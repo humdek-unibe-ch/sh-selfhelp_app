@@ -1,0 +1,7 @@
+{
+  "name": "SelfHelpMobile",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
