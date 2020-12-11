@@ -1,0 +1,13 @@
+<ion-content [fullscreen]="true">
+    <ion-header>
+        <ion-toolbar>
+            <ion-buttons slot="secondary">
+                <ion-button>
+                    <ion-icon slot="icon-only" name="person-circle-outline" color="medium"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title>{{title}}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <app-basic-style *ngFor="let style of content" [style]="style"></app-basic-style>
+</ion-content>
