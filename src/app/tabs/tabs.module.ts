@@ -17,15 +17,15 @@ const routes: Routes = [
                 loadChildren: () => import('../tab/tab.module').then(m => m.TabPageModule)
             },
             {
-                path: '',
-                redirectTo: '/default',
+                path: '/',
+                redirectTo: '/',
                 pathMatch: 'full'
             }
         ]
     },
     {
         path: '**',
-        redirectTo: '/default',
+        redirectTo: '/',
         pathMatch: 'full'
     }
 ];
@@ -85,7 +85,6 @@ export class TabsPageModule {
         if (this.areRoutesDifferent(currConfig, newRoutes)) {
             this.router.resetConfig(newRoutes);
             this.router.navigate(['/' + selectedTab]);
-            console.log('adjustRoutes'); 
         }
     }
 

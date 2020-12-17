@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SelfhelpService } from '../services/selfhelp.service';
-import { SelfHelpPage, Styles } from './../selfhelpInterfaces';
+import { SelfHelpPage } from './../selfhelpInterfaces';
 
 @Component({
     selector: 'app-tab',
@@ -9,45 +9,41 @@ import { SelfHelpPage, Styles } from './../selfhelpInterfaces';
 })
 export class TabPage {
 
-    public content: Styles = [];
-    public title: string = '';
+    public page: SelfHelpPage;
 
     constructor(private selfhelp: SelfhelpService) {
         this.selfhelp.observePage().subscribe((page: SelfHelpPage) => {
             if (page) {
-                this.setContent(page);
-                this.setTabTitle(page);
+                // this.setContent(page);
+                // this.setNavigation(page);
+                this.page = page;
             }
         });
     }
 
-    /**
-     * @description Set page content
-     * @author Stefan Kodzhabashev
-     * @date 2020-12-11
-     * @private
-     * @param {SelfHelpPage} page
-     * @memberof TabPage
-     */
-    private setContent(page: SelfHelpPage): void {
-        this.content = page.content;
-    }
-
-
-    /**
-     * @description Set tab tittle
-     * @author Stefan Kodzhabashev
-     * @date 2020-12-11
-     * @private
-     * @param {SelfHelpPage} page
-     * @memberof TabPage
-     */
-    private setTabTitle(page: SelfHelpPage): void {
-        page.navigation.forEach(nav => {
-            if (nav.is_active) {
-                this.title = nav.title;
+    public getTitle(): string {
+        if (this.page && this.page.navigation) {
+            for (const nav of this.page.navigation) {
+                if (nav.is_active) {
+                    console.log('title', nav.title);
+                    return nav.title;
+                }
             }
-        });
+        } else {
+            return '';
+        }
     }
 
+    public hasChildren(): boolean {
+        if (this.page && this.page.navigation) {
+            for (const nav of this.page.navigation) {
+                if (nav.is_active) {
+                    return nav.children.length > 0;
+                }
+            }
+        } else {
+            return false;
+        }
+
+    }
 }

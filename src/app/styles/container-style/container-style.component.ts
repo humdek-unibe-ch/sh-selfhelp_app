@@ -1,15 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ContainerStyle } from 'src/app/selfhelpInterfaces';
+import { BasicStyleComponent } from '../basic-style/basic-style.component';
 
 @Component({
     selector: 'app-container-style',
     templateUrl: './container-style.component.html',
     styleUrls: ['./container-style.component.scss'],
 })
-export class ContainerStyleComponent implements OnInit {
-    @Input() public style: ContainerStyle;
+export class ContainerStyleComponent extends BasicStyleComponent implements OnInit {
+    @Input() style: ContainerStyle;
 
-    constructor() { }
+    constructor() {
+        super();
+    }
 
     ngOnInit() { }
 

@@ -27,15 +27,15 @@ export class TabsPage {
      * @param {SelfHelpPage} page
      * @memberof TabsPage
      */
-    public setTabsMenu(page: SelfHelpPage):void {
+    public setTabsMenu(page: SelfHelpPage): void {
         this.tabMenu = [];
         page.navigation.forEach(nav => {
             this.tabMenu.push({
                 title: nav.title,
-                keyword: nav.keyword
+                keyword: nav.keyword,
+                url: (nav.children ? nav.children[0].url : nav.url) // if there is a submenu execute first child
             });
         });
-        console.log('adjustTab', this.tabMenu);
     }
 
     /**
@@ -44,8 +44,19 @@ export class TabsPage {
      * @date 2020-12-11
      * @memberof TabsPage
      */
-    setCurrentTab(): void {        
-        this.selfhelp.getPage(this.tabs.getSelected());
+    setCurrentTab(): void {
+        if (this.tabMenu) {
+            let url = '';
+            for (const tab of this.tabMenu) {
+                if (tab.keyword == decodeURIComponent(this.tabs.getSelected())) {
+                    url = tab.url;
+                    break;
+                }
+            }
+            if (url != '') {
+                this.selfhelp.getPage(url);
+            }
+        }
     }
 
 }

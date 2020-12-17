@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { MarkdownStyle } from './../../selfhelpInterfaces';
 
 @Component({
@@ -6,10 +7,12 @@ import { MarkdownStyle } from './../../selfhelpInterfaces';
     templateUrl: './markdown-style.component.html',
     styleUrls: ['./markdown-style.component.scss'],
 })
-export class MarkdownStyleComponent implements OnInit {
-    @Input() public style:MarkdownStyle;
+export class MarkdownStyleComponent extends BasicStyleComponent implements OnInit {
+    @Input() style: MarkdownStyle;
 
-    constructor() { }
+    constructor() {
+        super();
+    }
 
     ngOnInit() { }
 

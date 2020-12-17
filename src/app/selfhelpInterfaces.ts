@@ -1,14 +1,16 @@
 export interface TabMenuItem {
     keyword: string;
     title: string;
+    url: string;
 }
 
 export interface SelfHelpNavigation {
     id_navigation_section: any,
     title: string,
     keyword: string,
+    url: string,
     is_active: boolean,
-    children: any
+    children: SelfHelpNavigation[]
 }
 
 export interface StyleId {
@@ -26,8 +28,9 @@ export interface StyleField {
 export interface Style {
     id: StyleId,
     name: string,
-    type: "style"
-    children: any
+    type: "style",
+    children: any,
+    css: string
 }
 
 export interface CardStyle extends Style {
@@ -42,8 +45,18 @@ export interface ContainerStyle extends Style {
     export_pdf: StyleField,
 }
 
+export interface ContainerStyle extends Style {
+    is_fluid: StyleField,
+    export_pdf: StyleField,
+}
+
 export interface MarkdownStyle extends Style {
     text_md: StyleField
+}
+
+export interface ConditionalContainerStyle extends Style {
+    content: StyleField,
+    debug: StyleField,
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle)[];

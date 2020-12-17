@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TabPage } from './tab.page';
-
 import { TabPageRoutingModule } from './tab-routing.module';
 import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
 import { CardStyleComponent } from '../styles/card-style/card-style.component';
 import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
 import { ContainerStyleComponent } from '../styles/container-style/container-style.component';
+import { FormUserInputStyleComponent } from '../styles/form-user-input-style/form-user-input-style.component';
+import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
+import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
 
 @NgModule({
     imports: [
@@ -22,7 +24,10 @@ import { ContainerStyleComponent } from '../styles/container-style/container-sty
         CardStyleComponent,
         BasicStyleComponent,
         MarkdownStyleComponent,
-        ContainerStyleComponent
+        ContainerStyleComponent,
+        FormUserInputStyleComponent,
+        ConditionalContainerStyleComponent,
+        SubMenuComponent
     ]
 })
 export class TabPageModule { }

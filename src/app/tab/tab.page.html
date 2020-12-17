@@ -6,8 +6,13 @@
                     <ion-icon slot="icon-only" name="person-circle-outline" color="medium"></ion-icon>
                 </ion-button>
             </ion-buttons>
-            <ion-title>{{title}}</ion-title>
+            <ion-title>{{getTitle()}}</ion-title>
         </ion-toolbar>
     </ion-header>
-    <app-basic-style *ngFor="let style of content" [style]="style"></app-basic-style>
+    <div *ngIf="1==2" >
+        <app-basic-style *ngFor="let style of page.content" [style]="style"></app-basic-style>
+    </div>
+    <div *ngIf="page && page.navigation && hasChildren()" >
+        <!-- <app-sub-menu [navigation]="page.navigation"></app-sub-menu> -->
+    </div>
 </ion-content>

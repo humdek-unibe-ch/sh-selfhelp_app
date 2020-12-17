@@ -11,7 +11,7 @@ import { SelfHelpPage } from './../selfhelpInterfaces';
 export class SelfhelpService {
 
     private isApp: boolean = false;
-    public API_ENDPOINT = 'http://localhost/selfhelp/';
+    public API_ENDPOINT = 'http://localhost/selfhelp';
     private page: BehaviorSubject<SelfHelpPage> = new BehaviorSubject<SelfHelpPage>(null);
 
     constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform) {
@@ -22,7 +22,7 @@ export class SelfhelpService {
                 this.isApp = false;
             }
         });
-        this.getPage('tab');
+        this.getPage('/');
     }
 
     /**
@@ -103,7 +103,6 @@ export class SelfhelpService {
                 this.http.post(this.API_ENDPOINT + keyword, this.getPostParams(params), { headers, withCredentials: true })
                     .toPromise()
                     .then(res => {
-                        console.log(res);
                         resolve(res);
                     })
                     .catch((err) => {
@@ -155,11 +154,9 @@ export class SelfhelpService {
      * @returns {Promise<void>}
      * @memberof SelfhelpService
      */
-    public async getPage(keyword: string): Promise<void> {
-        console.log('getPage');
+    public async getPage(keyword: string): Promise<void> {        
         this.execServerRequest(keyword, { mobile: true })
             .then(res => {
-                console.log(res);
                 this.setPage(res);
             })
             .catch((err) => {
