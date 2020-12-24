@@ -83,27 +83,19 @@ export class SelfhelpService {
      * @memberof SelfhelpService
      */
     private async execServerRequest(keyword: string, params: any): Promise<any> {
-        // path
-        // params
-        // success
-        // error
         if (this.getIsApp()) {
             // use native calls
-            this.httpN.setDataSerializer('json');
-            // this.httpN
-            //     .post(this.API_ENDPOINT + config['path'], config['params'], this.createHeaderN())
-            //     .then(
-            //         response => {
-            //             if (config['success']) {
-            //                 config['success'](response.data);
-            //             }
-            //         },
-            //         error => {
-            //             if (config['error']) {
-            //                 config['error'](error.error);
-            //             }
-            //         }
-            //     );
+            // this.httpN.setDataSerializer('json');
+            this.httpN
+                .post(this.API_ENDPOINT + keyword, params, this.createHeaderN())
+                .then(
+                    response => {
+                        console.log(response);
+                    },
+                    error => {
+                        console.log(error);
+                    }
+                );
         } else {
             //use http requests
             const headers = new HttpHeaders({
@@ -201,31 +193,6 @@ export class SelfhelpService {
     public getUrl(nav: SelfHelpNavigation): string {
         return nav.children.length > 0 ? nav.children[0].url : nav.url;
     }
-
-    // private getAndInitMenuPage(url: string): void {
-    //     let currSelhelp = this.selfhelp.value;
-    //     if (subNavIndex) {
-    //         this.getPageInit(currSelhelp.navigation[navIndex].children[subNavIndex].url).then((res: SelfHelpPageRequest) => {
-    //             if (res) {
-    //                 let subNavInit = this.selfhelp.value;
-    //                 subNavInit.navigation[navIndex].children[subNavIndex].content = res.content;
-    //                 this.setSelfhelp(subNavInit);
-    //             }
-    //         })
-    //     } else {
-    //         this.getPageInit(this.getUrl(currSelhelp.navigation[navIndex])).then((res: SelfHelpPageRequest) => {
-    //             if (res) {
-    //                 let navInit = this.selfhelp.value;
-    //                 navInit.navigation[navIndex].content = res.content;
-    //                 if (navInit.navigation[navIndex].children.length > 0) {
-    //                     // first sub menu is in the menu, we can directly assign it here
-    //                     navInit.navigation[navIndex].children[0].content = res.content;
-    //                 }
-    //                 this.setSelfhelp(navInit);
-    //             }
-    //         })
-    //     }
-    // }
 
     private initAllMenuContent(): void {
         let currSelfhelp = this.selfhelp.value;
