@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { IonSlides } from '@ionic/angular';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { SelfHelp, SelfHelpNavigation, Styles } from './../../selfhelpInterfaces';
 
 @Component({
     selector: 'app-sub-menu',
@@ -7,41 +9,34 @@ import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
     styleUrls: ['./sub-menu.component.scss'],
 })
 export class SubMenuComponent implements OnInit {
-    @Input() navigation: SelfHelpNavigation;
-    segment: any;
-    slides: any;
+    @Input() selfhelp: SelfHelp;
+    @ViewChild('slides', { static: true }) slider: IonSlides;
+    segment = 0;
 
-    constructor() { }
-
-    ngOnInit() {
-        this.test();
-     }
-
-     private test() {
-        this.segment = document.getElementsByClassName('segment-'+ this.navigation.keyword)[0];
-        this.slides = document.getElementsByClassName('slides-'+ this.navigation.keyword)[0];
-
-        this.segment.addEventListener('ionChange', (ev) => this.onSegmentChange(ev));
-        this.slides.addEventListener('ionSlideDidChange', (ev) => this.onSlideDidChange(ev));
+    constructor(private selfhelpService: SelfhelpService) {
+        this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
+            if (selfhelp) {
+                this.selfhelp = selfhelp;
+            }
+        });
     }
 
-    // On Segment change slide to the matching slide
-    private onSegmentChange(ev) {
-        this.slideTo(ev.detail.value);
+    ngOnInit() { }
+
+    async setSelectedSubMenu() {
+        this.selfhelpService.setSelectedSubMenu(this.selfhelp.selectedMenu.children[this.segment]);
+        this.selfhelpService.getPage(this.selfhelpService.getUrl(this.selfhelp.selectedMenu.children[this.segment]));
+        await this.slider.slideTo(this.segment);
     }
 
-    private slideTo(index) {
-        this.slides.slideTo(index);
+    async slideChanged() {
+        this.segment = await this.slider.getActiveIndex();
     }
 
-    // On Slide change update segment to the matching value
-    private async onSlideDidChange(ev) {
-        var index = await this.slides.getActiveIndex();
-        this.clickSegment(index);
-    }
-
-    private clickSegment(index) {
-        this.segment.value = index;
-    }
+    public getContent(nav: SelfHelpNavigation): Styles {
+        const res = this.selfhelpService.getContent(nav);
+        // console.log(this.selfhelp.selectedMenu.keyword, res);
+        return res;
+    }    
 
 }

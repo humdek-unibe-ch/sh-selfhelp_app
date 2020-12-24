@@ -3,16 +3,23 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SelfHelpPage } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest } from './../selfhelpInterfaces';
+declare var require: any;
+var equal = require('fast-deep-equal');
 
 @Injectable({
     providedIn: 'root'
 })
-export class SelfhelpService {
+export class SelfhelpService {    
 
     private isApp: boolean = false;
     public API_ENDPOINT = 'http://localhost/selfhelp';
-    private page: BehaviorSubject<SelfHelpPage> = new BehaviorSubject<SelfHelpPage>(null);
+    private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
+        navigation: [],
+        selectedMenu: null,
+        selectedSubMenu: null,
+        urls: {}
+    });
 
     constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform) {
         this.platform.ready().then(() => {
@@ -21,6 +28,7 @@ export class SelfhelpService {
             } else {
                 this.isApp = false;
             }
+
         });
         this.getPage('/');
     }
@@ -29,11 +37,11 @@ export class SelfhelpService {
      * @description Return observable for SelfHelp page, it will be used to detect changes
      * @author Stefan Kodzhabashev
      * @date 2020-12-11
-     * @returns {Observable<SelfHelpPage>}
+     * @returns {Observable<SelfHelp>}
      * @memberof SelfhelpService
      */
-    public observePage(): Observable<SelfHelpPage> {
-        return this.page.asObservable();
+    public observeSelfhelp(): Observable<SelfHelp> {
+        return this.selfhelp.asObservable();
     }
 
     /**
@@ -134,34 +142,161 @@ export class SelfhelpService {
         return res;
     }
 
-    /**
-     * @description Set page value
-     * @author Stefan Kodzhabashev
-     * @date 2020-12-11
-     * @private
-     * @param {SelfHelpPage} page
-     * @memberof SelfhelpService
-     */
-    private setPage(page: SelfHelpPage): void {
-        this.page.next(page);
+    private setPage(url: string, page: SelfHelpPageRequest): void {
+        this.setNavigation(page.navigation);
+        let urlFound = false;
+        let currSelfhelp = this.selfhelp.value;
+        for (let i = 0; i < currSelfhelp.navigation.length; i++) {
+            const nav = currSelfhelp.navigation[i];
+            if (this.getUrl(nav) == url) {
+                urlFound = true;
+                // if (!this.isEqual(nav.content, page.content)) {
+                //     currSelfhelp.navigation[i].content = page.content;
+                //     this.setSelfhelp(currSelfhelp);
+                // }
+                if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
+                    // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
+                    currSelfhelp.urls[url] = page.content;
+                    this.setSelfhelp(currSelfhelp);
+                }
+                break;
+            } else {
+                for (let j = 0; j < nav.children.length; j++) {
+                    const subNav = nav.children[j];
+                    if (this.getUrl(subNav) == url) {
+                        urlFound = true;
+                        // if (!this.isEqual(subNav.content, page.content)) {
+                        //     currSelfhelp.navigation[i].children[j].content = page.content;
+                        //     this.setSelfhelp(currSelfhelp);
+                        // }
+                        if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
+                            // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
+                            currSelfhelp.urls[url] = page.content;
+                            this.setSelfhelp(currSelfhelp);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        if (!urlFound) {
+            if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
+                // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
+                currSelfhelp.urls[url] = page.content;
+                this.setSelfhelp(currSelfhelp);
+            }
+        }
     }
 
-    /**
-     * @description Get page from SelfHelp
-     * @author Stefan Kodzhabashev
-     * @date 2020-12-11
-     * @param {string} keyword
-     * @returns {Promise<void>}
-     * @memberof SelfhelpService
-     */
-    public async getPage(keyword: string): Promise<void> {        
+    public setNavigation(selfHelpNavigation: SelfHelpNavigation[]): void {
+        if (!this.isEqual(selfHelpNavigation, this.selfhelp.value.navigation)) {
+            console.log('setNavigation');
+            let currSelfhelp = this.selfhelp.value;
+            const init = currSelfhelp.navigation.length == 0;
+            currSelfhelp.navigation = selfHelpNavigation;
+            this.setSelfhelp(currSelfhelp);
+            if (init) {
+                this.initAllMenuContent();
+            }
+        }
+    }
+    isNavigationEqual(newNav: SelfHelpNavigation[], oldNav: SelfHelpNavigation[]): boolean {
+        return true;
+    }
+
+    public getUrl(nav: SelfHelpNavigation): string {
+        return nav.children.length > 0 ? nav.children[0].url : nav.url;
+    }
+
+    // private getAndInitMenuPage(url: string): void {
+    //     let currSelhelp = this.selfhelp.value;
+    //     if (subNavIndex) {
+    //         this.getPageInit(currSelhelp.navigation[navIndex].children[subNavIndex].url).then((res: SelfHelpPageRequest) => {
+    //             if (res) {
+    //                 let subNavInit = this.selfhelp.value;
+    //                 subNavInit.navigation[navIndex].children[subNavIndex].content = res.content;
+    //                 this.setSelfhelp(subNavInit);
+    //             }
+    //         })
+    //     } else {
+    //         this.getPageInit(this.getUrl(currSelhelp.navigation[navIndex])).then((res: SelfHelpPageRequest) => {
+    //             if (res) {
+    //                 let navInit = this.selfhelp.value;
+    //                 navInit.navigation[navIndex].content = res.content;
+    //                 if (navInit.navigation[navIndex].children.length > 0) {
+    //                     // first sub menu is in the menu, we can directly assign it here
+    //                     navInit.navigation[navIndex].children[0].content = res.content;
+    //                 }
+    //                 this.setSelfhelp(navInit);
+    //             }
+    //         })
+    //     }
+    // }
+
+    private initAllMenuContent(): void {
+        let currSelfhelp = this.selfhelp.value;
+        for (let i = 0; i < currSelfhelp.navigation.length; i++) {
+            const nav = currSelfhelp.navigation[i];
+            if (nav.url) {
+                this.getPage(this.getUrl(nav));
+                if(nav.children.length > 0){
+                    // first url is same as parent main url
+                    for (let j = 1; j < nav.children.length; j++) {
+                        this.getPage(this.getUrl(nav.children[j]));
+                    }
+                }
+            }
+        }
+    }
+
+    private setSelfhelp(selfhelp: SelfHelp): void {
+        this.selfhelp.next(selfhelp);
+    }
+
+    public setSelectedMenu(nav: SelfHelpNavigation): void {
+        let currSelfhelp = this.selfhelp.value;
+        currSelfhelp.selectedMenu = nav;
+        this.setSelfhelp(currSelfhelp);
+    }
+
+    public setSelectedSubMenu(nav: SelfHelpNavigation): void {
+        let currSelfhelp = this.selfhelp.value;
+        currSelfhelp.selectedSubMenu = nav;
+        this.setSelfhelp(currSelfhelp);
+    }
+
+    public getPage(keyword: string): void {
         this.execServerRequest(keyword, { mobile: true })
-            .then(res => {
-                this.setPage(res);
+            .then((res: SelfHelpPageRequest) => {
+                this.setPage(keyword, res);
             })
             .catch((err) => {
                 console.log(err);
             });
     }
 
+    private async getPageInit(keyword: string): Promise<SelfHelpPageRequest> {
+        return this.execServerRequest(keyword, { mobile: true })
+            .then(res => {
+                return res;
+            })
+            .catch((err) => {
+                console.log(err);
+                return null;
+            });
+    }
+
+    public isEqual(obj1: any, obj2: any): boolean {
+        const o1 = JSON.stringify(obj1);
+        const o2 = JSON.stringify(obj2);
+        const res = o1 == o2;
+        if (!res) {
+            console.log('change');
+        }
+        return res;
+    }
+
+    getContent(nav: SelfHelpNavigation) {
+        return this.selfhelp.value.urls[this.getUrl(nav)];
+    }
 }

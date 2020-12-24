@@ -1,8 +1,8 @@
-<ion-tabs #tabs (ionTabsDidChange)="setCurrentTab()">
+<ion-tabs>
     <ion-tab-bar slot="bottom">
-        <ion-tab-button *ngFor="let tabMenuItem of tabMenu" [tab]="tabMenuItem.keyword">
+        <ion-tab-button *ngFor="let nav of selfhelp.navigation" [tab]="nav.keyword" (click)="setTab(nav)">
             <ion-icon name="triangle"></ion-icon>
-            <ion-label>{{tabMenuItem.title}}</ion-label>
+            <ion-label>{{nav.title}}</ion-label>
         </ion-tab-button>
     </ion-tab-bar>
 </ion-tabs>

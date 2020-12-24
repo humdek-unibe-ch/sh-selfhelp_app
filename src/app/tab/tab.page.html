@@ -6,13 +6,12 @@
                     <ion-icon slot="icon-only" name="person-circle-outline" color="medium"></ion-icon>
                 </ion-button>
             </ion-buttons>
-            <ion-title>{{getTitle()}}</ion-title>
+            <ion-title>{{selfhelp.selectedMenu.title}}</ion-title>
         </ion-toolbar>
     </ion-header>
-    <div *ngIf="1==2" >
-        <app-basic-style *ngFor="let style of page.content" [style]="style"></app-basic-style>
+    <div *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length == 0">
+        <app-basic-style *ngFor="let style of getContent(selfhelp.selectedMenu)" [style]="style"></app-basic-style>
     </div>
-    <div *ngIf="page && page.navigation && hasChildren()" >
-        <!-- <app-sub-menu [navigation]="page.navigation"></app-sub-menu> -->
-    </div>
+    <app-sub-menu *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length > 0" [selfhelp]="selfhelp">
+    </app-sub-menu>
 </ion-content>

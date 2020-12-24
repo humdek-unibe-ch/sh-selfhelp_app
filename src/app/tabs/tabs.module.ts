@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TabsPage } from './tabs.page';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
-import { SelfHelpPage } from '../selfhelpInterfaces';
+import { SelfHelp } from '../selfhelpInterfaces';
 
 const routes: Routes = [
     {
@@ -13,7 +13,7 @@ const routes: Routes = [
         component: TabsPage,
         children: [
             {
-                path: 'default',
+                path: '/',
                 loadChildren: () => import('../tab/tab.module').then(m => m.TabPageModule)
             },
             {
@@ -43,10 +43,10 @@ const routes: Routes = [
 })
 export class TabsPageModule {
 
-    constructor(private selfhelp: SelfhelpService, private router: Router) {
-        this.selfhelp.observePage().subscribe((page: SelfHelpPage) => {
-            if (page) {
-                this.adjustRoutes(page);
+    constructor(private selfhelpService: SelfhelpService, private router: Router) {
+        this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
+            if (selfhelp.navigation.length > 0) {
+                this.adjustRoutes(selfhelp);
             }
         });
     }
@@ -56,20 +56,20 @@ export class TabsPageModule {
      * @author Stefan Kodzhabashev
      * @date 2020-12-11
      * @private
-     * @param {SelfHelpPage} page
+     * @param {SelfHelp} selfhelp
      * @memberof TabsPageModule
      */
-    private adjustRoutes(page: SelfHelpPage) {
+    private adjustRoutes(selfhelp: SelfHelp) {
         let newRoutes = routes;
         newRoutes[0].children = [];
         let selectedTab = '';
         let firstTab = '';
-        page.navigation.forEach(nav => {
+        selfhelp.navigation.forEach(nav => {
             if (nav.is_active) {
                 selectedTab = nav.keyword;
             }
             if (firstTab === '') {
-                selectedTab = firstTab;
+                firstTab = nav.keyword;
             }
             newRoutes[0].children.push(
                 {
@@ -77,7 +77,10 @@ export class TabsPageModule {
                     loadChildren: () => import('../tab/tab.module').then(m => m.TabPageModule)
                 }
             );
-            newRoutes[1].redirectTo = '/' + (selectedTab == '' ? firstTab : selectedTab);
+            if(selectedTab === '' && selectedTab != firstTab){
+                selectedTab = firstTab;
+            }
+            newRoutes[1].redirectTo = '/' + selectedTab;
 
         });
         const currConfig = this.router.config;
@@ -99,24 +102,24 @@ export class TabsPageModule {
      * @memberof TabsPageModule
      */
     private areRoutesDifferent(route1: Routes, route2: Routes): boolean {
-        if(route1[0].redirectTo != route2[0].redirectTo){
+        if (route1[0].redirectTo != route2[0].redirectTo) {
             return true;
         }
-        if(!route1[0].children || !route2[0].children){
+        if (!route1[0].children || !route2[0].children) {
             return true;
         }
-        for (let i = 0; i < route1[0].children.length; i++){
+        for (let i = 0; i < route1[0].children.length; i++) {
             const element = route1[0].children[i];
-            if(route1[0].children.length > i){
-                if(route1[0].children[i].path != route2[0].children[i].path){
+            if (route1[0].children.length > i) {
+                if (route1[0].children[i].path != route2[0].children[i].path) {
                     // different path
                     return true;
                 }
-            }else{
+            } else {
                 //different number of routes
                 return true;
             }
-            
+
         }
         // no difference
         return false;

@@ -61,7 +61,24 @@ export interface ConditionalContainerStyle extends Style {
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle)[];
 
-export interface SelfHelpPage {
+export interface SelfHelpPageRequest {
     navigation: SelfHelpNavigation[],
-    content: Styles
+    content: Styles,
+    time?: any    
+}
+
+// export interface SelfHelp {
+//     page: SelfHelpPage,
+//     selected_menu_title?: string
+// }
+
+export interface Url {
+    [key:string]: Styles
+}
+
+export interface SelfHelp{
+    navigation: SelfHelpNavigation[],
+    selectedMenu: SelfHelpNavigation,
+    selectedSubMenu: SelfHelpNavigation,
+    urls: Url
 }

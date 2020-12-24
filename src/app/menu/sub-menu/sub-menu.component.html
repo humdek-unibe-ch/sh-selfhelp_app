@@ -1,68 +1,16 @@
-<ion-segment scrollable [class]="'segment-'+ navigation.keyword">
-    <ion-segment-button value="0" checked>
-        <ion-icon name="call"></ion-icon>
-        <ion-label>Call</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="1">
-        <ion-icon name="cloud-upload"></ion-icon>
-        <ion-label>Publish</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="2">
-        <ion-icon name="paper"></ion-icon>
-        <ion-label>Topic</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="3">
-        <ion-icon name="code-working"></ion-icon>
-        <ion-label>Query</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="4">
-        <ion-icon name="open"></ion-icon>
-        <ion-label>Open</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="5">
-        <ion-icon name="search"></ion-icon>
-        <ion-label>Search</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="6">
-        <ion-icon name="create"></ion-icon>
-        <ion-label>Write</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="7">
-        <ion-icon name="book"></ion-icon>
-        <ion-label>Read</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="8">
-        <ion-icon name="trash"></ion-icon>
-        <ion-label>Trash</ion-label>
+<ion-segment scrollable [(ngModel)]="segment" (ionChange)="setSelectedSubMenu()">
+    <ion-segment-button *ngFor="let subNav of selfhelp.selectedMenu.children; let i = index" [value]="i">
+        <!-- <ion-icon [name]="subNav.keyword"></ion-icon> -->
+        <ion-label>{{subNav.title}}</ion-label>
     </ion-segment-button>
 </ion-segment>
 
-<ion-slides [class]="'h-100 slides-'+ navigation.keyword">
-    <ion-slide class="slide-1">
-        Call
-    </ion-slide>
-    <ion-slide class="slide-2">
-        Publish
-    </ion-slide>
-    <ion-slide class="slide-3">
-        Topic
-    </ion-slide>
-    <ion-slide class="slide-1">
-        Query
-    </ion-slide>
-    <ion-slide class="slide-2">
-        Open
-    </ion-slide>
-    <ion-slide class="slide-3">
-        Search
-    </ion-slide>
-    <ion-slide class="slide-1">
-        Write
-    </ion-slide>
-    <ion-slide class="slide-2">
-        Read
-    </ion-slide>
-    <ion-slide class="slide-3">
-        Trash
+<ion-slides #slides (ionSlideDidChange)="slideChanged()">
+    <ion-slide *ngFor="let subNav of selfhelp.selectedMenu.children; let i = index" 
+        [ngSwitch]="selfhelp.selectedSubMenu && selfhelp.selectedSubMenu.keyword == subNav.keyword" scrollbar="true">
+        <ion-content center class="subMenuSlide" scrollbar="true">
+            <app-basic-style *ngFor="let style of getContent(subNav)" [style]="style">
+            </app-basic-style>
+        </ion-content>
     </ion-slide>
 </ion-slides>

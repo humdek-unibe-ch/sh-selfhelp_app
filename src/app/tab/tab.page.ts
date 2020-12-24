@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SelfhelpService } from '../services/selfhelp.service';
-import { SelfHelpPage } from './../selfhelpInterfaces';
+import { SelfHelp } from './../selfhelpInterfaces';
+import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 
 @Component({
     selector: 'app-tab',
@@ -9,41 +10,18 @@ import { SelfHelpPage } from './../selfhelpInterfaces';
 })
 export class TabPage {
 
-    public page: SelfHelpPage;
+    public selfhelp: SelfHelp;
 
-    constructor(private selfhelp: SelfhelpService) {
-        this.selfhelp.observePage().subscribe((page: SelfHelpPage) => {
-            if (page) {
-                // this.setContent(page);
-                // this.setNavigation(page);
-                this.page = page;
+    constructor(private selfhelpService: SelfhelpService) {
+        this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
+            if (selfhelp) {
+                this.selfhelp = selfhelp;
             }
         });
     }
 
-    public getTitle(): string {
-        if (this.page && this.page.navigation) {
-            for (const nav of this.page.navigation) {
-                if (nav.is_active) {
-                    console.log('title', nav.title);
-                    return nav.title;
-                }
-            }
-        } else {
-            return '';
-        }
+    public getContent(nav: SelfHelpNavigation){
+        return this.selfhelpService.getContent(nav);
     }
-
-    public hasChildren(): boolean {
-        if (this.page && this.page.navigation) {
-            for (const nav of this.page.navigation) {
-                if (nav.is_active) {
-                    return nav.children.length > 0;
-                }
-            }
-        } else {
-            return false;
-        }
-
-    }
+    
 }
