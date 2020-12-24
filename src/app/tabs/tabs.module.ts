@@ -6,6 +6,14 @@ import { TabsPage } from './tabs.page';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
+import { MenuComponent } from '../menu/menu/menu.component';
+import { CardStyleComponent } from '../styles/card-style/card-style.component';
+import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
+import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
+import { ContainerStyleComponent } from '../styles/container-style/container-style.component';
+import { FormUserInputStyleComponent } from '../styles/form-user-input-style/form-user-input-style.component';
+import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
+import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
 
 const routes: Routes = [
     {
@@ -39,7 +47,17 @@ const routes: Routes = [
         RouterModule.forChild(routes)
     ],
     exports: [RouterModule],
-    declarations: [TabsPage]
+    declarations: [
+        TabsPage,
+        MenuComponent,
+        CardStyleComponent,
+        BasicStyleComponent,
+        MarkdownStyleComponent,
+        ContainerStyleComponent,
+        FormUserInputStyleComponent,
+        ConditionalContainerStyleComponent,
+        SubMenuComponent
+    ]
 })
 export class TabsPageModule {
 
@@ -77,7 +95,7 @@ export class TabsPageModule {
                     loadChildren: () => import('../tab/tab.module').then(m => m.TabPageModule)
                 }
             );
-            if(selectedTab === '' && selectedTab != firstTab){
+            if (selectedTab === '' && selectedTab != firstTab) {
                 selectedTab = firstTab;
             }
             newRoutes[1].redirectTo = '/' + selectedTab;

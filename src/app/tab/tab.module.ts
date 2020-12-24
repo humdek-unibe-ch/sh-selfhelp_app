@@ -27,7 +27,7 @@ import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
         ContainerStyleComponent,
         FormUserInputStyleComponent,
         ConditionalContainerStyleComponent,
-        SubMenuComponent
+        SubMenuComponent        
     ]
 })
 export class TabPageModule { }
