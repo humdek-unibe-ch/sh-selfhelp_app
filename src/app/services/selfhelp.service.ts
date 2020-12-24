@@ -3,16 +3,18 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp } from './../selfhelpInterfaces';
+import { Storage } from '@ionic/storage';
 declare var require: any;
 var equal = require('fast-deep-equal');
 
 @Injectable({
     providedIn: 'root'
 })
-export class SelfhelpService {    
+export class SelfhelpService {
 
     private isApp: boolean = false;
+    private local_selfhelp: LocalSelfhelp = 'selfhelp';
     public API_ENDPOINT = 'http://localhost/selfhelp';
     private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
@@ -21,16 +23,16 @@ export class SelfhelpService {
         urls: {}
     });
 
-    constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform) {
+    constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform, private storage: Storage) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
                 this.isApp = true;
             } else {
                 this.isApp = false;
             }
-
+            this.getLocalSelfhelp();
+            this.getPage('/');
         });
-        this.getPage('/');
     }
 
     /**
@@ -150,14 +152,10 @@ export class SelfhelpService {
             const nav = currSelfhelp.navigation[i];
             if (this.getUrl(nav) == url) {
                 urlFound = true;
-                // if (!this.isEqual(nav.content, page.content)) {
-                //     currSelfhelp.navigation[i].content = page.content;
-                //     this.setSelfhelp(currSelfhelp);
-                // }
                 if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
                     // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
                     currSelfhelp.urls[url] = page.content;
-                    this.setSelfhelp(currSelfhelp);
+                    this.setSelfhelp(currSelfhelp, true);
                 }
                 break;
             } else {
@@ -165,14 +163,10 @@ export class SelfhelpService {
                     const subNav = nav.children[j];
                     if (this.getUrl(subNav) == url) {
                         urlFound = true;
-                        // if (!this.isEqual(subNav.content, page.content)) {
-                        //     currSelfhelp.navigation[i].children[j].content = page.content;
-                        //     this.setSelfhelp(currSelfhelp);
-                        // }
                         if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
                             // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
                             currSelfhelp.urls[url] = page.content;
-                            this.setSelfhelp(currSelfhelp);
+                            this.setSelfhelp(currSelfhelp, true);
                         }
                         break;
                     }
@@ -183,7 +177,7 @@ export class SelfhelpService {
             if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
                 // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
                 currSelfhelp.urls[url] = page.content;
-                this.setSelfhelp(currSelfhelp);
+                this.setSelfhelp(currSelfhelp, true);
             }
         }
     }
@@ -194,7 +188,7 @@ export class SelfhelpService {
             let currSelfhelp = this.selfhelp.value;
             const init = currSelfhelp.navigation.length == 0;
             currSelfhelp.navigation = selfHelpNavigation;
-            this.setSelfhelp(currSelfhelp);
+            this.setSelfhelp(currSelfhelp, true);
             if (init) {
                 this.initAllMenuContent();
             }
@@ -239,7 +233,7 @@ export class SelfhelpService {
             const nav = currSelfhelp.navigation[i];
             if (nav.url) {
                 this.getPage(this.getUrl(nav));
-                if(nav.children.length > 0){
+                if (nav.children.length > 0) {
                     // first url is same as parent main url
                     for (let j = 1; j < nav.children.length; j++) {
                         this.getPage(this.getUrl(nav.children[j]));
@@ -249,20 +243,23 @@ export class SelfhelpService {
         }
     }
 
-    private setSelfhelp(selfhelp: SelfHelp): void {
+    private setSelfhelp(selfhelp: SelfHelp, contentChange: boolean): void {
+        if (contentChange) {
+            this.saveLocalSelfhelp();
+        }
         this.selfhelp.next(selfhelp);
     }
 
     public setSelectedMenu(nav: SelfHelpNavigation): void {
         let currSelfhelp = this.selfhelp.value;
         currSelfhelp.selectedMenu = nav;
-        this.setSelfhelp(currSelfhelp);
+        this.setSelfhelp(currSelfhelp, false);
     }
 
     public setSelectedSubMenu(nav: SelfHelpNavigation): void {
         let currSelfhelp = this.selfhelp.value;
         currSelfhelp.selectedSubMenu = nav;
-        this.setSelfhelp(currSelfhelp);
+        this.setSelfhelp(currSelfhelp, false);
     }
 
     public getPage(keyword: string): void {
@@ -296,7 +293,19 @@ export class SelfhelpService {
         return res;
     }
 
-    getContent(nav: SelfHelpNavigation) {
+    public getContent(nav: SelfHelpNavigation) {
         return this.selfhelp.value.urls[this.getUrl(nav)];
+    }
+
+    private getLocalSelfhelp() {
+        this.storage.get(this.local_selfhelp).then((val) => {
+            if (val) {
+                this.setSelfhelp(JSON.parse(val), false);
+            }
+        });
+    }
+
+    private saveLocalSelfhelp() {
+        this.storage.set(this.local_selfhelp, JSON.stringify(this.selfhelp.value));
     }
 }

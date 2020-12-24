@@ -1,3 +1,5 @@
+export type LocalSelfhelp = 'selfhelp';
+
 export interface TabMenuItem {
     keyword: string;
     title: string;
