@@ -13,7 +13,7 @@ import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 export class TabsPage {
     public selfhelp: SelfHelp;
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(public selfhelpService: SelfhelpService) {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
             if (selfhelp) {
                 this.selfhelp = selfhelp;

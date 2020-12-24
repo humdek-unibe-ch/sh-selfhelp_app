@@ -66,14 +66,14 @@ export class TabsPageModule {
         let firstTab = '';
         selfhelp.navigation.forEach(nav => {
             if (nav.is_active) {
-                selectedTab = nav.keyword;
+                selectedTab = this.selfhelpService.getUrl(nav).replace('/', '');
             }
             if (firstTab === '') {
-                firstTab = nav.keyword;
+                firstTab = this.selfhelpService.getUrl(nav).replace('/', '');
             }
             newRoutes[0].children.push(
                 {
-                    path: nav.keyword,
+                    path: this.selfhelpService.getUrl(nav).replace('/', ''),
                     loadChildren: () => import('../tab/tab.module').then(m => m.TabPageModule)
                 }
             );
