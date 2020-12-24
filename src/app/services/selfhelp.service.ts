@@ -265,7 +265,9 @@ export class SelfhelpService {
     public getPage(keyword: string): void {
         this.execServerRequest(keyword, { mobile: true })
             .then((res: SelfHelpPageRequest) => {
-                this.setPage(keyword, res);
+                if (res) {
+                    this.setPage(keyword, res);
+                }
             })
             .catch((err) => {
                 console.log(err);

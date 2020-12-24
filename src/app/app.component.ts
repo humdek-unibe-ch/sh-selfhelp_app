@@ -38,8 +38,5 @@ export class AppComponent {
             duration: 3000
         });
         await loading.present();
-
-        const { role, data } = await loading.onDidDismiss();
-        console.log('Loading dismissed with role:', role);
     }
 }
