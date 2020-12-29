@@ -16,13 +16,17 @@ export class SelfhelpService {
 
     private isApp: boolean = false;
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
-    public API_ENDPOINT = 'http://178.38.58.178/selfhelp';
+    private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
+    private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
+    private API_LOGIN = '/login';
     private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
         selectedMenu: null,
         selectedSubMenu: null,
-        urls: {}
+        urls: {},
+        logged_in: null
     });
+    private initApp = false;
 
     constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform, private storage: Storage) {
         this.platform.ready().then(() => {
@@ -45,21 +49,6 @@ export class SelfhelpService {
      */
     public observeSelfhelp(): Observable<SelfHelp> {
         return this.selfhelp.asObservable();
-    }
-
-    /**
-     * @description Create native header for http request
-     * @author Stefan Kodzhabashev
-     * @date 2020-12-11
-     * @private
-     * @returns {*}
-     * @memberof SelfhelpService
-     */
-    private createHeaderN(): any {
-        const res = {
-            'Content-Type': 'application/json'
-        };
-        return res;
     }
 
     /**
@@ -88,10 +77,14 @@ export class SelfhelpService {
             // use native calls
             return new Promise((resolve, reject) => {
                 this.httpN
-                    .post(this.API_ENDPOINT + keyword, params, this.createHeaderN())
+                    .post(this.API_ENDPOINT_NATIVE + keyword, params, { 'Content-Type': 'application/json' })
                     .then(
                         response => {
-                            resolve(JSON.parse(response.data));
+                            try {
+                                resolve(JSON.parse(response.data));
+                            } catch (error) {
+                                reject(error);
+                            }
                         },
                         error => {
                             console.log(error);
@@ -108,7 +101,7 @@ export class SelfhelpService {
                 'Content-Type': 'application/x-www-form-urlencoded'
             });
             return new Promise((resolve, reject) => {
-                this.http.post(this.API_ENDPOINT + keyword, this.getPostParams(params), { headers, withCredentials: true })
+                this.http.post(this.API_ENDPOINT_WEB + keyword, this.getPostParams(params), { headers, withCredentials: true })
                     .toPromise()
                     .then(res => {
                         resolve(res as SelfHelpPageRequest);
@@ -178,16 +171,51 @@ export class SelfhelpService {
                 this.setSelfhelp(currSelfhelp, true);
             }
         }
+        if (this.selfhelp.value.logged_in != page.logged_in) {
+            // check for login change
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.logged_in = page.logged_in;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (!page.logged_in) {
+            this.autoLogin();
+        }
+    }
+
+    private autoLogin() {
+        console.log('try auto login');
+        this.login('admin', 'admin');
+    }
+
+    private login(email: string, password: string) {
+        this.execServerRequest(this.API_LOGIN, {
+            mobile: true,
+            type: 'login',
+            email: email,
+            password: password
+        })
+            .then((res: SelfHelpPageRequest) => {
+                console.log('login', res);
+                let currSelfhelp = this.selfhelp.value;
+                if (currSelfhelp.logged_in != res.logged_in) {
+                    currSelfhelp.logged_in = res.logged_in;
+                    this.setSelfhelp(currSelfhelp, true);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     public setNavigation(selfHelpNavigation: SelfHelpNavigation[]): void {
         if (!this.isEqual(selfHelpNavigation, this.selfhelp.value.navigation)) {
             console.log('setNavigation');
             let currSelfhelp = this.selfhelp.value;
-            const init = currSelfhelp.navigation.length == 0;
             currSelfhelp.navigation = selfHelpNavigation;
             this.setSelfhelp(currSelfhelp, true);
-            if (init) {
+            if (!this.initApp) {
+                this.initApp = true;
+                console.log('Init the app - take all menues');
                 this.initAllMenuContent();
             }
         }

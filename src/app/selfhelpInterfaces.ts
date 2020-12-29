@@ -66,6 +66,7 @@ export type Styles = (CardStyle | ContainerStyle | MarkdownStyle)[];
 export interface SelfHelpPageRequest {
     navigation: SelfHelpNavigation[],
     content: Styles,
+    logged_in: boolean,
     time?: any    
 }
 
@@ -82,5 +83,6 @@ export interface SelfHelp{
     navigation: SelfHelpNavigation[],
     selectedMenu: SelfHelpNavigation,
     selectedSubMenu: SelfHelpNavigation,
-    urls: Url
+    urls: Url,
+    logged_in: boolean
 }
