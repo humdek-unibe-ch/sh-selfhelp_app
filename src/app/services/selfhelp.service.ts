@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
+import { map } from 'rxjs/operators';
 declare var require: any;
 var equal = require('fast-deep-equal');
 
@@ -15,7 +16,7 @@ export class SelfhelpService {
 
     private isApp: boolean = false;
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
-    public API_ENDPOINT = 'http://localhost/selfhelp';
+    public API_ENDPOINT = 'http://178.38.58.178/selfhelp';
     private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
         selectedMenu: null,
@@ -75,27 +76,32 @@ export class SelfhelpService {
     /**
      * @description Execute server request
      * @author Stefan Kodzhabashev
-     * @date 2020-12-11
+     * @date 2020-12-29
      * @private
      * @param {string} keyword
      * @param {*} params
-     * @returns {Promise<any>}
+     * @returns {Promise<SelfHelpPageRequest>}
      * @memberof SelfhelpService
      */
-    private async execServerRequest(keyword: string, params: any): Promise<any> {
+    private async execServerRequest(keyword: string, params: any): Promise<SelfHelpPageRequest> {
         if (this.getIsApp()) {
             // use native calls
-            // this.httpN.setDataSerializer('json');
-            this.httpN
-                .post(this.API_ENDPOINT + keyword, params, this.createHeaderN())
-                .then(
-                    response => {
-                        console.log(response);
-                    },
-                    error => {
-                        console.log(error);
-                    }
-                );
+            return new Promise((resolve, reject) => {
+                this.httpN
+                    .post(this.API_ENDPOINT + keyword, params, this.createHeaderN())
+                    .then(
+                        response => {
+                            resolve(JSON.parse(response.data));
+                        },
+                        error => {
+                            console.log(error);
+                            reject(error);
+                        }
+                    )
+                    .catch((err) => {
+                        reject(err);
+                    });
+            });
         } else {
             //use http requests
             const headers = new HttpHeaders({
@@ -105,7 +111,7 @@ export class SelfhelpService {
                 this.http.post(this.API_ENDPOINT + keyword, this.getPostParams(params), { headers, withCredentials: true })
                     .toPromise()
                     .then(res => {
-                        resolve(res);
+                        resolve(res as SelfHelpPageRequest);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -232,23 +238,13 @@ export class SelfhelpService {
     public getPage(keyword: string): void {
         this.execServerRequest(keyword, { mobile: true })
             .then((res: SelfHelpPageRequest) => {
+                console.log(res);
                 if (res) {
                     this.setPage(keyword, res);
                 }
             })
             .catch((err) => {
                 console.log(err);
-            });
-    }
-
-    private async getPageInit(keyword: string): Promise<SelfHelpPageRequest> {
-        return this.execServerRequest(keyword, { mobile: true })
-            .then(res => {
-                return res;
-            })
-            .catch((err) => {
-                console.log(err);
-                return null;
             });
     }
 
