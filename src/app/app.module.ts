@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { HTTP } from '@ionic-native/http/ngx';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
+import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { IonicStorageModule } from '@ionic/storage';
     providers: [
         StatusBar,
         SplashScreen,
+        AndroidFullScreen,
         HTTP,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],

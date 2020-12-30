@@ -3,6 +3,7 @@ import { LoadingController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { name } from '../../package.json';
+import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 
 @Component({
     selector: 'app-root',
@@ -14,16 +15,20 @@ export class AppComponent {
         private platform: Platform,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
-        private loadingCtrl: LoadingController
+        private loadingCtrl: LoadingController,
+        private androidFullScreen: AndroidFullScreen
     ) {
         this.initializeApp();
-        this.presentLoadingWithOptions();
     }
 
     initializeApp() {
         this.platform.ready().then(() => {
+            this.androidFullScreen.isImmersiveModeSupported()
+                .then(() => this.androidFullScreen.immersiveMode())
+                .catch(err => console.log(err));
             this.statusBar.styleDefault();
             this.splashScreen.hide();
+            this.presentLoadingWithOptions();
         });
     }
 
