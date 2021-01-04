@@ -1,7 +1,6 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { TabsPage } from './tabs.page';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
@@ -14,6 +13,7 @@ import { ContainerStyleComponent } from '../styles/container-style/container-sty
 import { FormUserInputStyleComponent } from '../styles/form-user-input-style/form-user-input-style.component';
 import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
 import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
     {
@@ -42,9 +42,10 @@ const routes: Routes = [
 @NgModule({
     imports: [
         IonicModule,
-        CommonModule,
+        CommonModule,        
+        RouterModule.forChild(routes),
         FormsModule,
-        RouterModule.forChild(routes)
+        ReactiveFormsModule
     ],
     exports: [RouterModule],
     declarations: [

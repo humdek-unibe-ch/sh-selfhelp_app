@@ -1,7 +1,6 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { TabPage } from './tab.page';
 import { TabPageRoutingModule } from './tab-routing.module';
 import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
@@ -11,13 +10,15 @@ import { ContainerStyleComponent } from '../styles/container-style/container-sty
 import { FormUserInputStyleComponent } from '../styles/form-user-input-style/form-user-input-style.component';
 import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
 import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
         IonicModule,
         CommonModule,
+        TabPageRoutingModule,
         FormsModule,
-        TabPageRoutingModule
+        ReactiveFormsModule
     ],
     declarations: [
         TabPage,

@@ -1,3 +1,16 @@
-<form action="http://localhost/selfhelp/sleep#section-64">
-    <button type="submit" class="btn btn-primary btn-sm">Add</button>
+<form [formGroup]="form">
+    <ion-item>
+        <ion-label position="floating">first_name</ion-label>
+        <ion-input required type="text" formControlName="first_name"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">lastName</ion-label>
+        <ion-input required type="text" formControlName="lastName"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label position="floating">datetime</ion-label>
+        <ion-input formControlName="datetime"></ion-input>
+    </ion-item>
+    <ion-button size='small' [disabled]="!form.valid" (click)="submitForm(form.value)">Submit
+    </ion-button>
 </form>

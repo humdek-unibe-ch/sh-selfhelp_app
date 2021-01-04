@@ -9,7 +9,7 @@
     <ion-slide *ngFor="let subNav of selfhelp.selectedMenu.children; let i = index" 
         [ngSwitch]="selfhelp.selectedSubMenu && selfhelp.selectedSubMenu.keyword == subNav.keyword" scrollbar="true">
         <ion-content center class="subMenuSlide" scrollbar="true">
-            <app-basic-style *ngFor="let style of getContent(subNav)" [style]="style">
+            <app-basic-style *ngFor="let style of getContent(subNav)" [style]="style" [url]="subNav.url">
             </app-basic-style>
         </ion-content>
     </ion-slide>

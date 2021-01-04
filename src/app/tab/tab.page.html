@@ -10,7 +10,7 @@
         </ion-toolbar>
     </ion-header>
     <div *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length == 0">
-        <app-basic-style *ngFor="let style of getContent(selfhelp.selectedMenu)" [style]="style"></app-basic-style>
+        <app-basic-style *ngFor="let style of getContent(selfhelp.selectedMenu)" [style]="style" [url]="selfhelp.selectedMenu.url"></app-basic-style>
     </div>
     <app-sub-menu *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length > 0" [selfhelp]="selfhelp">
     </app-sub-menu>

@@ -3,7 +3,7 @@
     <name>SelfHelpMobile</name>
     <description>SelfHelp App</description>
     <author email="tpf@humdek.unibe.ch" href="https://www.tpf.philhum.unibe.ch">Technology Platform for Research, UNIBE</author>
-    <content original-src="index.html" src="http://localhost:8101" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -98,5 +98,4 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <allow-navigation href="http://localhost:8101" sessionid="ec63e624" />
 </widget>

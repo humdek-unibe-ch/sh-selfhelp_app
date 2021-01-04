@@ -8,6 +8,7 @@ import { Style } from './../../selfhelpInterfaces';
 })
 export class BasicStyleComponent implements OnInit {
     @Input() style: Style;
+    @Input() url: string;
 
     constructor() { }
 
@@ -28,12 +29,12 @@ export class BasicStyleComponent implements OnInit {
      * @description Check if the style is the same as the requested one
      * @author Stefan Kodzhabashev
      * @date 2020-12-16
-     * @param {string} name
+     * @param {string} styleName
      * @returns {boolean}
      * @memberof BasicStyleComponent
      */
-    public isStyle(name: string): boolean {
-        return this.style && this.style.name == name;
+    public isStyle(styleName: string): boolean {
+        return this.style && this.style.style_name == styleName;
     }
 
     /**

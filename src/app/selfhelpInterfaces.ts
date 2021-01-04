@@ -29,7 +29,7 @@ export interface StyleField {
 
 export interface Style {
     id: StyleId,
-    name: string,
+    style_name: string,
     type: "style",
     children: any,
     css: string
@@ -37,14 +37,8 @@ export interface Style {
 
 export interface CardStyle extends Style {
     title: StyleField,
-    name: string,
     type: "style"
     childrn: any
-}
-
-export interface ContainerStyle extends Style {
-    is_fluid: StyleField,
-    export_pdf: StyleField,
 }
 
 export interface ContainerStyle extends Style {
@@ -61,25 +55,28 @@ export interface ConditionalContainerStyle extends Style {
     debug: StyleField,
 }
 
-export type Styles = (CardStyle | ContainerStyle | MarkdownStyle)[];
+export interface FormUserInputStyle extends Style {
+    form_name: string,
+}
+
+export interface InputStyle extends Style {
+    field_name: string,
+}
+
+export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {
     navigation: SelfHelpNavigation[],
     content: Styles,
     logged_in: boolean,
-    time?: any    
+    time?: any
 }
-
-// export interface SelfHelp {
-//     page: SelfHelpPage,
-//     selected_menu_title?: string
-// }
 
 export interface Url {
-    [key:string]: Styles
+    [key: string]: Styles
 }
 
-export interface SelfHelp{
+export interface SelfHelp {
     navigation: SelfHelpNavigation[],
     selectedMenu: SelfHelpNavigation,
     selectedSubMenu: SelfHelpNavigation,

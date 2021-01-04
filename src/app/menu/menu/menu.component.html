@@ -10,7 +10,7 @@
         [ngSwitch]="selfhelp.selectedMenu && selfhelp.selectedMenu.keyword == subNav.keyword" scrollbar="true">
         <ion-content center class="menuSlide" scrollbar="true">
             <div *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length == 0">
-                <app-basic-style *ngFor="let style of getContent(subNav)" [style]="style">
+                <app-basic-style *ngFor="let style of getContent(subNav)" [style]="style" [url]="subNav.url">
                 </app-basic-style>
             </div>
             <app-sub-menu *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length > 0"
