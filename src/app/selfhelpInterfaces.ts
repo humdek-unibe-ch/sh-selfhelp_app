@@ -73,7 +73,8 @@ export interface InputStyle extends Style {
     label: StyleField,
     value: StyleField,
     placeholder: StyleField,
-    last_value?: string
+    last_value?: string,
+    format?: string
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];

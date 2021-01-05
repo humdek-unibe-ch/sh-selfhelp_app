@@ -339,6 +339,7 @@ export class SelfhelpService {
                 });
             }
             if (style.fail_msgs) {
+                console.log(style.fail_msgs);
                 style.fail_msgs.forEach(fail_msg => {
                     this.presentToast(fail_msg, 'danger');
                 });

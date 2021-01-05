@@ -23,34 +23,47 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         this.style.children.forEach(formField => {
             if (formField.style_name && formField.style_name == 'input') {
                 const input = <InputStyle>formField;
-                let value = input.value ? input.value.content : ''; // if there is a default value we assign it
-                if(this.style.is_log.content != '1' && input.last_value){
+                let value: any = input.value ? input.value.content : ''; // if there is a default value we assign it
+                if (this.style.is_log.content != '1' && input.last_value) {
                     value = input.last_value; // the form is not a log, get the last value
+                }
+                if (input.type_input.content == 'checkbox' && value != '') {
+                    // assign values to true/false for checkbox. Ionic need them as boolean
+                    value = value == 1;
                 }
                 const req = input.is_required.content == '1' ? Validators.required : null;
                 formFields[input.name.content] = new FormControl(value, req);
             }
         });
         this.form = this.formBuilder.group(formFields);
+        this.form.valueChanges.subscribe(x => {
+            console.log('form value changed')
+            console.log(x)
+        })
     }
 
-    prepareParams(value): any{
+    prepareParams(value): any {
         let params = {};
         params['mobile'] = true;
         params['__form_name'] = this.style.name.content;
         this.style.children.forEach(formField => {
             if (formField.style_name && formField.style_name == 'input') {
                 const input = <InputStyle>formField;
+                let fieldValue = value[input.name.content];
+                if (input.type_input.content == 'checkbox') {
+                    // assign values to true/false for checkbox. Ionic need them as boolean
+                    fieldValue = Number(fieldValue);
+                }
                 params[input.name.content] = {
                     id: input.id.content,
-                    value: value[input.name.content]
+                    value: fieldValue
                 }
             }
         });
         return params;
     }
 
-    submitForm(value) {        
+    submitForm(value) {
         this.selfhelpService.submitForm(this.url, this.prepareParams(value));
     }
 
