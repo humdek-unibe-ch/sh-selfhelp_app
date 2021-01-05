@@ -40,7 +40,7 @@ export class AppComponent {
             translucent: true,
             showBackdrop: false,
             spinner: null,
-            duration: 3000
+            duration: 1000
         });
         await loading.present();
     }

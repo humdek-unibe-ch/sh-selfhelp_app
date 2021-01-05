@@ -1,0 +1,5 @@
+<ion-item *ngIf="style.type_input.content == 'text'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label position="floating">{{style.label.content}}</ion-label>
+    <ion-input [formControlName]="style.name.content"
+        [placeholder]="style.placeholder ? style.placeholder.content : ''"></ion-input>
+</ion-item>

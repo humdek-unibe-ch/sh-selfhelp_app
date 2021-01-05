@@ -11,6 +11,7 @@ import { FormUserInputStyleComponent } from '../styles/form-user-input-style/for
 import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
 import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputStyleComponent } from '../styles/input-style/input-style.component';
 
 @NgModule({
     imports: [
@@ -28,7 +29,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         ContainerStyleComponent,
         FormUserInputStyleComponent,
         ConditionalContainerStyleComponent,
-        SubMenuComponent        
+        SubMenuComponent,
+        InputStyleComponent        
     ]
 })
 export class TabPageModule { }

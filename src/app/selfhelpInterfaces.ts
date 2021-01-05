@@ -30,14 +30,14 @@ export interface StyleField {
 export interface Style {
     id: StyleId,
     style_name: string,
-    type: "style",
     children: any,
-    css: string
+    css: string,
+    success_msgs?: string[],
+    fail_msgs?: string[]
 }
 
 export interface CardStyle extends Style {
     title: StyleField,
-    type: "style"
     childrn: any
 }
 
@@ -56,11 +56,24 @@ export interface ConditionalContainerStyle extends Style {
 }
 
 export interface FormUserInputStyle extends Style {
-    form_name: string,
+    name: StyleField,
+    type: StyleField,
+    is_log: StyleField,
+    ajax: StyleField,
+    label: StyleField,
+    alert_success: StyleField,
+    submit_and_send_email: StyleField,
+    submit_and_send_label: StyleField,
 }
 
 export interface InputStyle extends Style {
-    field_name: string,
+    type_input: StyleField,
+    is_required: StyleField,
+    name: StyleField,
+    label: StyleField,
+    value: StyleField,
+    placeholder: StyleField,
+    last_value?: string
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];

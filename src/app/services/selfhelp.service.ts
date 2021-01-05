@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 
 @Injectable({
@@ -24,8 +24,9 @@ export class SelfhelpService {
         logged_in: null
     });
     private initApp = false;
+    private messageDuration = 2000;
 
-    constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform, private storage: Storage) {
+    constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform, private storage: Storage, public toastController: ToastController) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
                 this.isApp = true;
@@ -282,7 +283,6 @@ export class SelfhelpService {
     public getPage(keyword: string): void {
         this.execServerRequest(keyword, { mobile: true })
             .then((res: SelfHelpPageRequest) => {
-                console.log(res);
                 if (res) {
                     this.setPage(keyword, res);
                 }
@@ -322,12 +322,29 @@ export class SelfhelpService {
         this.execServerRequest(keyword, params)
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
+                    this.output_messages(res.content);
                     this.setPage(keyword, res);
                 }
             })
             .catch((err) => {
                 console.log(err);
             });
+    }
+
+    private output_messages(content: Styles) {
+        content.forEach(style => {
+            if (style.success_msgs) {
+                style.success_msgs.forEach(success_msg => {
+                    this.presentToast(success_msg, 'success');
+                });
+            }
+            if (style.fail_msgs) {
+                style.fail_msgs.forEach(fail_msg => {
+                    this.presentToast(fail_msg, 'danger');
+                });
+            }
+            this.output_messages(style.children);
+        });
     }
 
     private getNativeParams(params): string {
@@ -372,6 +389,16 @@ export class SelfhelpService {
             // Serialize scalar item.
             add(prefix, obj);
         }
+    }
+
+    async presentToast(msg: string, color: string) {
+        const toast = await this.toastController.create({
+            message: msg,
+            position: 'top',
+            color: color,
+            duration: this.messageDuration
+        });
+        toast.present();
     }
 
 }
