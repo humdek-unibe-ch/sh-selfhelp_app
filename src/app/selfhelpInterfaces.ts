@@ -20,8 +20,13 @@ export interface StyleId {
     type: string
 }
 
+export interface ValueItem {
+    value: string,
+    text: string,
+}
+
 export interface StyleField {
-    content: string,
+    content: string | ValueItem,
     type: string,
     id: number,
     default: string
@@ -75,6 +80,15 @@ export interface InputStyle extends Style {
     placeholder: StyleField,
     last_value?: string,
     format?: string
+}
+
+export interface RadioStyle extends Style {
+    is_required: StyleField,
+    name: StyleField,
+    label: StyleField,
+    value: StyleField,
+    items: StyleField,
+    last_value?: string
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];

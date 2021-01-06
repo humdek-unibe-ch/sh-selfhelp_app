@@ -8,6 +8,7 @@ import { FormGroup } from '@angular/forms';
     templateUrl: './input-style.component.html',
     styleUrls: ['./input-style.component.scss'],
 })
+
 export class InputStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: InputStyle;
     @Input() parentForm: FormGroup;

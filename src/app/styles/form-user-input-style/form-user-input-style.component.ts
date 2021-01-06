@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { FormUserInputStyle } from './../../selfhelpInterfaces';
+import { FormUserInputStyle, InputStyle, RadioStyle } from './../../selfhelpInterfaces';
 import { BasicStyleComponent } from './../basic-style/basic-style.component';
-import { InputStyle } from 'src/app/selfhelpInterfaces';
 
 @Component({
     selector: 'app-form-user-input-style',
@@ -19,20 +18,24 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     ngOnInit() {
+        this.initForm();
+    }
+
+    private initForm(): void {
         let formFields = {};
         this.style.children.forEach(formField => {
-            if (formField.style_name && formField.style_name == 'input') {
-                const input = <InputStyle>formField;
+            if (this.isFormField(formField)) {
+                const input = this.getFormField(formField);
                 let value: any = input.value ? input.value.content : ''; // if there is a default value we assign it
                 if (this.style.is_log.content != '1' && input.last_value) {
                     value = input.last_value; // the form is not a log, get the last value
                 }
-                if (input.type_input.content == 'checkbox' && value != '') {
+                if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox' && value != '') {
                     // assign values to true/false for checkbox. Ionic need them as boolean
                     value = value == 1;
                 }
                 const req = input.is_required.content == '1' ? Validators.required : null;
-                formFields[input.name.content] = new FormControl(value, req);
+                formFields[input.name.content.toString()] = new FormControl(value, req);
             }
         });
         this.form = this.formBuilder.group(formFields);
@@ -42,19 +45,19 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         })
     }
 
-    prepareParams(value): any {
+    private prepareParams(value: { [key: string]: any; }): any {
         let params = {};
         params['mobile'] = true;
         params['__form_name'] = this.style.name.content;
         this.style.children.forEach(formField => {
-            if (formField.style_name && formField.style_name == 'input') {
-                const input = <InputStyle>formField;
-                let fieldValue = value[input.name.content];
-                if (input.type_input.content == 'checkbox') {
+            if (this.isFormField(formField)) {
+                const input = this.getFormField(formField);
+                let fieldValue = value[input.name.content.toString()];
+                if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox') {
                     // assign values to true/false for checkbox. Ionic need them as boolean
                     fieldValue = Number(fieldValue);
                 }
-                params[input.name.content] = {
+                params[input.name.content.toString()] = {
                     id: input.id.content,
                     value: fieldValue
                 }
@@ -62,12 +65,27 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         });
         return params;
     }
+    private getFormField(formField: any): InputStyle | RadioStyle {
+        switch (formField.style_name) {
+            case 'input':
+                return <InputStyle>formField;
+            case 'radio':
+                return <RadioStyle>formField;
+            default:
+                return null;
+        }
+    }
 
-    submitForm(value) {
+    private isFormField(field: any): boolean {
+        return field.style_name &&
+            (field.style_name == 'input' || field.style_name == 'radio');
+    }
+
+    public submitForm(value: { [key: string]: any; }): void {
         this.selfhelpService.submitForm(this.url, this.prepareParams(value));
     }
 
-    submitFormAndSendEmail(value) {
+    public submitFormAndSendEmail(value: { [key: string]: any; }): void {
         let params = this.prepareParams(value);
         params['btnSubmitAndSend'] = 'send_email';
         this.selfhelpService.submitForm(this.url, params);

@@ -12,6 +12,7 @@ import { ConditionalContainerStyleComponent } from '../styles/conditional-contai
 import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputStyleComponent } from '../styles/input-style/input-style.component';
+import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
 
 @NgModule({
     imports: [
@@ -30,7 +31,8 @@ import { InputStyleComponent } from '../styles/input-style/input-style.component
         FormUserInputStyleComponent,
         ConditionalContainerStyleComponent,
         SubMenuComponent,
-        InputStyleComponent        
+        InputStyleComponent,
+        RadioStyleComponent     
     ]
 })
 export class TabPageModule { }
