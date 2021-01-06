@@ -1,33 +1,33 @@
-<ion-item *ngIf="style.type_input.content == 'text'" [formGroup]="parentForm" [class]="getCss()">
+<ion-item *ngIf="parentForm && style.type_input.content == 'text'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label position="floating">{{style.label.content}}</ion-label>
     <ion-input [formControlName]="style.name.content"
         [placeholder]="style.placeholder ? style.placeholder.content : ''"></ion-input>
 </ion-item>
 
-<ion-item *ngIf="style.type_input.content == 'date'" [formGroup]="parentForm" [class]="getCss()">
+<ion-item *ngIf="parentForm && style.type_input.content == 'date'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label position="floating">{{style.label.content}}</ion-label>
-    <ion-datetime [displayFormat]="style.format"></ion-datetime>
+    <ion-datetime [formControlName]="style.name.content" [displayFormat]="style.format"></ion-datetime>
 </ion-item>
 
-<ion-item *ngIf="style.type_input.content == 'email'" [formGroup]="parentForm" [class]="getCss()">
+<ion-item *ngIf="parentForm && style.type_input.content == 'email'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label position="floating">{{style.label.content}}</ion-label>
     <ion-input [formControlName]="style.name.content" email required
         [placeholder]="style.placeholder ? style.placeholder.content : ''"></ion-input>
 </ion-item>
 
-<ion-item *ngIf="style.type_input.content == 'number'" [formGroup]="parentForm" [class]="getCss()">
+<ion-item *ngIf="parentForm && style.type_input.content == 'number'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label position="floating">{{style.label.content}}</ion-label>
     <ion-input [formControlName]="style.name.content" type="number"
         [placeholder]="style.placeholder ? style.placeholder.content : ''"></ion-input>
 </ion-item>
 
-<ion-item *ngIf="style.type_input.content == 'password'" [formGroup]="parentForm" [class]="getCss()">
+<ion-item *ngIf="parentForm && style.type_input.content == 'password'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label position="floating">{{style.label.content}}</ion-label>
     <ion-input [formControlName]="style.name.content" type="password"
         [placeholder]="style.placeholder ? style.placeholder.content : ''"></ion-input>
 </ion-item>
 
-<ion-item *ngIf="style.type_input.content == 'range'" [formGroup]="parentForm" [class]="getCss()">
+<ion-item *ngIf="parentForm && style.type_input.content == 'range'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label position="stacked">{{style.label.content}}</ion-label>
     <ion-range pin="true" color="secondary" [formControlName]="style.name.content">
     </ion-range>
