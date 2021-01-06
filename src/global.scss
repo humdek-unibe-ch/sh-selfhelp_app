@@ -82,3 +82,21 @@ $color-loader: #ce4233;
   50% { height: 8px; width: 40px }
   100% { left: 235px; height: 30px; width: 15px}
 }
+
+/*
+ * This adds a scroll bar to ionic alerts
+ */
+.alert-radio-group::-webkit-scrollbar, .alert-checkbox-group::-webkit-scrollbar {
+    width: 0.7em;
+    display: block !important;
+}
+
+.alert-radio-group::-webkit-scrollbar-track, .alert-checkbox-group::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.alert-radio-group::-webkit-scrollbar-thumb, .alert-checkbox-group::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { FormUserInputStyle, InputStyle, RadioStyle } from './../../selfhelpInterfaces';
+import { FormUserInputStyle, InputStyle, RadioStyle, SelectStyle } from './../../selfhelpInterfaces';
 import { BasicStyleComponent } from './../basic-style/basic-style.component';
 
 @Component({
@@ -18,6 +18,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     ngOnInit() {
+        console.log(this.url);
         this.initForm();
     }
 
@@ -33,6 +34,11 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                 if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox' && value != '') {
                     // assign values to true/false for checkbox. Ionic need them as boolean
                     value = value == 1;
+                }
+                if (input.style_name == 'select' && (<SelectStyle>input).disabled.content == '1') {
+                    // if select is disabled
+                    value = value == 1;
+                    value = { value: value, disabled: true };
                 }
                 const req = input.is_required.content == '1' ? Validators.required : null;
                 formFields[input.name.content.toString()] = new FormControl(value, req);
@@ -65,20 +71,22 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         });
         return params;
     }
-    private getFormField(formField: any): InputStyle | RadioStyle {
+    private getFormField(formField: any): InputStyle | RadioStyle | SelectStyle {
         switch (formField.style_name) {
             case 'input':
                 return <InputStyle>formField;
             case 'radio':
                 return <RadioStyle>formField;
+            case 'select':
+                return <SelectStyle>formField;
             default:
-                return null;
+                return formField;
         }
     }
 
     private isFormField(field: any): boolean {
         return field.style_name &&
-            (field.style_name == 'input' || field.style_name == 'radio');
+            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select');
     }
 
     public submitForm(value: { [key: string]: any; }): void {

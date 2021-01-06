@@ -13,6 +13,7 @@ import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputStyleComponent } from '../styles/input-style/input-style.component';
 import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
+import { SelectStyleComponent } from '../styles/select-style/select-style.component';
 
 @NgModule({
     imports: [
@@ -24,15 +25,16 @@ import { RadioStyleComponent } from '../styles/radio-style/radio-style.component
     ],
     declarations: [
         TabPage,
-        CardStyleComponent,
         BasicStyleComponent,
+        CardStyleComponent,        
         MarkdownStyleComponent,
         ContainerStyleComponent,
         FormUserInputStyleComponent,
         ConditionalContainerStyleComponent,
         SubMenuComponent,
         InputStyleComponent,
-        RadioStyleComponent     
+        RadioStyleComponent,
+        SelectStyleComponent
     ]
 })
 export class TabPageModule { }

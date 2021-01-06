@@ -7,6 +7,16 @@ import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
 import { MenuComponent } from '../menu/menu/menu.component';
 import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
+import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
+import { CardStyleComponent } from '../styles/card-style/card-style.component';
+import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
+import { ContainerStyleComponent } from '../styles/container-style/container-style.component';
+import { FormUserInputStyleComponent } from '../styles/form-user-input-style/form-user-input-style.component';
+import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
+import { InputStyleComponent } from '../styles/input-style/input-style.component';
+import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
+import { SelectStyleComponent } from '../styles/select-style/select-style.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
     {
@@ -36,13 +46,24 @@ const routes: Routes = [
     imports: [
         IonicModule,
         CommonModule,        
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        FormsModule,
+        ReactiveFormsModule
     ],
     exports: [RouterModule],
     declarations: [
         TabsPage,
         MenuComponent,
         SubMenuComponent,
+        BasicStyleComponent,
+        CardStyleComponent,        
+        MarkdownStyleComponent,
+        ContainerStyleComponent,
+        FormUserInputStyleComponent,
+        ConditionalContainerStyleComponent,
+        InputStyleComponent,
+        RadioStyleComponent,
+        SelectStyleComponent
     ]
 })
 export class TabsPageModule {

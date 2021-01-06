@@ -71,24 +71,31 @@ export interface FormUserInputStyle extends Style {
     submit_and_send_label: StyleField,
 }
 
-export interface InputStyle extends Style {
-    type_input: StyleField,
+export interface FormField extends Style {
     is_required: StyleField,
     name: StyleField,
     label: StyleField,
     value: StyleField,
+    last_value?: string
+}
+
+export interface InputStyle extends FormField {
+    type_input: StyleField,
     placeholder: StyleField,
-    last_value?: string,
     format?: string
 }
 
-export interface RadioStyle extends Style {
-    is_required: StyleField,
-    name: StyleField,
-    label: StyleField,
-    value: StyleField,
+export interface RadioStyle extends FormField {
+    items: StyleField
+}
+
+export interface SelectStyle extends FormField {
     items: StyleField,
-    last_value?: string
+    is_multiple: StyleField,
+    max: StyleField,
+    live_search: StyleField,
+    disabled: StyleField,
+    alt: StyleField
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];

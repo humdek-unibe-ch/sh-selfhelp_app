@@ -1,7 +1,7 @@
 <div *ngIf="parentForm" [formGroup]="parentForm" [class]="getCss()">
     <ion-radio-group [formControlName]="style.name.content">
-        <ion-list-header>
-            <ion-label>{{style.name.content}}</ion-label>
+        <ion-list-header *ngIf="style.label">
+            <ion-label>{{style.label.content}}</ion-label>
         </ion-list-header>
         <ion-item *ngFor="let item of style.items.content">
             <ion-label>{{item.text}}</ion-label>

@@ -1,0 +1,8 @@
+<ion-item *ngIf="parentForm && style.items" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label">{{style.label.content}}</ion-label>
+    <ion-select [multiple]="style.is_multiple.content == '1'" interface="popover"
+        [formControlName]="style.name.content" [placeholder]="style.alt ? style.alt.content : ''">
+        <ion-select-option *ngFor="let item of style.items.content" [value]="item.value">{{item.text}}
+        </ion-select-option>
+    </ion-select>
+</ion-item>

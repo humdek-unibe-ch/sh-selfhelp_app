@@ -3,6 +3,6 @@
         <ion-card-title>{{style.title.content}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-        <app-basic-style *ngFor="let child of style.children" [style]="child"></app-basic-style> 
+        <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url"></app-basic-style> 
     </ion-card-content>
 </ion-card>
