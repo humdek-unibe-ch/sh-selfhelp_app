@@ -98,6 +98,10 @@ export interface SelectStyle extends FormField {
     alt: StyleField
 }
 
+export interface TextAreaStyle extends FormField {
+    placeholder: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {

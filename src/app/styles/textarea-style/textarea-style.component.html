@@ -1,0 +1,4 @@
+<ion-item *ngIf="parentForm" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="floating">{{style.label.content}}</ion-label>
+    <ion-textarea [autoGrow]="true" [rows]="4" [formControlName]="style.name.content" [placeholder]="style.placeholder ? style.placeholder.content : ''"></ion-textarea>
+</ion-item>

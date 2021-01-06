@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputStyleComponent } from '../styles/input-style/input-style.component';
 import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
 import { SelectStyleComponent } from '../styles/select-style/select-style.component';
+import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.component';
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { SelectStyleComponent } from '../styles/select-style/select-style.compon
         SubMenuComponent,
         InputStyleComponent,
         RadioStyleComponent,
-        SelectStyleComponent
+        SelectStyleComponent,
+        TextareaStyleComponent
     ]
 })
 export class TabPageModule { }

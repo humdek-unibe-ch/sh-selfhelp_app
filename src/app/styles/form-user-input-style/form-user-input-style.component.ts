@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { FormUserInputStyle, InputStyle, RadioStyle, SelectStyle } from './../../selfhelpInterfaces';
+import { FormUserInputStyle, InputStyle, RadioStyle, SelectStyle, TextAreaStyle } from './../../selfhelpInterfaces';
 import { BasicStyleComponent } from './../basic-style/basic-style.component';
 
 @Component({
@@ -71,7 +71,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         });
         return params;
     }
-    private getFormField(formField: any): InputStyle | RadioStyle | SelectStyle {
+    private getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle {
         switch (formField.style_name) {
             case 'input':
                 return <InputStyle>formField;
@@ -79,6 +79,8 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                 return <RadioStyle>formField;
             case 'select':
                 return <SelectStyle>formField;
+            case 'textarea':
+                return <TextAreaStyle>formField;
             default:
                 return formField;
         }
@@ -86,7 +88,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
 
     private isFormField(field: any): boolean {
         return field.style_name &&
-            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select');
+            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea');
     }
 
     public submitForm(value: { [key: string]: any; }): void {

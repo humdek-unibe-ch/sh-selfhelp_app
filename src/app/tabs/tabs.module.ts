@@ -17,6 +17,7 @@ import { InputStyleComponent } from '../styles/input-style/input-style.component
 import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
 import { SelectStyleComponent } from '../styles/select-style/select-style.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.component';
 
 const routes: Routes = [
     {
@@ -63,7 +64,8 @@ const routes: Routes = [
         ConditionalContainerStyleComponent,
         InputStyleComponent,
         RadioStyleComponent,
-        SelectStyleComponent
+        SelectStyleComponent,
+        TextareaStyleComponent
     ]
 })
 export class TabsPageModule {
