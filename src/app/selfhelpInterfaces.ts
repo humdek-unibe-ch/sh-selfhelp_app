@@ -102,6 +102,11 @@ export interface TextAreaStyle extends FormField {
     placeholder: StyleField
 }
 
+export interface QualtricsSurveyStyle extends Style {
+    qualtricsSurvey: StyleField,
+    qualtrics_url: string
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {

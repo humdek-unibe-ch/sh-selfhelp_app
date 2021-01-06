@@ -15,6 +15,8 @@ import { InputStyleComponent } from '../styles/input-style/input-style.component
 import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
 import { SelectStyleComponent } from '../styles/select-style/select-style.component';
 import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.component';
+import { QualtricsSurveyStyleComponent } from '../qualtrics-survey-style/qualtrics-survey-style.component';
+import { SafePipeModule } from 'safe-pipe';
 
 @NgModule({
     imports: [
@@ -22,7 +24,8 @@ import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.
         CommonModule,
         TabPageRoutingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        SafePipeModule
     ],
     declarations: [
         TabPage,
@@ -36,7 +39,8 @@ import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.
         InputStyleComponent,
         RadioStyleComponent,
         SelectStyleComponent,
-        TextareaStyleComponent
+        TextareaStyleComponent,
+        QualtricsSurveyStyleComponent
     ]
 })
 export class TabPageModule { }

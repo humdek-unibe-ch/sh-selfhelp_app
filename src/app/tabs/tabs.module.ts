@@ -18,6 +18,8 @@ import { RadioStyleComponent } from '../styles/radio-style/radio-style.component
 import { SelectStyleComponent } from '../styles/select-style/select-style.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.component';
+import { QualtricsSurveyStyleComponent } from '../qualtrics-survey-style/qualtrics-survey-style.component';
+import { SafePipeModule } from 'safe-pipe';
 
 const routes: Routes = [
     {
@@ -49,7 +51,8 @@ const routes: Routes = [
         CommonModule,        
         RouterModule.forChild(routes),
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        SafePipeModule
     ],
     exports: [RouterModule],
     declarations: [
@@ -65,7 +68,8 @@ const routes: Routes = [
         InputStyleComponent,
         RadioStyleComponent,
         SelectStyleComponent,
-        TextareaStyleComponent
+        TextareaStyleComponent,
+        QualtricsSurveyStyleComponent
     ]
 })
 export class TabsPageModule {

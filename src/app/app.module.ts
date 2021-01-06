@@ -15,7 +15,7 @@ import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 
 @NgModule({
     declarations: [
-        AppComponent               
+        AppComponent
     ],
     entryComponents: [],
     imports: [

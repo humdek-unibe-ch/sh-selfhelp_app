@@ -16,8 +16,6 @@ export class SelectStyleComponent extends BasicStyleComponent implements OnInit 
         super();
     }
 
-    ngOnInit() { 
-        console.log(this.style);
-    }
+    ngOnInit() { }
 
 }

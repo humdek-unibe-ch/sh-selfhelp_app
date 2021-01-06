@@ -204,7 +204,7 @@ export class SelfhelpService {
 
     private autoLogin() {
         console.log('try auto login');
-        this.login('tpf', 'h2QPK2fJ_WNca6W$');
+        this.login('redwater@abv.bg', 'q1w2e3r4');
     }
 
     private login(email: string, password: string) {
