@@ -24,6 +24,7 @@ import { DivStyleComponent } from '../styles/div-style/div-style.component';
 import { ImageStyleComponent } from '../styles/image-style/image-style.component';
 import { VideoStyleComponent } from '../styles/video-style/video-style.component';
 import { AlertStyleComponent } from '../styles/alert-style/alert-style.component';
+import { PlaintextStyleComponent } from '../styles/plaintext-style/plaintext-style.component';
 
 const routes: Routes = [
     {
@@ -77,7 +78,8 @@ const routes: Routes = [
         DivStyleComponent,
         ImageStyleComponent,
         VideoStyleComponent,
-        AlertStyleComponent
+        AlertStyleComponent,
+        PlaintextStyleComponent
     ]
 })
 export class TabsPageModule {

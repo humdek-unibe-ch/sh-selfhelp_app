@@ -130,6 +130,11 @@ export interface AlertStyle extends Style {
     type: StyleField
 }
 
+export interface PlaintextStyle extends Style {
+    is_paragraph: StyleField,
+    text: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {
