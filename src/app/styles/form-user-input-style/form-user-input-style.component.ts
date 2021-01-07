@@ -18,7 +18,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     ngOnInit() {
-        console.log(this.url);
         this.initForm();
     }
 

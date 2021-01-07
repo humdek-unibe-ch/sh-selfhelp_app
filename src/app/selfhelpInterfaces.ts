@@ -107,6 +107,12 @@ export interface QualtricsSurveyStyle extends Style {
     qualtrics_url: string
 }
 
+export interface ImageStyle extends Style {
+    is_fluid: StyleField,
+    title: StyleField,
+    source: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {

@@ -56,6 +56,8 @@ export class BasicStyleComponent implements OnInit {
         return mobileCss;
     }
 
-
+    public getFieldContent(fieldName: string): string {
+        return this.style[fieldName] ? this.style[fieldName].content : '';
+    }
 
 }

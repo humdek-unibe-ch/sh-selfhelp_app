@@ -402,4 +402,8 @@ export class SelfhelpService {
         toast.present();
     }
 
+    public getApiEndPointNative(): string {
+        return this.API_ENDPOINT_NATIVE;
+    }
+
 }

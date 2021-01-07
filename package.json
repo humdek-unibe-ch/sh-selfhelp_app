@@ -31,6 +31,7 @@
     "rxjs": "~6.5.5",
     "safe-pipe": "^1.0.3",
     "tslib": "^2.0.0",
+    "turbocommons-ts": "^3.7.0",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
