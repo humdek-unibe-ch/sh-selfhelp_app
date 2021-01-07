@@ -25,8 +25,13 @@ export interface ValueItem {
     text: string,
 }
 
+export interface VideoContent {
+    source: string,
+    type: string,
+}
+
 export interface StyleField {
-    content: string | ValueItem,
+    content: string | ValueItem | VideoContent[],
     type: string,
     id: number,
     default: string
@@ -110,7 +115,14 @@ export interface QualtricsSurveyStyle extends Style {
 export interface ImageStyle extends Style {
     is_fluid: StyleField,
     title: StyleField,
+    alt: StyleField,
     source: StyleField
+}
+
+export interface VideoStyle extends Style {
+    is_fluid: StyleField,
+    alt: StyleField,
+    sources: StyleField
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];

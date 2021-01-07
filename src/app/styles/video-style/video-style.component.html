@@ -1,0 +1,4 @@
+<video controls [class]="(style.is_fluid.content == '1' ? 'img-fluid ' : '') + getCss()">
+    <source *ngFor="let source of getVideoSource()" [src]="getVideoUrl(source)" [type]="source.type">
+    {{getFieldContent('alt')}}
+</video>

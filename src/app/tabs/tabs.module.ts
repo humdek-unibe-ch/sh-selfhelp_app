@@ -22,6 +22,7 @@ import { QualtricsSurveyStyleComponent } from '../qualtrics-survey-style/qualtri
 import { SafePipeModule } from 'safe-pipe';
 import { DivStyleComponent } from '../styles/div-style/div-style.component';
 import { ImageStyleComponent } from '../styles/image-style/image-style.component';
+import { VideoStyleComponent } from '../styles/video-style/video-style.component';
 
 const routes: Routes = [
     {
@@ -73,7 +74,8 @@ const routes: Routes = [
         TextareaStyleComponent,
         QualtricsSurveyStyleComponent,
         DivStyleComponent,
-        ImageStyleComponent
+        ImageStyleComponent,
+        VideoStyleComponent
     ]
 })
 export class TabsPageModule {
