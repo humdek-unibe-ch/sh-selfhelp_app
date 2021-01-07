@@ -20,6 +20,7 @@ import { SafePipeModule } from 'safe-pipe';
 import { DivStyleComponent } from '../styles/div-style/div-style.component';
 import { ImageStyleComponent } from '../styles/image-style/image-style.component';
 import { VideoStyleComponent } from '../styles/video-style/video-style.component';
+import { AlertStyleComponent } from '../styles/alert-style/alert-style.component';
 
 @NgModule({
     imports: [
@@ -46,7 +47,8 @@ import { VideoStyleComponent } from '../styles/video-style/video-style.component
         QualtricsSurveyStyleComponent,
         DivStyleComponent,
         ImageStyleComponent,
-        VideoStyleComponent
+        VideoStyleComponent,
+        AlertStyleComponent
     ]
 })
 export class TabPageModule { }

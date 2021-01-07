@@ -125,6 +125,11 @@ export interface VideoStyle extends Style {
     sources: StyleField
 }
 
+export interface AlertStyle extends Style {
+    is_dismissable: StyleField,
+    type: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {
