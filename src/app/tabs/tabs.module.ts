@@ -27,6 +27,7 @@ import { AlertStyleComponent } from '../styles/alert-style/alert-style.component
 import { PlaintextStyleComponent } from '../styles/plaintext-style/plaintext-style.component';
 import { MarkdownInlineStyleComponent } from '../styles/markdown-inline-style/markdown-inline-style.component';
 import { HeadingStyleComponent } from '../styles/heading-style/heading-style.component';
+import { RawTextStyleComponent } from '../styles/raw-text-style/raw-text-style.component';
 
 const routes: Routes = [
     {
@@ -83,7 +84,8 @@ const routes: Routes = [
         AlertStyleComponent,
         PlaintextStyleComponent,
         MarkdownInlineStyleComponent,
-        HeadingStyleComponent
+        HeadingStyleComponent,
+        RawTextStyleComponent
     ]
 })
 export class TabsPageModule {

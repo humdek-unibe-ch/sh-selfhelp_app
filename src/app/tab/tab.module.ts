@@ -24,6 +24,7 @@ import { AlertStyleComponent } from '../styles/alert-style/alert-style.component
 import { PlaintextStyleComponent } from '../styles/plaintext-style/plaintext-style.component';
 import { MarkdownInlineStyleComponent } from '../styles/markdown-inline-style/markdown-inline-style.component';
 import { HeadingStyleComponent } from '../styles/heading-style/heading-style.component';
+import { RawTextStyleComponent } from '../styles/raw-text-style/raw-text-style.component';
 
 @NgModule({
     imports: [
@@ -54,7 +55,8 @@ import { HeadingStyleComponent } from '../styles/heading-style/heading-style.com
         AlertStyleComponent,
         PlaintextStyleComponent,
         MarkdownInlineStyleComponent,
-        HeadingStyleComponent
+        HeadingStyleComponent,
+        RawTextStyleComponent
     ]
 })
 export class TabPageModule { }

@@ -144,6 +144,10 @@ export interface HeadingStyle extends Style {
     title: StyleField
 }
 
+export interface RawTextStyle extends Style {
+    text: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {
