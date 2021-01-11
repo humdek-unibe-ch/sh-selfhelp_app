@@ -29,6 +29,7 @@ import { MarkdownInlineStyleComponent } from '../styles/markdown-inline-style/ma
 import { HeadingStyleComponent } from '../styles/heading-style/heading-style.component';
 import { RawTextStyleComponent } from '../styles/raw-text-style/raw-text-style.component';
 import { AudioStyleComponent } from '../styles/audio-style/audio-style.component';
+import { FigureStyleComponent } from '../styles/figure-style/figure-style.component';
 
 const routes: Routes = [
     {
@@ -87,7 +88,8 @@ const routes: Routes = [
         MarkdownInlineStyleComponent,
         HeadingStyleComponent,
         RawTextStyleComponent,
-        AudioStyleComponent
+        AudioStyleComponent,
+        FigureStyleComponent
     ]
 })
 export class TabsPageModule {

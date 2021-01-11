@@ -153,6 +153,11 @@ export interface AudioStyle extends Style {
     sources: StyleField
 }
 
+export interface FigureStyle extends Style {
+    caption_title: StyleField,
+    caption: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {
