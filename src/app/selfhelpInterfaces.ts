@@ -139,6 +139,11 @@ export interface MarkdownInlineStyle extends Style {
     text_md_inline: StyleField
 }
 
+export interface HeadingStyle extends Style {
+    level: StyleField,
+    title: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {

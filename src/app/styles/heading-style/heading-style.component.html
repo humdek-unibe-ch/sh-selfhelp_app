@@ -1,0 +1,9 @@
+<span [ngSwitch]="getFieldContent('level')">
+    <h1 *ngSwitchCase="'1'" [class]="getCss()">{{getFieldContent('title')}}</h1>
+    <h2 *ngSwitchCase="'2'" [class]="getCss()">{{getFieldContent('title')}}</h2>
+    <h3 *ngSwitchCase="'3'" [class]="getCss()">{{getFieldContent('title')}}</h3>
+    <h4 *ngSwitchCase="'4'" [class]="getCss()">{{getFieldContent('title')}}</h4>
+    <h5 *ngSwitchCase="'5'" [class]="getCss()">{{getFieldContent('title')}}</h5>
+    <h6 *ngSwitchCase="'6'" [class]="getCss()">{{getFieldContent('title')}}</h6>
+    <h1 *ngSwitchDefault [class]="getCss()">{{getFieldContent('title')}}</h1>
+</span>
