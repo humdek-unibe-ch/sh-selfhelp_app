@@ -1,28 +1,29 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { VideoStyle, MediaContent } from 'src/app/selfhelpInterfaces';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { StringUtils } from 'turbocommons-ts';
-import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { AudioStyle, MediaContent } from 'src/app/selfhelpInterfaces';
 
 @Component({
-    selector: 'app-video-style',
-    templateUrl: './video-style.component.html',
-    styleUrls: ['./video-style.component.scss'],
+    selector: 'app-audio-style',
+    templateUrl: './audio-style.component.html',
+    styleUrls: ['./audio-style.component.scss'],
 })
-export class VideoStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: VideoStyle;
+export class AudioStyleComponent extends BasicStyleComponent implements OnInit {
+    @Input() style: AudioStyle;
 
     constructor(private selfhelp: SelfhelpService) {
         super();
     }
 
+
     ngOnInit() { }
 
-    public getVideoSource(): MediaContent[] {
+    public getAudioSource(): MediaContent[] {
         return this.style.sources ?  <MediaContent[]>this.style.sources.content : null;
     }
 
-    public getVideoUrl(videoUrl: MediaContent): string {
+    public getAudioUrl(videoUrl: MediaContent): string {
         if (StringUtils.isUrl(videoUrl.source)) {
             return videoUrl.source; 
         } else {

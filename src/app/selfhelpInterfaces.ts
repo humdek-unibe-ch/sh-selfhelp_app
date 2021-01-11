@@ -25,13 +25,13 @@ export interface ValueItem {
     text: string,
 }
 
-export interface VideoContent {
+export interface MediaContent {
     source: string,
     type: string,
 }
 
 export interface StyleField {
-    content: string | ValueItem | VideoContent[],
+    content: string | ValueItem | MediaContent[],
     type: string,
     id: number,
     default: string
@@ -146,6 +146,11 @@ export interface HeadingStyle extends Style {
 
 export interface RawTextStyle extends Style {
     text: StyleField
+}
+
+export interface AudioStyle extends Style {
+    alt: StyleField,
+    sources: StyleField
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];

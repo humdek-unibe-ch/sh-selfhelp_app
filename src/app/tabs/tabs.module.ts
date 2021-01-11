@@ -28,6 +28,7 @@ import { PlaintextStyleComponent } from '../styles/plaintext-style/plaintext-sty
 import { MarkdownInlineStyleComponent } from '../styles/markdown-inline-style/markdown-inline-style.component';
 import { HeadingStyleComponent } from '../styles/heading-style/heading-style.component';
 import { RawTextStyleComponent } from '../styles/raw-text-style/raw-text-style.component';
+import { AudioStyleComponent } from '../styles/audio-style/audio-style.component';
 
 const routes: Routes = [
     {
@@ -85,7 +86,8 @@ const routes: Routes = [
         PlaintextStyleComponent,
         MarkdownInlineStyleComponent,
         HeadingStyleComponent,
-        RawTextStyleComponent
+        RawTextStyleComponent,
+        AudioStyleComponent
     ]
 })
 export class TabsPageModule {

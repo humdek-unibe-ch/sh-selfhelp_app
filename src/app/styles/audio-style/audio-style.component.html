@@ -1,0 +1,4 @@
+<audio controls [class]="getCss()">
+    <source *ngFor="let source of getAudioSource()" [src]="getAudioUrl(source)" [type]="source.type">
+    {{getFieldContent('alt')}}
+</audio>
