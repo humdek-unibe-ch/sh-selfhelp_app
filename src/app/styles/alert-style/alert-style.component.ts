@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AlertStyle } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 
@@ -8,7 +8,6 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./alert-style.component.scss'],
 })
 export class AlertStyleComponent extends BasicStyleComponent implements OnInit {
-    @ViewChild('alert') private alert: ElementRef;
     @Input() style: AlertStyle;
 
     constructor() {
@@ -16,9 +15,5 @@ export class AlertStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     ngOnInit() { }
-
-    public remove(): void {
-        this.alert.nativeElement.remove();
-    }
 
 }

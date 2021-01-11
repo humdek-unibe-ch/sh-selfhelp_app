@@ -28,6 +28,7 @@
     "@ionic/storage": "^2.3.1",
     "bootstrap": "^4.4.1",
     "iframe-resizer": "^4.3.0",
+    "jquery": "^3.5.1",
     "rxjs": "~6.5.5",
     "safe-pipe": "^1.0.3",
     "tslib": "^2.0.0",

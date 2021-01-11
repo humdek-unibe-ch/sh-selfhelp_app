@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { getDefaultSettings } from 'http2';
 import { ProgressBarStyle } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 

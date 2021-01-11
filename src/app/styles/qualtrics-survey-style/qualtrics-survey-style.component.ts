@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { QualtricsSurveyStyle } from '../selfhelpInterfaces';
-import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
+import { QualtricsSurveyStyle } from '../../selfhelpInterfaces';
+import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { iframeResizer } from 'iframe-resizer';
 
 @Component({
@@ -20,7 +20,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
             log: false,
             heightCalculationMethod: 'lowestElement',
             checkOrigin: false
-        }, this.element.nativeElement.querySelector('iframe'));
+        }, this.element.nativeElement.querySelector('iframe')); 
     }
 
 }
