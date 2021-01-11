@@ -29,6 +29,7 @@ import { AudioStyleComponent } from '../styles/audio-style/audio-style.component
 import { FigureStyleComponent } from '../styles/figure-style/figure-style.component';
 import { ProgressBarStyleComponent } from '../styles/progress-bar-style/progress-bar-style.component';
 import { CarouselStyleComponent } from '../styles/carousel-style/carousel-style.component';
+import { JumbotronStyleComponent } from '../styles/jumbotron-style/jumbotron-style.component';
 
 @NgModule({
     imports: [
@@ -64,7 +65,8 @@ import { CarouselStyleComponent } from '../styles/carousel-style/carousel-style.
         AudioStyleComponent,
         FigureStyleComponent,
         ProgressBarStyleComponent,
-        CarouselStyleComponent
+        CarouselStyleComponent,
+        JumbotronStyleComponent
     ]
 })
 export class TabPageModule { }
