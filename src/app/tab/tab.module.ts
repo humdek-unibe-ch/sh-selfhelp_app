@@ -28,6 +28,7 @@ import { RawTextStyleComponent } from '../styles/raw-text-style/raw-text-style.c
 import { AudioStyleComponent } from '../styles/audio-style/audio-style.component';
 import { FigureStyleComponent } from '../styles/figure-style/figure-style.component';
 import { ProgressBarStyleComponent } from '../styles/progress-bar-style/progress-bar-style.component';
+import { CarouselStyleComponent } from '../styles/carousel-style/carousel-style.component';
 
 @NgModule({
     imports: [
@@ -62,7 +63,8 @@ import { ProgressBarStyleComponent } from '../styles/progress-bar-style/progress
         RawTextStyleComponent,
         AudioStyleComponent,
         FigureStyleComponent,
-        ProgressBarStyleComponent
+        ProgressBarStyleComponent,
+        CarouselStyleComponent
     ]
 })
 export class TabPageModule { }

@@ -30,8 +30,14 @@ export interface MediaContent {
     type: string,
 }
 
+export interface CarouselContent {
+    source: string,
+    alt: string,
+    caption: string
+}
+
 export interface StyleField {
-    content: string | ValueItem | MediaContent[],
+    content: string | ValueItem | MediaContent[] | CarouselContent[],
     type: string,
     id: number,
     default: string
@@ -164,6 +170,14 @@ export interface ProgressBarStyle extends Style {
     count_max: StyleField,
     is_striped: StyleField,
     has_label: StyleField
+}
+
+export interface CarouselStyle extends Style {
+    id_prefix: StyleField,
+    has_controls: StyleField,
+    has_indicators: StyleField,
+    has_crossfade: StyleField,
+    sources: StyleField
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
