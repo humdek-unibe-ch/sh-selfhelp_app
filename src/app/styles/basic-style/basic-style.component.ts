@@ -37,6 +37,10 @@ export class BasicStyleComponent implements OnInit {
         return this.style && this.style.style_name == styleName;
     }
 
+    public isChildStyle(child: Style, styleName: string): boolean {
+        return child && child.style_name == styleName;
+    }
+
     /**
      * @description Return the css class names for the mobile app. Only class names that starts with `mobile-` are concidered as class names that we will use.
      * @author Stefan Kodzhabashev
@@ -56,8 +60,20 @@ export class BasicStyleComponent implements OnInit {
         return mobileCss;
     }
 
-    public getFieldContent(fieldName: string): string {        
+    public getFieldContent(fieldName: string): string {
         return this.style[fieldName] ? this.style[fieldName].content : '';
+    }
+
+    public getChildFieldContent(child: Style, fieldName: string): string {
+        return child[fieldName] ? child[fieldName].content : '';
+    }
+
+    public getID(): number {
+        return this.style.id ? parseInt(this.style.id.content.toString()) : null;
+    }
+
+    public getChildID(child: Style): number {
+        return child.id ? parseInt(child.id.content.toString()) : null;
     }
 
 }

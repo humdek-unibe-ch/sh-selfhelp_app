@@ -33,6 +33,7 @@ import { FigureStyleComponent } from '../styles/figure-style/figure-style.compon
 import { ProgressBarStyleComponent } from '../styles/progress-bar-style/progress-bar-style.component';
 import { CarouselStyleComponent } from '../styles/carousel-style/carousel-style.component';
 import { JumbotronStyleComponent } from '../styles/jumbotron-style/jumbotron-style.component';
+import { TabsStyleComponent } from '../styles/tabs-style/tabs-style.component';
 
 const routes: Routes = [
     {
@@ -95,7 +96,8 @@ const routes: Routes = [
         FigureStyleComponent,
         ProgressBarStyleComponent,
         CarouselStyleComponent,
-        JumbotronStyleComponent
+        JumbotronStyleComponent,
+        TabsStyleComponent,
     ]
 })
 export class TabsPageModule {

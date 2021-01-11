@@ -30,6 +30,7 @@ import { FigureStyleComponent } from '../../styles/figure-style/figure-style.com
 import { ProgressBarStyleComponent } from '../../styles/progress-bar-style/progress-bar-style.component';
 import { CarouselStyleComponent } from '../../styles/carousel-style/carousel-style.component';
 import { JumbotronStyleComponent } from '../../styles/jumbotron-style/jumbotron-style.component';
+import { TabsStyleComponent } from 'src/app/styles/tabs-style/tabs-style.component';
 
 @NgModule({
     imports: [
@@ -66,7 +67,8 @@ import { JumbotronStyleComponent } from '../../styles/jumbotron-style/jumbotron-
         FigureStyleComponent,
         ProgressBarStyleComponent,
         CarouselStyleComponent,
-        JumbotronStyleComponent
+        JumbotronStyleComponent,
+        TabsStyleComponent
     ]
 })
 export class TabPageModule { }

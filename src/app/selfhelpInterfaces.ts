@@ -180,6 +180,12 @@ export interface CarouselStyle extends Style {
     sources: StyleField
 }
 
+export interface TabStyle extends Style {
+    label: StyleField,
+    type: StyleField,
+    is_expanded: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {
