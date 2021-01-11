@@ -135,6 +135,10 @@ export interface PlaintextStyle extends Style {
     text: StyleField
 }
 
+export interface MarkdownInlineStyle extends Style {
+    text_md_inline: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {

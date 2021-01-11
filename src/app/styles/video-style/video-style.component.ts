@@ -24,7 +24,7 @@ export class VideoStyleComponent extends BasicStyleComponent implements OnInit {
 
     public getVideoUrl(videoUrl: VideoContent): string {
         if (StringUtils.isUrl(videoUrl.source)) {
-            return videoUrl.source;
+            return videoUrl.source; 
         } else {
             let res = this.selfhelp.getApiEndPointNative() + '/' + videoUrl.source;
             return res;
