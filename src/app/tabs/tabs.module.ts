@@ -30,6 +30,7 @@ import { HeadingStyleComponent } from '../styles/heading-style/heading-style.com
 import { RawTextStyleComponent } from '../styles/raw-text-style/raw-text-style.component';
 import { AudioStyleComponent } from '../styles/audio-style/audio-style.component';
 import { FigureStyleComponent } from '../styles/figure-style/figure-style.component';
+import { ProgressBarStyleComponent } from '../styles/progress-bar-style/progress-bar-style.component';
 
 const routes: Routes = [
     {
@@ -89,7 +90,8 @@ const routes: Routes = [
         HeadingStyleComponent,
         RawTextStyleComponent,
         AudioStyleComponent,
-        FigureStyleComponent
+        FigureStyleComponent,
+        ProgressBarStyleComponent
     ]
 })
 export class TabsPageModule {

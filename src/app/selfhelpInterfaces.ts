@@ -158,6 +158,14 @@ export interface FigureStyle extends Style {
     caption: StyleField
 }
 
+export interface ProgressBarStyle extends Style {
+    type: StyleField,
+    count: StyleField,
+    count_max: StyleField,
+    is_striped: StyleField,
+    has_label: StyleField
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {
