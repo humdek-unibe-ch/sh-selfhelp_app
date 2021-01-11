@@ -6,9 +6,9 @@ import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 
 
 @Component({
-    selector: 'app-tabs',
-    templateUrl: 'tabs.page.html',
-    styleUrls: ['tabs.page.scss']
+    selector: 'app-navigation',
+    templateUrl: 'navigation.page.html',
+    styleUrls: ['navigation.page.scss']
 })
 export class TabsPage {
     public selfhelp: SelfHelp;

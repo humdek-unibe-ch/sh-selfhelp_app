@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { SelfhelpService } from '../services/selfhelp.service';
-import { SelfHelp } from './../selfhelpInterfaces';
+import { SelfhelpService } from '../../services/selfhelp.service';
+import { SelfHelp } from '../../selfhelpInterfaces';
 import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 
 @Component({
-    selector: 'app-tab',
-    templateUrl: 'tab.page.html',
-    styleUrls: ['tab.page.scss']
+    selector: 'app-menu',
+    templateUrl: 'menu.page.html',
+    styleUrls: ['menu.page.scss']
 })
 export class TabPage {
 

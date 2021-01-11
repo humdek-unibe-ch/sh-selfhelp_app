@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { SelfHelp, SelfHelpNavigation, Styles } from './../../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, Styles } from '../../selfhelpInterfaces';
 
 @Component({
     selector: 'app-sub-menu',

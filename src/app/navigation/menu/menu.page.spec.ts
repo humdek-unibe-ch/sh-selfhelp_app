@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
-import { TabPage } from './tab.page';
+import { TabPage } from './menu.page';
 
 describe('TabPage', () => {
   let component: TabPage;

@@ -1,12 +1,12 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TabsPage } from './tabs.page';
+import { TabsPage } from './navigation.page';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
-import { MenuComponent } from '../menu/menu/menu.component';
-import { SubMenuComponent } from '../menu/sub-menu/sub-menu.component';
+import { MenuComponent } from './menu-test/menu.component';
+import { SubMenuComponent } from './sub-menu/sub-menu.component';
 import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
 import { CardStyleComponent } from '../styles/card-style/card-style.component';
 import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
@@ -41,7 +41,7 @@ const routes: Routes = [
         children: [
             {
                 path: '/',
-                loadChildren: () => import('../tab/tab.module').then(m => m.TabPageModule)
+                loadChildren: () => import('./menu/menu.module').then(m => m.TabPageModule)
             },
             {
                 path: '/',
@@ -131,7 +131,7 @@ export class TabsPageModule {
             newRoutes[0].children.push(
                 {
                     path: this.selfhelpService.getUrl(nav).replace('/', ''),
-                    loadChildren: () => import('../tab/tab.module').then(m => m.TabPageModule)
+                    loadChildren: () => import('./menu/menu.module').then(m => m.TabPageModule)
                 }
             );
             if (selectedTab === '' && selectedTab != firstTab) {
