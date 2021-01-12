@@ -19,7 +19,6 @@ export class TabsPage {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
             if (selfhelp) {
                 this.selfhelp = selfhelp;
-                console.log('selected menu', this.selfhelp.selectedMenu);
                 if (!this.selfhelp.selectedMenu && selfhelp.navigation.length > 0) {
                     //set default tab if none is selected, used in the initialization
                     this.init = true;
@@ -41,7 +40,6 @@ export class TabsPage {
     }
 
     setTab(nav: SelfHelpNavigation): void {
-        console.log('set tab');
         this.selectMenu(nav);
         this.selfhelpService.getPage(this.selfhelpService.getUrl(nav));
     }

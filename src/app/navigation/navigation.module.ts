@@ -34,6 +34,8 @@ import { ProgressBarStyleComponent } from '../styles/progress-bar-style/progress
 import { CarouselStyleComponent } from '../styles/carousel-style/carousel-style.component';
 import { JumbotronStyleComponent } from '../styles/jumbotron-style/jumbotron-style.component';
 import { TabsStyleComponent } from '../styles/tabs-style/tabs-style.component';
+import { GraphStyleComponent } from '../styles/graph-style/graph-style.component';
+import { PlotlyViaWindowModule } from 'angular-plotly.js';
 
 const routes: Routes = [
     {
@@ -66,7 +68,8 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         FormsModule,
         ReactiveFormsModule,
-        SafePipeModule
+        SafePipeModule,
+        PlotlyViaWindowModule
     ],
     exports: [RouterModule],
     declarations: [
@@ -98,6 +101,7 @@ const routes: Routes = [
         CarouselStyleComponent,
         JumbotronStyleComponent,
         TabsStyleComponent,
+        GraphStyleComponent
     ]
 })
 export class TabsPageModule {

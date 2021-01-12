@@ -31,6 +31,8 @@ import { ProgressBarStyleComponent } from '../../styles/progress-bar-style/progr
 import { CarouselStyleComponent } from '../../styles/carousel-style/carousel-style.component';
 import { JumbotronStyleComponent } from '../../styles/jumbotron-style/jumbotron-style.component';
 import { TabsStyleComponent } from 'src/app/styles/tabs-style/tabs-style.component';
+import { GraphStyleComponent } from 'src/app/styles/graph-style/graph-style.component';
+import { PlotlyViaWindowModule } from 'angular-plotly.js';
 
 @NgModule({
     imports: [
@@ -39,7 +41,8 @@ import { TabsStyleComponent } from 'src/app/styles/tabs-style/tabs-style.compone
         TabPageRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        SafePipeModule
+        SafePipeModule,
+        PlotlyViaWindowModule
     ],
     declarations: [
         TabPage,
@@ -68,7 +71,8 @@ import { TabsStyleComponent } from 'src/app/styles/tabs-style/tabs-style.compone
         ProgressBarStyleComponent,
         CarouselStyleComponent,
         JumbotronStyleComponent,
-        TabsStyleComponent
+        TabsStyleComponent,
+        GraphStyleComponent
     ]
 })
 export class TabPageModule { }

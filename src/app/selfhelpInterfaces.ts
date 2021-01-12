@@ -37,7 +37,7 @@ export interface CarouselContent {
 }
 
 export interface StyleField {
-    content: string | ValueItem | MediaContent[] | CarouselContent[],
+    content: string | ValueItem | MediaContent[] | CarouselContent[] | any,
     type: string,
     id: number,
     default: string
@@ -184,6 +184,13 @@ export interface TabStyle extends Style {
     label: StyleField,
     type: StyleField,
     is_expanded: StyleField
+}
+
+export interface GraphStyle extends Style {
+    title: StyleField,
+    traces: StyleField,
+    layout: StyleField,
+    show_graph: boolean
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
