@@ -193,6 +193,26 @@ export interface GraphStyle extends Style {
     show_graph: boolean
 }
 
+export interface ShowUserInputStyle extends Style {
+    fields: any,
+    is_log: StyleField,
+    delete_title: StyleField,
+    label_delete: StyleField,
+    delete_content: StyleField,
+    source: StyleField,
+    label_date_time: StyleField,
+    can_delete: boolean
+}
+
+export interface ConfirmAlert {
+    header?: string,
+    msg: string,
+    confirmLabel?: string,
+    cancelLabel?: string,
+    backdropDismiss?: boolean,
+    callback?: () => void
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
 
 export interface SelfHelpPageRequest {

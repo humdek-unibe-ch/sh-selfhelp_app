@@ -43,13 +43,17 @@
                             },
                             {
                                 "input": "node_modules/@fortawesome/fontawesome-free/css/all.css"
+                            },
+                            {
+                                "input": "node_modules/datatables.net-dt/css/jquery.dataTables.css"
                             }
                         ],
                         "scripts": [
                             "node_modules/jquery/dist/jquery.min.js",
                             "node_modules/bootstrap/dist/js/bootstrap.min.js",
                             "node_modules/@fortawesome/fontawesome-free/js/all.js",
-                            "node_modules/plotly.js/dist/plotly.min.js"
+                            "node_modules/plotly.js/dist/plotly.min.js",
+                            "node_modules/datatables.net/js/jquery.dataTables.js"
                         ]
                     },
                     "configurations": {

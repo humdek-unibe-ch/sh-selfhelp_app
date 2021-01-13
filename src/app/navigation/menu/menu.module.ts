@@ -33,6 +33,8 @@ import { JumbotronStyleComponent } from '../../styles/jumbotron-style/jumbotron-
 import { TabsStyleComponent } from 'src/app/styles/tabs-style/tabs-style.component';
 import { GraphStyleComponent } from 'src/app/styles/graph-style/graph-style.component';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
+import { DataTablesModule } from 'angular-datatables';
+import { ShowUserInputStyleComponent } from 'src/app/styles/show-user-input-style/show-user-input-style.component';
 
 @NgModule({
     imports: [
@@ -42,7 +44,8 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
         FormsModule,
         ReactiveFormsModule,
         SafePipeModule,
-        PlotlyViaWindowModule
+        PlotlyViaWindowModule,
+        DataTablesModule
     ],
     declarations: [
         TabPage,
@@ -72,7 +75,8 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
         CarouselStyleComponent,
         JumbotronStyleComponent,
         TabsStyleComponent,
-        GraphStyleComponent
+        GraphStyleComponent,
+        ShowUserInputStyleComponent
     ]
 })
 export class TabPageModule { }

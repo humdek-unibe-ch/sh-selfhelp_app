@@ -36,6 +36,8 @@ import { JumbotronStyleComponent } from '../styles/jumbotron-style/jumbotron-sty
 import { TabsStyleComponent } from '../styles/tabs-style/tabs-style.component';
 import { GraphStyleComponent } from '../styles/graph-style/graph-style.component';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
+import { DataTablesModule } from 'angular-datatables';
+import { ShowUserInputStyleComponent } from '../styles/show-user-input-style/show-user-input-style.component';
 
 const routes: Routes = [
     {
@@ -69,7 +71,8 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         SafePipeModule,
-        PlotlyViaWindowModule
+        PlotlyViaWindowModule,
+        DataTablesModule
     ],
     exports: [RouterModule],
     declarations: [
@@ -101,7 +104,8 @@ const routes: Routes = [
         CarouselStyleComponent,
         JumbotronStyleComponent,
         TabsStyleComponent,
-        GraphStyleComponent
+        GraphStyleComponent,
+        ShowUserInputStyleComponent
     ]
 })
 export class TabsPageModule {

@@ -14,8 +14,6 @@ export class GraphStyleComponent extends BasicStyleComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
-        console.log(this.style);
-     }
+    ngOnInit() { }
 
 }

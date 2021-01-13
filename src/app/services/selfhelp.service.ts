@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
-import { Platform, ToastController } from '@ionic/angular';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 
 @Injectable({
@@ -26,7 +26,14 @@ export class SelfhelpService {
     private initApp = false;
     private messageDuration = 2000;
 
-    constructor(public http: HttpClient, public httpN: HTTP, private platform: Platform, private storage: Storage, public toastController: ToastController) {
+    constructor(
+        private http: HttpClient,
+        private httpN: HTTP,
+        private platform: Platform,
+        private storage: Storage,
+        private toastController: ToastController,
+        private alertController: AlertController
+    ) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
                 this.isApp = true;
@@ -64,13 +71,16 @@ export class SelfhelpService {
      * @description Execute server request
      * @author Stefan Kodzhabashev
      * @date 2020-12-29
-     * @private
+     * @public
      * @param {string} keyword
      * @param {*} params
      * @returns {Promise<SelfHelpPageRequest>}
      * @memberof SelfhelpService
      */
-    private async execServerRequest(keyword: string, params: any): Promise<SelfHelpPageRequest> {
+    public async execServerRequest(keyword: string, params: any): Promise<SelfHelpPageRequest> {
+        if (!params['mobile']) {
+            params['mobile'] = true;
+        }
         if (this.getIsApp()) {
             // use native calls
             return new Promise((resolve, reject) => {
@@ -155,7 +165,7 @@ export class SelfhelpService {
         return new HttpParams({ fromString: params });
     }
 
-    private setPage(url: string, page: SelfHelpPageRequest): void {
+    public setPage(url: string, page: SelfHelpPageRequest): void {
         this.setNavigation(page.navigation);
         let urlFound = false;
         let currSelfhelp = this.selfhelp.value;
@@ -204,13 +214,12 @@ export class SelfhelpService {
 
     private autoLogin() {
         console.log('try auto login');
-        this.login('redwater@abv.bg', 'q1w2e3r4'); 
+        this.login('redwater@abv.bg', 'q1w2e3r4');
         // this.login('tpf', 'h2QPK2fJ_WNca6W$');
     }
 
     private login(email: string, password: string) {
         this.execServerRequest(this.API_LOGIN, {
-            mobile: true,
             type: 'login',
             email: email,
             password: password
@@ -282,7 +291,7 @@ export class SelfhelpService {
     }
 
     public getPage(keyword: string): void {
-        this.execServerRequest(keyword, { mobile: true })
+        this.execServerRequest(keyword, {})
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
                     this.setPage(keyword, res);
@@ -405,6 +414,33 @@ export class SelfhelpService {
 
     public getApiEndPointNative(): string {
         return this.API_ENDPOINT_NATIVE;
+    }
+
+    public async presentAlertConfirm(options: ConfirmAlert) {
+        const alert = await this.alertController.create({
+            cssClass: '',
+            header: options.header ? options.header : "Selfhelp",
+            message: options.msg,
+            backdropDismiss: options.backdropDismiss,
+            buttons: [
+                {
+                    text: options.cancelLabel ? options.cancelLabel : 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+
+                    }
+                }, {
+                    text: options.confirmLabel ? options.confirmLabel : 'Okay',
+                    handler: () => {
+                        if (options.callback) {
+                            options.callback();
+                        }
+                    }
+                }
+            ]
+        });
+        await alert.present();
     }
 
 }
