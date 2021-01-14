@@ -38,6 +38,7 @@ import { GraphStyleComponent } from '../styles/graph-style/graph-style.component
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { DataTablesModule } from 'angular-datatables';
 import { ShowUserInputStyleComponent } from '../styles/show-user-input-style/show-user-input-style.component';
+import { ButtonStyleComponent } from '../styles/button-style/button-style.component';
 
 const routes: Routes = [
     {
@@ -105,7 +106,8 @@ const routes: Routes = [
         JumbotronStyleComponent,
         TabsStyleComponent,
         GraphStyleComponent,
-        ShowUserInputStyleComponent
+        ShowUserInputStyleComponent,
+        ButtonStyleComponent
     ]
 })
 export class TabsPageModule {

@@ -204,6 +204,18 @@ export interface ShowUserInputStyle extends Style {
     can_delete: boolean
 }
 
+export interface ButtonStyle extends Style {
+    url: StyleField,
+    type: StyleField,
+    label: StyleField
+}
+
+export interface LinkStyle extends Style {
+    url: StyleField,
+    open_in_new_tab: StyleField,
+    label: StyleField
+}
+
 export interface ConfirmAlert {
     header?: string,
     msg: string,
@@ -219,7 +231,8 @@ export interface SelfHelpPageRequest {
     navigation: SelfHelpNavigation[],
     content: Styles,
     logged_in: boolean,
-    time?: any
+    time?: any,
+    base_path: string
 }
 
 export interface Url {
@@ -231,5 +244,6 @@ export interface SelfHelp {
     selectedMenu: SelfHelpNavigation,
     selectedSubMenu: SelfHelpNavigation,
     urls: Url,
-    logged_in: boolean
+    logged_in: boolean,
+    base_path: string
 }

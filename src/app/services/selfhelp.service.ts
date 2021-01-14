@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,8 @@ export class SelfhelpService {
         selectedMenu: null,
         selectedSubMenu: null,
         urls: {},
-        logged_in: null
+        logged_in: null,
+        base_path: ''
     });
     private initApp = false;
     private messageDuration = 2000;
@@ -32,7 +34,8 @@ export class SelfhelpService {
         private platform: Platform,
         private storage: Storage,
         private toastController: ToastController,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private router: Router
     ) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
@@ -205,6 +208,7 @@ export class SelfhelpService {
             // check for login change
             let newSelfhelp = this.selfhelp.value;
             newSelfhelp.logged_in = page.logged_in;
+            newSelfhelp.base_path = page.base_path;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (!page.logged_in) {
@@ -441,6 +445,54 @@ export class SelfhelpService {
             ]
         });
         await alert.present();
+    }
+
+    public getBasePath(): string {
+        return this.selfhelp.value.base_path;
+    }
+
+    public setNav(url: string): boolean {
+        console.log(this.selfhelp.value);
+        const currSelfhelp = this.selfhelp.value;
+        for (let i = 0; i < currSelfhelp.navigation.length; i++) {
+            const nav = currSelfhelp.navigation[i];
+            if (nav.url == url) {
+                console.log('Set Menu', nav);
+                console.log('navigate to', this.getUrl(nav));
+                this.router.navigate([this.getUrl(nav)]);
+                currSelfhelp.selectedMenu = nav;
+                this.setSelfhelp(currSelfhelp, false);
+                return true;
+            } else {
+                for (let j = 0; j < nav.children.length; j++) {
+                    const subNav = nav.children[j];
+                    if (subNav.url == url) {
+                        console.log('navigate to', this.getUrl(nav));
+                        this.router.navigate([this.getUrl(nav)]);
+                        currSelfhelp.selectedMenu = nav;
+                        currSelfhelp.selectedSubMenu = subNav;
+                        console.log('Set Menu', nav);
+                        console.log('Set Sub Menu', subNav);
+                        this.setSelfhelp(currSelfhelp, false);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public openUrl(url: string): boolean {
+        if (this.selfhelp.value.urls[url]) {
+            
+            // 
+            this.getPage(url);
+            if (!this.setNav(url)) {
+                console.log('url not found');
+            }
+            // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
+        }
+        return true;
     }
 
 }
