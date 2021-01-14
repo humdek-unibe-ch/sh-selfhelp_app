@@ -36,6 +36,7 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { DataTablesModule } from 'angular-datatables';
 import { ShowUserInputStyleComponent } from 'src/app/styles/show-user-input-style/show-user-input-style.component';
 import { ButtonStyleComponent } from 'src/app/styles/button-style/button-style.component';
+import { LinkStyleComponent } from 'src/app/styles/link-style/link-style.component';
 
 @NgModule({
     imports: [
@@ -51,7 +52,7 @@ import { ButtonStyleComponent } from 'src/app/styles/button-style/button-style.c
     declarations: [
         TabPage,
         BasicStyleComponent,
-        CardStyleComponent,        
+        CardStyleComponent,
         MarkdownStyleComponent,
         ContainerStyleComponent,
         FormUserInputStyleComponent,
@@ -78,7 +79,8 @@ import { ButtonStyleComponent } from 'src/app/styles/button-style/button-style.c
         TabsStyleComponent,
         GraphStyleComponent,
         ShowUserInputStyleComponent,
-        ButtonStyleComponent
+        ButtonStyleComponent,
+        LinkStyleComponent,
     ]
 })
 export class TabPageModule { }

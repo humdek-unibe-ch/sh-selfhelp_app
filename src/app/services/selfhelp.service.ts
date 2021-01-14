@@ -6,6 +6,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
+import { StringUtils } from 'turbocommons-ts';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Injectable({
     providedIn: 'root'
@@ -35,7 +37,8 @@ export class SelfhelpService {
         private storage: Storage,
         private toastController: ToastController,
         private alertController: AlertController,
-        private router: Router
+        private router: Router,
+        private inAppBrowser: InAppBrowser
     ) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
@@ -491,6 +494,10 @@ export class SelfhelpService {
                 console.log('url not found');
             }
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
+        }else if(StringUtils.isUrl(url)){
+            // it is web link, open in the browser
+            console.log('open browser');
+            const browser = this.inAppBrowser.create(url);
         }
         return true;
     }

@@ -39,6 +39,7 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { DataTablesModule } from 'angular-datatables';
 import { ShowUserInputStyleComponent } from '../styles/show-user-input-style/show-user-input-style.component';
 import { ButtonStyleComponent } from '../styles/button-style/button-style.component';
+import { LinkStyleComponent } from '../styles/link-style/link-style.component';
 
 const routes: Routes = [
     {
@@ -67,7 +68,7 @@ const routes: Routes = [
 @NgModule({
     imports: [
         IonicModule,
-        CommonModule,        
+        CommonModule,
         RouterModule.forChild(routes),
         FormsModule,
         ReactiveFormsModule,
@@ -81,7 +82,7 @@ const routes: Routes = [
         MenuComponent,
         SubMenuComponent,
         BasicStyleComponent,
-        CardStyleComponent,        
+        CardStyleComponent,
         MarkdownStyleComponent,
         ContainerStyleComponent,
         FormUserInputStyleComponent,
@@ -107,10 +108,11 @@ const routes: Routes = [
         TabsStyleComponent,
         GraphStyleComponent,
         ShowUserInputStyleComponent,
-        ButtonStyleComponent
+        ButtonStyleComponent,
+        LinkStyleComponent
     ]
 })
-export class TabsPageModule {
+export class NavigationPageModule {
 
     constructor(private selfhelpService: SelfhelpService, private router: Router) {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
@@ -126,7 +128,7 @@ export class TabsPageModule {
      * @date 2020-12-11
      * @private
      * @param {SelfHelp} selfhelp
-     * @memberof TabsPageModule
+     * @memberof NavigationPageModule
      */
     private adjustRoutes(selfhelp: SelfHelp) {
         let newRoutes = routes;
@@ -168,7 +170,7 @@ export class TabsPageModule {
      * @param {Routes} route1
      * @param {Routes} route2
      * @returns {boolean}
-     * @memberof TabsPageModule
+     * @memberof NavigationPageModule
      */
     private areRoutesDifferent(route1: Routes, route2: Routes): boolean {
         if (route1[0].redirectTo != route2[0].redirectTo) {
