@@ -37,6 +37,12 @@ import { DataTablesModule } from 'angular-datatables';
 import { ShowUserInputStyleComponent } from 'src/app/styles/show-user-input-style/show-user-input-style.component';
 import { ButtonStyleComponent } from 'src/app/styles/button-style/button-style.component';
 import { LinkStyleComponent } from 'src/app/styles/link-style/link-style.component';
+import { AccordionListStyleComponent } from 'src/app/styles/accordion-list-style/accordion-list-style.component';
+import { NestedListStyleComponent } from 'src/app/styles/nested-list-style/nested-list-style.component';
+import { SortableListComponent } from 'src/app/styles/sortable-list/sortable-list.component';
+import { NavigationContainerStyleComponent } from 'src/app/styles/navigation-container-style/navigation-container-style.component';
+import { JsonStyleComponent } from 'src/app/styles/json-style/json-style.component';
+import { QuizStyleComponent } from 'src/app/styles/quiz-style/quiz-style.component';
 
 @NgModule({
     imports: [
@@ -81,6 +87,12 @@ import { LinkStyleComponent } from 'src/app/styles/link-style/link-style.compone
         ShowUserInputStyleComponent,
         ButtonStyleComponent,
         LinkStyleComponent,
+        AccordionListStyleComponent,
+        NestedListStyleComponent,
+        SortableListComponent,
+        NavigationContainerStyleComponent,
+        JsonStyleComponent,
+        QuizStyleComponent
     ]
 })
 export class TabPageModule { }

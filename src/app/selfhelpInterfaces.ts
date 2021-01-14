@@ -216,6 +216,49 @@ export interface LinkStyle extends Style {
     label: StyleField
 }
 
+export interface AccordionListStyle extends Style {
+    id_active: StyleField,
+    title_prefix: StyleField,
+    label_root: StyleField,
+    id_prefix: StyleField,
+    items: StyleField
+}
+
+export interface NestedListStyle extends Style {
+    is_expanded: StyleField,
+    is_collapsible: StyleField,
+    id_prefix: StyleField,
+    id_active: StyleField,
+    title_prefix: StyleField,
+    items: StyleField,
+}
+
+export interface SortableListStyle extends Style {
+    is_sortable: StyleField,
+    is_editable: StyleField,
+    url_delete: StyleField,
+    url_add: StyleField,
+    items: StyleField,
+}
+
+export interface NavigationContainerStyle extends Style {
+    text_md: StyleField,
+    title: StyleField
+}
+
+export interface JsonStyle extends Style {
+    json: StyleField
+}
+
+export interface QuizStyle extends Style {
+    type: StyleField,
+    caption: StyleField,
+    label_right: StyleField,
+    label_wrong: StyleField,
+    right_content: StyleField,
+    wrong_content: StyleField,
+}
+
 export interface ConfirmAlert {
     header?: string,
     msg: string,

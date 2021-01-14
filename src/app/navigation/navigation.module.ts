@@ -40,6 +40,12 @@ import { DataTablesModule } from 'angular-datatables';
 import { ShowUserInputStyleComponent } from '../styles/show-user-input-style/show-user-input-style.component';
 import { ButtonStyleComponent } from '../styles/button-style/button-style.component';
 import { LinkStyleComponent } from '../styles/link-style/link-style.component';
+import { AccordionListStyleComponent } from '../styles/accordion-list-style/accordion-list-style.component';
+import { NestedListStyleComponent } from '../styles/nested-list-style/nested-list-style.component';
+import { SortableListComponent } from '../styles/sortable-list/sortable-list.component';
+import { NavigationContainerStyleComponent } from '../styles/navigation-container-style/navigation-container-style.component';
+import { JsonStyleComponent } from '../styles/json-style/json-style.component';
+import { QuizStyleComponent } from '../styles/quiz-style/quiz-style.component';
 
 const routes: Routes = [
     {
@@ -109,7 +115,13 @@ const routes: Routes = [
         GraphStyleComponent,
         ShowUserInputStyleComponent,
         ButtonStyleComponent,
-        LinkStyleComponent
+        LinkStyleComponent,
+        AccordionListStyleComponent,
+        NestedListStyleComponent,
+        SortableListComponent,
+        NavigationContainerStyleComponent,
+        JsonStyleComponent,
+        QuizStyleComponent
     ]
 })
 export class NavigationPageModule {
