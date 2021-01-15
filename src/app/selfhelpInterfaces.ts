@@ -259,6 +259,30 @@ export interface QuizStyle extends Style {
     wrong_content: StyleField,
 }
 
+export interface LoginStyle extends Style {
+    type: StyleField,
+    label: StyleField,
+    label_user: StyleField,
+    label_pw: StyleField,
+    label_login: StyleField,
+    label_pw_reset: StyleField,
+    alert_fail: StyleField,
+    login_title: StyleField
+}
+
+export interface RegisterStyle extends Style {
+    type: StyleField,
+    open_registration: StyleField,
+    group: StyleField,
+    label_user: StyleField,
+    label_pw: StyleField,
+    alert_fail: StyleField,
+    title: StyleField,
+    alert_success: StyleField,
+    success: StyleField,
+    label_submit: StyleField
+}
+
 export interface ConfirmAlert {
     header?: string,
     msg: string,
@@ -266,6 +290,11 @@ export interface ConfirmAlert {
     cancelLabel?: string,
     backdropDismiss?: boolean,
     callback?: () => void
+}
+
+export interface LoginValues {
+    email: string,
+    password: string
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
@@ -288,5 +317,6 @@ export interface SelfHelp {
     selectedSubMenu: SelfHelpNavigation,
     urls: Url,
     logged_in: boolean,
-    base_path: string
+    base_path: string,
+    current_url: string
 }

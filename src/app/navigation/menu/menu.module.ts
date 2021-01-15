@@ -43,6 +43,9 @@ import { SortableListComponent } from 'src/app/styles/sortable-list/sortable-lis
 import { NavigationContainerStyleComponent } from 'src/app/styles/navigation-container-style/navigation-container-style.component';
 import { JsonStyleComponent } from 'src/app/styles/json-style/json-style.component';
 import { QuizStyleComponent } from 'src/app/styles/quiz-style/quiz-style.component';
+import { LoginComponent } from 'src/app/components/login/login.component';
+import { LoginStyleComponent } from 'src/app/styles/login-style/login-style.component';
+import { RegisterStyleComponen } from 'src/app/styles/register-style/register-style.component';
 
 @NgModule({
     imports: [
@@ -92,7 +95,10 @@ import { QuizStyleComponent } from 'src/app/styles/quiz-style/quiz-style.compone
         SortableListComponent,
         NavigationContainerStyleComponent,
         JsonStyleComponent,
-        QuizStyleComponent
+        QuizStyleComponent,
+        LoginComponent,
+        LoginStyleComponent,
+        RegisterStyleComponen
     ]
 })
 export class TabPageModule { }

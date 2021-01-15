@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
-import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -25,7 +25,8 @@ export class SelfhelpService {
         selectedSubMenu: null,
         urls: {},
         logged_in: null,
-        base_path: ''
+        base_path: '',
+        current_url: '/'
     });
     private initApp = false;
     private messageDuration = 2000;
@@ -38,7 +39,8 @@ export class SelfhelpService {
         private toastController: ToastController,
         private alertController: AlertController,
         private router: Router,
-        private inAppBrowser: InAppBrowser
+        private inAppBrowser: InAppBrowser,
+        private modalController: ModalController
     ) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
@@ -172,9 +174,12 @@ export class SelfhelpService {
     }
 
     public setPage(url: string, page: SelfHelpPageRequest): void {
-        this.setNavigation(page.navigation);
+        if (page.navigation) {
+            this.setNavigation(page.navigation);
+        }
         let urlFound = false;
         let currSelfhelp = this.selfhelp.value;
+        currSelfhelp.current_url = url;
         for (let i = 0; i < currSelfhelp.navigation.length; i++) {
             const nav = currSelfhelp.navigation[i];
             if (this.getUrl(nav) == url) {
@@ -217,30 +222,37 @@ export class SelfhelpService {
         if (!page.logged_in) {
             this.autoLogin();
         }
+        this.setSelfhelp(currSelfhelp, true);
     }
 
     private autoLogin() {
         console.log('try auto login');
-        this.login('redwater@abv.bg', 'q1w2e3r4');
+        // this.login('redwater@abv.bg', 'q1w2e3r4');
         // this.login('tpf', 'h2QPK2fJ_WNca6W$');
     }
 
-    private login(email: string, password: string) {
-        this.execServerRequest(this.API_LOGIN, {
-            type: 'login',
-            email: email,
-            password: password
-        })
+    public login(loginValues: LoginValues, alert_fail: string): Promise<boolean> {
+        let data = loginValues;
+        data['type'] = 'login';
+        return this.execServerRequest(this.API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 console.log('login', res);
                 let currSelfhelp = this.selfhelp.value;
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
-                    this.setSelfhelp(currSelfhelp, true);
+                    this.setSelfhelp(currSelfhelp, true);                    
+                    this.getPage('/tab');
+                    this.setNav(this.selfhelp.value.current_url);
                 }
+                if (!res.logged_in && alert_fail) {
+                    this.presentToast(alert_fail, 'danger');
+                    return false;
+                }
+                return true;
             })
             .catch((err) => {
                 console.log(err);
+                return false;
             });
     }
 
@@ -487,19 +499,23 @@ export class SelfhelpService {
 
     public openUrl(url: string): boolean {
         if (this.selfhelp.value.urls[url]) {
-            
+
             // 
             this.getPage(url);
             if (!this.setNav(url)) {
                 console.log('url not found');
             }
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
-        }else if(StringUtils.isUrl(url)){
+        } else if (StringUtils.isUrl(url)) {
             // it is web link, open in the browser
             console.log('open browser');
             const browser = this.inAppBrowser.create(url);
         }
         return true;
+    }
+
+    public async closeModal() {
+        await this.modalController.dismiss(null, undefined);
     }
 
 }

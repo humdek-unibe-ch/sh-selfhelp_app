@@ -13,12 +13,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { LoginComponent } from './components/login/login.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
-    entryComponents: [],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),

@@ -1,0 +1,11 @@
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="#" (click)="close()"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Login</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <app-basic-style *ngFor="let style of selfhelp.urls['/login']" [style]="style" url="/login"></app-basic-style>
+</ion-content>

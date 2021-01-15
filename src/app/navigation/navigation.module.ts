@@ -7,7 +7,6 @@ import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
 import { MenuComponent } from './menu-test/menu.component';
 import { SubMenuComponent } from './sub-menu/sub-menu.component';
-import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
 import { CardStyleComponent } from '../styles/card-style/card-style.component';
 import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
 import { ContainerStyleComponent } from '../styles/container-style/container-style.component';
@@ -46,6 +45,10 @@ import { SortableListComponent } from '../styles/sortable-list/sortable-list.com
 import { NavigationContainerStyleComponent } from '../styles/navigation-container-style/navigation-container-style.component';
 import { JsonStyleComponent } from '../styles/json-style/json-style.component';
 import { QuizStyleComponent } from '../styles/quiz-style/quiz-style.component';
+import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
+import { LoginComponent } from '../components/login/login.component';
+import { LoginStyleComponent } from '../styles/login-style/login-style.component';
+import { RegisterStyleComponen } from '../styles/register-style/register-style.component';
 
 const routes: Routes = [
     {
@@ -87,7 +90,6 @@ const routes: Routes = [
         TabsPage,
         MenuComponent,
         SubMenuComponent,
-        BasicStyleComponent,
         CardStyleComponent,
         MarkdownStyleComponent,
         ContainerStyleComponent,
@@ -121,7 +123,11 @@ const routes: Routes = [
         SortableListComponent,
         NavigationContainerStyleComponent,
         JsonStyleComponent,
-        QuizStyleComponent
+        QuizStyleComponent,
+        BasicStyleComponent,
+        LoginComponent,
+        LoginStyleComponent,
+        RegisterStyleComponen
     ]
 })
 export class NavigationPageModule {
