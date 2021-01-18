@@ -5,9 +5,9 @@
         <app-select-style *ngIf="child.style_name == 'select'" [style]="child" [parentForm]="form"></app-select-style>
         <app-textarea-style *ngIf="child.style_name == 'textarea'" [style]="child" [parentForm]="form"></app-textarea-style>
     </div>
-    <ion-button [color]="style.type.content" size='small' [disabled]="!form.valid" (click)="submitForm(form.value)">
-        {{style.label.content}}</ion-button>
-    <ion-button *ngIf="style.submit_and_send_email.content == '1'" [color]="style.type.content" size='small'
-        [disabled]="!form.valid" (click)="submitFormAndSendEmail(form.value)">{{style.submit_and_send_label.content}}
+    <ion-button [color]="getFieldContent('type')" size='small' [disabled]="!form.valid" (click)="submitForm(form.value)">
+        {{getFieldContent('label')}}</ion-button>
+    <ion-button *ngIf="getFieldContent('submit_and_send_email') == '1'" [color]="getFieldContent('type')" size='small'
+        [disabled]="!form.valid" (click)="submitFormAndSendEmail(form.value)">{{getFieldContent('submit_and_send_label')}}
     </ion-button>
 </form>

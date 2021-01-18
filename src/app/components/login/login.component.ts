@@ -1,29 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { SelfHelp } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { BasicComponentComponent } from './../../basic-component/basic-component.component';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
-    public selfhelp: SelfHelp;
+export class LoginComponent extends BasicComponentComponent implements OnInit {
 
-    constructor(private selfhelpService: SelfhelpService) {
-        this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
-            if (selfhelp) {
-                this.selfhelp = selfhelp;
-            }
-        });
-    }
-
-    ngOnInit() { 
-        this.selfhelpService.getPage('/login');
-    }
-
-    public async close() {
-        this.selfhelpService.closeModal();
+    constructor(selfhelpService: SelfhelpService) {
+        super(selfhelpService);
+        this.url = '/login'
     }
 
 }

@@ -46,6 +46,8 @@ import { QuizStyleComponent } from 'src/app/styles/quiz-style/quiz-style.compone
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { LoginStyleComponent } from 'src/app/styles/login-style/login-style.component';
 import { RegisterStyleComponen } from 'src/app/styles/register-style/register-style.component';
+import { ProfileStyleComponent } from 'src/app/styles/profile-style/profile-style.component';
+import { ProfileComponent } from 'src/app/components/profile/profile.component';
 
 @NgModule({
     imports: [
@@ -98,7 +100,9 @@ import { RegisterStyleComponen } from 'src/app/styles/register-style/register-st
         QuizStyleComponent,
         LoginComponent,
         LoginStyleComponent,
-        RegisterStyleComponen
+        RegisterStyleComponen,
+        ProfileComponent,
+        ProfileStyleComponent
     ]
 })
 export class TabPageModule { }

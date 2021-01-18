@@ -219,7 +219,7 @@ export class SelfhelpService {
             newSelfhelp.base_path = page.base_path;
             this.setSelfhelp(newSelfhelp, true);
         }
-        if (!page.logged_in) {
+        if (!page.logged_in && url != "/login") {
             this.autoLogin();
         }
         this.setSelfhelp(currSelfhelp, true);
@@ -258,7 +258,7 @@ export class SelfhelpService {
 
     public setNavigation(selfHelpNavigation: SelfHelpNavigation[]): void {
         if (!this.isEqual(selfHelpNavigation, this.selfhelp.value.navigation)) {
-            console.log('setNavigation');
+            console.log('setNavigation', selfHelpNavigation);
             let currSelfhelp = this.selfhelp.value;
             currSelfhelp.navigation = selfHelpNavigation;
             this.setSelfhelp(currSelfhelp, true);
@@ -516,6 +516,10 @@ export class SelfhelpService {
 
     public async closeModal() {
         await this.modalController.dismiss(null, undefined);
+    }
+
+    public logout():void{
+        this.getPage('/login');
     }
 
 }

@@ -68,6 +68,14 @@ export class BasicStyleComponent implements OnInit {
         return child[fieldName] ? child[fieldName].content : '';
     }
 
+    public getFieldDefaut(fieldName: string): string {
+        return this.style[fieldName] ? this.style[fieldName].default : '';
+    }
+
+    public getChildFieldDefault(child: Style, fieldName: string): string {
+        return child[fieldName] ? child[fieldName].default : '';
+    }
+
     public getID(): number {
         return this.style.id ? parseInt(this.style.id.content.toString()) : null;
     }

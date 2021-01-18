@@ -283,6 +283,15 @@ export interface RegisterStyle extends Style {
     label_submit: StyleField
 }
 
+export interface ProfileStyle extends Style {
+    label: StyleField,
+    alert_fail: StyleField,
+    alert_del_fail: StyleField,
+    alert_del_success: StyleField,
+    alert_success: StyleField,
+    profile_title: string
+}
+
 export interface ConfirmAlert {
     header?: string,
     msg: string,
@@ -297,7 +306,7 @@ export interface LoginValues {
     password: string
 }
 
-export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle)[];
+export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle | ProfileStyle)[];
 
 export interface SelfHelpPageRequest {
     navigation: SelfHelpNavigation[],

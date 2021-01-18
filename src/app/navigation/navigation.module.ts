@@ -49,6 +49,8 @@ import { BasicStyleComponent } from '../styles/basic-style/basic-style.component
 import { LoginComponent } from '../components/login/login.component';
 import { LoginStyleComponent } from '../styles/login-style/login-style.component';
 import { RegisterStyleComponen } from '../styles/register-style/register-style.component';
+import { ProfileStyleComponent } from '../styles/profile-style/profile-style.component';
+import { ProfileComponent } from '../components/profile/profile.component';
 
 const routes: Routes = [
     {
@@ -127,7 +129,9 @@ const routes: Routes = [
         BasicStyleComponent,
         LoginComponent,
         LoginStyleComponent,
-        RegisterStyleComponen
+        RegisterStyleComponen,
+        ProfileComponent,
+        ProfileStyleComponent
     ]
 })
 export class NavigationPageModule {

@@ -1,3 +1,19 @@
-<p>
-  profile works!
-</p>
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="#" (click)="close()">clsos</ion-back-button>
+        </ion-buttons>
+        <ion-title>{{getProfileTitle()}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <app-basic-style *ngFor="let style of selfhelp.urls[url]" [style]="style" [url]="url"></app-basic-style>
+    <ion-item>
+        <ion-buttons slot="start">
+            <ion-button (click)="logout()">
+                <ion-icon slot="start" name="power"></ion-icon>
+                Logout
+            </ion-button>
+        </ion-buttons>
+    </ion-item>
+</ion-content>
