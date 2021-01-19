@@ -306,6 +306,11 @@ export interface LoginValues {
     password: string
 }
 
+export interface RegistrationValues {
+    email: string,
+    code?: string
+}
+
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle | ProfileStyle)[];
 
 export interface SelfHelpPageRequest {

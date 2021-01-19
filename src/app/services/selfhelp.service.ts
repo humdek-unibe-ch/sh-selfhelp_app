@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -236,11 +236,10 @@ export class SelfhelpService {
         data['type'] = 'login';
         return this.execServerRequest(this.API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
-                console.log('login', res);
                 let currSelfhelp = this.selfhelp.value;
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
-                    this.setSelfhelp(currSelfhelp, true);                    
+                    this.setSelfhelp(currSelfhelp, true);
                     this.getPage('/tab');
                     this.setNav(this.selfhelp.value.current_url);
                 }
@@ -249,6 +248,27 @@ export class SelfhelpService {
                     return false;
                 }
                 return true;
+            })
+            .catch((err) => {
+                console.log(err);
+                return false;
+            });
+    }
+
+    public register(regValues: RegistrationValues): Promise<boolean> {
+        let data = regValues;
+        data['type'] = 'register';
+        return this.execServerRequest(this.API_LOGIN, data)
+            .then((res: SelfHelpPageRequest) => {
+                let currSelfhelp = this.selfhelp.value;
+                const result = this.output_messages(res.content);
+                if (currSelfhelp.logged_in != res.logged_in) {
+                    currSelfhelp.logged_in = res.logged_in;
+                    this.setSelfhelp(currSelfhelp, true);
+                    this.getPage('/tab');
+                    this.setNav(this.selfhelp.value.current_url);
+                }
+                return result;
             })
             .catch((err) => {
                 console.log(err);
@@ -360,7 +380,8 @@ export class SelfhelpService {
             });
     }
 
-    private output_messages(content: Styles) {
+    private output_messages(content: Styles): boolean {
+        let res = true;
         content.forEach(style => {
             if (style.success_msgs) {
                 style.success_msgs.forEach(success_msg => {
@@ -369,12 +390,14 @@ export class SelfhelpService {
             }
             if (style.fail_msgs) {
                 console.log(style.fail_msgs);
+                res = false;
                 style.fail_msgs.forEach(fail_msg => {
                     this.presentToast(fail_msg, 'danger');
                 });
             }
-            this.output_messages(style.children);
+            res = res && this.output_messages(style.children);
         });
+        return res;
     }
 
     private getNativeParams(params): string {
@@ -467,13 +490,10 @@ export class SelfhelpService {
     }
 
     public setNav(url: string): boolean {
-        console.log(this.selfhelp.value);
         const currSelfhelp = this.selfhelp.value;
         for (let i = 0; i < currSelfhelp.navigation.length; i++) {
             const nav = currSelfhelp.navigation[i];
             if (nav.url == url) {
-                console.log('Set Menu', nav);
-                console.log('navigate to', this.getUrl(nav));
                 this.router.navigate([this.getUrl(nav)]);
                 currSelfhelp.selectedMenu = nav;
                 this.setSelfhelp(currSelfhelp, false);
@@ -482,12 +502,9 @@ export class SelfhelpService {
                 for (let j = 0; j < nav.children.length; j++) {
                     const subNav = nav.children[j];
                     if (subNav.url == url) {
-                        console.log('navigate to', this.getUrl(nav));
                         this.router.navigate([this.getUrl(nav)]);
                         currSelfhelp.selectedMenu = nav;
                         currSelfhelp.selectedSubMenu = subNav;
-                        console.log('Set Menu', nav);
-                        console.log('Set Sub Menu', subNav);
                         this.setSelfhelp(currSelfhelp, false);
                         return true;
                     }
@@ -518,7 +535,7 @@ export class SelfhelpService {
         await this.modalController.dismiss(null, undefined);
     }
 
-    public logout():void{
+    public logout(): void {
         this.getPage('/login');
     }
 
