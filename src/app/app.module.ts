@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Device } from '@ionic-native/device/ngx';
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
         AndroidFullScreen,
         HTTP,
         InAppBrowser,
+        Device,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],
     bootstrap: [AppComponent]

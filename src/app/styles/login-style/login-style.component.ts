@@ -28,7 +28,7 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
         });
     }
 
-    public login(value: LoginValues): void {
+    public login(value: LoginValues): void {        
         this.selfhelpService.login(value, this.getFieldContent('alert_fail'))
             .then((res: boolean) => {
                 if (res) {
