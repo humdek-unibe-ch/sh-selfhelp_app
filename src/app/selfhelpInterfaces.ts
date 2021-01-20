@@ -332,5 +332,6 @@ export interface SelfHelp {
     urls: Url,
     logged_in: boolean,
     base_path: string,
-    current_url: string
+    current_url: string,
+    credentials?: LoginValues
 }

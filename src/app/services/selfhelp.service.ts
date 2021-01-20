@@ -40,7 +40,7 @@ export class SelfhelpService {
         private alertController: AlertController,
         private router: Router,
         private inAppBrowser: InAppBrowser,
-        private modalController: ModalController
+        private modalController: ModalController,
     ) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
@@ -227,8 +227,9 @@ export class SelfhelpService {
 
     private autoLogin() {
         console.log('try auto login');
-        // this.login('redwater@abv.bg', 'q1w2e3r4');
-        // this.login('tpf', 'h2QPK2fJ_WNca6W$');
+        if (this.selfhelp.value.credentials) {
+            this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
+        }
     }
 
     public login(loginValues: LoginValues, alert_fail: string): Promise<boolean> {
@@ -247,12 +248,19 @@ export class SelfhelpService {
                     this.presentToast(alert_fail, 'danger');
                     return false;
                 }
+                this.saveCredentials(loginValues);
                 return true;
             })
             .catch((err) => {
                 console.log(err);
                 return false;
             });
+    }
+
+    private saveCredentials(loginValues: LoginValues) {
+        let currSelfhelp = this.selfhelp.value;
+        currSelfhelp.credentials = loginValues;
+        this.setSelfhelp(currSelfhelp, true);
     }
 
     public register(regValues: RegistrationValues): Promise<boolean> {
@@ -536,6 +544,9 @@ export class SelfhelpService {
     }
 
     public logout(): void {
+        let currSelfhelp = this.selfhelp.value;
+        currSelfhelp.credentials = null;
+        this.setSelfhelp(currSelfhelp, true);
         this.getPage('/login');
     }
 
