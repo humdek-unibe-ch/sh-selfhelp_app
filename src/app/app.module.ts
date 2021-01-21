@@ -14,6 +14,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@ionic-native/device/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { Device } from '@ionic-native/device/ngx';
         HTTP,
         InAppBrowser,
         Device,
+        FirebaseX,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],
     bootstrap: [AppComponent]

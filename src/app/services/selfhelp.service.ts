@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@ionic-native/device/ngx';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
     providedIn: 'root'
@@ -42,7 +43,8 @@ export class SelfhelpService {
         private router: Router,
         private inAppBrowser: InAppBrowser,
         private modalController: ModalController,
-        private device: Device
+        private device: Device,
+        private notificationsService: NotificationsService
     ) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
@@ -91,7 +93,8 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
-        params['device_id'] = this.getDeviceID();
+        params['device_id'] = this.getDeviceID(); 
+        params['device_token'] = await this.notificationsService.getToken();
         if (this.getIsApp()) {
             // use native calls
             return new Promise((resolve, reject) => {

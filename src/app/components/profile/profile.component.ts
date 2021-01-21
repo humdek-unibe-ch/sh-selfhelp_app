@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { BasicComponentComponent } from './../../basic-component/basic-component.component';
+import { BasicComponentComponent } from '../basic-component/basic-component.component';
 import { ProfileStyle } from './../../selfhelpInterfaces';
 
 @Component({

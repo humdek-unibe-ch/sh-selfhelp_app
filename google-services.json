@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "500227861670",
+    "project_id": "tpf-selfhelp",
+    "storage_bucket": "tpf-selfhelp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:c5ef17d54dc4bb81141867",
+        "android_client_info": {
+          "package_name": "tpf.selfhelp.becccs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SelfHelp } from '../selfhelpInterfaces';
-import { SelfhelpService } from '../services/selfhelp.service';
+import { SelfHelp } from 'src/app/selfhelpInterfaces';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 @Component({
     selector: 'app-basic-component',

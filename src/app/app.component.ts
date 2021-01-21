@@ -4,6 +4,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { name } from '../../package.json';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
+import { NotificationsService } from './services/notifications.service';
+import { SelfhelpService } from './services/selfhelp.service';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +18,9 @@ export class AppComponent {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private loadingCtrl: LoadingController,
-        private androidFullScreen: AndroidFullScreen
+        private androidFullScreen: AndroidFullScreen,
+        private notificationsService: NotificationsService,
+        private selfhelpSerivce: SelfhelpService
     ) {
         this.initializeApp();
     }
@@ -29,10 +33,13 @@ export class AppComponent {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
             this.presentLoadingWithOptions();
+            if (this.selfhelpSerivce.getIsApp()) {
+                this.notificationsService.initFirebaseX();
+            }
         });
     }
 
-    async presentLoadingWithOptions() {
+    private async presentLoadingWithOptions() {
         const loading = await this.loadingCtrl.create({
             // message: '<ion-img src="/assets/loading.gif" alt="loading..."></ion-img>',
             message: '<div class="loader">Loading ' + name + '...</div>',
@@ -44,4 +51,5 @@ export class AppComponent {
         });
         await loading.present();
     }
+
 }

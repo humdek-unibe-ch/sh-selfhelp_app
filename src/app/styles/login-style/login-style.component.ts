@@ -47,7 +47,7 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
         }
         this.selfhelpService.login(value, null);
         this.selfhelpService.getPage('/');
-        this.selfhelpService.closeModal();
+        this.selfhelpService.closeModal(); 
     }
 
 }
