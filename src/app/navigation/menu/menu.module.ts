@@ -48,6 +48,7 @@ import { LoginStyleComponent } from 'src/app/styles/login-style/login-style.comp
 import { RegisterStyleComponen } from 'src/app/styles/register-style/register-style.component';
 import { ProfileStyleComponent } from 'src/app/styles/profile-style/profile-style.component';
 import { ProfileComponent } from 'src/app/components/profile/profile.component';
+import { HiddenPageComponent } from 'src/app/hidden-page/hidden-page.component';
 
 @NgModule({
     imports: [
@@ -102,7 +103,8 @@ import { ProfileComponent } from 'src/app/components/profile/profile.component';
         LoginStyleComponent,
         RegisterStyleComponen,
         ProfileComponent,
-        ProfileStyleComponent
+        ProfileStyleComponent,
+        HiddenPageComponent
     ]
 })
-export class TabPageModule { }
+export class MenuPageModule { }

@@ -59,7 +59,7 @@ const routes: Routes = [
         children: [
             {
                 path: '/',
-                loadChildren: () => import('./menu/menu.module').then(m => m.TabPageModule)
+                loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
             },
             {
                 path: '/',
@@ -92,46 +92,8 @@ const routes: Routes = [
         TabsPage,
         MenuComponent,
         SubMenuComponent,
-        CardStyleComponent,
-        MarkdownStyleComponent,
-        ContainerStyleComponent,
-        FormUserInputStyleComponent,
-        ConditionalContainerStyleComponent,
-        InputStyleComponent,
-        RadioStyleComponent,
-        SelectStyleComponent,
-        TextareaStyleComponent,
-        QualtricsSurveyStyleComponent,
-        DivStyleComponent,
-        ImageStyleComponent,
-        VideoStyleComponent,
-        AlertStyleComponent,
-        PlaintextStyleComponent,
-        MarkdownInlineStyleComponent,
-        HeadingStyleComponent,
-        RawTextStyleComponent,
-        AudioStyleComponent,
-        FigureStyleComponent,
-        ProgressBarStyleComponent,
-        CarouselStyleComponent,
-        JumbotronStyleComponent,
-        TabsStyleComponent,
-        GraphStyleComponent,
-        ShowUserInputStyleComponent,
-        ButtonStyleComponent,
-        LinkStyleComponent,
-        AccordionListStyleComponent,
-        NestedListStyleComponent,
-        SortableListComponent,
-        NavigationContainerStyleComponent,
-        JsonStyleComponent,
-        QuizStyleComponent,
-        BasicStyleComponent,
         LoginComponent,
-        LoginStyleComponent,
-        RegisterStyleComponen,
         ProfileComponent,
-        ProfileStyleComponent
     ]
 })
 export class NavigationPageModule {
@@ -167,7 +129,7 @@ export class NavigationPageModule {
             newRoutes[0].children.push(
                 {
                     path: this.selfhelpService.getUrl(nav).replace('/', ''),
-                    loadChildren: () => import('./menu/menu.module').then(m => m.TabPageModule)
+                    loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
                 }
             );
             if (selectedTab === '' && selectedTab != firstTab) {

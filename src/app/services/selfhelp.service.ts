@@ -10,6 +10,7 @@ import { StringUtils } from 'turbocommons-ts';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { NotificationsService } from './notifications.service';
+import { HiddenPageComponent } from '../hidden-page/hidden-page.component';
 
 @Injectable({
     providedIn: 'root'
@@ -93,10 +94,10 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
-        params['device_id'] = this.getDeviceID(); 
-        params['device_token'] = await this.notificationsService.getToken();
+        params['device_id'] = this.getDeviceID();
         if (this.getIsApp()) {
             // use native calls
+            params['device_token'] = await this.notificationsService.getToken();
             return new Promise((resolve, reject) => {
                 this.httpN.setDataSerializer('utf8');
                 this.httpN
@@ -535,14 +536,32 @@ export class SelfhelpService {
             this.getPage(url);
             if (!this.setNav(url)) {
                 console.log('url not found');
+                this.showHiddenPage(url);
             }
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
         } else if (StringUtils.isUrl(url)) {
             // it is web link, open in the browser
             console.log('open browser');
             const browser = this.inAppBrowser.create(url);
+        } else {
+            console.log('url not found');
+            this.showHiddenPage(url);
         }
         return true;
+    }
+
+    private async showHiddenPage(url: string) {
+        const modal = await this.modalController.create({
+            component: HiddenPageComponent,
+            componentProps: {
+                url_param: url
+            },
+            swipeToClose: true,
+            backdropDismiss: true,
+            showBackdrop: true,
+            cssClass: ''
+        });
+        return await modal.present();
     }
 
     public async closeModal() {
@@ -556,7 +575,7 @@ export class SelfhelpService {
         this.getPage('/login');
     }
 
-    public getDeviceID():string{
+    public getDeviceID(): string {
         return this.device.uuid;
     }
 

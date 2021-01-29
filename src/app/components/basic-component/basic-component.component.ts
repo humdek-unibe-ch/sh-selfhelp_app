@@ -21,7 +21,9 @@ export class BasicComponentComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.selfhelpService.getPage(this.url);
+        if (this.url) {
+            this.selfhelpService.getPage(this.url);
+        }
     }
 
     public async close() {

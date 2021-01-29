@@ -29,7 +29,6 @@ export class NotificationsService {
 
     public getToken(): Promise<string> {
         return this.firebaseX.getToken().then(token => {
-            this.utils.debugLog('The token is ', token);
             return token;
         });
 
