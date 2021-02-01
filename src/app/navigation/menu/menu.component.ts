@@ -1,17 +1,17 @@
-import { Component } from '@angular/core';
-import { SelfhelpService } from '../../services/selfhelp.service';
-import { SelfHelp } from '../../selfhelpInterfaces';
-import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { ProfileComponent } from 'src/app/components/profile/profile.component';
+import { SelfHelp } from 'src/app/selfhelpInterfaces';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { SelfHelpNavigation } from './../../selfhelpInterfaces';
 
 @Component({
     selector: 'app-menu',
-    templateUrl: 'menu.page.html',
-    styleUrls: ['menu.page.scss']
+    templateUrl: './menu.component.html',
+    styleUrls: ['./menu.component.scss'],
 })
-export class TabPage {
+export class MenuComponent {
 
     public selfhelp: SelfHelp;
 

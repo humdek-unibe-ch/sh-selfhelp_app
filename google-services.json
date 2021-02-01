@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:500227861670:android:c5ef17d54dc4bb81141867",
+        "mobilesdk_app_id": "1:500227861670:android:d8e82ca6c2710c80141867",
         "android_client_info": {
-          "package_name": "tpf.selfhelp.becccs"
+          "package_name": "tpf.selfhelp.soap"
         }
       },
       "oauth_client": [

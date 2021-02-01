@@ -12,9 +12,8 @@ import { BasicStyleComponent } from './../basic-style/basic-style.component';
 export class FormUserInputStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: FormUserInputStyle;
     public form: FormGroup;
-    @Input() isUserInput: boolean = true;
 
-    constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
+    constructor(protected formBuilder: FormBuilder, protected selfhelpService: SelfhelpService) {
         super();
     }
 
@@ -22,7 +21,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         this.initForm();
     }
 
-    private initForm(): void {
+    protected initForm(): void {
         let formFields = {};
         this.style.children.forEach(formField => {
             if (this.isFormField(formField)) {
@@ -51,31 +50,28 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         })
     }
 
-    private prepareParams(value: { [key: string]: any; }): any {
+    protected prepareParams(value: { [key: string]: any; }): any {
         let params = {};
-        if (this.isUserInput) {
-            params['__form_name'] = this.getFieldContent('name');
-            this.style.children.forEach(formField => {
-                if (this.isFormField(formField)) {
-                    const input = this.getFormField(formField);
-                    let fieldValue = value[input.name.content.toString()];
-                    if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox') {
-                        // assign values to true/false for checkbox. Ionic need them as boolean
-                        fieldValue = fieldValue ? this.getChildFieldDefault(formField, 'value') : null;
-                        console.log(fieldValue);
-                    }
-                    params[input.name.content.toString()] = {
-                        id: input.id.content,
-                        value: fieldValue
-                    }
+        params['__form_name'] = this.getFieldContent('name');
+        this.style.children.forEach(formField => {
+            if (this.isFormField(formField)) {
+                const input = this.getFormField(formField);
+                let fieldValue = value[input.name.content.toString()];
+                if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox') {
+                    // assign values to true/false for checkbox. Ionic need them as boolean
+                    fieldValue = fieldValue ? this.getChildFieldDefault(formField, 'value') : null;
+                    console.log(fieldValue);
                 }
-            });
-        } else {
-            params = value;
-        }
+                params[input.name.content.toString()] = {
+                    id: input.id.content,
+                    value: fieldValue
+                }
+            }
+        });
         return params;
     }
-    private getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle {
+
+    protected getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle {
         switch (formField.style_name) {
             case 'input':
                 return <InputStyle>formField;
@@ -90,7 +86,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         }
     }
 
-    private isFormField(field: any): boolean {
+    protected isFormField(field: any): boolean {
         return field.style_name &&
             (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea');
     }

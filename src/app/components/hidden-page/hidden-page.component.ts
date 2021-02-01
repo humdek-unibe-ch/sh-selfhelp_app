@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BasicComponentComponent } from '../components/basic-component/basic-component.component';
-import { SelfhelpService } from '../services/selfhelp.service';
+import { Component, Injector, Input, OnInit } from '@angular/core';
+import { BasicComponentComponent } from '../basic-component/basic-component.component';
 
 @Component({
     selector: 'app-hidden-page',
@@ -10,8 +9,8 @@ import { SelfhelpService } from '../services/selfhelp.service';
 export class HiddenPageComponent extends BasicComponentComponent implements OnInit {
     @Input() url_param: string;
 
-    constructor(selfhelpService: SelfhelpService) {
-        super(selfhelpService);        
+    constructor(injector: Injector) {
+        super(injector);        
     }
 
     ngOnInit(){

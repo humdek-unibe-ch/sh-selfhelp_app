@@ -10,7 +10,7 @@ import { StringUtils } from 'turbocommons-ts';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { NotificationsService } from './notifications.service';
-import { HiddenPageComponent } from '../hidden-page/hidden-page.component';
+import { HiddenPageComponent } from '../components/hidden-page/hidden-page.component';
 
 @Injectable({
     providedIn: 'root'
@@ -54,7 +54,7 @@ export class SelfhelpService {
                 this.isApp = false;
             }
             this.getLocalSelfhelp();
-            this.getPage('/');
+            this.getPage('/home');
         });
     }
 
@@ -111,7 +111,7 @@ export class SelfhelpService {
                             }
                         },
                         error => {
-                            console.log(error);
+                            console.log(keyword, error);
                             reject(error);
                         }
                     )
@@ -348,11 +348,12 @@ export class SelfhelpService {
         this.execServerRequest(keyword, {})
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
+                    console.log(res);
                     this.setPage(keyword, res);
                 }
             })
             .catch((err) => {
-                console.log(err);
+                console.log(keyword, err);
             });
     }
 

@@ -18,6 +18,7 @@ export class TabsPage {
     constructor(public selfhelpService: SelfhelpService) {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
             if (selfhelp) {
+                console.log(selfhelp);
                 this.selfhelp = selfhelp;
                 if (!this.selfhelp.selectedMenu && selfhelp.navigation.length > 0) {
                     //set default tab if none is selected, used in the initialization

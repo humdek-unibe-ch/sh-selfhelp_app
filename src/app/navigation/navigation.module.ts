@@ -5,20 +5,27 @@ import { TabsPage } from './navigation.page';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
-import { MenuComponent } from './menu-test/menu.component';
-import { SubMenuComponent } from './sub-menu/sub-menu.component';
+import { MenuComponent } from './menu/menu.component';
+import { SafePipeModule } from 'safe-pipe';
+import { PlotlyViaWindowModule } from 'angular-plotly.js';
+import { DataTablesModule } from 'angular-datatables';
+import { LoginComponent } from '../components/login/login.component';
+import { ProfileComponent } from '../components/profile/profile.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
+import { BasicComponentComponent } from '../components/basic-component/basic-component.component';
+import { HiddenPageComponent } from '../components/hidden-page/hidden-page.component';
 import { CardStyleComponent } from '../styles/card-style/card-style.component';
 import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
 import { ContainerStyleComponent } from '../styles/container-style/container-style.component';
 import { FormUserInputStyleComponent } from '../styles/form-user-input-style/form-user-input-style.component';
 import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
+import { SubMenuComponent } from './sub-menu/sub-menu.component';
 import { InputStyleComponent } from '../styles/input-style/input-style.component';
 import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
 import { SelectStyleComponent } from '../styles/select-style/select-style.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.component';
 import { QualtricsSurveyStyleComponent } from '../styles/qualtrics-survey-style/qualtrics-survey-style.component';
-import { SafePipeModule } from 'safe-pipe';
 import { DivStyleComponent } from '../styles/div-style/div-style.component';
 import { ImageStyleComponent } from '../styles/image-style/image-style.component';
 import { VideoStyleComponent } from '../styles/video-style/video-style.component';
@@ -34,8 +41,6 @@ import { CarouselStyleComponent } from '../styles/carousel-style/carousel-style.
 import { JumbotronStyleComponent } from '../styles/jumbotron-style/jumbotron-style.component';
 import { TabsStyleComponent } from '../styles/tabs-style/tabs-style.component';
 import { GraphStyleComponent } from '../styles/graph-style/graph-style.component';
-import { PlotlyViaWindowModule } from 'angular-plotly.js';
-import { DataTablesModule } from 'angular-datatables';
 import { ShowUserInputStyleComponent } from '../styles/show-user-input-style/show-user-input-style.component';
 import { ButtonStyleComponent } from '../styles/button-style/button-style.component';
 import { LinkStyleComponent } from '../styles/link-style/link-style.component';
@@ -45,12 +50,10 @@ import { SortableListComponent } from '../styles/sortable-list/sortable-list.com
 import { NavigationContainerStyleComponent } from '../styles/navigation-container-style/navigation-container-style.component';
 import { JsonStyleComponent } from '../styles/json-style/json-style.component';
 import { QuizStyleComponent } from '../styles/quiz-style/quiz-style.component';
-import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
-import { LoginComponent } from '../components/login/login.component';
 import { LoginStyleComponent } from '../styles/login-style/login-style.component';
 import { RegisterStyleComponen } from '../styles/register-style/register-style.component';
 import { ProfileStyleComponent } from '../styles/profile-style/profile-style.component';
-import { ProfileComponent } from '../components/profile/profile.component';
+import { FormStyleComponent } from '../styles/form-style/form-style.component';
 
 const routes: Routes = [
     {
@@ -59,7 +62,8 @@ const routes: Routes = [
         children: [
             {
                 path: '/',
-                loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
+                component: MenuComponent
+                // loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
             },
             {
                 path: '/',
@@ -91,9 +95,51 @@ const routes: Routes = [
     declarations: [
         TabsPage,
         MenuComponent,
-        SubMenuComponent,
         LoginComponent,
         ProfileComponent,
+        BasicComponentComponent,
+        HiddenPageComponent,
+        BasicStyleComponent,
+        BasicStyleComponent,
+        CardStyleComponent,
+        MarkdownStyleComponent,
+        ContainerStyleComponent,
+        FormUserInputStyleComponent,
+        ConditionalContainerStyleComponent,
+        SubMenuComponent,
+        InputStyleComponent,
+        RadioStyleComponent,
+        SelectStyleComponent,
+        TextareaStyleComponent,
+        QualtricsSurveyStyleComponent,
+        DivStyleComponent,
+        ImageStyleComponent,
+        VideoStyleComponent,
+        AlertStyleComponent,
+        PlaintextStyleComponent,
+        MarkdownInlineStyleComponent,
+        HeadingStyleComponent,
+        RawTextStyleComponent,
+        AudioStyleComponent,
+        FigureStyleComponent,
+        ProgressBarStyleComponent,
+        CarouselStyleComponent,
+        JumbotronStyleComponent,
+        TabsStyleComponent,
+        GraphStyleComponent,
+        ShowUserInputStyleComponent,
+        ButtonStyleComponent,
+        LinkStyleComponent,
+        AccordionListStyleComponent,
+        NestedListStyleComponent,
+        SortableListComponent,
+        NavigationContainerStyleComponent,
+        JsonStyleComponent,
+        QuizStyleComponent,
+        LoginStyleComponent,
+        RegisterStyleComponen,
+        ProfileStyleComponent,
+        FormStyleComponent
     ]
 })
 export class NavigationPageModule {
@@ -129,7 +175,8 @@ export class NavigationPageModule {
             newRoutes[0].children.push(
                 {
                     path: this.selfhelpService.getUrl(nav).replace('/', ''),
-                    loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
+                    component: MenuComponent
+                    // loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
                 }
             );
             if (selectedTab === '' && selectedTab != firstTab) {

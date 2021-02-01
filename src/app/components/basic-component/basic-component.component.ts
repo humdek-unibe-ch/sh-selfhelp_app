@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { SelfHelp } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
@@ -11,10 +11,13 @@ export class BasicComponentComponent implements OnInit {
 
     public selfhelp: SelfHelp;
     public url: string;
+    protected selfhelpService: SelfhelpService;
 
-    constructor(protected selfhelpService: SelfhelpService) {
+    constructor(protected injector: Injector) {
+        this.selfhelpService = this.injector.get(SelfhelpService);
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
             if (selfhelp) {
+                console.log(selfhelp.urls[this.url]);
                 this.selfhelp = selfhelp;
             }
         });

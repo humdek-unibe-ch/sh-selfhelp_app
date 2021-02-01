@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { Component, Injector, OnInit } from '@angular/core';
 import { BasicComponentComponent } from '../basic-component/basic-component.component';
 
 @Component({
@@ -9,8 +8,8 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
 })
 export class LoginComponent extends BasicComponentComponent implements OnInit {
 
-    constructor(selfhelpService: SelfhelpService) {
-        super(selfhelpService);
+    constructor(injector: Injector) {
+        super(injector);
         this.url = '/login'
     }
 
