@@ -51,4 +51,15 @@ export class TabsPage {
         this.tabRef.select(this.getTabName(this.selfhelp.selectedMenu));
     }
 
+    public getIcon(nav: SelfHelpNavigation): string {
+        const icons = nav.icon.split(' ');
+        let res = '';
+        icons.forEach(icon => {
+            if (icon.startsWith('mobile-')) {
+               res = icon.replace('mobile-', '');
+            }
+        });
+        return res;
+    }
+
 }

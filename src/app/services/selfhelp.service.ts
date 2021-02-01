@@ -22,6 +22,7 @@ export class SelfhelpService {
     private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     private API_LOGIN = '/login';
+    private HOME = '/home';
     private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
         selectedMenu: null,
@@ -32,7 +33,7 @@ export class SelfhelpService {
         current_url: '/'
     });
     private initApp = false;
-    private messageDuration = 2000;
+    private messageDuration = 2000;    
 
     constructor(
         private http: HttpClient,
@@ -54,7 +55,7 @@ export class SelfhelpService {
                 this.isApp = false;
             }
             this.getLocalSelfhelp();
-            this.getPage('/home');
+            this.getPage(this.HOME);
         });
     }
 

@@ -11,6 +11,7 @@ export interface SelfHelpNavigation {
     title: string,
     keyword: string,
     url: string,
+    icon: string,
     is_active: boolean,
     children: SelfHelpNavigation[]
 }

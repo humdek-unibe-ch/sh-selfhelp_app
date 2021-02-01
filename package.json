@@ -1,8 +1,8 @@
 {
-  "name": "SelfHelp",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "name": "SOAP",
+  "version": "1.0.0",
+  "author": "Stefan Kodzhabashev",
+  "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
