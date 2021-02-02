@@ -293,6 +293,18 @@ export interface ProfileStyle extends Style {
     profile_title: string
 }
 
+export interface ResetPasswordStyle extends Style {
+    type: StyleField,
+    is_html: StyleField,
+    label_login: StyleField,
+    label_pw_reset: StyleField,
+    alert_fail: StyleField,
+    text_md: string,
+    alert_success: string
+    success: string
+    placeholder: string
+}
+
 export interface ConfirmAlert {
     header?: string,
     msg: string,
@@ -310,6 +322,10 @@ export interface LoginValues {
 export interface RegistrationValues {
     email: string,
     code?: string
+}
+
+export interface ResetPasswordValues {
+    email_user: string
 }
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle | ProfileStyle)[];

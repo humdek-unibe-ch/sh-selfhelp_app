@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -22,6 +22,7 @@ export class SelfhelpService {
     private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     private API_LOGIN = '/login';
+    private API_RESET = '/reset';
     private HOME = '/home';
     private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
@@ -294,6 +295,18 @@ export class SelfhelpService {
                     this.setNav(this.selfhelp.value.current_url);
                 }
                 return result;
+            })
+            .catch((err) => {
+                console.log(err);
+                return false;
+            });
+    }
+
+    public resetPassword(resetValues: ResetPasswordValues): Promise<boolean> {
+        let data = resetValues;
+        return this.execServerRequest(this.API_RESET, data)
+            .then((res: SelfHelpPageRequest) => {
+                return this.output_messages(res.content);
             })
             .catch((err) => {
                 console.log(err);

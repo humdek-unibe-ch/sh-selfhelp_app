@@ -15,6 +15,7 @@ import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+import { FormBuilder } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -35,6 +36,7 @@ import { FirebaseX } from '@ionic-native/firebase-x/ngx';
         InAppBrowser,
         Device,
         FirebaseX,
+        FormBuilder,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],
     bootstrap: [AppComponent]
