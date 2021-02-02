@@ -319,11 +319,17 @@ export interface SelfHelpPageRequest {
     content: Styles,
     logged_in: boolean,
     time?: any,
-    base_path: string
+    base_path: string,
+    title: string,
+}
+
+export interface CachedPage {
+    content: Styles,
+    title: string,
 }
 
 export interface Url {
-    [key: string]: Styles
+    [key: string]: CachedPage
 }
 
 export interface SelfHelp {
@@ -333,6 +339,6 @@ export interface SelfHelp {
     urls: Url,
     logged_in: boolean,
     base_path: string,
-    current_url: string,
+    current_url: string,    
     credentials?: LoginValues
 }

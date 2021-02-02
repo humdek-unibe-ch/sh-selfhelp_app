@@ -33,4 +33,8 @@ export class BasicComponentComponent implements OnInit {
         this.selfhelpService.closeModal();
     }
 
+    public getTitle(): string {
+        return this.selfhelp.urls[this.url] && this.selfhelp.urls[this.url].title ? this.selfhelp.urls[this.url].title : ''; 
+    }
+
 }

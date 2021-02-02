@@ -33,7 +33,7 @@ export class SelfhelpService {
         current_url: '/'
     });
     private initApp = false;
-    private messageDuration = 2000;    
+    private messageDuration = 2000;
 
     constructor(
         private http: HttpClient,
@@ -192,9 +192,12 @@ export class SelfhelpService {
             const nav = currSelfhelp.navigation[i];
             if (this.getUrl(nav) == url) {
                 urlFound = true;
-                if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
+                if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                     // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
-                    currSelfhelp.urls[url] = page.content;
+                    currSelfhelp.urls[url] = {
+                        content: page.content,
+                        title: page.title
+                    };
                     this.setSelfhelp(currSelfhelp, true);
                 }
                 break;
@@ -203,9 +206,12 @@ export class SelfhelpService {
                     const subNav = nav.children[j];
                     if (this.getUrl(subNav) == url) {
                         urlFound = true;
-                        if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
+                        if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                             // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
-                            currSelfhelp.urls[url] = page.content;
+                            currSelfhelp.urls[url] = {
+                        content: page.content,
+                        title: page.title
+                    };
                             this.setSelfhelp(currSelfhelp, true);
                         }
                         break;
@@ -214,9 +220,12 @@ export class SelfhelpService {
             }
         }
         if (!urlFound) {
-            if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url], page.content)) {
+            if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                 // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
-                currSelfhelp.urls[url] = page.content;
+                currSelfhelp.urls[url] = {
+                        content: page.content,
+                        title: page.title
+                    };
                 this.setSelfhelp(currSelfhelp, true);
             }
         }
@@ -345,17 +354,21 @@ export class SelfhelpService {
         this.setSelfhelp(currSelfhelp, false);
     }
 
-    public getPage(keyword: string): void {
-        this.execServerRequest(keyword, {})
-            .then((res: SelfHelpPageRequest) => {
-                if (res) {
-                    console.log(res);
-                    this.setPage(keyword, res);
-                }
-            })
-            .catch((err) => {
-                console.log(keyword, err);
-            });
+    public getPage(keyword: string): Promise<SelfHelpPageRequest> {
+        return new Promise((resolve, reject) => {
+            this.execServerRequest(keyword, {})
+                .then((res: SelfHelpPageRequest) => {
+                    if (res) {
+                        console.log(res);
+                        this.setPage(keyword, res);
+                        resolve(res);
+                    }
+                })
+                .catch((err) => {
+                    console.log(keyword, err);
+                    reject(err);
+                });
+        });
     }
 
     public isEqual(obj1: any, obj2: any): boolean {
@@ -369,7 +382,7 @@ export class SelfhelpService {
     }
 
     public getContent(nav: SelfHelpNavigation) {
-        return this.selfhelp.value.urls[this.getUrl(nav)];
+        return this.selfhelp.value.urls[this.getUrl(nav)].content;
     }
 
     private getLocalSelfhelp() {

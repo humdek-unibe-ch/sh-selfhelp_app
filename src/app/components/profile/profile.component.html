@@ -7,7 +7,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-    <app-basic-style *ngFor="let style of selfhelp.urls[url]" [style]="style" [url]="url"></app-basic-style>
+    <app-basic-style *ngFor="let style of selfhelp.urls[url].content" [style]="style" [url]="url"></app-basic-style>
     <ion-item>
         <ion-buttons slot="start">
             <ion-button (click)="logout()">

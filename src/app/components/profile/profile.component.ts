@@ -16,8 +16,8 @@ export class ProfileComponent extends BasicComponentComponent implements OnInit 
 
     public getProfileTitle(): string {
         if (this.selfhelp.urls[this.url]) {
-            for (let i = 0; i < this.selfhelp.urls[this.url].length; i++) {
-                const style = this.selfhelp.urls[this.url][i];
+            for (let i = 0; i < this.selfhelp.urls[this.url].content.length; i++) {
+                const style = this.selfhelp.urls[this.url].content[i];
                 const prof = <ProfileStyle>style;
                 if (prof.profile_title) {
                     return prof.profile_title;

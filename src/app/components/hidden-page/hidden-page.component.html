@@ -3,9 +3,9 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="#" (click)="close()"></ion-back-button>
         </ion-buttons>
-        <ion-title>Hidden Page</ion-title>
+        <ion-title>{{getTitle()}}</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
-    <app-basic-style *ngFor="let style of selfhelp.urls[url]" [style]="style" [url]="url"></app-basic-style>
+    <app-basic-style *ngFor="let style of selfhelp.urls[url].content" [style]="style" [url]="url"></app-basic-style>
 </ion-content>

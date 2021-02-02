@@ -1,5 +1,6 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { BasicComponentComponent } from '../basic-component/basic-component.component';
+import { SelfHelpPageRequest } from './../../selfhelpInterfaces';
 
 @Component({
     selector: 'app-hidden-page',
@@ -13,9 +14,9 @@ export class HiddenPageComponent extends BasicComponentComponent implements OnIn
         super(injector);        
     }
 
-    ngOnInit(){
+    async ngOnInit(){
         this.url = this.url_param;
         this.selfhelpService.getPage(this.url);
-    }
+    }    
 
 }
