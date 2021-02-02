@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="tpf.selfhelp.soap" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>SOAP</name>
-    <description>SOAP App</description>
+<widget id="tpf.selfhelp.soapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>SelfHelpMobile</name>
+    <description>SelfHelp App</description>
     <author email="tpf@humdek.unibe.ch" href="https://www.tpf.philhum.unibe.ch">Technology Platform for Research, UNIBE</author>
     <content original-src="index.html" src="http://localhost:8101" />
     <access origin="*" />

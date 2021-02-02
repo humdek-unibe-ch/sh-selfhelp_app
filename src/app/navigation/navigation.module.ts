@@ -1,11 +1,10 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TabsPage } from './navigation.page';
+import { NavigationPage } from './navigation.page';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
-import { MenuComponent } from './menu/menu.component';
 import { SafePipeModule } from 'safe-pipe';
 import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { DataTablesModule } from 'angular-datatables';
@@ -54,16 +53,17 @@ import { LoginStyleComponent } from '../styles/login-style/login-style.component
 import { RegisterStyleComponen } from '../styles/register-style/register-style.component';
 import { ProfileStyleComponent } from '../styles/profile-style/profile-style.component';
 import { FormStyleComponent } from '../styles/form-style/form-style.component';
+import { MenuPage } from './menu/menu.page';
 
 const routes: Routes = [
     {
         path: '',
-        component: TabsPage,
+        component: NavigationPage,
         children: [
             {
                 path: '/',
-                component: MenuComponent
-                // loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
+                // component: MenuComponent
+                loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
             },
             {
                 path: '/',
@@ -93,8 +93,8 @@ const routes: Routes = [
     ],
     exports: [RouterModule],
     declarations: [
-        TabsPage,
-        MenuComponent,
+        NavigationPage,
+        MenuPage,
         LoginComponent,
         ProfileComponent,
         BasicComponentComponent,
@@ -175,8 +175,8 @@ export class NavigationPageModule {
             newRoutes[0].children.push(
                 {
                     path: this.selfhelpService.getUrl(nav).replace('/', ''),
-                    component: MenuComponent
-                    // loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
+                    // component: MenuComponent
+                    loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
                 }
             );
             if (selectedTab === '' && selectedTab != firstTab) {

@@ -10,7 +10,7 @@ import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
     templateUrl: 'navigation.page.html',
     styleUrls: ['navigation.page.scss']
 })
-export class TabsPage {
+export class NavigationPage {
     public selfhelp: SelfHelp;
     private init = false;
     @ViewChild('navigation') tabRef: IonTabs;
@@ -48,7 +48,9 @@ export class TabsPage {
     selectMenu(nav: SelfHelpNavigation): void {
         this.selfhelp.selectedMenu = nav;
         this.selfhelpService.setSelectedMenu(nav);
-        this.tabRef.select(this.getTabName(this.selfhelp.selectedMenu));
+        if(this.tabRef){
+            this.tabRef.select(this.getTabName(this.selfhelp.selectedMenu));
+        }
     }
 
     public getIcon(nav: SelfHelpNavigation): string {

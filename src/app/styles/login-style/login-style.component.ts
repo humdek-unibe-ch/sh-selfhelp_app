@@ -41,13 +41,14 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     public forgottenPassword() {
-        const value: LoginValues = {
-            email: '',
-            password: ''
-        }
-        this.selfhelpService.login(value, null);
-        this.selfhelpService.getPage('/');
-        this.selfhelpService.closeModal();
+        // const value: LoginValues = {
+        //     email: '',
+        //     password: ''
+        // }
+        // this.selfhelpService.login(value, null);
+        // this.selfhelpService.getPage('/');
+        // this.selfhelpService.closeModal();
+        this.selfhelpService.openUrl('/reset');
     }
 
 }
