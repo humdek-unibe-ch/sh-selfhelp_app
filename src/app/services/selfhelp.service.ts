@@ -259,8 +259,8 @@ export class SelfhelpService {
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
                     this.setSelfhelp(currSelfhelp, true);
-                    this.getPage('/tab');
-                    this.setNav(this.selfhelp.value.current_url);
+                    this.getPage(currSelfhelp.navigation[0].url);
+                    this.setNav(currSelfhelp.navigation[0].url);
                 }
                 if (!res.logged_in && alert_fail) {
                     this.presentToast(alert_fail, 'danger');
@@ -291,13 +291,13 @@ export class SelfhelpService {
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
                     this.setSelfhelp(currSelfhelp, true);
-                    this.getPage('/tab');
-                    this.setNav(this.selfhelp.value.current_url);
+                    this.getPage(currSelfhelp.navigation[0].url);
+                    this.setNav(currSelfhelp.navigation[0].url);
                 }
                 return result;
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err); 
                 return false;
             });
     }
@@ -372,7 +372,6 @@ export class SelfhelpService {
             this.execServerRequest(keyword, {})
                 .then((res: SelfHelpPageRequest) => {
                     if (res) {
-                        console.log(res);
                         this.setPage(keyword, res);
                         resolve(res);
                     }
@@ -596,11 +595,12 @@ export class SelfhelpService {
         await this.modalController.dismiss(null, undefined);
     }
 
-    public logout(): void {
+    public async logout() {
         let currSelfhelp = this.selfhelp.value;
         currSelfhelp.credentials = null;
         this.setSelfhelp(currSelfhelp, true);
-        this.getPage('/login');
+        await this.getPage(this.API_LOGIN); 
+        this.getPage(currSelfhelp.navigation[0].url); // set first tab on logout
     }
 
     public getDeviceID(): string {

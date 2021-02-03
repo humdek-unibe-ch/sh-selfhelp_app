@@ -116,7 +116,8 @@ export interface TextAreaStyle extends FormField {
 
 export interface QualtricsSurveyStyle extends Style {
     qualtricsSurvey: StyleField,
-    qualtrics_url: string
+    qualtrics_url: string,
+    alert?: string
 }
 
 export interface ImageStyle extends Style {

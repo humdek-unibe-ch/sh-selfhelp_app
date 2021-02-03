@@ -17,7 +17,6 @@ export class BasicComponentComponent implements OnInit {
         this.selfhelpService = this.injector.get(SelfhelpService);
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
             if (selfhelp) {
-                console.log(selfhelp.urls[this.url]);
                 this.selfhelp = selfhelp;
             }
         });
