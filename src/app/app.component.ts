@@ -6,6 +6,7 @@ import { name } from '../../package.json';
 import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
+import { CodePush } from '@ionic-native/code-push/ngx';
 
 @Component({
     selector: 'app-root',
@@ -20,13 +21,15 @@ export class AppComponent {
         private loadingCtrl: LoadingController,
         private androidFullScreen: AndroidFullScreen,
         private notificationsService: NotificationsService,
-        private selfhelpSerivce: SelfhelpService
+        private selfhelpSerivce: SelfhelpService,
+        private codePush: CodePush
     ) {
         this.initializeApp();
     }
 
     initializeApp() {
         this.platform.ready().then(() => {
+            this.checkForUpdate();
             this.androidFullScreen.isImmersiveModeSupported()
                 .then(() => this.androidFullScreen.immersiveMode())
                 .catch(err => console.log(err));
@@ -50,6 +53,11 @@ export class AppComponent {
             duration: 1000
         });
         await loading.present();
+    }
+
+    private checkForUpdate() {
+        const downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
+        this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
     }
 
 }

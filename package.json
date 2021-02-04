@@ -21,6 +21,7 @@
     "@angular/router": "~10.0.0",
     "@fortawesome/fontawesome-free": "^5.2.0",
     "@ionic-native/android-full-screen": "^5.30.0",
+    "@ionic-native/code-push": "^5.31.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/device": "^5.30.0",
     "@ionic-native/firebase-x": "^5.30.0",
@@ -59,11 +60,18 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/jquery": "^3.5.5",
     "@types/node": "^12.11.1",
+    "code-push": "^3.0.1",
     "codelyzer": "^6.0.0",
     "cordova-android": "^9.0.0",
     "cordova-plugin-advanced-http": "^3.1.0",
     "cordova-plugin-androidx-adapter": "^1.1.3",
+    "cordova-plugin-appcenter-analytics": "^0.5.1",
+    "cordova-plugin-appcenter-crashes": "^0.5.1",
+    "cordova-plugin-appcenter-push": "^0.5.1",
+    "cordova-plugin-appcenter-shared": "^0.5.1",
+    "cordova-plugin-code-push": "^2.0.0",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-firebasex": "^11.0.3",
     "cordova-plugin-fullscreen": "^1.3.0",
@@ -73,6 +81,7 @@
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-plugin-zip": "^3.1.0",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
@@ -119,7 +128,11 @@
         "ANDROID_GSON_VERSION": "2.8.6",
         "ANDROID_FIREBASE_PERF_GRADLE_PLUGIN_VERSION": "1.3.1"
       },
-      "cordova-plugin-androidx-adapter": {}
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-appcenter-analytics": {},
+      "cordova-plugin-appcenter-crashes": {},
+      "cordova-plugin-appcenter-push": {},
+      "cordova-plugin-code-push": {}
     },
     "platforms": [
       "android"
