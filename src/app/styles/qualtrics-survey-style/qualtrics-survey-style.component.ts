@@ -12,7 +12,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     @Input() style: QualtricsSurveyStyle;
     @ViewChild('iframe') iframe: ElementRef;
 
-    constructor(private element: ElementRef) {
+    constructor() {
         super();
     }
 

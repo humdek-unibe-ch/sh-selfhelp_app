@@ -55,6 +55,7 @@ import { ProfileStyleComponent } from '../styles/profile-style/profile-style.com
 import { FormStyleComponent } from '../styles/form-style/form-style.component';
 import { MenuPage } from './menu/menu.page';
 import { ResetPasswordStyleComponent } from '../styles/reset-password-style/reset-password-style.component';
+import { ValidateStyleComponent } from '../styles/validate-style/validate-style.component';
 
 const routes: Routes = [
     {
@@ -141,7 +142,8 @@ const routes: Routes = [
         RegisterStyleComponen,
         ProfileStyleComponent,
         FormStyleComponent,
-        ResetPasswordStyleComponent
+        ResetPasswordStyleComponent,
+        ValidateStyleComponent
     ]
 })
 export class NavigationPageModule {

@@ -49,15 +49,19 @@ export class BasicStyleComponent implements OnInit {
      * @memberof BasicStyleComponent
      */
     public getCss(): string {
-        const cssClasses = this.style.css.split(' ');
-        let mobileCss = '';
-        cssClasses.forEach(cssClass => {
-            if (cssClass.startsWith('mobile-')) {
-                let mobileClass = cssClass.replace('mobile-', '');
-                mobileCss = mobileCss + (mobileCss == '' ? mobileClass : (' ' + mobileClass));
-            }
-        });
-        return mobileCss;
+        if (this.style && this.style.css) {
+            const cssClasses = this.style.css.split(' ');
+            let mobileCss = '';
+            cssClasses.forEach(cssClass => {
+                if (cssClass.startsWith('mobile-')) {
+                    let mobileClass = cssClass.replace('mobile-', '');
+                    mobileCss = mobileCss + (mobileCss == '' ? mobileClass : (' ' + mobileClass));
+                }
+            });
+            return mobileCss;
+        } else {
+            return "";
+        }
     }
 
     public getFieldContent(fieldName: string): string {

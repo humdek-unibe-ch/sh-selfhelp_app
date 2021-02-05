@@ -300,10 +300,30 @@ export interface ResetPasswordStyle extends Style {
     label_login: StyleField,
     label_pw_reset: StyleField,
     alert_fail: StyleField,
-    text_md: string,
-    alert_success: string
-    success: string
-    placeholder: string
+    text_md: StyleField,
+    alert_success: StyleField,
+    success: StyleField,
+    placeholder: StyleField,
+}
+
+export interface ValidateStyle extends Style {
+    label: StyleField,
+    label_pw: StyleField,
+    label_login: StyleField,
+    alert_fail: StyleField,
+    label_pw_confirm: StyleField,
+    title: StyleField,
+    subtitle: StyleField,
+    alert_success: StyleField,
+    label_name: StyleField,
+    name_placeholder: StyleField,
+    name_description: StyleField,
+    label_gender: StyleField,
+    gender_male: StyleField,
+    gender_female: StyleField,
+    label_activate: StyleField,
+    pw_placeholder: StyleField,
+    success: StyleField,
 }
 
 export interface ConfirmAlert {
@@ -323,6 +343,13 @@ export interface LoginValues {
 export interface RegistrationValues {
     email: string,
     code?: string
+}
+
+export interface ValidateValues {
+    name: string,
+    pw: string,
+    pw_verify: string,
+    gender: number
 }
 
 export interface ResetPasswordValues {
