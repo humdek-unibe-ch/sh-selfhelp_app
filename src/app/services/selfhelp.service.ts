@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ComponentRef, Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -10,7 +10,7 @@ import { StringUtils } from 'turbocommons-ts';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { NotificationsService } from './notifications.service';
-import { HiddenPageComponent } from '../components/hidden-page/hidden-page.component';
+import { ModalPageComponent } from '../components/modal-page/modal-page.component';
 
 @Injectable({
     providedIn: 'root'
@@ -19,8 +19,8 @@ export class SelfhelpService {
 
     private isApp: boolean = false;
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
-    private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
-    private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
+    private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
+    private API_ENDPOINT_WEB = 'https://becccs.psy.unibe.ch';
     private API_LOGIN = '/login';
     private API_RESET = '/reset';
     private HOME = '/home';
@@ -563,7 +563,7 @@ export class SelfhelpService {
             this.getPage(url);
             if (!this.setNav(url)) {
                 console.log('url not found');
-                this.showHiddenPage(url);
+                this.getModalPage(url);
             }
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
         } else if (StringUtils.isUrl(url)) {
@@ -572,21 +572,21 @@ export class SelfhelpService {
             const browser = this.inAppBrowser.create(url);
         } else {
             console.log('url not found');
-            this.showHiddenPage(url);
+            this.getModalPage(url);
         }
         return true;
     }
 
-    private async showHiddenPage(url: string) {
+    private async getModalPage(url: string) {
         const modal = await this.modalController.create({
-            component: HiddenPageComponent,
+            component: ModalPageComponent,
             componentProps: {
                 url_param: url
             },
             swipeToClose: true,
             backdropDismiss: true,
             showBackdrop: true,
-            cssClass: ''
+            cssClass: 'modal-fullscreen'
         });
         return await modal.present();
     }
@@ -605,6 +605,17 @@ export class SelfhelpService {
 
     public getDeviceID(): string {
         return this.device.uuid;
+    }
+
+    public async getModalComponent(component: any){
+        const modal = await this.modalController.create({
+            component: component,
+            swipeToClose: true,
+            backdropDismiss: true,
+            showBackdrop: true,
+            cssClass: 'modal-fullscreen'
+        });
+        return await modal.present();
     }
 
 }

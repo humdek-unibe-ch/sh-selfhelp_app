@@ -13,7 +13,7 @@ import { ProfileComponent } from '../components/profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
 import { BasicComponentComponent } from '../components/basic-component/basic-component.component';
-import { HiddenPageComponent } from '../components/hidden-page/hidden-page.component';
+import { ModalPageComponent } from '../components/modal-page/modal-page.component';
 import { CardStyleComponent } from '../styles/card-style/card-style.component';
 import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
 import { ContainerStyleComponent } from '../styles/container-style/container-style.component';
@@ -99,7 +99,7 @@ const routes: Routes = [
         LoginComponent,
         ProfileComponent,
         BasicComponentComponent,
-        HiddenPageComponent,
+        ModalPageComponent,
         BasicStyleComponent,
         BasicStyleComponent,
         CardStyleComponent,

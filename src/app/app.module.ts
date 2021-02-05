@@ -15,6 +15,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { FormBuilder } from '@angular/forms';
 import { CodePush } from '@ionic-native/code-push/ngx';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 
 @NgModule({
     declarations: [
@@ -37,6 +38,7 @@ import { CodePush } from '@ionic-native/code-push/ngx';
         FirebaseX,
         FormBuilder,
         CodePush,
+        Deeplinks,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],
     bootstrap: [AppComponent]

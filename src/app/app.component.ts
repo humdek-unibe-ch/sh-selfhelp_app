@@ -7,6 +7,8 @@ import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
 import { CodePush } from '@ionic-native/code-push/ngx';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { MenuPage } from './navigation/menu/menu.page';
 
 @Component({
     selector: 'app-root',
@@ -22,7 +24,8 @@ export class AppComponent {
         private androidFullScreen: AndroidFullScreen,
         private notificationsService: NotificationsService,
         private selfhelpSerivce: SelfhelpService,
-        private codePush: CodePush
+        private codePush: CodePush,
+        private deeplinks: Deeplinks
     ) {
         this.initializeApp();
     }
@@ -30,6 +33,7 @@ export class AppComponent {
     initializeApp() {
         this.platform.ready().then(() => {
             this.checkForUpdate();
+            this.initDeepLinking();
             this.androidFullScreen.isImmersiveModeSupported()
                 .then(() => this.androidFullScreen.immersiveMode())
                 .catch(err => console.log(err));
@@ -58,6 +62,25 @@ export class AppComponent {
     private checkForUpdate() {
         const downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
         this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+    }
+
+    initDeepLinking() {
+        this.deeplinks.route({ '/validate/:uid/:token': 'validate' }).
+            subscribe(
+                match => {
+                    console.log('Successfully matched route', match);
+                },
+                nomatch => {
+                    // nomatch.$link - the full link data
+                    if (nomatch['$link']) {
+                        const pathArr = nomatch.$link.path.split('/');
+                        if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
+                            console.log('opne validate');
+                            this.selfhelpSerivce.openUrl(nomatch.$link.path);
+                        }
+                    }
+                }
+            );
     }
 
 }

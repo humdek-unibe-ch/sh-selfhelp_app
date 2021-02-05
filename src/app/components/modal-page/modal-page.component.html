@@ -6,6 +6,6 @@
         <ion-title>{{getTitle()}}</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content fullscreen>
+<ion-content *ngIf="selfhelp.urls[url]"  fullscreen>
     <app-basic-style *ngFor="let style of selfhelp.urls[url].content" [style]="style" [url]="url"></app-basic-style>
 </ion-content>
