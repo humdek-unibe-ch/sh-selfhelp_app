@@ -3,7 +3,7 @@
     <name>SelfHelpMobile</name>
     <description>SelfHelp App</description>
     <author email="tpf@humdek.unibe.ch" href="https://www.tpf.philhum.unibe.ch">Technology Platform for Research, UNIBE</author>
-    <content original-src="index.html" src="http://localhost:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -11,6 +11,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-navigation href="https://*tpf-test.humdek.unibe.ch/blank/*" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
@@ -103,5 +104,5 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <allow-navigation href="http://localhost:8101" sessionid="57583968" />
-    <allow-navigation href="http://localhost:8100" sessionid="5937d1c1" />
+    <allow-navigation href="https://*tpf-test.humdek.unibe.ch/blank/*" />
 </widget>

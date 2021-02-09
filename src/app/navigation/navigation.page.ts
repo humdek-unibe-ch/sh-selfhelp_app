@@ -39,9 +39,10 @@ export class NavigationPage {
         return this.selfhelpService.getUrl(nav).replace('/', '');
     }
 
-    setTab(nav: SelfHelpNavigation): void {
+    async setTab(nav: SelfHelpNavigation) {
         this.selectMenu(nav);
-        this.selfhelpService.getPage(this.selfhelpService.getUrl(nav));
+        const res = await this.selfhelpService.getPage(this.selfhelpService.getUrl(nav));
+        console.log(nav, res);
     }
 
     selectMenu(nav: SelfHelpNavigation): void {

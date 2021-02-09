@@ -19,8 +19,8 @@ export class SelfhelpService {
 
     private isApp: boolean = false;
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
-    // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp'; 
-    private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
+    private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
+    // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
     private API_ENDPOINT_WEB = 'https://becccs.psy.unibe.ch';
     public API_LOGIN = '/login';
     private API_RESET = '/reset';
@@ -35,7 +35,7 @@ export class SelfhelpService {
         current_url: '/'
     });
     private initApp = false;
-    private messageDuration = 2000;
+    private messageDuration = 10000;
 
     constructor(
         private http: HttpClient,
@@ -211,9 +211,9 @@ export class SelfhelpService {
                         if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                             // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
                             currSelfhelp.urls[url] = {
-                        content: page.content,
-                        title: page.title
-                    };
+                                content: page.content,
+                                title: page.title
+                            };
                             this.setSelfhelp(currSelfhelp, true);
                         }
                         break;
@@ -225,9 +225,9 @@ export class SelfhelpService {
             if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                 // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
                 currSelfhelp.urls[url] = {
-                        content: page.content,
-                        title: page.title
-                    };
+                    content: page.content,
+                    title: page.title
+                };
                 this.setSelfhelp(currSelfhelp, true);
             }
         }
@@ -298,7 +298,7 @@ export class SelfhelpService {
                 return result;
             })
             .catch((err) => {
-                console.log(err); 
+                console.log(err);
                 return false;
             });
     }
@@ -310,7 +310,7 @@ export class SelfhelpService {
                 return result;
             })
             .catch((err) => {
-                console.log(err); 
+                console.log(err);
                 return false;
             });
     }
@@ -504,7 +504,15 @@ export class SelfhelpService {
             message: msg,
             position: 'top',
             color: color,
-            duration: this.messageDuration
+            duration: this.messageDuration,
+            buttons: [
+                {
+                    text: "close",
+                    handler: () => {
+                        console.log('Close clicked');
+                    }
+                }
+            ]
         });
         toast.present();
     }
@@ -612,7 +620,7 @@ export class SelfhelpService {
         let currSelfhelp = this.selfhelp.value;
         currSelfhelp.credentials = null;
         this.setSelfhelp(currSelfhelp, true);
-        await this.getPage(this.API_LOGIN); 
+        await this.getPage(this.API_LOGIN);
         this.getPage(currSelfhelp.navigation[0].url); // set first tab on logout
     }
 
@@ -620,7 +628,7 @@ export class SelfhelpService {
         return this.device.uuid;
     }
 
-    public async getModalComponent(component: any){
+    public async getModalComponent(component: any) {
         const modal = await this.modalController.create({
             component: component,
             swipeToClose: true,
