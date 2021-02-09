@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Platform, ToastController } from '@ionic/angular';
+import { SelfhelpService } from './selfhelp.service';
 import { UtilsService } from './utils.service';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { UtilsService } from './utils.service';
 })
 export class NotificationsService {
 
-    constructor(private firebaseX: FirebaseX, private utils: UtilsService, private platform: Platform, public toastController: ToastController) { }
+    constructor(private firebaseX: FirebaseX, private utils: UtilsService, private platform: Platform, public toastController: ToastController, private injector: Injector) { }
 
     public initFirebaseX() {
         this.firebaseX.hasPermission().then((res) => {
@@ -39,6 +40,10 @@ export class NotificationsService {
         this.firebaseX.onMessageReceived().subscribe((data: any) => {
             this.utils.debugLog('Push notification recieved ', data);
             this.showNotification(data);
+            if(data['url']){
+                const selfhelpService = this.injector.get(SelfhelpService);
+                selfhelpService.openUrl(data['url']); 
+            }
         });
     }
 
