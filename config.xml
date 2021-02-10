@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="tpf.selfhelp.soapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>SelfHelpMobile</name>
+    <name>Soapp</name>
     <description>SelfHelp App</description>
     <author email="tpf@humdek.unibe.ch" href="https://www.tpf.philhum.unibe.ch">Technology Platform for Research, UNIBE</author>
     <content src="index.html" />

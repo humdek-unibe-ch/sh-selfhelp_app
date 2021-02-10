@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<ion-content #ionContent [fullscreen]="true">
     <ion-header>
         <ion-toolbar>
             <ion-buttons slot="secondary">
@@ -11,7 +11,7 @@
     </ion-header>
     <div *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length == 0">
         <app-basic-style *ngFor="let style of getContent(selfhelp.selectedMenu)" [style]="style"
-            [url]="selfhelp.selectedMenu.url"></app-basic-style>
+            [url]="selfhelp.selectedMenu.url" [ionContent]="ionContent"></app-basic-style>
     </div>
     <app-sub-menu *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length > 0" [selfhelp]="selfhelp">
     </app-sub-menu>

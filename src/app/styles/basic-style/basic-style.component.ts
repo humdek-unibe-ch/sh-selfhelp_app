@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Style } from './../../selfhelpInterfaces';
+import { IonContent } from '@ionic/angular';
 
 @Component({
     selector: 'app-basic-style',
@@ -9,10 +10,12 @@ import { Style } from './../../selfhelpInterfaces';
 export class BasicStyleComponent implements OnInit {
     @Input() style: Style;
     @Input() url: string;
+    @Input() ionContent: IonContent;
 
     constructor() { }
 
-    ngOnInit() { }
+    ngOnInit() { 
+    }
 
     /**
      * @description Return the style
@@ -86,6 +89,10 @@ export class BasicStyleComponent implements OnInit {
 
     public getChildID(child: Style): number {
         return child.id ? parseInt(child.id.content.toString()) : null;
+    }
+
+    public getIonContent(){
+        return this.ionContent;
     }
 
 }

@@ -56,6 +56,8 @@ import { FormStyleComponent } from '../styles/form-style/form-style.component';
 import { MenuPage } from './menu/menu.page';
 import { ResetPasswordStyleComponent } from '../styles/reset-password-style/reset-password-style.component';
 import { ValidateStyleComponent } from '../styles/validate-style/validate-style.component';
+import { MessageBoardStyleComponent } from '../styles/message-board-style/message-board-style.component';
+import { SubmitCommentComponent } from '../styles/message-board-style/submit-comment/submit-comment.component';
 
 const routes: Routes = [
     {
@@ -143,7 +145,9 @@ const routes: Routes = [
         ProfileStyleComponent,
         FormStyleComponent,
         ResetPasswordStyleComponent,
-        ValidateStyleComponent
+        ValidateStyleComponent,
+        MessageBoardStyleComponent,
+        SubmitCommentComponent
     ]
 })
 export class NavigationPageModule {

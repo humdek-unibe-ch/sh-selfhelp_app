@@ -20,8 +20,8 @@ export class SelfhelpService {
     private isApp: boolean = false;
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
-    // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
-    private API_ENDPOINT_WEB = 'https://becccs.psy.unibe.ch';
+    // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch'; 
+    private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     public API_LOGIN = '/login';
     private API_RESET = '/reset';
     private HOME = '/home';
@@ -57,6 +57,7 @@ export class SelfhelpService {
                 this.isApp = false;
             }
             this.getLocalSelfhelp();
+            console.log('selfehlp service loaded');
             this.getPage(this.HOME);
         });
     }
@@ -238,16 +239,22 @@ export class SelfhelpService {
             newSelfhelp.base_path = page.base_path;
             this.setSelfhelp(newSelfhelp, true);
         }
-        if (!page.logged_in && url != "/login") {
+        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate')) {
             this.autoLogin();
         }
         this.setSelfhelp(currSelfhelp, true);
     }
 
-    private autoLogin() {
+    private async autoLogin() {
         console.log('try auto login');
         if (this.selfhelp.value.credentials) {
-            this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
+            const loginRes = await this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
+            if (!loginRes) {
+                console.log('Login failed');
+                this.openUrl(this.API_LOGIN);
+            }
+        } else {
+            this.openUrl(this.API_LOGIN);
         }
     }
 
@@ -385,6 +392,7 @@ export class SelfhelpService {
             this.execServerRequest(keyword, {})
                 .then((res: SelfHelpPageRequest) => {
                     if (res) {
+                        console.log(res);
                         this.setPage(keyword, res);
                         resolve(res);
                     }
@@ -422,16 +430,21 @@ export class SelfhelpService {
         this.storage.set(this.local_selfhelp, JSON.stringify(this.selfhelp.value));
     }
 
-    public submitForm(keyword: string, params: any) {
-        this.execServerRequest(keyword, params)
+    public submitForm(keyword: string, params: any): Promise<boolean> {
+        return this.execServerRequest(keyword, params)
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
-                    this.output_messages(res.content);
+                    if (!this.output_messages(res.content)) {
+                        return false;
+                    };
+                    console.log(res);
                     this.setPage(keyword, res);
                 }
+                return true;
             })
             .catch((err) => {
                 console.log(err);
+                return false;
             });
     }
 

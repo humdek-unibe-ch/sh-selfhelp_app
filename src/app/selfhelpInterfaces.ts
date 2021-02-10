@@ -327,6 +327,43 @@ export interface ValidateStyle extends Style {
     success: StyleField,
 }
 
+export interface MessageBoardStyle extends Style {
+    comments: StyleField,
+    form_name: StyleField,
+    icons: StyleField,
+    is_log: StyleField,
+    label: StyleField,
+    max: StyleField,
+    messages: MessageBoardMessage[],
+    name: StyleField,
+    text_md: StyleField,
+    title: StyleField,
+    type_input: StyleField,
+    id_section: number,
+    id_reply: number,
+    id_link: number
+}
+
+export interface MessageBoardMessage {
+    color: string,
+    icon_counter: any,
+    record_id: number,
+    reply_messages: MessageBoardMessageReply[],
+    score: string,
+    time: string,
+    ts: Date,
+    user: string,
+    url: string
+}
+
+export interface MessageBoardMessageReply {
+    create_time: Date,
+    user_id: number,
+    user_name: string,
+    value: string,
+    time: string
+}
+
 export interface ConfirmAlert {
     header?: string,
     msg: string,
@@ -384,6 +421,6 @@ export interface SelfHelp {
     urls: Url,
     logged_in: boolean,
     base_path: string,
-    current_url: string,    
+    current_url: string,
     credentials?: LoginValues
 }

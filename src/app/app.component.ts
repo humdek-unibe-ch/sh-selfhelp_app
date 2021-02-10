@@ -7,8 +7,7 @@ import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
 import { CodePush } from '@ionic-native/code-push/ngx';
-import { Deeplinks } from '@ionic-native/deeplinks/ngx';
-import { MenuPage } from './navigation/menu/menu.page';
+declare const IonicDeeplink: any;
 
 @Component({
     selector: 'app-root',
@@ -24,23 +23,22 @@ export class AppComponent {
         private androidFullScreen: AndroidFullScreen,
         private notificationsService: NotificationsService,
         private selfhelpSerivce: SelfhelpService,
-        private codePush: CodePush,
-        private deeplinks: Deeplinks
+        private codePush: CodePush
     ) {
         this.initializeApp();
     }
 
     initializeApp() {
         this.platform.ready().then(() => {
-            this.checkForUpdate();
-            this.initDeepLinking();
-            this.androidFullScreen.isImmersiveModeSupported()
-                .then(() => this.androidFullScreen.immersiveMode())
-                .catch(err => console.log(err));
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
             this.presentLoadingWithOptions();
             if (this.selfhelpSerivce.getIsApp()) {
+                this.checkForUpdate();
+                this.initDeepLinking();
+                this.androidFullScreen.isImmersiveModeSupported()
+                    .then(() => this.androidFullScreen.immersiveMode())
+                    .catch(err => console.log(err));
+                this.statusBar.styleDefault();
+                this.splashScreen.hide();
                 this.notificationsService.initFirebaseX();
             }
         });
@@ -65,22 +63,14 @@ export class AppComponent {
     }
 
     initDeepLinking() {
-        this.deeplinks.route({ '/validate/:uid/:token': 'validate' }).
-            subscribe(
-                match => {
-                    console.log('Successfully matched route', match);
-                },
-                nomatch => {
-                    // nomatch.$link - the full link data
-                    if (nomatch['$link']) {
-                        const pathArr = nomatch.$link.path.split('/');
-                        if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
-                            console.log('opne validate');
-                            this.selfhelpSerivce.openUrl(nomatch.$link.path);
-                        }
-                    }
+        IonicDeeplink.onDeepLink((link) => {
+            if (link['path']) {
+                const pathArr = link.path.split('/');
+                if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
+                    this.selfhelpSerivce.openUrl(link.path);
                 }
-            );
+            }
+        });
     }
 
 }
