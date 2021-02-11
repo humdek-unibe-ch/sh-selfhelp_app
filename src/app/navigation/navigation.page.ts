@@ -31,9 +31,7 @@ export class NavigationPage {
         });
     }
 
-    ngOnInit(): void {
-
-    }
+    ngOnInit(): void { }
 
     getTabName(nav: SelfHelpNavigation): string {
         return this.selfhelpService.getUrl(nav).replace('/', '');
@@ -42,13 +40,13 @@ export class NavigationPage {
     async setTab(nav: SelfHelpNavigation) {
         this.selectMenu(nav);
         const res = await this.selfhelpService.getPage(this.selfhelpService.getUrl(nav));
-        console.log(nav, res);
+        console.log('set tab - getPage', nav, res);
     }
 
     selectMenu(nav: SelfHelpNavigation): void {
         this.selfhelp.selectedMenu = nav;
         this.selfhelpService.setSelectedMenu(nav);
-        if(this.tabRef){
+        if (this.tabRef) {
             this.tabRef.select(this.getTabName(this.selfhelp.selectedMenu));
         }
     }
@@ -58,7 +56,7 @@ export class NavigationPage {
         let res = '';
         icons.forEach(icon => {
             if (icon.startsWith('mobile-')) {
-               res = icon.replace('mobile-', '');
+                res = icon.replace('mobile-', '');
             }
         });
         return res;

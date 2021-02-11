@@ -1,4 +1,4 @@
-import { ComponentRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -19,12 +19,12 @@ export class SelfhelpService {
 
     private isApp: boolean = false;
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
-    private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
-    // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch'; 
+    // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
+    private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     public API_LOGIN = '/login';
     private API_RESET = '/reset';
-    private HOME = '/home';
+    private API_HOME = '/home';
     private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
         selectedMenu: null,
@@ -32,7 +32,8 @@ export class SelfhelpService {
         urls: {},
         logged_in: null,
         base_path: '',
-        current_url: '/'
+        current_url: '/',
+        current_modal_url: ''
     });
     private initApp = false;
     private messageDuration = 10000;
@@ -56,9 +57,9 @@ export class SelfhelpService {
             } else {
                 this.isApp = false;
             }
-            this.getLocalSelfhelp();
-            console.log('selfehlp service loaded');
-            this.getPage(this.HOME);
+            this.getLocalSelfhelp();                        
+            console.log('selfehlp service loaded', this.selfhelp.value.current_modal_url);
+            this.getPage(this.API_HOME);
         });
     }
 
@@ -239,7 +240,7 @@ export class SelfhelpService {
             newSelfhelp.base_path = page.base_path;
             this.setSelfhelp(newSelfhelp, true);
         }
-        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate')) {
+        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET)) {
             this.autoLogin();
         }
         this.setSelfhelp(currSelfhelp, true);
@@ -250,10 +251,11 @@ export class SelfhelpService {
         if (this.selfhelp.value.credentials) {
             const loginRes = await this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
             if (!loginRes) {
-                console.log('Login failed');
+                console.log('Login failed', this.selfhelp.value.current_url);
                 this.openUrl(this.API_LOGIN);
             }
         } else {
+            console.log('Show login', this.selfhelp.value.current_url);
             this.openUrl(this.API_LOGIN);
         }
     }
@@ -342,8 +344,8 @@ export class SelfhelpService {
             this.setSelfhelp(currSelfhelp, true);
             if (!this.initApp) {
                 this.initApp = true;
-                console.log('Init the app - take all menues');
-                this.initAllMenuContent();
+                // console.log('Init the app - take all menues');
+                // this.initAllMenuContent();
             }
         }
     }
@@ -415,13 +417,15 @@ export class SelfhelpService {
     }
 
     public getContent(nav: SelfHelpNavigation) {
-        return this.selfhelp.value.urls[this.getUrl(nav)].content;
+        return this.selfhelp.value.urls[this.getUrl(nav)] ? this.selfhelp.value.urls[this.getUrl(nav)].content : null;
     }
 
     private getLocalSelfhelp() {
         this.storage.get(this.local_selfhelp).then((val) => {
             if (val) {
-                this.setSelfhelp(JSON.parse(val), false);
+                let currSelfhelp = <SelfHelp>JSON.parse(val);
+                currSelfhelp.current_modal_url = ''; 
+                this.setSelfhelp(currSelfhelp, false);
             }
         });
     }
@@ -591,6 +595,7 @@ export class SelfhelpService {
     }
 
     public openUrl(url: string): boolean {
+        console.log('open url', url, this.selfhelp.value.current_url);
         if (this.selfhelp.value.urls[url]) {
 
             // 
@@ -612,20 +617,32 @@ export class SelfhelpService {
     }
 
     private async getModalPage(url: string) {
-        const modal = await this.modalController.create({
-            component: ModalPageComponent,
-            componentProps: {
-                url_param: url
-            },
-            swipeToClose: true,
-            backdropDismiss: true,
-            showBackdrop: true,
-            cssClass: 'modal-fullscreen'
-        });
-        return await modal.present();
+        console.log(url, 'modal url', this.selfhelp.value.current_modal_url);
+        if (this.selfhelp.value.current_modal_url != url) {            
+            let curSelfhelp = this.selfhelp.value;
+            curSelfhelp.current_modal_url = url;
+            console.log('setModalUrl', url, this.selfhelp.value.current_modal_url);
+            this.setSelfhelp(curSelfhelp, false);
+            const modal = await this.modalController.create({
+                component: ModalPageComponent,
+                componentProps: {
+                    url_param: url
+                },
+                swipeToClose: true,
+                backdropDismiss: true,
+                showBackdrop: true,
+                cssClass: 'modal-fullscreen'
+            });
+            return await modal.present();
+        } else {
+            return null;
+        }
     }
 
     public async closeModal() {
+        let curSelfhelp = this.selfhelp.value;
+        curSelfhelp.current_modal_url = '';
+        this.setSelfhelp(curSelfhelp, false);
         await this.modalController.dismiss(null, undefined);
     }
 

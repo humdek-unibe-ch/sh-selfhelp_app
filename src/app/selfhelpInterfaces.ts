@@ -422,5 +422,6 @@ export interface SelfHelp {
     logged_in: boolean,
     base_path: string,
     current_url: string,
+    current_modal_url: string,
     credentials?: LoginValues
 }
