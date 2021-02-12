@@ -119,7 +119,9 @@ export interface QualtricsSurveyStyle extends Style {
     qualtrics_url: string,
     alert: string,
     show_survey: boolean,
-    restart_on_refresh: StyleField
+    restart_on_refresh: StyleField,
+    use_as_container: StyleField,
+    close_modal_at_end: StyleField
 }
 
 export interface ImageStyle extends Style {

@@ -21,7 +21,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
 
     ngAfterViewInit() {
         console.log(this.style);
-        if (this.style.show_survey) {
+        if (this.style.show_survey && !this.isContainer()) {
             iframeResizer({
                 log: false,
                 heightCalculationMethod: 'lowestElement',
@@ -34,7 +34,12 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
         this.iFrameLoadCount++;
         if (this.iFrameLoadCount > 2) {
             this.iframe.nativeElement.remove();
-            this.selfhelpService.getPage(this.url);
+            if(this.getFieldContent('close_modal_at_end') == '1'){
+                this.selfhelpService.closeModal();
+                this.selfhelpService.getPage(this.selfhelpService.API_HOME);
+            }else{
+                this.selfhelpService.getPage(this.url);
+            }
         }
     }
 
@@ -44,6 +49,10 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
         } else {
             return this.style.qualtrics_url;
         }
+    }
+
+    isContainer():boolean{
+        return this.getFieldContent('use_as_container') && this.getFieldContent('use_as_container') == '1';
     }
 
 }

@@ -1,6 +1,7 @@
 <div *ngIf="style.show_survey">
-    <iframe #iframe [class]="getCss()" scrolling="no" frameborder="0" (load)="onLoad()"
+    <iframe *ngIf="!isContainer()"  #iframe [class]="getCss()" scrolling="no" frameborder="0" (load)="onLoad()"
         [src]="getQualtricsUrl() | safe: 'resourceUrl'"></iframe>
+        <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style> 
 </div>
 <div *ngIf="!style.show_survey && style.alert != ''" class="m-3 alert alert-danger">
     <div [innerHTML]="style['alert']"></div>

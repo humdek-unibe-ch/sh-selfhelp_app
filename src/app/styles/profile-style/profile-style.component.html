@@ -6,18 +6,18 @@
             <ion-card-title>Version</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            <ion-text>
-                <h1>App version:</h1>
-            </ion-text>
-            <ion-text color="primary">
-                <h1>{{getAppVersion()}}</h1>
-            </ion-text>
-            <ion-text>
-                <h1>App build:</h1>
-            </ion-text>
-            <ion-text color="primary">
-                <h1>{{getAppBuildVersion()}}</h1>
-            </ion-text>
+            <ion-item>
+                <ion-label>App version:</ion-label>
+                <ion-text color="primary">
+                    <h1>{{getAppVersion()}}</h1>
+                </ion-text>
+            </ion-item>
+            <ion-item>
+                <ion-label>App build:</ion-label>
+                <ion-text color="primary">
+                    <h1>{{getAppBuildVersion()}}</h1>
+                </ion-text>
+            </ion-item>
         </ion-card-content>
     </ion-card>
 </div>
