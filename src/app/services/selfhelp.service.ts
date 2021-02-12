@@ -11,6 +11,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { NotificationsService } from './notifications.service';
 import { ModalPageComponent } from '../components/modal-page/modal-page.component';
+import { AppVersion } from '@ionic-native/app-version/ngx';
+import { version } from '../../../package.json';
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +39,8 @@ export class SelfhelpService {
     });
     private initApp = false;
     private messageDuration = 10000;
+    public appVersion: string;
+    public appBuildVersion: string;
 
     constructor(
         private http: HttpClient,
@@ -49,7 +53,8 @@ export class SelfhelpService {
         private inAppBrowser: InAppBrowser,
         private modalController: ModalController,
         private device: Device,
-        private notificationsService: NotificationsService
+        private notificationsService: NotificationsService,
+        private appVersionPlugin: AppVersion
     ) {
         this.platform.ready().then(() => {
             if (this.platform.is('cordova')) {
@@ -57,6 +62,10 @@ export class SelfhelpService {
             } else {
                 this.isApp = false;
             }
+            this.appVersionPlugin.getVersionNumber().then((res) => {
+                this.appVersion = res;
+            });
+            this.appBuildVersion = version;
             this.getLocalSelfhelp();
             console.log('selfehlp service loaded', this.selfhelp.value.current_modal_url);
             this.getPage(this.API_HOME);

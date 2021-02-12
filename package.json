@@ -1,6 +1,6 @@
 {
   "name": "SOAPP",
-  "version": "1.0.0",
+  "version": "1.0.0.1",
   "author": "Stefan Kodzhabashev",
   "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
@@ -21,6 +21,7 @@
     "@angular/router": "~10.0.0",
     "@fortawesome/fontawesome-free": "^5.2.0",
     "@ionic-native/android-full-screen": "^5.30.0",
+    "@ionic-native/app-version": "^5.31.1",
     "@ionic-native/code-push": "^5.31.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/deeplinks": "^5.31.1",
@@ -67,6 +68,7 @@
     "cordova-android": "^9.0.0",
     "cordova-plugin-advanced-http": "^3.1.0",
     "cordova-plugin-androidx-adapter": "^1.1.3",
+    "cordova-plugin-app-version": "^0.1.12",
     "cordova-plugin-appcenter-analytics": "^0.5.1",
     "cordova-plugin-appcenter-crashes": "^0.5.1",
     "cordova-plugin-appcenter-push": "^0.5.1",
@@ -153,7 +155,8 @@
         "DEEPLINK_4_HOST": " ",
         "DEEPLINK_5_SCHEME": " ",
         "DEEPLINK_5_HOST": " "
-      }
+      },
+      "cordova-plugin-app-version": {}
     },
     "platforms": [
       "android"

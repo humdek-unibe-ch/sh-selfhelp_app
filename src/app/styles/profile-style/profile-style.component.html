@@ -1,1 +1,23 @@
-<app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style> 
+<app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent">
+</app-basic-style>
+<div class="container-fluid">
+    <ion-card class="my-3">
+        <ion-card-header>
+            <ion-card-title>Version</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-text>
+                <h1>App version:</h1>
+            </ion-text>
+            <ion-text color="primary">
+                <h1>{{getAppVersion()}}</h1>
+            </ion-text>
+            <ion-text>
+                <h1>App build:</h1>
+            </ion-text>
+            <ion-text color="primary">
+                <h1>{{getAppBuildVersion()}}</h1>
+            </ion-text>
+        </ion-card-content>
+    </ion-card>
+</div>

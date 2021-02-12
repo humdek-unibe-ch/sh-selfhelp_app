@@ -16,6 +16,7 @@ import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { FormBuilder } from '@angular/forms';
 import { CodePush } from '@ionic-native/code-push/ngx';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { AppVersion } from '@ionic-native/app-version/ngx';
 
 @NgModule({
     declarations: [
@@ -35,6 +36,7 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
         HTTP,
         InAppBrowser,
         Device,
+        AppVersion,
         FirebaseX,
         FormBuilder,
         CodePush,

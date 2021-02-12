@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ProfileStyle } from 'src/app/selfhelpInterfaces';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { ProfileStyle } from './../../selfhelpInterfaces';
 
 @Component({
     selector: 'app-profile-style',
@@ -10,11 +11,19 @@ import { ProfileStyle } from './../../selfhelpInterfaces';
 export class ProfileStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: ProfileStyle;
 
-    constructor() {
+    constructor(private selfhelpService: SelfhelpService) {
         super();
     }
 
 
     ngOnInit() { }
+
+    getAppVersion(): string {
+        return this.selfhelpService.appVersion;
+    }
+
+    getAppBuildVersion(): string {
+        return this.selfhelpService.appBuildVersion;
+    }
 
 }
