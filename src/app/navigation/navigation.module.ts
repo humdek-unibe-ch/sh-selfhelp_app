@@ -212,27 +212,32 @@ export class NavigationPageModule {
      * @memberof NavigationPageModule
      */
     private areRoutesDifferent(route1: Routes, route2: Routes): boolean {
-        if (route1[0].redirectTo != route2[0].redirectTo) {
-            return true;
-        }
-        if (!route1[0].children || !route2[0].children) {
-            return true;
-        }
-        for (let i = 0; i < route1[0].children.length; i++) {
-            const element = route1[0].children[i];
-            if (route1[0].children.length > i) {
-                if (route1[0].children[i].path != route2[0].children[i].path) {
-                    // different path
-                    return true;
-                }
-            } else {
-                //different number of routes
+        try {
+            if (route1[0].redirectTo != route2[0].redirectTo) {
                 return true;
             }
+            if (!route1[0].children || !route2[0].children) {
+                return true;
+            }
+            for (let i = 0; i < route1[0].children.length; i++) {
+                const element = route1[0].children[i];
+                if (route1[0].children.length > i) {
+                    if (route1[0].children[i].path != route2[0].children[i].path) {
+                        // different path
+                        return true;
+                    }
+                } else {
+                    //different number of routes
+                    return true;
+                }
 
+            }
+            // no difference
+            return false;
+        } catch (er) {
+            console.log(er);
+            return true;
         }
-        // no difference
-        return false;
     }
 
 

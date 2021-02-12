@@ -13,6 +13,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     @Input() style: QualtricsSurveyStyle;
     @ViewChild('iframe') iframe: ElementRef;
     private iFrameLoadCount = 0;
+    private time = (new Date()).getTime();
 
     constructor(private selfhelpService: SelfhelpService, private detectChanges: ChangeDetectorRef) {
         super();
@@ -31,18 +32,18 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
 
     onLoad() {
         this.iFrameLoadCount++;
-        console.log('Counter', this.iFrameLoadCount);
-        if (this.iFrameLoadCount > 2) {            
+        if (this.iFrameLoadCount > 2) {
             this.iframe.nativeElement.remove();
             this.selfhelpService.getPage(this.url);
-            console.log('Survey Done'); 
         }
     }
 
-    async refreshPage() {
-        const reload = await this.selfhelpService.getPage(this.url);
-        // this.selfhelpService.openUrl(this.url); 
-        // this.detectChanges.detectChanges();
+    getQualtricsUrl() {
+        if (this.getFieldContent('restart_on_refresh') == '1') {            
+            return this.style.qualtrics_url + "&time=" + this.time;
+        } else {
+            return this.style.qualtrics_url;
+        }
     }
 
 }

@@ -24,7 +24,7 @@ export class SelfhelpService {
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     public API_LOGIN = '/login';
     private API_RESET = '/reset';
-    private API_HOME = '/home';
+    public API_HOME = '/home';
     private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
         selectedMenu: null,
@@ -57,7 +57,7 @@ export class SelfhelpService {
             } else {
                 this.isApp = false;
             }
-            this.getLocalSelfhelp();                        
+            this.getLocalSelfhelp();
             console.log('selfehlp service loaded', this.selfhelp.value.current_modal_url);
             this.getPage(this.API_HOME);
         });
@@ -394,7 +394,7 @@ export class SelfhelpService {
             this.execServerRequest(keyword, {})
                 .then((res: SelfHelpPageRequest) => {
                     if (res) {
-                        console.log(res);
+                        console.log(keyword, 'getPage', res);
                         this.setPage(keyword, res);
                         resolve(res);
                     }
@@ -424,7 +424,7 @@ export class SelfhelpService {
         this.storage.get(this.local_selfhelp).then((val) => {
             if (val) {
                 let currSelfhelp = <SelfHelp>JSON.parse(val);
-                currSelfhelp.current_modal_url = ''; 
+                currSelfhelp.current_modal_url = '';
                 this.setSelfhelp(currSelfhelp, false);
             }
         });
@@ -618,7 +618,7 @@ export class SelfhelpService {
 
     private async getModalPage(url: string) {
         console.log(url, 'modal url', this.selfhelp.value.current_modal_url);
-        if (this.selfhelp.value.current_modal_url != url) {            
+        if (this.selfhelp.value.current_modal_url != url) {
             let curSelfhelp = this.selfhelp.value;
             curSelfhelp.current_modal_url = url;
             console.log('setModalUrl', url, this.selfhelp.value.current_modal_url);

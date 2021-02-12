@@ -39,6 +39,9 @@
                     <ion-item>
                         <ion-label>{{getFieldContent('gender_female')}}</ion-label>
                         <ion-radio slot="start" [value]="2"></ion-radio>
+                    </ion-item><ion-item>
+                        <ion-label>divers</ion-label>
+                        <ion-radio slot="start" [value]="3"></ion-radio>
                     </ion-item>
                 </ion-radio-group>
                 <ion-button [color]="'primary'" [disabled]="!form.valid" (click)="validate(form.value)"

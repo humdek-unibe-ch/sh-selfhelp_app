@@ -1,6 +1,6 @@
 <div *ngIf="style.show_survey">
     <iframe #iframe [class]="getCss()" scrolling="no" frameborder="0" (load)="onLoad()"
-        [src]="style.qualtrics_url | safe: 'resourceUrl'"></iframe>
+        [src]="getQualtricsUrl() | safe: 'resourceUrl'"></iframe>
 </div>
 <div *ngIf="!style.show_survey && style.alert != ''" class="m-3 alert alert-danger">
     <div [innerHTML]="style['alert']"></div>
