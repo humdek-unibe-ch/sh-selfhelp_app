@@ -620,6 +620,7 @@ export class SelfhelpService {
             const browser = this.inAppBrowser.create(url);
         } else {
             console.log('url not found');
+            this.getPage(url);
             this.getModalPage(url);
         }
         return true;
