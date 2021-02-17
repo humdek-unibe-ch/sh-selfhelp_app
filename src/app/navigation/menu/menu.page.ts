@@ -36,4 +36,8 @@ export class MenuPage {
         }
     }
 
+    public getAvatar(): string {
+        return this.selfhelpService.getAvatarImg();
+    }
+
 }

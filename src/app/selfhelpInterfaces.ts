@@ -407,6 +407,7 @@ export interface SelfHelpPageRequest {
     time?: any,
     base_path: string,
     title: string,
+    avatar: string
 }
 
 export interface CachedPage {
@@ -428,4 +429,5 @@ export interface SelfHelp {
     current_url: string,
     current_modal_url: string,
     credentials?: LoginValues
+    avatar: string
 }

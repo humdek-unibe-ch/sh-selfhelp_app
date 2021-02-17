@@ -35,7 +35,8 @@ export class SelfhelpService {
         logged_in: null,
         base_path: '',
         current_url: '/',
-        current_modal_url: ''
+        current_modal_url: '',
+        avatar: ''
     });
     private initApp = false;
     private messageDuration = 10000;
@@ -247,6 +248,13 @@ export class SelfhelpService {
             let newSelfhelp = this.selfhelp.value;
             newSelfhelp.logged_in = page.logged_in;
             newSelfhelp.base_path = page.base_path;
+            newSelfhelp.avatar = page.avatar;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (this.selfhelp.value.avatar != page.avatar) {
+            // check for login change
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.avatar = page.avatar;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET)) {
@@ -380,10 +388,10 @@ export class SelfhelpService {
     }
 
     private setSelfhelp(selfhelp: SelfHelp, contentChange: boolean): void {
+        this.selfhelp.next(selfhelp);
         if (contentChange) {
             this.saveLocalSelfhelp();
         }
-        this.selfhelp.next(selfhelp);
     }
 
     public setSelectedMenu(nav: SelfHelpNavigation): void {
@@ -677,6 +685,14 @@ export class SelfhelpService {
             cssClass: 'modal-fullscreen'
         });
         return await modal.present();
+    }
+
+    public getAvatarImg(): string {
+        let currSelfhelp = this.selfhelp.value;
+        if (currSelfhelp.avatar && !StringUtils.isUrl(currSelfhelp.avatar)) {
+            return this.getApiEndPointNative() + '/' + currSelfhelp.avatar;
+        }
+        return '';
     }
 
 }
