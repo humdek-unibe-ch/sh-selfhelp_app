@@ -102,12 +102,13 @@ export interface RadioStyle extends FormField {
 }
 
 export interface SelectStyle extends FormField {
-    items: StyleField,
+    items: any[],
     is_multiple: StyleField,
     max: StyleField,
     live_search: StyleField,
     disabled: StyleField,
-    alt: StyleField
+    alt: StyleField,
+    image_selector: StyleField
 }
 
 export interface TextAreaStyle extends FormField {

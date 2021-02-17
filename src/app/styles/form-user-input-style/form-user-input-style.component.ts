@@ -44,10 +44,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
             }
         });
         this.form = this.formBuilder.group(formFields);
-        this.form.valueChanges.subscribe(x => {
-            console.log('form value changed')
-            console.log(x)
-        })
     }
 
     protected prepareParams(value: { [key: string]: any; }): any {
@@ -60,7 +56,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                 if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox') {
                     // assign values to true/false for checkbox. Ionic need them as boolean
                     fieldValue = fieldValue ? this.getChildFieldDefault(formField, 'value') : null;
-                    console.log(fieldValue);
                 }
                 params[input.name.content.toString()] = {
                     id: input.id.content,
@@ -95,7 +90,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         this.selfhelpService.submitForm(this.url, this.prepareParams(value));
     }
 
-    public submitFormAndSendEmail(value: { [key: string]: any; }): void {
+    public submitFormAndSendEmail(value: { [key: string]: any; }): void {        
         let params = this.prepareParams(value);
         params['btnSubmitAndSend'] = 'send_email';
         this.selfhelpService.submitForm(this.url, params);

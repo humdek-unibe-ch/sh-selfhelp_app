@@ -54,7 +54,9 @@
                             "node_modules/bootstrap/dist/js/bootstrap.min.js",
                             "node_modules/@fortawesome/fontawesome-free/js/all.js",
                             "node_modules/plotly.js/dist/plotly.min.js",
-                            "node_modules/datatables.net/js/jquery.dataTables.js"
+                            "node_modules/datatables.net/js/jquery.dataTables.js",
+                            "src/assets/js/iconselect.js",
+                            "src/assets/js/iscroll.js"
                         ]
                     },
                     "configurations": {

@@ -21,8 +21,8 @@ export class SelfhelpService {
 
     private isApp: boolean = false;
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
-    // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
-    private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
+    private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
+    // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     public API_LOGIN = '/login';
     private API_RESET = '/reset';
