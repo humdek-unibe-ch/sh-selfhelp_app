@@ -357,6 +357,7 @@ export interface MessageBoardMessage {
     time: string,
     ts: Date,
     user: string,
+    avatar: string,
     url: string
 }
 
@@ -364,6 +365,7 @@ export interface MessageBoardMessageReply {
     create_time: Date,
     user_id: number,
     user_name: string,
+    avatar: string,
     value: string,
     time: string
 }

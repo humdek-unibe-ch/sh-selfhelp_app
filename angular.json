@@ -46,6 +46,9 @@
                             },
                             {
                                 "input": "node_modules/datatables.net-dt/css/jquery.dataTables.css"
+                            },
+                            {
+                                "input": "src/assets//css/iconselect.css"
                             }
                         ],
                         "scripts": [
