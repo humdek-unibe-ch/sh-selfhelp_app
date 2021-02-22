@@ -20,19 +20,18 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
         super();
     }
 
-    ngOnInit(){
-        console.log(this.style);
+    ngOnInit() {
     }
 
-    ngAfterViewInit() {        
-        this.initIFrame();
+    ngAfterViewInit() {
+        this.initIFrame();        
     }
 
-    initIFrame(){
+    initIFrame() {
         if (this.style.show_survey && !this.isContainer()) {
             const components = iframeResizer({
                 log: false,
-                messageCallback: (data:IFrameMessageData) => (this.iframeMessage(data)),
+                messageCallback: (data: IFrameMessageData) => (this.iframeMessage(data)),
                 heightCalculationMethod: 'lowestElement',
                 checkOrigin: ["https://eu.qualtrics.com"],
             }, this.iframe.nativeElement);
@@ -54,8 +53,8 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
         }
     }
 
-    iframeMessage(data:IFrameMessageData) {
-        if(data.message == 'closeIFrame'){
+    iframeMessage(data: IFrameMessageData) {
+        if (data.message == 'closeIFrame') {
             this.removeIFrame();
         }
     }
@@ -63,11 +62,12 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     removeIFrame() {
         this.iframe.nativeElement.remove();
         if (this.getFieldContent('close_modal_at_end') == '1') {
-            console.log('closeModal');
             this.selfhelpService.closeModal();
             this.selfhelpService.getPage(this.selfhelpService.API_HOME);
         } else {
-            this.selfhelpService.getPage(this.url);
+            setTimeout(() => {
+                this.selfhelpService.getPage(this.url);// wiat 1 second in order to get the data from qualtrics
+            }, 1000);            
         }
     }
 
