@@ -15,9 +15,7 @@ export class ButtonStyleComponent extends BasicStyleComponent implements OnInit 
         super();
     }
 
-    ngOnInit() {
-        console.log(this.style);
-    }
+    ngOnInit() { }
 
     public btnClick(): void {
         console.log(this.selfhelp.getBasePath());

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { QualtricsSurveyStyle } from '../../selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { IFrameComponent, IFrameMessageData, iframeResizer } from 'iframe-resizer';
@@ -16,11 +16,19 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     private time = (new Date()).getTime();
     private component: IFrameComponent;
 
-    constructor(private selfhelpService: SelfhelpService, private detectChanges: ChangeDetectorRef) {
+    constructor(private selfhelpService: SelfhelpService) {
         super();
     }
 
-    ngAfterViewInit() {
+    ngOnInit(){
+        console.log(this.style);
+    }
+
+    ngAfterViewInit() {        
+        this.initIFrame();
+    }
+
+    initIFrame(){
         if (this.style.show_survey && !this.isContainer()) {
             const components = iframeResizer({
                 log: false,
@@ -35,6 +43,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     ngOnDestroy(): void {
         if (this.component && this.component.iFrameResizer) {
             this.component.iFrameResizer.close();
+            this.time = (new Date()).getTime();
         }
     }
 
@@ -54,6 +63,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     removeIFrame() {
         this.iframe.nativeElement.remove();
         if (this.getFieldContent('close_modal_at_end') == '1') {
+            console.log('closeModal');
             this.selfhelpService.closeModal();
             this.selfhelpService.getPage(this.selfhelpService.API_HOME);
         } else {

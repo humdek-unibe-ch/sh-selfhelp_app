@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone } from '@angular/core';
 import { SelfhelpService } from '../../services/selfhelp.service';
 import { SelfHelp } from '../../selfhelpInterfaces';
 import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
@@ -14,11 +14,13 @@ export class MenuPage {
 
     public selfhelp: SelfHelp;
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(private selfhelpService: SelfhelpService, private zone: NgZone) {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
-            if (selfhelp) {
-                this.selfhelp = selfhelp;
-            }
+            this.zone.run(() => {
+                if (selfhelp) {
+                    this.selfhelp = selfhelp;
+                }
+            });
         });
     }
 

@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component, Injector, Input, NgZone, OnInit } from '@angular/core';
 import { BasicComponentComponent } from '../basic-component/basic-component.component';
 
 @Component({
@@ -9,8 +9,8 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
 export class ModalPageComponent extends BasicComponentComponent implements OnInit {
     @Input() url_param: string;
 
-    constructor(injector: Injector) {
-        super(injector);              
+    constructor(injector: Injector,zone: NgZone) {
+        super(injector, zone);           
     }
 
     async ngOnInit(){

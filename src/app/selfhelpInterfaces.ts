@@ -122,7 +122,8 @@ export interface QualtricsSurveyStyle extends Style {
     show_survey: boolean,
     restart_on_refresh: StyleField,
     use_as_container: StyleField,
-    close_modal_at_end: StyleField
+    close_modal_at_end: StyleField,
+    time: Date
 }
 
 export interface ImageStyle extends Style {

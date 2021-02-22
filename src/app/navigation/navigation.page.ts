@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import { IonTabs } from '@ionic/angular';
 import { SelfHelp } from '../selfhelpInterfaces';
 import { SelfhelpService } from '../services/selfhelp.service';
@@ -15,19 +15,21 @@ export class NavigationPage {
     private init = false;
     @ViewChild('navigation') tabRef: IonTabs;
 
-    constructor(public selfhelpService: SelfhelpService) {
+    constructor(public selfhelpService: SelfhelpService, private zone: NgZone) {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
-            if (selfhelp) {
-                this.selfhelp = selfhelp;
-                if (!this.selfhelp.selectedMenu && selfhelp.navigation.length > 0) {
-                    //set default tab if none is selected, used in the initialization
-                    this.init = true;
-                    this.setTab(this.selfhelp.navigation[0]);
-                } else if (this.selfhelp.selectedMenu && !this.init) {
-                    this.init = true;
-                    this.selectMenu(this.selfhelp.selectedMenu);
+            this.zone.run(() => {
+                if (selfhelp) {
+                    this.selfhelp = selfhelp;
+                    if (!this.selfhelp.selectedMenu && selfhelp.navigation.length > 0) {
+                        //set default tab if none is selected, used in the initialization
+                        this.init = true;
+                        this.setTab(this.selfhelp.navigation[0]);
+                    } else if (this.selfhelp.selectedMenu && !this.init) {
+                        this.init = true;
+                        this.selectMenu(this.selfhelp.selectedMenu);
+                    }
                 }
-            }
+            });
         });
     }
 

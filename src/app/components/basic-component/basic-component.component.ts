@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, NgZone, OnInit } from '@angular/core';
 import { SelfHelp } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
@@ -13,12 +13,14 @@ export class BasicComponentComponent implements OnInit {
     public url: string;
     protected selfhelpService: SelfhelpService;
 
-    constructor(protected injector: Injector) {
+    constructor(protected injector: Injector, protected zone: NgZone) {
         this.selfhelpService = this.injector.get(SelfhelpService);
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
-            if (selfhelp) {
-                this.selfhelp = selfhelp;
-            }
+            this.zone.run(() => {
+                if (selfhelp) {
+                    this.selfhelp = selfhelp;
+                }
+            });
         });
     }
 

@@ -27,7 +27,7 @@ export class SelfhelpService {
     public API_LOGIN = '/login';
     private API_RESET = '/reset';
     public API_HOME = '/home';
-    private selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
+    public selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
         selectedMenu: null,
         selectedSubMenu: null,
@@ -208,6 +208,7 @@ export class SelfhelpService {
                 urlFound = true;
                 if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                     // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
+                    console.log('setPage');
                     currSelfhelp.urls[url] = {
                         content: page.content,
                         title: page.title

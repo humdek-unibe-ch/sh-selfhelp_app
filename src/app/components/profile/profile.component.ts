@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, NgZone, OnInit } from '@angular/core';
 import { BasicComponentComponent } from '../basic-component/basic-component.component';
 import { ProfileStyle } from './../../selfhelpInterfaces';
 
@@ -9,8 +9,8 @@ import { ProfileStyle } from './../../selfhelpInterfaces';
 })
 export class ProfileComponent extends BasicComponentComponent implements OnInit {
 
-    constructor(injector: Injector) {
-        super(injector);
+    constructor(injector: Injector,zone: NgZone) {
+        super(injector, zone);
         this.url = '/profile'
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, NgZone } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { SelfHelp, SelfHelpNavigation, Styles } from '../../selfhelpInterfaces';
@@ -13,11 +13,13 @@ export class SubMenuComponent implements OnInit {
     @ViewChild('slides', { static: true }) slider: IonSlides;
     segment = 0;
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(private selfhelpService: SelfhelpService, private zone: NgZone) {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
-            if (selfhelp) {
-                this.selfhelp = selfhelp;
-            }
+            this.zone.run(() => {
+                if (selfhelp) {
+                    this.selfhelp = selfhelp;
+                }
+            });
         });
     }
 
