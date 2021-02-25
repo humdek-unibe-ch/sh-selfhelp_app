@@ -29,7 +29,7 @@ export class SelfhelpService {
     public API_HOME = '/home';
     public selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
-        selectedMenu: null,
+        selectedMenu: null, 
         selectedSubMenu: null,
         urls: {},
         logged_in: null,

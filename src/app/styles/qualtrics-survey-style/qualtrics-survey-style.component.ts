@@ -66,7 +66,8 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
             this.selfhelpService.getPage(this.selfhelpService.API_HOME);
         } else {
             setTimeout(() => {
-                this.selfhelpService.getPage(this.url);// wiat 1 second in order to get the data from qualtrics
+                // this.selfhelpService.getPage(this.url);// wiat 1 second in order to get the data from qualtrics
+                this.selfhelpService.openUrl(this.url);
             }, 1000);            
         }
     }

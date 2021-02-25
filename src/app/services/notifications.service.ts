@@ -55,10 +55,11 @@ export class NotificationsService {
         } else {
             message = data['body'];
         }
+        console.log('message', message);
         if (message && message != " ") {
             const toast = await this.toastController.create({
                 message,
-                duration: 3000
+                duration: 10000
             });
             toast.present();
         }
