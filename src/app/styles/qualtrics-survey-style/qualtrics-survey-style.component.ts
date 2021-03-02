@@ -15,6 +15,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     private iFrameLoadCount = 0;
     private time = (new Date()).getTime();
     private component: IFrameComponent;
+    private init = false;
 
     constructor(private selfhelpService: SelfhelpService) {
         super();
@@ -28,12 +29,13 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     }
 
     initIFrame() {
-        if (this.style.show_survey && !this.isContainer()) {
+        if (this.style.show_survey && !this.isContainer() && !this.init) {
+            this.init = true;
             const components = iframeResizer({
                 log: false,
                 messageCallback: (data: IFrameMessageData) => (this.iframeMessage(data)),
-                heightCalculationMethod: 'lowestElement',
-                checkOrigin: ["https://eu.qualtrics.com"],
+                heightCalculationMethod: 'taggedElement',
+                checkOrigin: false,
             }, this.iframe.nativeElement);
             this.component = components && components.length > 0 ? components[0] : null;
         }
@@ -54,6 +56,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     }
 
     iframeMessage(data: IFrameMessageData) {
+        console.log(data);
         if (data.message == 'closeIFrame') {
             this.removeIFrame();
         }
