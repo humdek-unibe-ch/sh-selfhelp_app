@@ -18,9 +18,9 @@
         </div>
         <div class="card-body">
             <div class="d-flex align-items-center">
-                <h1><span [class]="'badge badge-' + message.color + ' mr-3'">
+                <h5><span [class]="'badge badge-' + message.color + ' mr-3 message'">
                         {{message.score}}
-                    </span></h1>
+                    </span></h5>
                 <span class="messageBoard-message" [innerHTML]="getFieldContent('text_md')"> </span>
             </div>
             <div class="pl-3">
@@ -59,7 +59,7 @@
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Comment
+                        Kommentieren
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <app-submit-comment *ngFor="let comment of getFieldContent('comments')" [url]="message.url"
