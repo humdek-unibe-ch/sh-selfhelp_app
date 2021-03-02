@@ -88,7 +88,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
 
     public async submitForm(value: { [key: string]: any; }) {
         const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));
-        console.log('res', res);
         if (res) {
             this.selfhelpService.closeModal();
         }

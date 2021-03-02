@@ -55,7 +55,6 @@ export class NotificationsService {
         } else {
             message = data['body'];
         }
-        console.log('message', message);
         if (message && message != " ") {
             const toast = await this.toastController.create({
                 message,

@@ -4,9 +4,9 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 
 @Component({
-  selector: 'app-link-style',
-  templateUrl: './link-style.component.html',
-  styleUrls: ['./link-style.component.scss'],
+    selector: 'app-link-style',
+    templateUrl: './link-style.component.html',
+    styleUrls: ['./link-style.component.scss'],
 })
 export class LinkStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: LinkStyle;
@@ -15,13 +15,9 @@ export class LinkStyleComponent extends BasicStyleComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
-        console.log(this.style);
-    }
+    ngOnInit() { }
 
     public btnClick(): void {
-        console.log(this.selfhelp.getBasePath());
-        console.log();
         const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath(), '');
         this.selfhelp.openUrl(url);
     }

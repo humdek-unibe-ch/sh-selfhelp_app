@@ -68,7 +68,6 @@ export class SelfhelpService {
             });
             this.appBuildVersion = version;
             this.getLocalSelfhelp();
-            console.log('selfehlp service loaded', this.selfhelp.value.current_modal_url);
             this.getPage(this.API_HOME);
         });
     }
@@ -208,7 +207,6 @@ export class SelfhelpService {
                 urlFound = true;
                 if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                     // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
-                    console.log('setPage');
                     currSelfhelp.urls[url] = {
                         content: page.content,
                         title: page.title
@@ -265,15 +263,12 @@ export class SelfhelpService {
     }
 
     private async autoLogin() {
-        console.log('try auto login');
         if (this.selfhelp.value.credentials) {
             const loginRes = await this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
             if (!loginRes) {
-                console.log('Login failed', this.selfhelp.value.current_url);
                 this.openUrl(this.API_LOGIN);
             }
         } else {
-            console.log('Show login', this.selfhelp.value.current_url);
             this.openUrl(this.API_LOGIN);
         }
     }
@@ -356,7 +351,6 @@ export class SelfhelpService {
 
     public setNavigation(selfHelpNavigation: SelfHelpNavigation[]): void {
         if (!this.isEqual(selfHelpNavigation, this.selfhelp.value.navigation)) {
-            console.log('setNavigation', selfHelpNavigation);
             let currSelfhelp = this.selfhelp.value;
             currSelfhelp.navigation = selfHelpNavigation;
             this.setSelfhelp(currSelfhelp, true);
@@ -429,7 +423,7 @@ export class SelfhelpService {
         const o2 = JSON.stringify(obj2);
         const res = o1 == o2;
         if (!res) {
-            console.log('change');
+            // console.log('change');
         }
         return res;
     }
@@ -459,7 +453,6 @@ export class SelfhelpService {
                     if (!this.output_messages(res.content)) {
                         return false;
                     };
-                    console.log(res);
                     this.setPage(keyword, res);
                 }
                 return true;
@@ -480,7 +473,6 @@ export class SelfhelpService {
                     });
                 }
                 if (style.fail_msgs) {
-                    console.log(style.fail_msgs);
                     res = false;
                     style.fail_msgs.forEach(fail_msg => {
                         this.presentToast(fail_msg, 'danger');
@@ -546,7 +538,7 @@ export class SelfhelpService {
                 {
                     text: "close",
                     handler: () => {
-                        console.log('Close clicked');
+                        // console.log('Close clicked');
                     }
                 }
             ]
@@ -615,22 +607,18 @@ export class SelfhelpService {
     }
 
     public openUrl(url: string): boolean {
-        console.log('open url', url, this.selfhelp.value.current_url);
         if (this.selfhelp.value.urls[url]) {
 
             // 
             this.getPage(url);
             if (!this.setNav(url)) {
-                console.log('url not found');
                 this.getModalPage(url);
             }
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
         } else if (StringUtils.isUrl(url)) {
             // it is web link, open in the browser
-            console.log('open browser');
             const browser = this.inAppBrowser.create(url);
         } else {
-            console.log('url not found');
             this.getPage(url);
             this.getModalPage(url);
         }
@@ -638,11 +626,9 @@ export class SelfhelpService {
     }
 
     private async getModalPage(url: string) {
-        console.log(url, 'modal url', this.selfhelp.value.current_modal_url);
         if (this.selfhelp.value.current_modal_url != url) {
             let curSelfhelp = this.selfhelp.value;
             curSelfhelp.current_modal_url = url;
-            console.log('setModalUrl', url, this.selfhelp.value.current_modal_url);
             this.setSelfhelp(curSelfhelp, false);
             const modal = await this.modalController.create({
                 component: ModalPageComponent,

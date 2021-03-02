@@ -19,7 +19,7 @@ export class UtilsService {
 
     // CODE PUSH ************************************
 
-    private debugMode: boolean = true;
+    private debugMode: boolean = false;
 
     constructor() { }
 

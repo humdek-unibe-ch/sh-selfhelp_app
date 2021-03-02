@@ -42,7 +42,6 @@ export class NavigationPage {
     async setTab(nav: SelfHelpNavigation) {
         this.selectMenu(nav);
         const res = await this.selfhelpService.getPage(this.selfhelpService.getUrl(nav));
-        console.log('set tab - getPage', nav, res);
     }
 
     selectMenu(nav: SelfHelpNavigation): void {

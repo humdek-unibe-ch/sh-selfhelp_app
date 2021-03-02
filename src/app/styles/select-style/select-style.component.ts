@@ -19,19 +19,16 @@ export class SelectStyleComponent extends BasicStyleComponent implements OnInit 
         super();
     }
 
-    ngOnInit() {
-        console.log('style', this.style)
-    }
+    ngOnInit() { }
 
     ngAfterViewInit(): void {
-        if(this.getFieldContent('image_selector') == '1'){
+        if (this.getFieldContent('image_selector') == '1') {
             this.initImageSelector();
         }
     }
 
     private initImageSelector(): void {
         let iconSelect = new IconSelect('image_selector-' + this.getFieldContent('id'));
-        console.log(this.style, iconSelect);
         let el = document.getElementById('image_selector-' + this.getFieldContent('id'));
         let fieldName = this.getFieldContent('name');
         let pForm = this.parentForm;
@@ -55,7 +52,6 @@ export class SelectStyleComponent extends BasicStyleComponent implements OnInit 
                 icons.push({ 'iconFilePath': text, 'iconValue': value['value'] });
             }
         });
-        console.log(icons);
         iconSelect.refresh(icons);
     }
 

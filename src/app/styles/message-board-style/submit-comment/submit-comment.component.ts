@@ -33,10 +33,8 @@ export class SubmitCommentComponent implements OnInit {
         data['reply'] = reply;
         data['link'] = link;
         data['__form_name'] = this.form_name;
-        console.log(this.url, data);
         const res = await this.selfhelpService.submitForm(this.url, data);
         if (res) {
-            console.log('executed');
             this.selfhelpService.getPage(this.parent_url);
         }
     }

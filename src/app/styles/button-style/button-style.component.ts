@@ -18,8 +18,6 @@ export class ButtonStyleComponent extends BasicStyleComponent implements OnInit 
     ngOnInit() { }
 
     public btnClick(): void {
-        console.log(this.selfhelp.getBasePath());
-        console.log();
         const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath(), '');
         this.selfhelp.openUrl(url);
     }
