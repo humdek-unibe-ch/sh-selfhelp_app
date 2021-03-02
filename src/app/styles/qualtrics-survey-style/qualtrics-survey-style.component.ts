@@ -24,7 +24,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     }
 
     ngAfterViewInit() {
-        this.initIFrame();        
+        this.initIFrame();
     }
 
     initIFrame() {
@@ -63,12 +63,16 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
         this.iframe.nativeElement.remove();
         if (this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal();
-            this.selfhelpService.getPage(this.selfhelpService.API_HOME);
+            if (this.getFieldContent('redirect_at_end') != '') {
+                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            } else {
+                this.selfhelpService.getPage(this.selfhelpService.API_HOME);
+            }
         } else {
             setTimeout(() => {
                 // this.selfhelpService.getPage(this.url);// wiat 1 second in order to get the data from qualtrics
                 this.selfhelpService.openUrl(this.url);
-            }, 1000);            
+            }, 1000);
         }
     }
 

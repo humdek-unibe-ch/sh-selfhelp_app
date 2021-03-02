@@ -123,7 +123,8 @@ export interface QualtricsSurveyStyle extends Style {
     restart_on_refresh: StyleField,
     use_as_container: StyleField,
     close_modal_at_end: StyleField,
-    time: Date
+    time: Date,
+    redirect_at_end: StyleField
 }
 
 export interface ImageStyle extends Style {

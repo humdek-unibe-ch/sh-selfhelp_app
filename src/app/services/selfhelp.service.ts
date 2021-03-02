@@ -29,7 +29,7 @@ export class SelfhelpService {
     public API_HOME = '/home';
     public selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
-        selectedMenu: null, 
+        selectedMenu: null,
         selectedSubMenu: null,
         urls: {},
         logged_in: null,
@@ -473,19 +473,21 @@ export class SelfhelpService {
     private output_messages(content: Styles): boolean {
         let res = true;
         content.forEach(style => {
-            if (style.success_msgs) {
-                style.success_msgs.forEach(success_msg => {
-                    this.presentToast(success_msg, 'success');
-                });
+            if (style) {
+                if (style.success_msgs) {
+                    style.success_msgs.forEach(success_msg => {
+                        this.presentToast(success_msg, 'success');
+                    });
+                }
+                if (style.fail_msgs) {
+                    console.log(style.fail_msgs);
+                    res = false;
+                    style.fail_msgs.forEach(fail_msg => {
+                        this.presentToast(fail_msg, 'danger');
+                    });
+                }
+                res = res && this.output_messages(style.children);
             }
-            if (style.fail_msgs) {
-                console.log(style.fail_msgs);
-                res = false;
-                style.fail_msgs.forEach(fail_msg => {
-                    this.presentToast(fail_msg, 'danger');
-                });
-            }
-            res = res && this.output_messages(style.children);
         });
         return res;
     }

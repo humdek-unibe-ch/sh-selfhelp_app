@@ -86,11 +86,15 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
             (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea');
     }
 
-    public submitForm(value: { [key: string]: any; }): void {
-        this.selfhelpService.submitForm(this.url, this.prepareParams(value));
+    public async submitForm(value: { [key: string]: any; }) {
+        const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));
+        console.log('res', res);
+        if (res) {
+            this.selfhelpService.closeModal();
+        }
     }
 
-    public submitFormAndSendEmail(value: { [key: string]: any; }): void {        
+    public submitFormAndSendEmail(value: { [key: string]: any; }): void {
         let params = this.prepareParams(value);
         params['btnSubmitAndSend'] = 'send_email';
         this.selfhelpService.submitForm(this.url, params);
