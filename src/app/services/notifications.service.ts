@@ -60,7 +60,16 @@ export class NotificationsService {
         if (message && message != " ") {
             const toast = await this.toastController.create({
                 message,
-                duration: 10000
+                duration: 10000,
+                position: 'top',
+                buttons: [
+                {
+                    text: "close",
+                    handler: () => {
+                        // console.log('Close clicked');
+                    }
+                }
+            ]
             });
             toast.present();
         }
