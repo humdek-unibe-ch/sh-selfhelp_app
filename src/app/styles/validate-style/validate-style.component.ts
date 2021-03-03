@@ -27,7 +27,7 @@ export class ValidateStyleComponent extends BasicStyleComponent implements OnIni
             name: new FormControl('', Validators.required),
             pw: new FormControl('', [Validators.required, Validators.minLength(8)]),
             pw_verify: new FormControl('', Validators.required),
-            gender: new FormControl('', Validators.required),
+            gender: new FormControl(1, Validators.required),
         }, {
             validator: MustMatch('pw', 'pw_verify')
         });

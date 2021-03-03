@@ -12,10 +12,9 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 export class QualtricsSurveyStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: QualtricsSurveyStyle;
     @ViewChild('iframe') iframe: ElementRef;
-    private iFrameLoadCount = 0;
     private time = (new Date()).getTime();
     private component: IFrameComponent;
-    private init = false;
+    public init = false;
 
     constructor(private selfhelpService: SelfhelpService) {
         super();
@@ -25,12 +24,14 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     }
 
     ngAfterViewInit() {
+        console.log('after view');
         this.initIFrame();
     }
 
     initIFrame() {
         if (this.style.show_survey && !this.isContainer() && !this.init) {
             this.init = true;
+            console.log('init', this.getQualtricsUrl());
             const components = iframeResizer({
                 log: false,
                 messageCallback: (data: IFrameMessageData) => (this.iframeMessage(data)),
@@ -45,13 +46,6 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
         if (this.component && this.component.iFrameResizer) {
             this.component.iFrameResizer.close();
             this.time = (new Date()).getTime();
-        }
-    }
-
-    onLoad() {
-        this.iFrameLoadCount++;
-        if (this.iFrameLoadCount > 2) {
-            this.removeIFrame();
         }
     }
 
