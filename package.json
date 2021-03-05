@@ -1,6 +1,6 @@
 {
-  "name": "SOAPP",
-  "version": "1.0.0.6",
+  "name": "soapp",
+  "version": "1.0.6",
   "author": "Stefan Kodzhabashev",
   "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
@@ -36,6 +36,7 @@
     "angular-datatables": "^4.4.1",
     "angular-plotly.js": "^3.0.0",
     "bootstrap": "^4.6.0",
+    "cordova-ios": "5.1.1",
     "datatables.net": "^1.10.23",
     "datatables.net-dt": "^1.10.23",
     "iframe-resizer": "^4.3.0",
@@ -159,7 +160,8 @@
       "cordova-plugin-app-version": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
