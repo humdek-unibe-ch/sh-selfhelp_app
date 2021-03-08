@@ -14,12 +14,15 @@ export class UtilsService {
     // appcenter codepush deployment list -k --app TPF-UniBe/soapp-android
 
     //1 ionic cordova prepare android --prod --release
+    //1 ionic cordova prepare ios --prod --release
     //2 appcenter codepush release-cordova -a TPF-UniBe/soapp-android -d Production 
+    //2 appcenter codepush release-cordova -a TPF-UniBe/soapp-ios -d Production    
     //3 appcenter codepush  deployment history -a TPF-UniBe/soapp-android Production // check history of the versions
+    //3 appcenter codepush  deployment history -a TPF-UniBe/soapp-ios Production
 
     // CODE PUSH ************************************
 
-    private debugMode: boolean = true;
+    private debugMode: boolean = false;
 
     constructor() { }
 
