@@ -81,6 +81,8 @@ export interface FormUserInputStyle extends Style {
     alert_success: StyleField,
     submit_and_send_email: StyleField,
     submit_and_send_label: StyleField,
+    close_modal_at_end: StyleField,
+    redirect_at_end: StyleField
 }
 
 export interface FormField extends Style {

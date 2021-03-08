@@ -88,8 +88,11 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
 
     public async submitForm(value: { [key: string]: any; }) {
         const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));
-        if (res) {
+        if (res && this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal();
+        }
+        if (this.getFieldContent('redirect_at_end') != '') {
+            this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
         }
     }
 
