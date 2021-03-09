@@ -42,9 +42,9 @@ export class NotificationsService {
             this.showNotification(data);
             if(data['url']){
                 const selfhelpService = this.injector.get(SelfhelpService);
-                setTimeout(() => {
+                // setTimeout(() => {
                     selfhelpService.openUrl(data['url']); 
-                }, 1000);                
+                // }, 1000);                
             }
         });
     }
