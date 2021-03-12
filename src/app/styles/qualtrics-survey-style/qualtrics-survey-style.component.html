@@ -1,5 +1,5 @@
 <div *ngIf="style.show_survey">
-    <iframe *ngIf="!isContainer()" #iframe [class]="getCss()" scrolling="no" frameborder="0"
+    <iframe *ngIf="!isContainer()" #iframe [class]="getCss()" scrolling="no" frameborder="0" 
         [src]="getQualtricsUrl() | safe: 'resourceUrl'" [attr.data-time]="style.time"></iframe>
     <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent">
     </app-basic-style>

@@ -36,7 +36,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
                 log: false,
                 messageCallback: (data: IFrameMessageData) => (this.iframeMessage(data)),
                 heightCalculationMethod: 'taggedElement',
-                checkOrigin: false,
+                checkOrigin: ["https://eu.qualtrics.com"],
             }, this.iframe.nativeElement);
             this.component = components && components.length > 0 ? components[0] : null;
         }
