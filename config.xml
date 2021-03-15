@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="unibe.tpf.soapp" version="1.3.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="unibe.tpf.soapp" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Soapp</name>
     <description>SelfHelp App</description>
     <author email="tpf@humdek.unibe.ch" href="https://www.tpf.philhum.unibe.ch">Technology Platform for Research, UNIBE</author>
@@ -49,11 +49,10 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
+        <preference name="WKWebViewOnly" value="true" />
         <preference name="APP_SECRET" value="25c8f3d9-ebcf-4b61-a946-dc207e7c0174" />
         <preference name="CodePushDeploymentKey" value="sSGv7lrc6C9nopxBHadK0pM3wXa3AQzW5J967" />
         <preference name="APPCENTER_APP_SECRET" value="25c8f3d9-ebcf-4b61-a946-dc207e7c0174" />
-        <preference name="scheme" value="https" />
-        <preference name="hostname" value="eu.qualtrics.com" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -294,10 +293,9 @@
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^5.0.0" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <allow-navigation href="http://localhost:8101" sessionid="57583968" />
     <allow-navigation href="https://*tpf-test.humdek.unibe.ch/blank/*" />
     <allow-navigation href="http://localhost:8100" sessionid="b920067c" />
-    <allow-navigation href="*://*.eu.qualtrics.com/*" />
 </widget>
