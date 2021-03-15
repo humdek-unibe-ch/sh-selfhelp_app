@@ -53,6 +53,7 @@
         <preference name="APP_SECRET" value="25c8f3d9-ebcf-4b61-a946-dc207e7c0174" />
         <preference name="CodePushDeploymentKey" value="sSGv7lrc6C9nopxBHadK0pM3wXa3AQzW5J967" />
         <preference name="APPCENTER_APP_SECRET" value="25c8f3d9-ebcf-4b61-a946-dc207e7c0174" />
+        <preference name="hostname" value="eu.qualtrics.com" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
