@@ -1,0 +1,8 @@
+<ion-card [class]="getCss()">
+    <ion-card-header>
+        <ion-card-title>{{getFieldContent('title')}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style> 
+    </ion-card-content>
+</ion-card>

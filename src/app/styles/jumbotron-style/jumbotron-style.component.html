@@ -1,0 +1,3 @@
+<div [class]="'jumbotron ' + getCss()">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style> 
+</div>

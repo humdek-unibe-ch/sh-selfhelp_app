@@ -1,0 +1,28 @@
+<div [id]="getFieldContent('id_prefix') + '-carousel'"
+    [class]="'carousel slide ' + getCss() + (getFieldContent('has_crossfade') == '1' ? ' carousel-fade' : '')"
+    data-ride="carousel">
+    <ol *ngIf="getFieldContent('has_indicators') == '1'" class="carousel-indicators">
+        <li *ngFor="let item of getFieldContent('sources'); let i = index"
+            [attr.data-target]="'#' + getFieldContent('id_prefix') + '-carousel'" [attr.data-slide-to]="i"
+            [class]="i == 0 ? 'active' : ''"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div *ngFor="let item of getFieldContent('sources'); let i = index"
+            [class]="'carousel-item' + (i == 0 ? ' active' : '')">
+            <img class="d-block w-100" [src]="getSrc( item.source)" [alt]="getFieldContent('alt')">
+            <div class="carousel-caption d-none d-md-block">
+                <p>{{getFieldContent('caption')}}</p>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" [href]="'#' + getFieldContent('id_prefix') + '-carousel'" role="button"
+        data-slide="prev">
+        <span class="fas fa-lg fa-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">prev</span>
+    </a>
+    <a class="carousel-control-next" [href]="'#' + getFieldContent('id_prefix') + '-carousel'" role="button"
+        data-slide="next">
+        <span class="fas fa-lg fa-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">next</span>
+    </a>
+</div>

@@ -1,0 +1,13 @@
+<ion-segment scrollable [(ngModel)]="selectedTab" (ionChange)="setSelectedTab()">
+    <ion-segment-button *ngFor="let tab of style.children; let i = index" [value]="i">
+        <ion-label [color]="getChildFieldContent(tab, 'type')">{{getChildFieldContent(tab, 'label')}}</ion-label>
+    </ion-segment-button>
+</ion-segment>
+
+<ion-slides #tabContent (ionSlideDidChange)="tabChanged()" [options]="sliderConfig">
+    <ion-slide *ngFor="let tab of style.children; let i = index"
+        [ngSwitch]="selectedTab == i" scrollbar="true">
+            <app-basic-style *ngFor="let child of tab.children" [style]="child" [url]="url">
+            </app-basic-style>
+    </ion-slide>
+</ion-slides>

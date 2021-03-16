@@ -1,0 +1,27 @@
+<ion-card *ngIf="!reg_success" [class]="getCss()">
+    <ion-card-header [color]="getFieldContent('type')">
+        <ion-card-title>{{getFieldContent('title')}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <form [formGroup]="form" [class]="getCss()" (keyup.enter)="register(form.value)">
+            <ion-item>
+                <ion-input type="email" email formControlName="email" [placeholder]="getFieldContent('label_user')">
+                </ion-input>
+            </ion-item>
+            <ion-item *ngIf="getFieldContent('open_registration') != '1'">
+                <ion-input type="text" formControlName="code" [placeholder]="getFieldContent('label_pw')">
+                </ion-input>
+            </ion-item>
+            <ion-button [color]="getFieldContent('type')" size="small" [disabled]="!form.valid"
+                (click)="register(form.value)" class="w-100 mt-3" [disabled]="!form.valid">
+                {{getFieldContent('label_submit')}}</ion-button>
+        </form>
+    </ion-card-content>
+</ion-card>
+
+<div *ngIf="reg_success" class="container mt-3">
+    <div class="jumbotron">
+        <h1>{{getFieldContent('success')}}</h1>
+        <p>{{getFieldContent('alert_success')}}</p>
+    </div>
+</div>

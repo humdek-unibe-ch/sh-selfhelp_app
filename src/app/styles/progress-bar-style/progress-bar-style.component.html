@@ -1,0 +1,13 @@
+<!-- <ion-item>
+    <ion-label>label</ion-label>
+    <ion-progress-bar value="0.25" buffer="0.5"></ion-progress-bar>
+</ion-item> -->
+
+<div [class]="'progress ' + getCss()">
+    <div [class]="'h-100 progress-bar bg-' + getFieldContent('type') + (getFieldContent('is_striped') == '1' ? ' progress-bar-striped' : '')"
+        role="progressbar" [attr.aria-valuenow]='getProgress()' aria-valuemin="0" aria-valuemax="100"
+        [style]='"width:" + getProgress()+ "%"'>
+        <span
+            *ngIf="getFieldContent('has_label') == '1'">{{getFieldContent('count')}}/{{getFieldContent('count_max')}}</span>
+    </div>
+</div>

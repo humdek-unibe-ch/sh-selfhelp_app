@@ -1,0 +1,3 @@
+<ion-img *ngIf="getImgSource()"  [class]="(getFieldContent('is_fluid') == '1' ? 'img-fluid ' : '') + getCss()"
+    [src]="getImgSource()" [alt]="getFieldContent('alt')" [title]="getFieldContent('title')">
+</ion-img>

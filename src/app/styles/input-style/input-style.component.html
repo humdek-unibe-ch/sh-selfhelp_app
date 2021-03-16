@@ -1,0 +1,39 @@
+<ion-item *ngIf="parentForm && getFieldContent('type_input') == 'text'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
+    <ion-input [formControlName]="getFieldContent('name')"
+        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+</ion-item>
+
+<ion-item *ngIf="parentForm && getFieldContent('type_input') == 'date'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
+    <ion-datetime [formControlName]="getFieldContent('name')" [displayFormat]="style.format"></ion-datetime>
+</ion-item>
+
+<ion-item *ngIf="parentForm && getFieldContent('type_input') == 'email'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
+    <ion-input [formControlName]="getFieldContent('name')" email required
+        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+</ion-item>
+
+<ion-item *ngIf="parentForm && getFieldContent('type_input') == 'number'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
+    <ion-input [formControlName]="getFieldContent('name')" type="number"
+        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+</ion-item>
+
+<ion-item *ngIf="parentForm && getFieldContent('type_input') == 'password'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
+    <ion-input [formControlName]="getFieldContent('name')" type="password"
+        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+</ion-item>
+
+<ion-item *ngIf="parentForm && getFieldContent('type_input') == 'range'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="stacked">{{getFieldContent('label')}}</ion-label>
+    <ion-range pin="true" color="secondary" [formControlName]="getFieldContent('name')">
+    </ion-range>
+</ion-item>
+
+<ion-item *ngIf="getFieldContent('type_input') == 'checkbox'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
+    <ion-checkbox color="primary" [formControlName]="getFieldContent('name')" slot="start"></ion-checkbox>
+</ion-item>

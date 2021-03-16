@@ -1,0 +1,23 @@
+<ion-card [class]="getCss()">
+    <ion-card-header [color]="getFieldContent('type')">
+        <ion-card-title>{{getFieldContent('login_title')}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <form [formGroup]="form" [class]="getCss()" (keyup.enter)="login(form.value)">
+            <ion-item>
+                <ion-input type="text" formControlName="email" [placeholder]="getFieldContent('label_user')">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input type="password" formControlName="password" [placeholder]="getFieldContent('label_pw')">
+                </ion-input>
+            </ion-item>
+            <ion-button [color]="getFieldContent('type')" size="small" [disabled]="!form.valid"
+                (click)="login(form.value)" class="w-100 mt-3" [disabled]="!form.valid">
+                {{getFieldContent('label_login')}}</ion-button>
+        </form>
+        <a [class]="'small float-right text-'+getFieldContent('type')" (click)="forgottenPassword()">
+            {{getFieldContent('label_pw_reset')}}
+        </a>
+    </ion-card-content>
+</ion-card>

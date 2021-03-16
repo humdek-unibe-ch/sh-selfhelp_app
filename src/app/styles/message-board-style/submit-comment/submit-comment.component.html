@@ -1,0 +1,13 @@
+<button *ngIf="!icons" class="btn btn-light dropdown-item" (click)="onClickSubmit()">
+    {{reply_value}}
+</button>
+<div *ngIf="icons" class="d-inline">
+    <fieldset class="d-inline">
+        <button [disabled]="disabled || icon_counter[reply_value]['disabled']" type="submit" class="btn btn-light mr-1" (click)="onClickSubmit()">
+            <i [class]="'fas fa-lg ' + reply_value"></i>
+            <span *ngIf="icon_counter[reply_value] && icon_counter[reply_value]['count']">
+                {{icon_counter[reply_value]['count']}}
+            </span>
+        </button>
+    </fieldset>
+</div>

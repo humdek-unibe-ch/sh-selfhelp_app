@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="#" (click)="close()">close</ion-back-button>
+        </ion-buttons>
+        <ion-title>{{getProfileTitle()}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="logout()">
+                <ion-icon slot="start" name="power"></ion-icon>
+                Logout
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content #content *ngIf="selfhelp.urls[url]" fullscreen>
+    <app-basic-style *ngFor="let style of selfhelp.urls[url].content" [style]="style" [url]="url"
+        [ionContent]="content"></app-basic-style>    
+</ion-content>

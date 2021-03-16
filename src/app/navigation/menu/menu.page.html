@@ -1,0 +1,22 @@
+<ion-content #ionContent [fullscreen]="true">
+    <ion-header>
+        <ion-toolbar>
+            <ion-avatar class="avatar" slot="end" *ngIf="getAvatar() != ''" (click)="profileOrLogin()">
+                <img [src]="getAvatar()">                
+            </ion-avatar>            
+            <ion-buttons *ngIf="getAvatar() == ''" slot="secondary">
+                <ion-button (click)="profileOrLogin()">
+                    <ion-icon slot="icon-only" name="person-circle-outline" color="medium">
+                    </ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title>{{selfhelp.selectedMenu ? selfhelp.selectedMenu.title : ''}}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    <div *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length == 0">
+        <app-basic-style *ngFor="let style of getContent(selfhelp.selectedMenu)" [style]="style"
+            [url]="selfhelp.selectedMenu.url" [ionContent]="ionContent"></app-basic-style>
+    </div>
+    <app-sub-menu *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children.length > 0" [selfhelp]="selfhelp">
+    </app-sub-menu>
+</ion-content>

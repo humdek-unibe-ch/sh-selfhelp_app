@@ -1,0 +1,75 @@
+<div #messageBoard style="overflow: scroll; height: xyz;" [class]="getCss()">
+    <div *ngFor="let message of style.messages" [id]="'message-'+style.id_section+'-'+message.record_id"
+        class="card bg-light mb-3">
+        <div class="card-header">
+            <div class="mb-0 d-flex align-items-center">
+                <!-- <i class="fas fa-chart-line mr-3"></i> -->
+                <!-- {{getFieldContent('title')}} -->
+                <ion-avatar class="avatar" slot="start" *ngIf="message.avatar != ''">
+                    <img [src]="getAvatar(message.avatar)">
+                </ion-avatar>
+                <ion-icon *ngIf="message.avatar == ''" class="no-avatar" name="person-circle-outline" color="medium">
+                </ion-icon>
+                <h5 class="user_name">{{message.user}}</h5>
+                <small class="text-muted ml-auto" [title]="message.time">
+                    {{message.time}}
+                </small>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <h5><span [class]="'badge badge-' + message.color + ' mr-3 message'">
+                        {{message.score}}
+                    </span></h5>
+                <span class="messageBoard-message" [innerHTML]="getFieldContent('text_md')"> </span>
+            </div>
+            <div class="pl-3">
+                <div *ngFor="let reply of message.reply_messages" class="card mb-1">
+                    <div class="card-body py-2">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <ion-avatar class="avatar" slot="start" *ngIf="reply.avatar != ''">
+                                <img [src]="getAvatar(reply.avatar)">
+                            </ion-avatar>
+                            <ion-icon *ngIf="reply.avatar == ''" class="no-avatar" name="person-circle-outline"
+                                color="medium">
+                            </ion-icon>
+                            <div class="mr-2"><strong>
+                                    {{reply.user_name}}
+                                </strong>:</div>
+                            <div class="mr-2">
+                                {{reply.value}}
+                            </div>
+                            <small class="text-muted ml-auto" [title]="reply.create_time">
+                                {{reply.time}}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer d-flex align-items-center">
+            <div>
+                <app-submit-comment *ngFor="let icon of this.getFieldContent('icons')" [url]="message.url"
+                    [parent_url]="url" [reply_id]="style.id_reply" [reply_value]="icon" [link_id]="style.id_link"
+                    [link_value]="message.record_id" [icons]="true" [icon_counter]="message.icon_counter"
+                    [disabled]="message.color=='primary'" [form_name]="getFieldContent('name')">
+                </app-submit-comment>
+            </div>
+            <div *ngIf="message.color=='success'" class="ml-auto">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Kommentieren
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <app-submit-comment *ngFor="let comment of getFieldContent('comments')" [url]="message.url"
+                            [parent_url]="url" [reply_id]="style.id_reply" [reply_value]="comment"
+                            [link_id]="style.id_link" [link_value]="message.record_id" [icons]="false"
+                            [form_name]="getFieldContent('name')">
+                        </app-submit-comment>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
