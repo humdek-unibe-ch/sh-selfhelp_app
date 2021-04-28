@@ -1,6 +1,6 @@
 <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent">
 </app-basic-style>
-<div class="container-fluid">
+<div [class]="getCss()">
     <ion-card class="my-3">
         <ion-card-header>
             <ion-card-title>Version</ion-card-title>
