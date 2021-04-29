@@ -16,6 +16,18 @@ export class ModalPageComponent extends BasicComponentComponent implements OnIni
     async ngOnInit(){
         this.url = this.url_param;
         // this.selfhelpService.getPage(this.url);
-    }    
+    } 
+
+    isMissing():boolean{
+        if(this.selfhelp.urls[this.url].content.length > 0){
+            if(String(this.selfhelp.urls[this.url].content[0]) == 'missing'){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }   
 
 }

@@ -73,7 +73,8 @@ export class SelfhelpService {
                 this.appVersion = res;
             });
             this.appBuildVersion = version;
-            // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing
+            // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing 
+            // this.storage.remove(this.local_selfhelp); // enable for reseting the server when developing 
             if (this.devApp) {
                 // give an option to select a server
                 if (await this.getServer()) {
