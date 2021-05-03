@@ -352,6 +352,10 @@ export interface MessageBoardStyle extends Style {
     id_link: number
 }
 
+export interface EntryListStyle extends Style {
+    formName: StyleField,
+}
+
 export interface MessageBoardMessage {
     color: string,
     icon_counter: any,

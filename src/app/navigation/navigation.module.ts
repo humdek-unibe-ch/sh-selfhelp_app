@@ -58,6 +58,7 @@ import { ResetPasswordStyleComponent } from '../styles/reset-password-style/rese
 import { ValidateStyleComponent } from '../styles/validate-style/validate-style.component';
 import { MessageBoardStyleComponent } from '../styles/message-board-style/message-board-style.component';
 import { SubmitCommentComponent } from '../styles/message-board-style/submit-comment/submit-comment.component';
+import { EntryListComponent } from '../styles/entry-list/entry-list.component';
 
 const routes: Routes = [
     {
@@ -147,7 +148,8 @@ const routes: Routes = [
         ResetPasswordStyleComponent,
         ValidateStyleComponent,
         MessageBoardStyleComponent,
-        SubmitCommentComponent
+        SubmitCommentComponent,
+        EntryListComponent
     ]
 })
 export class NavigationPageModule {

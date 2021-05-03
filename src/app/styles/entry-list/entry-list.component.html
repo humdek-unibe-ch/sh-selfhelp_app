@@ -1,0 +1,14 @@
+<table datatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
+    <thead>
+        <tr>
+            <th class="d-none"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let child of style.children">
+            <td>
+                <app-basic-style [url]="url" [ionContent]="ionContent" [style]="child"></app-basic-style>
+            </td>
+        </tr>
+    </tbody>
+</table>
