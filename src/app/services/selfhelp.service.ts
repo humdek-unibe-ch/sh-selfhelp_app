@@ -81,7 +81,7 @@ export class SelfhelpService {
                     this.utils.debugLog('Server is selected - load local info and get home page', null);
                     this.loadApp();
                 } else {
-                    this.selectServer();
+                    this.selectServer(); 
                 }
             } else {
                 // load the app
