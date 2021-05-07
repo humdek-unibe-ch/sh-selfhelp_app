@@ -22,6 +22,7 @@
     "@fortawesome/fontawesome-free": "^5.2.0",
     "@ionic-native/android-full-screen": "^5.30.0",
     "@ionic-native/app-version": "^5.31.1",
+    "@ionic-native/calendar": "^5.32.1",
     "@ionic-native/code-push": "^5.31.1",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/deeplinks": "^5.31.1",
@@ -42,6 +43,7 @@
     "datatables.net": "^1.10.23",
     "datatables.net-dt": "^1.10.23",
     "iframe-resizer": "^4.3.0",
+    "ionic2-calendar": "^0.6.7",
     "jquery": "^3.5.1",
     "moment": "^2.29.1",
     "plotly.js": "^1.58.4",
@@ -76,6 +78,7 @@
     "cordova-plugin-appcenter-crashes": "^0.5.1",
     "cordova-plugin-appcenter-push": "^0.5.1",
     "cordova-plugin-appcenter-shared": "^0.5.1",
+    "cordova-plugin-calendar": "^5.1.5",
     "cordova-plugin-code-push": "^2.0.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-dialogs": "^2.0.2",
@@ -159,7 +162,8 @@
         "DEEPLINK_5_HOST": " "
       },
       "cordova-plugin-app-version": {},
-      "cordova-plugin-wkwebview-file-xhr": {}
+      "cordova-plugin-wkwebview-file-xhr": {},
+      "cordova-plugin-calendar": {}
     },
     "platforms": [
       "android",

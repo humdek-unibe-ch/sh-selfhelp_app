@@ -1,5 +1,5 @@
 import { IonicModule } from '@ionic/angular';
-import { NgModule, NgZone } from '@angular/core';
+import { LOCALE_ID, NgModule, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationPage } from './navigation.page';
 import { Router, RouterModule, Routes } from '@angular/router';
@@ -59,6 +59,8 @@ import { ValidateStyleComponent } from '../styles/validate-style/validate-style.
 import { MessageBoardStyleComponent } from '../styles/message-board-style/message-board-style.component';
 import { SubmitCommentComponent } from '../styles/message-board-style/submit-comment/submit-comment.component';
 import { EntryListComponent } from '../styles/entry-list/entry-list.component';
+import { CalendarStyleComponent } from '../styles/calendar-style/calendar-style.component';
+import { NgCalendarModule } from 'ionic2-calendar';
 
 const routes: Routes = [
     {
@@ -94,9 +96,12 @@ const routes: Routes = [
         ReactiveFormsModule,
         SafePipeModule,
         PlotlyViaWindowModule,
-        DataTablesModule
+        DataTablesModule,
+        NgCalendarModule
     ],
-    exports: [RouterModule],
+    exports: [
+        RouterModule
+    ],
     declarations: [
         NavigationPage,
         MenuPage,
@@ -149,7 +154,8 @@ const routes: Routes = [
         ValidateStyleComponent,
         MessageBoardStyleComponent,
         SubmitCommentComponent,
-        EntryListComponent
+        EntryListComponent,
+        CalendarStyleComponent,
     ]
 })
 export class NavigationPageModule {

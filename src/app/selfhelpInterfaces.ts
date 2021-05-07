@@ -356,6 +356,14 @@ export interface EntryListStyle extends Style {
     formName: StyleField,
 }
 
+export interface CalendarStyle extends Style {
+    title: StyleField,
+    label_month: StyleField,
+    label_week: StyleField,
+    label_day: StyleField,
+    config: StyleField,
+}
+
 export interface MessageBoardMessage {
     color: string,
     icon_counter: any,

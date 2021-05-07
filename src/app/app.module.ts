@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -17,6 +17,11 @@ import { FormBuilder } from '@angular/forms';
 import { CodePush } from '@ionic-native/code-push/ngx';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { NgCalendarModule  } from 'ionic2-calendar';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+registerLocaleData(localeDe);
+import { Calendar } from '@ionic-native/calendar/ngx';
 
 @NgModule({
     declarations: [
@@ -27,7 +32,8 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
         IonicModule.forRoot(),
         AppRoutingModule,
         HttpClientModule,
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        NgCalendarModule
     ],
     providers: [
         StatusBar,
@@ -41,7 +47,9 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
         FormBuilder,
         CodePush,
         Deeplinks,
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        { provide: LOCALE_ID, useValue: 'de-DE' },
+        Calendar
     ],
     bootstrap: [AppComponent]
 })

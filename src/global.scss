@@ -27,7 +27,7 @@
 
 :root {
   /** primary **/
-  --ion-color-primary: #397dac;
+//   --ion-color-primary: #397dac;
 }
 
 ion-loading{
@@ -46,7 +46,7 @@ ion-loading .loading-wrapper{
     border-radius: 0 !important;
 }
 
-$color-loader: #397dac;
+// $color-loader: --ion-color-primar;
 
 .loader {
   width: 250px;
@@ -60,7 +60,7 @@ $color-loader: #397dac;
   font-family: helvetica, arial, sans-serif;
   text-transform: uppercase;
   font-weight: 900;
-  color: $color-loader;
+  color: var(--ion-color-primary);
   letter-spacing: 0.2em;
   
   &::before, &::after {
@@ -68,7 +68,7 @@ $color-loader: #397dac;
     display: block;
     width: 15px;
     height: 15px;
-    background: $color-loader;
+    background: var(--ion-color-primary);
     position: absolute;
     animation: load .7s infinite alternate ease-in-out;
   }
@@ -120,4 +120,10 @@ $color-loader: #397dac;
 .selectServer .alert-wrapper {
     width: 80%;
     max-width: 80%;
+}
+
+.cal-modal {
+    --height: 80%;
+    --border-radius: 10px;
+    padding: 25px;
 }
