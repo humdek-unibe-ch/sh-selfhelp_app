@@ -22,6 +22,10 @@ import { registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 registerLocaleData(localeDe);
 import { Calendar } from '@ionic-native/calendar/ngx';
+import { MediaCapture} from '@ionic-native/media-capture/ngx';
+import { File } from '@ionic-native/File/ngx';
+import { StreamingMedia } from '@ionic-native/streaming-media/ngx';
+import { Media } from '@ionic-native/media/ngx';
 
 @NgModule({
     declarations: [
@@ -49,7 +53,11 @@ import { Calendar } from '@ionic-native/calendar/ngx';
         Deeplinks,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         { provide: LOCALE_ID, useValue: 'de-DE' },
-        Calendar
+        Calendar,
+        MediaCapture,        
+        File,
+        Media,
+        StreamingMedia
     ],
     bootstrap: [AppComponent]
 })
