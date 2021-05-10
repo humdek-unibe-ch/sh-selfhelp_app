@@ -11,7 +11,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
 export class ProfileStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: ProfileStyle;
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(public selfhelpService: SelfhelpService) {
         super();
     }
 

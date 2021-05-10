@@ -18,6 +18,12 @@
                     <h1>{{getAppBuildVersion()}}</h1>
                 </ion-text>
             </ion-item>
+            <ion-item *ngIf="selfhelpService.devApp">
+                <ion-label>Server:</ion-label>
+                <ion-text color="primary">
+                    <h1>{{selfhelpService.API_ENDPOINT_NATIVE}}</h1>
+                </ion-text>
+            </ion-item>
         </ion-card-content>
     </ion-card>
 </div>
