@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { CalendarComponent } from 'ionic2-calendar';
 import { CalendarStyle } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
+import * as moment from 'moment';
 
 
 @Component({
@@ -88,10 +89,14 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
 
     // Calendar event was clicked
     async onEventSelected(event) {
+        // if (this.plt.is('ios')){
+        //     this.nativeCal.modifyEvent(event.title, event.location, event.notes, event.startDate, event.endDate, 'new title', event.location, event.notes, event.startDate, event.endDate); 
+        // }else {
         this.nativeCal.openCalendar(this.selectedDate).then(
             (msg) => { console.log(msg); },
             (err) => { console.log(err); }
         );
+        // }
     }
 
     changeMode(mode) {
@@ -101,8 +106,16 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     onRangeChanged(event) {
         this.dataRange = event;
         if (this.plt.is('ios')) {
-            this.nativeCal.findAllEventsInNamedCalendar("stefan.kodzhabashev@gmail.com").then(data => {
+            // this.nativeCal.findAllEventsInNamedCalendar("stefan.kodzhabashev@gmail.com").then(data => {
+            //     this.events = data;
+            // });
+            let start = event.startTime;
+            let end = event.endTime;
+            console.log(this.nativeCal);
+            this.nativeCal.listEventsInRange(start, end).then(data => {
                 this.events = data;
+                console.log(this.events);
+                this.loadEventsInCalendar(data);
             });
         } else if (this.plt.is('android')) {
             let start = event.startTime;
@@ -117,10 +130,15 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
 
     loadEventsInCalendar(events: any) {
         this.eventSource = [];
+        const isIOS = this.plt.is('ios');
         events.forEach(event => {
-            event['allDay'] = event.allDay == 1;
-            event['endTime'] = new Date(event.dtend);
-            event['startTime'] = new Date(event.dtstart);
+            if (!isIOS) {
+                event['allDay'] = event.allDay == 1;
+            } else {
+                // event['allDay'] = moment(event.endDate).format('HH:mm:ss') === '23:59:59';
+            }
+            event['endTime'] = new Date(isIOS ? moment(event.endDate).toDate() : event.dtend);
+            event['startTime'] = new Date(isIOS ? moment(event.startDate).toDate() : event.dtstart);
             this.eventSource.push(event);
         });
     }
