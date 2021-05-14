@@ -53,14 +53,7 @@ export class NavigationPage {
     }
 
     public getIcon(nav: SelfHelpNavigation): string {
-        const icons = nav.icon.split(' ');
-        let res = '';
-        icons.forEach(icon => {
-            if (icon.startsWith('mobile-')) {
-                res = icon.replace('mobile-', '');
-            }
-        });
-        return res;
+        return this.selfhelpService.getIcon(nav.icon);
     }
 
 }

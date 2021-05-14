@@ -81,7 +81,7 @@ export class SelfhelpService {
                     this.utils.debugLog('Server is selected - load local info and get home page', null);
                     this.loadApp();
                 } else {
-                    this.selectServer(); 
+                    this.selectServer();
                 }
             } else {
                 // load the app
@@ -784,6 +784,17 @@ export class SelfhelpService {
                     reject(err);
                 });
         });
+    }
+
+    public getIcon(value: string): string {
+        const icons = value.split(' ');
+        let res = '';
+        icons.forEach(icon => {
+            if (icon.startsWith('mobile-')) {
+                res = icon.replace('mobile-', '');
+            }
+        });
+        return res;
     }
 
 }

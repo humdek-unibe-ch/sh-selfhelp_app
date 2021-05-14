@@ -14,7 +14,7 @@ export class BasicStyleComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() { 
+    ngOnInit() {
     }
 
     /**
@@ -91,7 +91,7 @@ export class BasicStyleComponent implements OnInit {
         return child.id ? parseInt(child.id.content.toString()) : null;
     }
 
-    public getIonContent(){
+    public getIonContent() {
         return this.ionContent;
     }
 

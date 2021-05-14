@@ -27,7 +27,24 @@
 
 :root {
   /** primary **/
-//   --ion-color-primary: #397dac;
+  --ion-color-primary: #007bff;
+  --ion-color-secondary: #6c757d;
+  --ion-color-success: #28a745;
+  --ion-color-danger: #dc3545;
+  --ion-color-warning: #ffc107;
+  --ion-color-info: #17a2b8;
+  --ion-color-light: #f8f9fa;
+  --ion-color-dark: #343a40;
+  --ion-color-white: #fff;
+}
+
+.ion-color-info {
+  --ion-color-base: var(--ion-color-info);
+  --ion-color-base-rgb: var(--ion-color-primary-rgb);
+  --ion-color-contrast: var(--ion-color-primary-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
+  --ion-color-shade: var(--ion-color-primary-shade);
+  --ion-color-tint: var(--ion-color-primary-tint);
 }
 
 ion-loading{

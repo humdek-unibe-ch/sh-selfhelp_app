@@ -194,7 +194,8 @@ export interface CarouselStyle extends Style {
 export interface TabStyle extends Style {
     label: StyleField,
     type: StyleField,
-    is_expanded: StyleField
+    is_expanded: StyleField,
+    icon: StyleField
 }
 
 export interface GraphStyle extends Style {
