@@ -41,7 +41,8 @@ export class SelfhelpService {
         base_path: '',
         current_url: '/',
         current_modal_url: '',
-        avatar: ''
+        avatar: '',
+        external_css: ''
     });
     private initApp = false;
     private messageDuration = 10000;
@@ -283,12 +284,19 @@ export class SelfhelpService {
             newSelfhelp.logged_in = page.logged_in;
             newSelfhelp.base_path = page.base_path;
             newSelfhelp.avatar = page.avatar;
+            newSelfhelp.external_css = page.external_css;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (this.selfhelp.value.avatar != page.avatar) {
             // check for login change
             let newSelfhelp = this.selfhelp.value;
             newSelfhelp.avatar = page.avatar;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (this.selfhelp.value.external_css != page.external_css) {
+            // check for login change
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.external_css = page.external_css;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET)) {
