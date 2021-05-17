@@ -1,0 +1,25 @@
+<ion-card class="my-3">
+    <ion-card-header>
+        <ion-card-title>Version</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-item>
+            <ion-label>App version:</ion-label>
+            <ion-text color="primary">
+                <h1>{{selfhelpService.appVersion}}</h1>
+            </ion-text>
+        </ion-item>
+        <ion-item>
+            <ion-label>App build:</ion-label>
+            <ion-text color="primary">
+                <h1>{{selfhelpService.appBuildVersion}}</h1>
+            </ion-text>
+        </ion-item>
+        <ion-item *ngIf="selfhelpService.devApp">
+            <ion-label>Server:</ion-label>
+            <ion-text color="primary">
+                <h1>{{selfhelpService.API_ENDPOINT_NATIVE}}</h1>
+            </ion-text>
+        </ion-item>
+    </ion-card-content>
+</ion-card>

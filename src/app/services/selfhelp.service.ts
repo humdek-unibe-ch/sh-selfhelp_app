@@ -42,7 +42,9 @@ export class SelfhelpService {
         current_url: '/',
         current_modal_url: '',
         avatar: '',
-        external_css: ''
+        external_css: '',
+        languages: null,
+        locale: 'de-CH'
     });
     private initApp = false;
     private messageDuration = 10000;
@@ -144,6 +146,7 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
+        params['locale'] = this.selfhelp.value.locale;
         params['device_id'] = this.getDeviceID();
         if (this.getIsApp()) {
             // use native calls
@@ -285,6 +288,7 @@ export class SelfhelpService {
             newSelfhelp.base_path = page.base_path;
             newSelfhelp.avatar = page.avatar;
             newSelfhelp.external_css = page.external_css;
+            newSelfhelp.languages = page.languages;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (this.selfhelp.value.avatar != page.avatar) {
@@ -297,6 +301,12 @@ export class SelfhelpService {
             // check for login change
             let newSelfhelp = this.selfhelp.value;
             newSelfhelp.external_css = page.external_css;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (this.selfhelp.value.languages != page.languages) {
+            // check for login change
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.languages = page.languages;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET)) {

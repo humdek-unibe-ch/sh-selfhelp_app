@@ -62,6 +62,8 @@ import { EntryListComponent } from '../styles/entry-list/entry-list.component';
 import { CalendarStyleComponent } from '../styles/calendar-style/calendar-style.component';
 import { NgCalendarModule } from 'ionic2-calendar';
 import { RecordMediaStyleComponent } from '../styles/record-media-style/record-media-style.component';
+import { LanguageSelectComponent } from '../components/language-select/language-select.component';
+import { AppVersionComponent } from '../components/app-version/app-version.component';
 
 const routes: Routes = [
     {
@@ -157,7 +159,9 @@ const routes: Routes = [
         SubmitCommentComponent,
         EntryListComponent,
         CalendarStyleComponent,
-        RecordMediaStyleComponent
+        RecordMediaStyleComponent,
+        LanguageSelectComponent,
+        AppVersionComponent
     ]
 })
 export class NavigationPageModule {

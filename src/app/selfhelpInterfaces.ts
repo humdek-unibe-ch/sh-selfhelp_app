@@ -427,11 +427,17 @@ export interface SelfHelpPageRequest {
     base_path: string,
     title: string,
     avatar: string,
-    external_css: string
+    external_css: string,
+    languages: Language[]
 }
 
 export interface CachedPage {
     content: Styles,
+    title: string,
+}
+
+export interface Language {
+    locale: string,
     title: string,
 }
 
@@ -450,5 +456,7 @@ export interface SelfHelp {
     current_modal_url: string,
     credentials?: LoginValues,
     avatar: string,
-    external_css: string
+    external_css: string,
+    languages: Language[],
+    locale: string
 }
