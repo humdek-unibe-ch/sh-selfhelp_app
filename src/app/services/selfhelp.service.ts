@@ -52,6 +52,7 @@ export class SelfhelpService {
     public appVersion: string;
     public appBuildVersion: string;
     private defaultLocale: 'de-CH';
+    private lastToastMsg = '';
 
     constructor(
         private http: HttpClient,
@@ -511,6 +512,7 @@ export class SelfhelpService {
         return this.execServerRequest(keyword, params)
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
+                    this.lastToastMsg = '';
                     if (!this.output_messages(res.content)) {
                         return false;
                     };
@@ -530,13 +532,19 @@ export class SelfhelpService {
             if (style) {
                 if (style.success_msgs) {
                     style.success_msgs.forEach(success_msg => {
-                        this.presentToast(success_msg, 'success');
+                        if (this.lastToastMsg != success_msg) {
+                            this.lastToastMsg = success_msg
+                            this.presentToast(success_msg, 'success');
+                        }
                     });
                 }
                 if (style.fail_msgs) {
                     res = false;
                     style.fail_msgs.forEach(fail_msg => {
-                        this.presentToast(fail_msg, 'danger');
+                        if (this.lastToastMsg != fail_msg) {
+                            this.lastToastMsg = fail_msg
+                            this.presentToast(fail_msg, 'danger');
+                        }
                     });
                 }
                 res = res && this.output_messages(style.children);
