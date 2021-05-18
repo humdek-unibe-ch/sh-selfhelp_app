@@ -64,6 +64,7 @@ import { NgCalendarModule } from 'ionic2-calendar';
 import { RecordMediaStyleComponent } from '../styles/record-media-style/record-media-style.component';
 import { LanguageSelectComponent } from '../components/language-select/language-select.component';
 import { AppVersionComponent } from '../components/app-version/app-version.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
     {
@@ -100,7 +101,8 @@ const routes: Routes = [
         SafePipeModule,
         PlotlyViaWindowModule,
         DataTablesModule,
-        NgCalendarModule
+        NgCalendarModule,
+        TranslateModule
     ],
     exports: [
         RouterModule

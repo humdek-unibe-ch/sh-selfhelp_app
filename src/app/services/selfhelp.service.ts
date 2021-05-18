@@ -14,6 +14,7 @@ import { ModalPageComponent } from '../components/modal-page/modal-page.componen
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { version } from '../../../package.json';
 import { UtilsService } from './utils.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
@@ -50,6 +51,7 @@ export class SelfhelpService {
     private messageDuration = 10000;
     public appVersion: string;
     public appBuildVersion: string;
+    private defaultLocale: 'de-CH';
 
     constructor(
         private http: HttpClient,
@@ -64,7 +66,8 @@ export class SelfhelpService {
         private device: Device,
         private notificationsService: NotificationsService,
         private appVersionPlugin: AppVersion,
-        private utils: UtilsService
+        private utils: UtilsService,
+        private translate: TranslateService
     ) {
         this.platform.ready().then(async () => {
             if (this.platform.is('cordova')) {
@@ -491,6 +494,7 @@ export class SelfhelpService {
                 let currSelfhelp = <SelfHelp>JSON.parse(val);
                 currSelfhelp.current_modal_url = '';
                 this.setSelfhelp(currSelfhelp, false);
+                this.loadLanguage();
             }
         });
     }
@@ -813,6 +817,12 @@ export class SelfhelpService {
             }
         });
         return res;
+    }
+
+    public loadLanguage() {
+        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultLocale;
+        this.translate.setDefaultLang(locale);
+        this.translate.use(locale);
     }
 
 }

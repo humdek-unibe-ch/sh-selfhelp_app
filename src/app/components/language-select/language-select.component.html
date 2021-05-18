@@ -1,5 +1,5 @@
 <ion-item>
-    <ion-label>Language</ion-label>
+    <ion-label>{{'language' | translate}}</ion-label>
     <ion-select interface="action-sheet" [(ngModel)]="selfhelp.locale" (ionChange)="refreshAfterLanguageChange()">
         <ion-select-option *ngFor="let lang of selfhelp.languages" [value]="lang.locale">{{lang.title}}
         </ion-select-option>

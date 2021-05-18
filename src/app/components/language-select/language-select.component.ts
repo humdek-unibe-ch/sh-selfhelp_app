@@ -16,6 +16,7 @@ export class LanguageSelectComponent extends BasicComponentComponent implements 
     ngOnInit() { }
 
     refreshAfterLanguageChange() {
+        this.selfhelpService.loadLanguage();
         this.selfhelpService.getPage(this.url);
     }
 
