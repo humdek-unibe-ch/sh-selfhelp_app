@@ -21,9 +21,10 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SelfhelpService {
 
+    private defaultAppLocale = 'de-CH';
     private isApp: boolean = false;
     public devApp: boolean = true; // change to false when we prepare a specific build
-    private local_selfhelp: LocalSelfhelp = 'selfhelp';
+    private local_selfhelp: LocalSelfhelp = 'selfhelp'; 
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
     // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
@@ -45,13 +46,12 @@ export class SelfhelpService {
         avatar: '',
         external_css: '',
         languages: null,
-        locale: 'de-CH'
+        locale: null
     });
     private initApp = false;
     private messageDuration = 10000;
     public appVersion: string;
-    public appBuildVersion: string;
-    private defaultLocale: 'de-CH';
+    public appBuildVersion: string;    
     private lastToastMsg = '';
 
     constructor(
@@ -150,7 +150,7 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
-        params['locale'] = this.selfhelp.value.locale;
+        params['locale'] = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale;
         params['device_id'] = this.getDeviceID();
         if (this.getIsApp()) {
             // use native calls
@@ -829,7 +829,7 @@ export class SelfhelpService {
     }
 
     public loadLanguage() {
-        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultLocale;
+        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale; 
         this.translate.setDefaultLang(locale);
         this.translate.use(locale);
     }
