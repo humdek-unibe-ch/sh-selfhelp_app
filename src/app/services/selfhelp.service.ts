@@ -162,8 +162,9 @@ export class SelfhelpService {
                     .then(
                         response => {
                             try {
-                                resolve(JSON.parse(response.data));
+                                resolve(JSON.parse(response.data));                                
                             } catch (error) {
+                                this.utils.debugLog('error', response.data);
                                 reject(error);
                             }
                         },

@@ -30,7 +30,7 @@ export class UtilsService {
     // iOS livereload debug
     // ionic cordova run ios --buildFlag="-UseModernBuildSystem=0" --livereload
 
-    private debugMode: boolean = false;
+    private debugMode: boolean = true;
 
     constructor() { }
 

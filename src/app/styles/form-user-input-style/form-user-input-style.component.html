@@ -8,6 +8,6 @@
     <ion-button *ngIf="getFieldContent('label')"  [color]="getFieldContent('type')" size='small' [disabled]="!form.valid" (click)="submitForm(form.value)">
         {{getFieldContent('label')}}</ion-button>
     <ion-button *ngIf="getFieldContent('submit_and_send_email') == '1'" [color]="getFieldContent('type')" size='small'
-        [disabled]="!form.valid" (click)="submitFormAndSendEmail(form.value)">{{getFieldContent('submit_and_send_label')}}
+        [disabled]="!form.valid" (click)="submitFormAndSendEmail(form.value)">{{getFieldContent('submit_and_send_label')}} 
     </ion-button>
 </form>
