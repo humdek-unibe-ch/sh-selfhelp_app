@@ -28,7 +28,7 @@
                         [placeholder]="getFieldContent('label_pw_confirm')">
                     </ion-input>
                 </ion-item>
-                <ion-radio-group class="d-none" formControlName="gender">
+                <ion-radio-group formControlName="gender">
                     <ion-list-header>
                         <ion-label>{{getFieldContent('label_gender')}}</ion-label>
                     </ion-list-header>
@@ -40,7 +40,7 @@
                         <ion-label>{{getFieldContent('gender_female')}}</ion-label>
                         <ion-radio slot="start" [value]="2"></ion-radio>
                     </ion-item><ion-item>
-                        <ion-label>divers</ion-label>
+                        <ion-label>{{getFieldContent('gender_divers')}}</ion-label>
                         <ion-radio slot="start" [value]="3"></ion-radio>
                     </ion-item>
                 </ion-radio-group>

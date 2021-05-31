@@ -331,6 +331,7 @@ export interface ValidateStyle extends Style {
     label_gender: StyleField,
     gender_male: StyleField,
     gender_female: StyleField,
+    gender_divers: StyleField,
     label_activate: StyleField,
     pw_placeholder: StyleField,
     success: StyleField,
