@@ -14,5 +14,14 @@
 </ion-header>
 <ion-content #content *ngIf="selfhelp.urls[url]" fullscreen>
     <app-basic-style *ngFor="let style of selfhelp.urls[url].content" [style]="style" [url]="url"
-        [ionContent]="content"></app-basic-style>    
+        [ionContent]="content"></app-basic-style>
+    <ion-card class="my-3">
+        <ion-card-header>
+            <ion-card-title>{{'settings' | translate}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <app-language-select [url]="url"></app-language-select>
+        </ion-card-content>
+    </ion-card>
+    <app-app-version></app-app-version>
 </ion-content>

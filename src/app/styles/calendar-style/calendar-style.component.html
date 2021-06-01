@@ -1,0 +1,77 @@
+<div [class]="'calendarHolder ' + getCss()">
+    <ion-header>
+        <ion-toolbar color="primary">
+            <ion-title>
+                {{this.getFieldContent('title')}}
+            </ion-title>
+            <ion-buttons slot="end">
+                <ion-button (click)="addEvent()">
+                    <ion-icon name="add" slot="icon-only"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-row *ngIf="getBtnSize() > 0">
+        <ion-col *ngIf="this.getFieldContent('label_month')" [size]="getBtnSize()">
+            <ion-button (click)="changeMode('month')" expand="block" fill="outline">
+                {{this.getFieldContent('label_month')}}
+            </ion-button>
+        </ion-col>
+        <ion-col *ngIf="this.getFieldContent('label_week')" [size]="getBtnSize()">
+            <ion-button (click)="changeMode('week')" expand="block" fill="outline">
+                {{this.getFieldContent('label_week')}}
+            </ion-button>
+        </ion-col>
+        <ion-col *ngIf="this.getFieldContent('label_day')" [size]="getBtnSize()">
+            <ion-button (click)="changeMode('day')" expand="block" fill="outline">
+                {{this.getFieldContent('label_day')}}
+            </ion-button>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
+        <!-- Move back one screen of the slides -->
+        <ion-col size="2">
+            <ion-button fill="clear" (click)="back()">
+                <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+            </ion-button>
+        </ion-col>
+
+        <ion-col size="8" class="ion-text-center">
+            <h2>{{ viewTitle }}</h2>
+        </ion-col>
+
+        <!-- Move forward one screen of the slides -->
+        <ion-col size="2">
+            <ion-button fill="clear" (click)="next()">
+                <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
+            </ion-button>
+        </ion-col>
+    </ion-row>
+
+    <calendar [eventSource]="eventSource" [calendarMode]="calendar.calendarMode" [currentDate]="calendar.currentDate"
+        (onCurrentDateChanged)="onCurrentDateChanged($event)" (onEventSelected)="onEventSelected($event)"
+        (onTitleChanged)="onViewTitleChanged($event)" [monthviewDisplayEventTemplate]="template"
+        (onRangeChanged)="onRangeChanged($event)" [queryMode]="'remote'" [startingDayMonth]="calendar.startingDayMonth"
+        [formatDay]="calendar.formatDay" [formatDayHeader]="calendar.formatDayHeader"
+        [formatDayTitle]="calendar.formatDayTitle" [formatWeekTitle]="calendar.formatWeekTitle"
+        [formatMonthTitle]="calendar.formatMonthTitle" [formatWeekViewDayHeader]="calendar.formatWeekViewDayHeader"
+        [formatHourColumn]="calendar.formatHourColumn" [startingDayMonth]="calendar.startingDayMonth"
+        [startingDayWeek]="calendar.startingDayWeek" [allDayLabel]="calendar.allDayLabel"
+        [noEventsLabel]="calendar.noEventsLabel" [step]="calendar.step" [timeInterval]="calendar.timeInterval"
+        [autoSelect]="calendar.autoSelect" [dir]="calendar.dir" [scrollToHour]="calendar.scrollToHour"
+        [preserveScrollPosition]="calendar.preserveScrollPosition" [lockSwipeToPrev]="calendar.lockSwipeToPrev"
+        [lockSwipes]="calendar.lockSwipes" [locale]="calendar.locale" [startHour]="calendar.startHour"
+        [endHour]="calendar.endHour" [sliderOptions]="calendar.sliderOptions">
+    </calendar>
+
+    <ng-template #template let-view="view" let-row="row" let-col="col">
+        <div [class.with-event]="view.dates[row*7+col].events.length">
+            {{view.dates[row*7+col].label}}
+            <div class="indicator-container">
+                <div class="event-indicator" *ngFor="let e of view.dates[row*7+col].events"></div>
+            </div>
+        </div>
+    </ng-template>
+</div>

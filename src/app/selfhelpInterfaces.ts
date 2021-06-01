@@ -194,7 +194,8 @@ export interface CarouselStyle extends Style {
 export interface TabStyle extends Style {
     label: StyleField,
     type: StyleField,
-    is_expanded: StyleField
+    is_expanded: StyleField,
+    icon: StyleField
 }
 
 export interface GraphStyle extends Style {
@@ -330,6 +331,7 @@ export interface ValidateStyle extends Style {
     label_gender: StyleField,
     gender_male: StyleField,
     gender_female: StyleField,
+    gender_divers: StyleField,
     label_activate: StyleField,
     pw_placeholder: StyleField,
     success: StyleField,
@@ -350,6 +352,18 @@ export interface MessageBoardStyle extends Style {
     id_section: number,
     id_reply: number,
     id_link: number
+}
+
+export interface EntryListStyle extends Style {
+    formName: StyleField,
+}
+
+export interface CalendarStyle extends Style {
+    title: StyleField,
+    label_month: StyleField,
+    label_week: StyleField,
+    label_day: StyleField,
+    config: StyleField,
 }
 
 export interface MessageBoardMessage {
@@ -413,11 +427,18 @@ export interface SelfHelpPageRequest {
     time?: any,
     base_path: string,
     title: string,
-    avatar: string
+    avatar: string,
+    external_css: string,
+    languages: Language[]
 }
 
 export interface CachedPage {
     content: Styles,
+    title: string,
+}
+
+export interface Language {
+    locale: string,
     title: string,
 }
 
@@ -434,6 +455,9 @@ export interface SelfHelp {
     base_path: string,
     current_url: string,
     current_modal_url: string,
-    credentials?: LoginValues
-    avatar: string
+    credentials?: LoginValues,
+    avatar: string,
+    external_css: string,
+    languages: Language[],
+    locale: string
 }

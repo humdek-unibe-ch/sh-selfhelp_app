@@ -1,5 +1,5 @@
 import { IonicModule } from '@ionic/angular';
-import { NgModule, NgZone } from '@angular/core';
+import { LOCALE_ID, NgModule, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationPage } from './navigation.page';
 import { Router, RouterModule, Routes } from '@angular/router';
@@ -58,6 +58,13 @@ import { ResetPasswordStyleComponent } from '../styles/reset-password-style/rese
 import { ValidateStyleComponent } from '../styles/validate-style/validate-style.component';
 import { MessageBoardStyleComponent } from '../styles/message-board-style/message-board-style.component';
 import { SubmitCommentComponent } from '../styles/message-board-style/submit-comment/submit-comment.component';
+import { EntryListComponent } from '../styles/entry-list/entry-list.component';
+import { CalendarStyleComponent } from '../styles/calendar-style/calendar-style.component';
+import { NgCalendarModule } from 'ionic2-calendar';
+import { RecordMediaStyleComponent } from '../styles/record-media-style/record-media-style.component';
+import { LanguageSelectComponent } from '../components/language-select/language-select.component';
+import { AppVersionComponent } from '../components/app-version/app-version.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
     {
@@ -93,9 +100,13 @@ const routes: Routes = [
         ReactiveFormsModule,
         SafePipeModule,
         PlotlyViaWindowModule,
-        DataTablesModule
+        DataTablesModule,
+        NgCalendarModule,
+        TranslateModule
     ],
-    exports: [RouterModule],
+    exports: [
+        RouterModule
+    ],
     declarations: [
         NavigationPage,
         MenuPage,
@@ -147,7 +158,12 @@ const routes: Routes = [
         ResetPasswordStyleComponent,
         ValidateStyleComponent,
         MessageBoardStyleComponent,
-        SubmitCommentComponent
+        SubmitCommentComponent,
+        EntryListComponent,
+        CalendarStyleComponent,
+        RecordMediaStyleComponent,
+        LanguageSelectComponent,
+        AppVersionComponent
     ]
 })
 export class NavigationPageModule {

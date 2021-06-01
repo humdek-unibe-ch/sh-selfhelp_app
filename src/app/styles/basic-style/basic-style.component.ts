@@ -14,7 +14,7 @@ export class BasicStyleComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() { 
+    ngOnInit() {
     }
 
     /**
@@ -67,6 +67,29 @@ export class BasicStyleComponent implements OnInit {
         }
     }
 
+    /**
+     * @description Return the css class names of the selected style for the mobile app. Only class names that starts with `mobile-` are concidered as class names that we will use.
+     * @author Stefan Kodzhabashev
+     * @date 2020-12-16
+     * @returns {string}
+     * @memberof BasicStyleComponent
+     */
+    public getChildCss(style: Style): string {
+        if (style && style.css) {
+            const cssClasses = style.css.split(' ');
+            let mobileCss = '';
+            cssClasses.forEach(cssClass => {
+                if (cssClass.startsWith('mobile-')) {
+                    let mobileClass = cssClass.replace('mobile-', '');
+                    mobileCss = mobileCss + (mobileCss == '' ? mobileClass : (' ' + mobileClass));
+                }
+            });
+            return mobileCss;
+        } else {
+            return "";
+        }
+    }
+
     public getFieldContent(fieldName: string): string {
         return this.style[fieldName] ? this.style[fieldName].content : '';
     }
@@ -91,7 +114,7 @@ export class BasicStyleComponent implements OnInit {
         return child.id ? parseInt(child.id.content.toString()) : null;
     }
 
-    public getIonContent(){
+    public getIonContent() {
         return this.ionContent;
     }
 

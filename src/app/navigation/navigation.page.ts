@@ -13,6 +13,7 @@ import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 export class NavigationPage {
     public selfhelp: SelfHelp;
     private init = false;
+    private external_css = 'external_css';
     @ViewChild('navigation') tabRef: IonTabs;
 
     constructor(public selfhelpService: SelfhelpService, private zone: NgZone) {
@@ -27,6 +28,19 @@ export class NavigationPage {
                     } else if (this.selfhelp.selectedMenu && !this.init) {
                         this.init = true;
                         this.selectMenu(this.selfhelp.selectedMenu);
+                    }
+                    let ext_css = document.getElementById(this.external_css);
+                    if (ext_css) {
+                        ext_css.innerHTML = '';
+                        ext_css.appendChild(document.createTextNode(selfhelp.external_css));
+                    } else {
+                        // if the external css is not added yet, create it and add it
+                        const head = document.getElementsByTagName('head')[0];
+                        const style = document.createElement('style');
+                        style.id = this.external_css;
+                        style.type = 'text/css';
+                        style.appendChild(document.createTextNode(selfhelp.external_css));
+                        head.appendChild(style);
                     }
                 }
             });
@@ -53,14 +67,7 @@ export class NavigationPage {
     }
 
     public getIcon(nav: SelfHelpNavigation): string {
-        const icons = nav.icon.split(' ');
-        let res = '';
-        icons.forEach(icon => {
-            if (icon.startsWith('mobile-')) {
-                res = icon.replace('mobile-', '');
-            }
-        });
-        return res;
+        return this.selfhelpService.getIcon(nav.icon);
     }
 
 }

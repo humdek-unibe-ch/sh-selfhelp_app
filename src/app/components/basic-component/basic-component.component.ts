@@ -11,7 +11,7 @@ export class BasicComponentComponent implements OnInit {
 
     public selfhelp: SelfHelp;
     public url: string;
-    protected selfhelpService: SelfhelpService;
+    public selfhelpService: SelfhelpService;
 
     constructor(protected injector: Injector, protected zone: NgZone) {
         this.selfhelpService = this.injector.get(SelfhelpService);

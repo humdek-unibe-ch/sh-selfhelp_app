@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -13,17 +13,24 @@ import { NotificationsService } from './notifications.service';
 import { ModalPageComponent } from '../components/modal-page/modal-page.component';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { version } from '../../../package.json';
+import { UtilsService } from './utils.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SelfhelpService {
 
+    private defaultAppLocale = 'de-CH';
     private isApp: boolean = false;
-    private local_selfhelp: LocalSelfhelp = 'selfhelp';
+    public devApp: boolean = true; // change to false when we prepare a specific build
+    private local_selfhelp: LocalSelfhelp = 'selfhelp'; 
+    private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
-    private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
+    // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
+    public API_ENDPOINT_NATIVE = 'https://tpf-test.humdek.unibe.ch/SelfHelpMobile';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
+    private API_SERVER_SELECTION = 'https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects';
     public API_LOGIN = '/login';
     private API_RESET = '/reset';
     public API_HOME = '/home';
@@ -36,12 +43,16 @@ export class SelfhelpService {
         base_path: '',
         current_url: '/',
         current_modal_url: '',
-        avatar: ''
+        avatar: '',
+        external_css: '',
+        languages: null,
+        locale: null
     });
     private initApp = false;
     private messageDuration = 10000;
     public appVersion: string;
-    public appBuildVersion: string;
+    public appBuildVersion: string;    
+    private lastToastMsg = '';
 
     constructor(
         private http: HttpClient,
@@ -55,9 +66,11 @@ export class SelfhelpService {
         private modalController: ModalController,
         private device: Device,
         private notificationsService: NotificationsService,
-        private appVersionPlugin: AppVersion
+        private appVersionPlugin: AppVersion,
+        private utils: UtilsService,
+        private translate: TranslateService
     ) {
-        this.platform.ready().then(() => {
+        this.platform.ready().then(async () => {
             if (this.platform.is('cordova')) {
                 this.isApp = true;
             } else {
@@ -67,8 +80,37 @@ export class SelfhelpService {
                 this.appVersion = res;
             });
             this.appBuildVersion = version;
-            this.getLocalSelfhelp();
-            this.getPage(this.API_HOME);
+            // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing 
+            // this.storage.remove(this.local_selfhelp); // enable for reseting the server when developing 
+            if (this.devApp) { 
+                // give an option to select a server
+                if (await this.getServer()) {
+                    this.utils.debugLog('Server is selected - load local info and get home page', null);
+                    this.loadApp();
+                } else {
+                    this.selectServer();
+                }
+            } else {
+                // load the app
+                this.loadApp();
+            }
+        });
+    }
+
+    public loadApp() {
+        this.getLocalSelfhelp();
+        this.getPage(this.API_HOME);
+    }
+
+    public getServer(): Promise<boolean> {
+        return this.storage.get(this.selfhelp_server).then((val) => {
+            if (val) {
+                this.API_ENDPOINT_NATIVE = val;
+                return true;
+            } else {
+                this.utils.debugLog('No server is selected', null);
+                return false;
+            }
         });
     }
 
@@ -108,6 +150,7 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
+        params['locale'] = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale;
         params['device_id'] = this.getDeviceID();
         if (this.getIsApp()) {
             // use native calls
@@ -119,8 +162,9 @@ export class SelfhelpService {
                     .then(
                         response => {
                             try {
-                                resolve(JSON.parse(response.data));
+                                resolve(JSON.parse(response.data));                                
                             } catch (error) {
+                                this.utils.debugLog('error', response.data);
                                 reject(error);
                             }
                         },
@@ -248,12 +292,26 @@ export class SelfhelpService {
             newSelfhelp.logged_in = page.logged_in;
             newSelfhelp.base_path = page.base_path;
             newSelfhelp.avatar = page.avatar;
+            newSelfhelp.external_css = page.external_css;
+            newSelfhelp.languages = page.languages;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (this.selfhelp.value.avatar != page.avatar) {
             // check for login change
             let newSelfhelp = this.selfhelp.value;
             newSelfhelp.avatar = page.avatar;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (this.selfhelp.value.external_css != page.external_css) {
+            // check for login change
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.external_css = page.external_css;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (this.selfhelp.value.languages != page.languages) {
+            // check for login change
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.languages = page.languages;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET)) {
@@ -438,6 +496,7 @@ export class SelfhelpService {
                 let currSelfhelp = <SelfHelp>JSON.parse(val);
                 currSelfhelp.current_modal_url = '';
                 this.setSelfhelp(currSelfhelp, false);
+                this.loadLanguage();
             }
         });
     }
@@ -446,10 +505,15 @@ export class SelfhelpService {
         this.storage.set(this.local_selfhelp, JSON.stringify(this.selfhelp.value));
     }
 
+    private saveSelfhelpServer(server: string) {
+        this.storage.set(this.selfhelp_server, server);
+    }
+
     public submitForm(keyword: string, params: any): Promise<boolean> {
         return this.execServerRequest(keyword, params)
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
+                    this.lastToastMsg = '';
                     if (!this.output_messages(res.content)) {
                         return false;
                     };
@@ -469,13 +533,19 @@ export class SelfhelpService {
             if (style) {
                 if (style.success_msgs) {
                     style.success_msgs.forEach(success_msg => {
-                        this.presentToast(success_msg, 'success');
+                        if (this.lastToastMsg != success_msg) {
+                            this.lastToastMsg = success_msg
+                            this.presentToast(success_msg, 'success');
+                        }
                     });
                 }
                 if (style.fail_msgs) {
                     res = false;
                     style.fail_msgs.forEach(fail_msg => {
-                        this.presentToast(fail_msg, 'danger');
+                        if (this.lastToastMsg != fail_msg) {
+                            this.lastToastMsg = fail_msg
+                            this.presentToast(fail_msg, 'danger');
+                        }
                     });
                 }
                 res = res && this.output_messages(style.children);
@@ -682,6 +752,86 @@ export class SelfhelpService {
             return this.getApiEndPointNative() + '/' + currSelfhelp.avatar;
         }
         return '';
+    }
+
+    async selectServer() {
+        let servers: ValueItem[] = (await this.getServers(this.API_SERVER_SELECTION)).content[0]['items']['content'];
+        let inputs = [];
+        servers.forEach(server => {
+            inputs.push(
+                {
+                    name: server.text,
+                    type: 'radio',
+                    label: server.text,
+                    value: server.value,
+                }
+            );
+        });
+        inputs[0]['checked'] = true;
+        const alert = await this.alertController.create({
+            cssClass: 'selectServer',
+            header: 'Server',
+            backdropDismiss: false,
+            inputs: inputs,
+            buttons: [
+                {
+                    text: 'Select',
+                    handler: data => {
+                        this.API_ENDPOINT_NATIVE = data;
+                        this.saveSelfhelpServer(this.API_ENDPOINT_NATIVE);
+                        this.utils.debugLog('Selected server is:', this.API_ENDPOINT_NATIVE);
+                        this.loadApp();
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
+
+    public async getServers(url: string): Promise<SelfHelpPageRequest> {
+        let params = {
+            'mobile': true,
+            'device_id': this.getDeviceID()
+        };
+        params['device_token'] = await this.notificationsService.getToken();
+        return new Promise((resolve, reject) => {
+            this.httpN.setDataSerializer('utf8');
+            this.httpN
+                .post(url, this.getNativeParams(params), { 'Content-Type': 'application/x-www-form-urlencoded' })
+                .then(
+                    response => {
+                        try {
+                            resolve(JSON.parse(response.data));
+                        } catch (error) {
+                            reject(error);
+                        }
+                    },
+                    error => {
+                        this.utils.debugLog('Cannot get servers', error)
+                        reject(error);
+                    }
+                )
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    public getIcon(value: string): string {
+        const icons = value.split(' ');
+        let res = '';
+        icons.forEach(icon => {
+            if (icon.startsWith('mobile-')) {
+                res = icon.replace('mobile-', '');
+            }
+        });
+        return res;
+    }
+
+    public loadLanguage() {
+        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale; 
+        this.translate.setDefaultLang(locale);
+        this.translate.use(locale);
     }
 
 }

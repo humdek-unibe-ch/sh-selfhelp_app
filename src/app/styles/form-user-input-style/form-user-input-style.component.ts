@@ -96,10 +96,16 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         }
     }
 
-    public submitFormAndSendEmail(value: { [key: string]: any; }): void {
+    public async submitFormAndSendEmail(value: { [key: string]: any; }) {
         let params = this.prepareParams(value);
         params['btnSubmitAndSend'] = 'send_email';
-        this.selfhelpService.submitForm(this.url, params);
+        const res = await this.selfhelpService.submitForm(this.url, params);
+        if (res && this.getFieldContent('close_modal_at_end') == '1') {
+            this.selfhelpService.closeModal();
+        }
+        if (this.getFieldContent('redirect_at_end') != '') {
+            this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+        }
     }
 
 }

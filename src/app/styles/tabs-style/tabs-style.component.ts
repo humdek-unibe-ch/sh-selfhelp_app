@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IonSlides } from '@ionic/angular';
 import { Style, TabStyle } from 'src/app/selfhelpInterfaces';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 
 @Component({
@@ -16,19 +17,19 @@ export class TabsStyleComponent extends BasicStyleComponent implements OnInit {
         autoHeight: true
     };
 
-    constructor() {
+    constructor(private selfhelpService: SelfhelpService) {
         super();
     }
 
     ngOnInit() {
         for (let i = 0; i < this.style.children.length; i++) {
             const tab = <TabStyle>this.style.children[i];
-            if (this.getChildFieldContent(tab, 'is_expanded') == '1'){
+            if (this.getChildFieldContent(tab, 'is_expanded') == '1') {
                 this.slider.slideTo(i);
                 break;
             }
         }
-     }
+    }
 
     async setSelectedTab() {
         await this.slider.slideTo(this.selectedTab);
@@ -36,6 +37,10 @@ export class TabsStyleComponent extends BasicStyleComponent implements OnInit {
 
     async tabChanged() {
         this.selectedTab = await this.slider.getActiveIndex();
+    }
+
+    getIcon(style: Style): string {
+        return this.selfhelpService.getIcon(this.getChildFieldContent(style, 'icon'));
     }
 
 }
