@@ -12,7 +12,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { NotificationsService } from './notifications.service';
 import { ModalPageComponent } from '../components/modal-page/modal-page.component';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { version } from '../../../package.json';
+import  version  from '../../../package.json';
 import { UtilsService } from './utils.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -79,7 +79,7 @@ export class SelfhelpService {
             this.appVersionPlugin.getVersionNumber().then((res) => {
                 this.appVersion = res;
             });
-            this.appBuildVersion = version;
+            this.appBuildVersion = version.version;
             // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing 
             // this.storage.remove(this.local_selfhelp); // enable for reseting the server when developing 
             if (this.devApp) { 
@@ -88,7 +88,7 @@ export class SelfhelpService {
                     this.utils.debugLog('Server is selected - load local info and get home page', null);
                     this.loadApp();
                 } else {
-                    this.selectServer();
+                    this.selectServer(); 
                 }
             } else {
                 // load the app
@@ -687,8 +687,14 @@ export class SelfhelpService {
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
         } else if (StringUtils.isUrl(url)) {
             // it is web link, open in the browser
-            const browser = this.inAppBrowser.create(url);
+            console.log('browser');  
+            if(url.match(".pdf")){
+                this.inAppBrowser.create(url, "_system");
+            }else{
+                this.inAppBrowser.create(url);
+            }            
         } else {
+            console.log('page');
             this.getPage(url);
             this.getModalPage(url);
         }
