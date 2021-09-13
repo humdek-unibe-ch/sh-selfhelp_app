@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { TabsStyleComponent } from './tabs-style.component';
@@ -7,7 +7,7 @@ describe('TabsStyleComponent', () => {
   let component: TabsStyleComponent;
   let fixture: ComponentFixture<TabsStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TabsStyleComponent ],
       imports: [IonicModule.forRoot()]

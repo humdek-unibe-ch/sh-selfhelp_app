@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { MarkdownStyleComponent } from './markdown-style.component';
@@ -7,7 +7,7 @@ describe('MarkdownStyleComponent', () => {
   let component: MarkdownStyleComponent;
   let fixture: ComponentFixture<MarkdownStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MarkdownStyleComponent ],
       imports: [IonicModule.forRoot()]

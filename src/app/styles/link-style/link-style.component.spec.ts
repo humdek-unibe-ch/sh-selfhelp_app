@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { LinkStyleComponent } from './link-style.component';
@@ -7,7 +7,7 @@ describe('LinkStyleComponent', () => {
   let component: LinkStyleComponent;
   let fixture: ComponentFixture<LinkStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LinkStyleComponent ],
       imports: [IonicModule.forRoot()]

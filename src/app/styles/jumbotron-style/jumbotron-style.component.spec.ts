@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { JumbotronStyleComponent } from './jumbotron-style.component';
@@ -7,7 +7,7 @@ describe('JumbotronStyleComponent', () => {
   let component: JumbotronStyleComponent;
   let fixture: ComponentFixture<JumbotronStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ JumbotronStyleComponent ],
       imports: [IonicModule.forRoot()]

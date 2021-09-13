@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { QuizStyleComponent } from './quiz-style.component';
@@ -7,7 +7,7 @@ describe('QuizStyleComponent', () => {
   let component: QuizStyleComponent;
   let fixture: ComponentFixture<QuizStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ QuizStyleComponent ],
       imports: [IonicModule.forRoot()]

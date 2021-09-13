@@ -33,22 +33,28 @@
                         ],
                         "styles": [
                             {
-                                "input": "src/theme/variables.scss"
+                                "input": "src/theme/variables.scss",
+                                "inject": true
                             },
                             {
-                                "input": "src/global.scss"
+                                "input": "src/global.scss",
+                                "inject": true
                             },
                             {
-                                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css"
+                                "input": "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                                "inject": true
                             },
                             {
-                                "input": "node_modules/@fortawesome/fontawesome-free/css/all.css"
+                                "input": "node_modules/@fortawesome/fontawesome-free/css/all.css",
+                                "inject": true
                             },
                             {
-                                "input": "node_modules/datatables.net-dt/css/jquery.dataTables.css"
+                                "input": "node_modules/datatables.net-dt/css/jquery.dataTables.css",
+                                "inject": true
                             },
                             {
-                                "input": "src/assets//css/iconselect.css"
+                                "input": "src/assets//css/iconselect.css",
+                                "inject": true
                             }
                         ],
                         "scripts": [
@@ -73,7 +79,6 @@
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "extractCss": true,
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,

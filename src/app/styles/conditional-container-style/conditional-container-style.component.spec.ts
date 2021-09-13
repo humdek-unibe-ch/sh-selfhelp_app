@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { ConditionalContainerStyleComponent } from './conditional-container-style.component';
@@ -7,7 +7,7 @@ describe('ConditionalContainerStyleComponent', () => {
   let component: ConditionalContainerStyleComponent;
   let fixture: ComponentFixture<ConditionalContainerStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ConditionalContainerStyleComponent ],
       imports: [IonicModule.forRoot()]

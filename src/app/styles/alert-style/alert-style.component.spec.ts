@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { AlertStyleComponent } from './alert-style.component';
@@ -7,7 +7,7 @@ describe('AlertStyleComponent', () => {
   let component: AlertStyleComponent;
   let fixture: ComponentFixture<AlertStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AlertStyleComponent ],
       imports: [IonicModule.forRoot()]

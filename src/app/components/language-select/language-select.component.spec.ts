@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { LanguageSelectComponent } from './language-select.component';
@@ -7,7 +7,7 @@ describe('LanguageSelectComponent', () => {
   let component: LanguageSelectComponent;
   let fixture: ComponentFixture<LanguageSelectComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ LanguageSelectComponent ],
       imports: [IonicModule.forRoot()]

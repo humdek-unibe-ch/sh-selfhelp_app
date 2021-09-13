@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { AppVersionComponent } from './app-version.component';
@@ -7,7 +7,7 @@ describe('AppVersionComponent', () => {
   let component: AppVersionComponent;
   let fixture: ComponentFixture<AppVersionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AppVersionComponent ],
       imports: [IonicModule.forRoot()]

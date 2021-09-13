@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { ProgressBarStyleComponent } from './progress-bar-style.component';
@@ -7,7 +7,7 @@ describe('ProgressBarStyleComponent', () => {
   let component: ProgressBarStyleComponent;
   let fixture: ComponentFixture<ProgressBarStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProgressBarStyleComponent ],
       imports: [IonicModule.forRoot()]

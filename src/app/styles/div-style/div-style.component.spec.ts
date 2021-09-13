@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { DivStyleComponent } from './div-style.component';
@@ -7,7 +7,7 @@ describe('DivStyleComponent', () => {
   let component: DivStyleComponent;
   let fixture: ComponentFixture<DivStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DivStyleComponent ],
       imports: [IonicModule.forRoot()]

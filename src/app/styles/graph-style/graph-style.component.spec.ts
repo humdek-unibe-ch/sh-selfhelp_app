@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { GraphStyleComponent } from './graph-style.component';
@@ -7,7 +7,7 @@ describe('GraphStyleComponent', () => {
   let component: GraphStyleComponent;
   let fixture: ComponentFixture<GraphStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GraphStyleComponent ],
       imports: [IonicModule.forRoot()]

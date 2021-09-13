@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { TextareaStyleComponent } from './textarea-style.component';
@@ -7,7 +7,7 @@ describe('TextareaStyleComponent', () => {
   let component: TextareaStyleComponent;
   let fixture: ComponentFixture<TextareaStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TextareaStyleComponent ],
       imports: [IonicModule.forRoot()]

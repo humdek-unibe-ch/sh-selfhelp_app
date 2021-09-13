@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { ShowUserInputStyleComponent } from './show-user-input-style.component';
@@ -7,7 +7,7 @@ describe('ShowUserInputStyleComponent', () => {
   let component: ShowUserInputStyleComponent;
   let fixture: ComponentFixture<ShowUserInputStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ShowUserInputStyleComponent ],
       imports: [IonicModule.forRoot()]

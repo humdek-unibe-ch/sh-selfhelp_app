@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { RegisterStyleComponent } from './register-style.component';
@@ -7,7 +7,7 @@ describe('RegisterStyleComponent', () => {
   let component: RegisterStyleComponent;
   let fixture: ComponentFixture<RegisterStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RegisterStyleComponent ],
       imports: [IonicModule.forRoot()]

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { MessageBoardStyleComponent } from './message-board-style.component';
@@ -7,7 +7,7 @@ describe('MessageBoardStyleComponent', () => {
   let component: MessageBoardStyleComponent;
   let fixture: ComponentFixture<MessageBoardStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MessageBoardStyleComponent ],
       imports: [IonicModule.forRoot()]

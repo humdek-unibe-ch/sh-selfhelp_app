@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { FigureStyleComponent } from './figure-style.component';
@@ -7,7 +7,7 @@ describe('FigureStyleComponent', () => {
   let component: FigureStyleComponent;
   let fixture: ComponentFixture<FigureStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FigureStyleComponent ],
       imports: [IonicModule.forRoot()]

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { ProfileStyleComponent } from './profile-style.component';
@@ -7,7 +7,7 @@ describe('ProfileStyleComponent', () => {
   let component: ProfileStyleComponent;
   let fixture: ComponentFixture<ProfileStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProfileStyleComponent ],
       imports: [IonicModule.forRoot()]

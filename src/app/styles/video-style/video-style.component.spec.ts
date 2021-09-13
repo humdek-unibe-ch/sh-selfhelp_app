@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { VideoStyleComponent } from './video-style.component';
@@ -7,7 +7,7 @@ describe('VideoStyleComponent', () => {
   let component: VideoStyleComponent;
   let fixture: ComponentFixture<VideoStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ VideoStyleComponent ],
       imports: [IonicModule.forRoot()]

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { RawTextStyleComponent } from './raw-text-style.component';
@@ -7,7 +7,7 @@ describe('RawTextStyleComponent', () => {
   let component: RawTextStyleComponent;
   let fixture: ComponentFixture<RawTextStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RawTextStyleComponent ],
       imports: [IonicModule.forRoot()]

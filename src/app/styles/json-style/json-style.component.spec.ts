@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { JsonStyleComponent } from './json-style.component';
@@ -7,7 +7,7 @@ describe('JsonStyleComponent', () => {
   let component: JsonStyleComponent;
   let fixture: ComponentFixture<JsonStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ JsonStyleComponent ],
       imports: [IonicModule.forRoot()]

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { SubMenuComponent } from './sub-menu.component';
@@ -7,7 +7,7 @@ describe('SubMenuComponent', () => {
   let component: SubMenuComponent;
   let fixture: ComponentFixture<SubMenuComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SubMenuComponent ],
       imports: [IonicModule.forRoot()]

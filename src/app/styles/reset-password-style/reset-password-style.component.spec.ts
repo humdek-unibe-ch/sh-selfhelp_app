@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { ResetPasswordStyleComponent } from './reset-password-style.component';
@@ -7,7 +7,7 @@ describe('ResetPasswordStyleComponent', () => {
   let component: ResetPasswordStyleComponent;
   let fixture: ComponentFixture<ResetPasswordStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ResetPasswordStyleComponent ],
       imports: [IonicModule.forRoot()]

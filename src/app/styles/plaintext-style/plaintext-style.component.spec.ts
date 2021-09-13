@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { PlaintextStyleComponent } from './plaintext-style.component';
@@ -7,7 +7,7 @@ describe('PlaintextStyleComponent', () => {
   let component: PlaintextStyleComponent;
   let fixture: ComponentFixture<PlaintextStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PlaintextStyleComponent ],
       imports: [IonicModule.forRoot()]

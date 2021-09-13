@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { RecordMediaStyleComponent } from './record-media-style.component';
@@ -7,7 +7,7 @@ describe('RecordMediaStyleComponent', () => {
   let component: RecordMediaStyleComponent;
   let fixture: ComponentFixture<RecordMediaStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ RecordMediaStyleComponent ],
       imports: [IonicModule.forRoot()]

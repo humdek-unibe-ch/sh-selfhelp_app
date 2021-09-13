@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { CarouselStyleComponent } from './carousel-style.component';
@@ -7,7 +7,7 @@ describe('CarouselStyleComponent', () => {
   let component: CarouselStyleComponent;
   let fixture: ComponentFixture<CarouselStyleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CarouselStyleComponent ],
       imports: [IonicModule.forRoot()]
