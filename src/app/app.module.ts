@@ -27,6 +27,7 @@ import { Media } from '@ionic-native/media/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import localeDe from '@angular/common/locales/de';
+import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
 registerLocaleData(localeDe);
 
 export function createTranslateLoader(http: HttpClient) {
@@ -44,6 +45,7 @@ export function createTranslateLoader(http: HttpClient) {
         HttpClientModule,
         IonicStorageModule.forRoot(),
         NgCalendarModule,
+        NgxIonicImageViewerModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
