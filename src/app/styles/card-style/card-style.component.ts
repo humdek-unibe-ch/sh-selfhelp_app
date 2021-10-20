@@ -9,11 +9,25 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
 })
 export class CardStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: CardStyle;
+    isCardExpanded: boolean;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        console.log(this.style);
+        this.isCardExpanded = this.getFieldContent('is_expanded') == '1';
+    }
+
+    toggleCard() {
+        if (this.getFieldContent('is_collapsible') == '1') {
+            if (this.isCardExpanded) {
+                this.isCardExpanded = false;
+            } else {
+                this.isCardExpanded = true;
+            }
+        }
+    }
 
 }
