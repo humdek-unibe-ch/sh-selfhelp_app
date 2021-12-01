@@ -30,6 +30,11 @@ export class UtilsService {
     // iOS livereload debug
     // ionic cordova run ios --buildFlag="-UseModernBuildSystem=0" --livereload
 
+    // LOCAL CODE PUSH
+    // code-push  deployment history -a CodePushCordovaDemo-android Production
+    // code-push release-cordova CodePushCordovaDemo-android android -d Production
+    // 130.92.251.32:3000 -- port not accessible outside of uni
+
     private debugMode: boolean = true;
 
     constructor() { }

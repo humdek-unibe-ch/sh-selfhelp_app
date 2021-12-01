@@ -175,7 +175,7 @@ export class SelfhelpService {
                     )
                     .catch((err) => {
                         reject(err);
-                    });
+                    }); 
             });
         } else {
             //use http requests
