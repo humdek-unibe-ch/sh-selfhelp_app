@@ -1,6 +1,6 @@
 {
   "name": "SelfHelp",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "author": "Stefan Kodzhabashev",
   "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
@@ -176,7 +176,8 @@
       "cordova-plugin-app-version": {},
       "cordova-plugin-wkwebview-file-xhr": {},
       "cordova-plugin-calendar": {
-        "CALENDAR_USAGE_DESCRIPTION": "This app uses your calendar for organizing tasks and events"
+        "CALENDAR_USAGE_DESCRIPTION": "This app uses your calendar for organizing tasks and events",
+        "CONTACTS_USAGE_DESCRIPTION": " "
       },
       "cordova-plugin-media-capture": {},
       "cordova-plugin-media": {

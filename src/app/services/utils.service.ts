@@ -40,6 +40,13 @@ export class UtilsService {
     // code-push release-cordova SelfHelp-android android -d Production --mandatory true     
     // code-push deployment clear SelfHelp-android Production
 
+    //      IOS    
+    // code-push app add SelfHelp-ios ios cordova
+    // ionic cordova prepare android // this one works better, check size
+    // code-push  deployment history -a SelfHelp-ios Production
+    // code-push release-cordova SelfHelp-ios ios -d Production --mandatory true     
+
+
     // EPERM or any blocking process -- kill java from task manager
 
     private debugMode: boolean = true;
