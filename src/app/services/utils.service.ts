@@ -31,9 +31,16 @@ export class UtilsService {
     // ionic cordova run ios --buildFlag="-UseModernBuildSystem=0" --livereload
 
     // LOCAL CODE PUSH
-    // code-push  deployment history -a CodePushCordovaDemo-android Production
-    // code-push release-cordova CodePushCordovaDemo-android android -d Production
-    // 130.92.251.32:3000 -- port not accessible outside of uni
+    // code-push login https://codepush.philhum.unibe.ch
+    // code-push app add SelfHelp-android android cordova
+    // code-push deployment list -k  SelfHelp-android // show deployment keys
+    // ionic cordova prepare android --prod --release
+    // ionic cordova prepare android // this one works better, check size
+    // code-push  deployment history -a SelfHelp-android Production
+    // code-push release-cordova SelfHelp-android android -d Production --mandatory true     
+    // code-push deployment clear SelfHelp-android Production
+
+    // EPERM or any blocking process -- kill java from task manager
 
     private debugMode: boolean = true;
 
