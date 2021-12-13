@@ -42,9 +42,10 @@ export class UtilsService {
 
     //      IOS    
     // code-push app add SelfHelp-ios ios cordova
-    // ionic cordova prepare android // this one works better, check size
+    // ionic cordova prepare ios  --prod --release // this one works better, check size
     // code-push  deployment history -a SelfHelp-ios Production
     // code-push release-cordova SelfHelp-ios ios -d Production --mandatory true     
+    // code-push deployment clear SelfHelp-ios Production
 
 
     // EPERM or any blocking process -- kill java from task manager
