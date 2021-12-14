@@ -1,6 +1,6 @@
 {
   "name": "SelfHelp",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Stefan Kodzhabashev",
   "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
@@ -187,7 +187,8 @@
       "cordova-plugin-streaming-media": {}
     },
     "platforms": [
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

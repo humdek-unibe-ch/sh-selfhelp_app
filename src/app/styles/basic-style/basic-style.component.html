@@ -14,7 +14,7 @@
     <app-entry-list *ngSwitchCase="isStyle('entryList')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-entry-list>
     <app-figure-style *ngSwitchCase="isStyle('figure')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-figure-style>
     <app-form-style *ngSwitchCase="isStyle('form')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-style>
-    <app-form-user-input-style *ngSwitchCase="isStyle('formUserInput')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-user-input-style>
+    <app-form-user-input-style *ngSwitchCase="isStyle('formUserInput') || isStyle('formUserInputLog') || isStyle('formUserInputRecord')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-user-input-style>
     <app-graph-style *ngSwitchCase="isStyle('graph')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-graph-style>
     <app-heading-style *ngSwitchCase="isStyle('heading')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-heading-style>
     <app-image-style *ngSwitchCase="isStyle('image')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-image-style>

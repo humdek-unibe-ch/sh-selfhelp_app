@@ -1,15 +1,18 @@
-# v2.0.0 (latest)
+# v2.0.1 (latest)
+ - add support for styles: `formUserInputLog` and `formUserInputRecord`
 
-### Angular 12 update
-### uodate server moved to codepush.philhum.unibe.ch
+# v2.0.0
+
+- Angular 12 update
+- update server moved to codepush.philhum.unibe.ch
 
 # v1.0.1
 
-### SelfHelp-Dev app
+- SelfHelp-Dev app
 
 
 ------------
 
-# v10.0.0
+# v1.0.0
 
-### SOAPP app
+- SOAPP app
