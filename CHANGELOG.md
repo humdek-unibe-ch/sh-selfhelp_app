@@ -1,5 +1,5 @@
 # v2.0.1 (latest)
- - add support for styles: `formUserInputLog` and `formUserInputRecord`
+ - add support for styles: `formUserInputLog`, `formUserInputRecord` and `conditionFailed`
 
 # v2.0.0
 
