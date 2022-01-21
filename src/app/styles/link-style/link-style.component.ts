@@ -18,7 +18,7 @@ export class LinkStyleComponent extends BasicStyleComponent implements OnInit {
     ngOnInit() { }
 
     public btnClick(): void {
-        const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath(), '');
+        const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath() + '/', '/');
         this.selfhelp.openUrl(url);
     }
 

@@ -1,4 +1,9 @@
-# v2.0.1 (latest)
+# v2.0.2 (latest)
+ - load `css_mobile` field for css styles
+ - loadd `linkStyle` children
+ - set `cardStyle` color type
+
+# v2.0.1
  - add support for styles: `formUserInputLog`, `formUserInputRecord` and `conditionFailed`
 
 # v2.0.0

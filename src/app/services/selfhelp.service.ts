@@ -53,6 +53,7 @@ export class SelfhelpService {
     public appVersion: string;
     public appBuildVersion: string;    
     private lastToastMsg = '';
+    private autoLoginAtempts = 0;
 
     constructor(
         private http: HttpClient,
@@ -80,8 +81,8 @@ export class SelfhelpService {
                 this.appVersion = res;
             });
             this.appBuildVersion = version.version;
-            // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing 
-            // this.storage.remove(this.local_selfhelp); // enable for reseting the server when developing 
+            // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing
+            // this.storage.remove(this.local_selfhelp); // enable for reseting the server when developing
             if (this.devApp) { 
                 // give an option to select a server
                 if (await this.getServer()) {
@@ -314,7 +315,8 @@ export class SelfhelpService {
             newSelfhelp.languages = page.languages;
             this.setSelfhelp(newSelfhelp, true);
         }
-        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET)) {
+        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET) && this.autoLoginAtempts == 0) {
+            this.autoLoginAtempts++; // try to autologin only once
             this.autoLogin();
         }
         this.setSelfhelp(currSelfhelp, true);
