@@ -144,3 +144,7 @@ ion-loading .loading-wrapper{
     --border-radius: 10px;
     padding: 25px;
 }
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border-bottom: none !important;
+}
