@@ -16,7 +16,6 @@ export class CardStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.style);
         this.isCardExpanded = this.getFieldContent('is_expanded') == '1';
     }
 
