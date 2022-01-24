@@ -51,6 +51,7 @@
     "ionic2-calendar": "^0.6.7",
     "jquery": "^3.5.1",
     "moment": "^2.29.1",
+    "ng2-pdf-viewer": "^7.0.2",
     "ngx-ionic-image-viewer": "^0.7.4",
     "plotly.js": "^1.58.4",
     "popper.js": "^1.16.1",

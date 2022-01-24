@@ -12,9 +12,10 @@ import { Device } from '@ionic-native/device/ngx';
 import { NotificationsService } from './notifications.service';
 import { ModalPageComponent } from '../components/modal-page/modal-page.component';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import  version  from '../../../package.json';
+import version from '../../../package.json';
 import { UtilsService } from './utils.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +25,7 @@ export class SelfhelpService {
     private defaultAppLocale = 'de-CH';
     private isApp: boolean = false;
     public devApp: boolean = true; // change to false when we prepare a specific build
-    private local_selfhelp: LocalSelfhelp = 'selfhelp'; 
+    private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
     // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
@@ -51,7 +52,7 @@ export class SelfhelpService {
     private initApp = false;
     private messageDuration = 10000;
     public appVersion: string;
-    public appBuildVersion: string;    
+    public appBuildVersion: string;
     private lastToastMsg = '';
     private autoLoginAtempts = 0;
 
@@ -83,13 +84,13 @@ export class SelfhelpService {
             this.appBuildVersion = version.version;
             // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing
             // this.storage.remove(this.local_selfhelp); // enable for reseting the server when developing
-            if (this.devApp) { 
+            if (this.devApp) {
                 // give an option to select a server
                 if (await this.getServer()) {
                     this.utils.debugLog('Server is selected - load local info and get home page', null);
                     this.loadApp();
                 } else {
-                    this.selectServer(); 
+                    this.selectServer();
                 }
             } else {
                 // load the app
@@ -163,7 +164,7 @@ export class SelfhelpService {
                     .then(
                         response => {
                             try {
-                                resolve(JSON.parse(response.data));                                
+                                resolve(JSON.parse(response.data));
                             } catch (error) {
                                 this.utils.debugLog('error', response.data);
                                 reject(error);
@@ -176,7 +177,7 @@ export class SelfhelpService {
                     )
                     .catch((err) => {
                         reject(err);
-                    }); 
+                    });
             });
         } else {
             //use http requests
@@ -678,6 +679,10 @@ export class SelfhelpService {
         return false;
     }
 
+    public savePdf(pdfLink: string){
+        this.inAppBrowser.create(pdfLink, "_system");
+    }
+
     public openUrl(url: string): boolean {
         if (this.selfhelp.value.urls[url]) {
 
@@ -689,12 +694,13 @@ export class SelfhelpService {
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
         } else if (StringUtils.isUrl(url)) {
             // it is web link, open in the browser
-            console.log('browser');  
-            if(url.match(".pdf")){
-                this.inAppBrowser.create(url, "_system");
-            }else{
+            console.log('browser');
+            if (url.match(".pdf")) {
+                // this.inAppBrowser.create(url, "_system");
+                this.getDocumentViewer(url);
+            } else {
                 this.inAppBrowser.create(url);
-            }            
+            }
         } else {
             console.log('page');
             this.getPage(url);
@@ -746,6 +752,20 @@ export class SelfhelpService {
     public async getModalComponent(component: any) {
         const modal = await this.modalController.create({
             component: component,
+            swipeToClose: true,
+            backdropDismiss: true,
+            showBackdrop: true,
+            cssClass: 'modal-fullscreen'
+        });
+        return await modal.present();
+    }
+
+    public async getDocumentViewer(url: string) {
+        const modal = await this.modalController.create({
+            component: PdfViewerComponent,
+            componentProps: {
+                pdfUrl: url,
+            },
             swipeToClose: true,
             backdropDismiss: true,
             showBackdrop: true,
@@ -837,7 +857,7 @@ export class SelfhelpService {
     }
 
     public loadLanguage() {
-        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale; 
+        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale;
         this.translate.setDefaultLang(locale);
         this.translate.use(locale);
     }

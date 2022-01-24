@@ -65,6 +65,8 @@ import { RecordMediaStyleComponent } from '../styles/record-media-style/record-m
 import { LanguageSelectComponent } from '../components/language-select/language-select.component';
 import { AppVersionComponent } from '../components/app-version/app-version.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 
 const routes: Routes = [
     {
@@ -102,7 +104,8 @@ const routes: Routes = [
         PlotlyViaWindowModule,
         DataTablesModule,
         NgCalendarModule,
-        TranslateModule
+        TranslateModule,
+        PdfViewerModule
     ],
     exports: [
         RouterModule
@@ -163,7 +166,8 @@ const routes: Routes = [
         CalendarStyleComponent,
         RecordMediaStyleComponent,
         LanguageSelectComponent,
-        AppVersionComponent
+        AppVersionComponent,
+        PdfViewerComponent
     ]
 })
 export class NavigationPageModule {

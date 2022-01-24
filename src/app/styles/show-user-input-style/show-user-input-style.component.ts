@@ -136,7 +136,7 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
             })
             .catch((err) => {
                 console.log(err);
-            });;
+            });
     }
 
 }
