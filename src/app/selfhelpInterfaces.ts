@@ -50,7 +50,8 @@ export interface Style {
     children: any,
     css: string,
     success_msgs?: string[],
-    fail_msgs?: string[]
+    fail_msgs?: string[],
+    css_mobile?: StyleField
 }
 
 export interface CardStyle extends Style {

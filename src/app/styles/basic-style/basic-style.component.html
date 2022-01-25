@@ -8,13 +8,13 @@
     <app-carousel-style *ngSwitchCase="isStyle('carousel')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-carousel-style>
     <app-conditional-container-style *ngSwitchCase="isStyle('conditionalContainer')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-conditional-container-style>
     <app-container-style *ngSwitchCase="isStyle('container')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-container-style>
-    <app-div-style *ngSwitchCase="isStyle('div')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-div-style>
+    <app-div-style *ngSwitchCase="isStyle('div') || isStyle('conditionFailed')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-div-style>
     <app-div-style *ngSwitchCase="isStyle('navigationNested')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-div-style>
     <app-div-style *ngSwitchCase="isStyle('entryRecord')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-div-style>
     <app-entry-list *ngSwitchCase="isStyle('entryList')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-entry-list>
     <app-figure-style *ngSwitchCase="isStyle('figure')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-figure-style>
     <app-form-style *ngSwitchCase="isStyle('form')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-style>
-    <app-form-user-input-style *ngSwitchCase="isStyle('formUserInput')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-user-input-style>
+    <app-form-user-input-style *ngSwitchCase="isStyle('formUserInput') || isStyle('formUserInputLog') || isStyle('formUserInputRecord')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-user-input-style>
     <app-graph-style *ngSwitchCase="isStyle('graph')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-graph-style>
     <app-heading-style *ngSwitchCase="isStyle('heading')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-heading-style>
     <app-image-style *ngSwitchCase="isStyle('image')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-image-style>
@@ -40,7 +40,8 @@
     <app-qualtrics-survey-style *ngSwitchCase="isStyle('qualtricsSurvey')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-qualtrics-survey-style>
     <app-validate-style *ngSwitchCase="isStyle('validate')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-validate-style>
     <app-video-style *ngSwitchCase="isStyle('video')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-video-style>
-    <div *ngSwitchDefault><code>{{getStyle().style_name}}</code> is not implemented</div>
+    <ng-container *ngSwitchCase="getStyle() == null"></ng-container>
+    <div *ngSwitchDefault><span *ngIf="getStyle().style_name"><code>{{getStyle().style_name}}Style</code> is not implemented</span></div>
 </ng-container>
 
 
