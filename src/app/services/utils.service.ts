@@ -10,6 +10,7 @@ export class UtilsService {
 
     // Build
     // ionic cordova build android --prod --release
+    // ionic cordova build android --prod --release -- -- --packageType=bundle
 
     // appcenter codepush release-cordova -a TPF-UniBe/SelfHelp-ios -d Production
 
@@ -50,7 +51,13 @@ export class UtilsService {
 
     // EPERM or any blocking process -- kill java from task manager
 
-    private debugMode: boolean = true;
+    // CODE PUSH SOAPP PLUS ANDROID
+    // code-push  deployment history -a Soapp-Plus-android Production
+    // ionic cordova prepare android --prod --release
+    // code-push release-cordova Soapp-Plus-android android -d Production --mandatory true  
+    // code-push deployment clear Soapp-Plus-android Production
+
+    private debugMode: boolean = false;
 
     constructor() { }
 

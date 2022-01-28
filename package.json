@@ -1,6 +1,6 @@
 {
-  "name": "SelfHelp",
-  "version": "2.0.2",
+  "name": "soapp",
+  "version": "2.0.3",
   "author": "Stefan Kodzhabashev",
   "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
@@ -159,7 +159,7 @@
       "ionic-plugin-deeplinks": {
         "URL_SCHEME": "soapp",
         "DEEPLINK_SCHEME": "https",
-        "DEEPLINK_HOST": "becccs.psy.unibe.ch",
+        "DEEPLINK_HOST": "soapp.psy.unibe.ch",
         "ANDROID_PATH_PREFIX": "/",
         "ANDROID_2_PATH_PREFIX": "/",
         "ANDROID_3_PATH_PREFIX": "/",
