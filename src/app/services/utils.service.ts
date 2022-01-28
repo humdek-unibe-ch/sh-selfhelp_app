@@ -57,6 +57,12 @@ export class UtilsService {
     // code-push release-cordova Soapp-Plus-android android -d Production --mandatory true  
     // code-push deployment clear Soapp-Plus-android Production
 
+     // CODE PUSH SOAPP PLUS IOS
+    // code-push  deployment history -a Soapp-Plus-ios Production
+    // ionic cordova prepare ios --prod --release
+    // code-push release-cordova Soapp-Plus-ios ios -d Production --mandatory true  
+    // code-push deployment clear Soapp-Plus-ios Production
+
     private debugMode: boolean = false;
 
     constructor() { }
