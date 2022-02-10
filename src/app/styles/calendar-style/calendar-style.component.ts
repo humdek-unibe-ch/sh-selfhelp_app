@@ -111,10 +111,8 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             // });
             let start = event.startTime;
             let end = event.endTime;
-            console.log(this.nativeCal);
             this.nativeCal.listEventsInRange(start, end).then(data => {
                 this.events = data;
-                console.log(this.events);
                 this.loadEventsInCalendar(data);
             });
         } else if (this.plt.is('android')) {

@@ -1,4 +1,9 @@
-# v2.0.2 (latest)
+# v2.0.3 (latest)
+ - add style `refContainer`
+ - input date now save the value in format `YYYY-MM-DD`
+ - all formFields are properly loaded if they are in a holder in the form
+
+# v2.0.2
  - load `css_mobile` field for css styles
  - loadd `linkStyle` children
  - set `cardStyle` color type

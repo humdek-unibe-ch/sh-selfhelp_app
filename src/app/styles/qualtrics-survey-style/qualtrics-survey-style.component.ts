@@ -24,14 +24,12 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     }
 
     ngAfterViewInit() {
-        console.log('after view');
         this.initIFrame();
     }
 
     initIFrame() {
         if (this.style.show_survey && !this.isContainer() && !this.init) {
             this.init = true;
-            console.log('init', this.getQualtricsUrl());
             const components = iframeResizer({
                 log: false,
                 messageCallback: (data: IFrameMessageData) => (this.iframeMessage(data)),

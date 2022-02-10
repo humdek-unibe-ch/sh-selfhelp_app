@@ -30,11 +30,9 @@ export class RecordMediaStyleComponent extends BasicStyleComponent implements On
             let path = this.file.dataDirectory;
             this.file.checkDir(path, MEDIA_FOLDER_NAME).then(
                 (res) => {
-                    console.log('load', path);
                     this.loadFiles();
                 },
                 err => {
-                    console.log('create');
                     this.file.createDir(path, MEDIA_FOLDER_NAME, false);
                 }
             );

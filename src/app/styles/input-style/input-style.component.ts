@@ -19,4 +19,8 @@ export class InputStyleComponent extends BasicStyleComponent implements OnInit {
 
     ngOnInit() { }
 
+    formatDate(controlName){
+        this.parentForm.controls[controlName].setValue(this.parentForm.controls[controlName].value.split('T')[0]);
+    }
+
 }

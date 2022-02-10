@@ -1,5 +1,5 @@
 <form [formGroup]="form" [class]="getCss()">
-    <div *ngFor="let child of style.children" class="mb-3">
+    <div *ngFor="let child of inputStyles" class="mb-3">
         <app-input-style *ngIf="child.style_name == 'input'" [style]="child" [parentForm]="form"></app-input-style>
         <app-radio-style *ngIf="child.style_name == 'radio'" [style]="child" [parentForm]="form"></app-radio-style>
         <app-select-style *ngIf="child.style_name == 'select'" [style]="child" [parentForm]="form"></app-select-style>

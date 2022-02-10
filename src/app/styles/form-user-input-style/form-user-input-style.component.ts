@@ -12,6 +12,8 @@ import { BasicStyleComponent } from './../basic-style/basic-style.component';
 export class FormUserInputStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: FormUserInputStyle;
     public form: FormGroup;
+    private formFields = {};
+    inputStyles = [];
 
     constructor(protected formBuilder: FormBuilder, protected selfhelpService: SelfhelpService) {
         super();
@@ -21,10 +23,12 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         this.initForm();
     }
 
-    protected initForm(): void {
-        let formFields = {};
-        this.style.children.forEach(formField => {
-            if (this.isFormField(formField)) {
+    private collectFormFields(style: any) {
+        style.children.forEach(formField => {
+            if (formField['children'] && formField['children'].length > 0) {
+                this.collectFormFields(formField);
+            }
+            else if (this.isFormField(formField)) {
                 const input = this.getFormField(formField);
                 let value: any = input.value ? input.value.content : ''; // if there is a default value we assign it
                 if (this.getFieldContent('is_log') != '1' && input.last_value) {
@@ -40,16 +44,23 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                     value = { value: value, disabled: true };
                 }
                 const req = input.is_required.content == '1' ? Validators.required : null;
-                formFields[input.name.content.toString()] = new FormControl(value, req);
+                this.inputStyles.push(formField);
+                this.formFields[input.name.content.toString()] = new FormControl(value, req);
             }
         });
-        this.form = this.formBuilder.group(formFields);
+    }
+
+    protected initForm(): void {
+        this.formFields = {};
+        this.inputStyles = [];
+        this.collectFormFields(this.style);
+        this.form = this.formBuilder.group(this.formFields);
     }
 
     protected prepareParams(value: { [key: string]: any; }): any {
         let params = {};
         params['__form_name'] = this.getFieldContent('name');
-        this.style.children.forEach(formField => {
+        this.inputStyles.forEach(formField => {
             if (this.isFormField(formField)) {
                 const input = this.getFormField(formField);
                 let fieldValue = value[input.name.content.toString()];
