@@ -1,4 +1,7 @@
-# v2.0.3 (latest)
+# v2.0.4 (latest)
+ - set the defaul ionic theme to `light`;
+
+# v2.0.3
  - add style `refContainer`
  - input date now save the value in format `YYYY-MM-DD`
  - all formFields are properly loaded if they are in a holder in the form
