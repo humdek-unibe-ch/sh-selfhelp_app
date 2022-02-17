@@ -38,9 +38,9 @@ export class RegisterStyleComponen extends BasicStyleComponent implements OnInit
     public register(value: RegistrationValues): void {
         this.selfhelpService.register(value)
             .then((res: boolean) => {
-                if (res) {
-                    // this.selfhelpService.closeModal();
+                if (res) {                    
                     this.reg_success = true;
+                    this.selfhelpService.closeModal();
                 }
             })
             .catch((err) => {
