@@ -1,5 +1,5 @@
 # v2.0.4 (latest)
- - set the defaul ionic theme to `light`;
+ - set the default ionic theme to `light`;
 
 # v2.0.3
  - add style `refContainer`
@@ -8,9 +8,9 @@
 
 # v2.0.2
  - load `css_mobile` field for css styles
- - loadd `linkStyle` children
+ - load `linkStyle` children
  - set `cardStyle` color type
- - add `pdfViewer` which openspdf files if they are detected in the url. Note: `<IfModule mod_headers.c>
+ - add `pdfViewer` which open pdf files if they are detected in the url. Note: `<IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
 </IfModule>` is needed in a `.htaccess` file in folder `assets`;
 
