@@ -1,4 +1,7 @@
-# v2.0.4 (latest)
+# v2.0.5 (latest)
+ - close modal on successful registration for better use experience
+
+# v2.0.4
  - set the default ionic theme to `light`;
 
 # v2.0.3
