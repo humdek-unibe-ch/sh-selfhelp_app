@@ -6,7 +6,16 @@
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') == 'date'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
-    <ion-datetime [formControlName]="getFieldContent('name')" [displayFormat]="style.format" (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
+    <ion-datetime [formControlName]="getFieldContent('name')"
+        [displayFormat]="getFieldContent('format') ? getFieldContent('format') : 'DD-MM-YYYY'"
+        (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
+</ion-item>
+
+<ion-item *ngIf="parentForm && getFieldContent('type_input') == 'datetime'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
+    <ion-datetime [formControlName]="getFieldContent('name')"
+        [displayFormat]="getFieldContent('format') ? getFieldContent('format') : 'DD-MM-YYYY HH:mm'"
+        (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>
 </ion-item>
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') == 'email'" [formGroup]="parentForm" [class]="getCss()">

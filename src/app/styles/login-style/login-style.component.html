@@ -5,11 +5,11 @@
     <ion-card-content>
         <form [formGroup]="form" [class]="getCss()" (keyup.enter)="login(form.value)">
             <ion-item>
-                <ion-input type="text" formControlName="email" [placeholder]="getFieldContent('label_user')">
+                <ion-input type="email" inputmode="email" autocomplete="email" formControlName="email" [placeholder]="getFieldContent('label_user')">
                 </ion-input>
             </ion-item>
             <ion-item>
-                <ion-input type="password" formControlName="password" [placeholder]="getFieldContent('label_pw')">
+                <ion-input type="password" autocomplete="current-password" formControlName="password" [placeholder]="getFieldContent('label_pw')">
                 </ion-input>
             </ion-item>
             <ion-button [color]="getFieldContent('type')" size="small" [disabled]="!form.valid"

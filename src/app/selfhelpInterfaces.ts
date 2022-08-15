@@ -430,7 +430,8 @@ export interface SelfHelpPageRequest {
     title: string,
     avatar: string,
     external_css: string,
-    languages: Language[]
+    languages: Language[],
+    user_language: Number
 }
 
 export interface CachedPage {
@@ -439,6 +440,7 @@ export interface CachedPage {
 }
 
 export interface Language {
+    id: Number,
     locale: string,
     title: string,
 }
@@ -460,5 +462,7 @@ export interface SelfHelp {
     avatar: string,
     external_css: string,
     languages: Language[],
-    locale: string
+    locale: string,
+    default_language_id: Number,
+    user_language: Number
 }

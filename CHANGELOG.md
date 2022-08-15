@@ -1,4 +1,8 @@
-# v2.0.5 (latest)
+# v2.0.6 (latest)
+ - adjust language load - requires SelfHelp v5.1.2+
+ - add `datetime` support for style `input`
+
+# v2.0.5
  - close modal on successful registration for better use experience
 
 # v2.0.4

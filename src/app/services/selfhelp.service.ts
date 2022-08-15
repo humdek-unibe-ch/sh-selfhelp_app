@@ -24,7 +24,7 @@ export class SelfhelpService {
 
     private defaultAppLocale = 'de-CH';
     private isApp: boolean = false;
-    public devApp: boolean = false; // change to false when we prepare a specific build
+    public devApp: boolean = true; // change to false when we prepare a specific build
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
@@ -47,7 +47,9 @@ export class SelfhelpService {
         avatar: '',
         external_css: '',
         languages: null,
-        locale: null
+        locale: null,
+        default_language_id: null,
+        user_language: null
     });
     private initApp = false;
     private messageDuration = 10000;
@@ -82,8 +84,8 @@ export class SelfhelpService {
                 this.appVersion = res;
             });
             this.appBuildVersion = version.version;
-            // this.storage.remove(this.selfhelp_server); // enable for reseting the server when developing
-            // this.storage.remove(this.local_selfhelp); // enable for reseting the server when developing
+            // this.storage.remove(this.selfhelp_server); // enable for resetting the server when developing
+            // this.storage.remove(this.local_selfhelp); // enable for resetting the server when developing 
             if (this.devApp) {
                 // give an option to select a server
                 if (await this.getServer()) {
@@ -152,7 +154,7 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
-        params['locale'] = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale;
+        params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.selfhelp.value.default_language_id;
         params['device_id'] = this.getDeviceID();
         if (this.getIsApp()) {
             // use native calls
@@ -252,7 +254,7 @@ export class SelfhelpService {
             if (this.getUrl(nav) == url) {
                 urlFound = true;
                 if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
-                    // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
+                    // if url is not in menu and it is not in external url we assign it. If it is in the urls but changed update too
                     currSelfhelp.urls[url] = {
                         content: page.content,
                         title: page.title
@@ -266,7 +268,7 @@ export class SelfhelpService {
                     if (this.getUrl(subNav) == url) {
                         urlFound = true;
                         if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
-                            // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
+                            // if url is not in menu and it is not in external url we assign it. If it is in the urls but changed update too
                             currSelfhelp.urls[url] = {
                                 content: page.content,
                                 title: page.title
@@ -314,6 +316,12 @@ export class SelfhelpService {
             // check for login change
             let newSelfhelp = this.selfhelp.value;
             newSelfhelp.languages = page.languages;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (this.selfhelp.value.user_language != page.user_language) {
+            // check for login change
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.user_language = page.user_language;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET) && this.autoLoginAtempts == 0) {
