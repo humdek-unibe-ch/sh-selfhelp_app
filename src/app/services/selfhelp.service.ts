@@ -854,6 +854,9 @@ export class SelfhelpService {
     }
 
     public getIcon(value: string): string {
+        if (!value){
+            return '';
+        }
         const icons = value.split(' ');
         let res = '';
         icons.forEach(icon => {

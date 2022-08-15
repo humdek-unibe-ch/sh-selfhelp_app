@@ -1,4 +1,7 @@
-# v2.0.6 (latest)
+# v2.0.7 (latest)
+ - fix icon load
+
+# v2.0.6
  - adjust language load - requires SelfHelp v5.1.2+
  - add `datetime` support for style `input`
 
