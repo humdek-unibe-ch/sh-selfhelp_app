@@ -156,9 +156,9 @@
       "cordova-plugin-appcenter-push": {},
       "cordova-plugin-code-push": {},
       "ionic-plugin-deeplinks": {
-        "URL_SCHEME": "soapp",
+        "URL_SCHEME": "selfact",
         "DEEPLINK_SCHEME": "https",
-        "DEEPLINK_HOST": "soapp.psy.unibe.ch",
+        "DEEPLINK_HOST": "selfact.psy.unibe.ch",
         "ANDROID_PATH_PREFIX": "/",
         "ANDROID_2_PATH_PREFIX": "/",
         "ANDROID_3_PATH_PREFIX": "/",
