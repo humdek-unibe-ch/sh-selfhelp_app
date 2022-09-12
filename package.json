@@ -45,6 +45,7 @@
     "angular-plotly.js": "^3.0.0",
     "appcenter-cli": "^2.9.0",
     "bootstrap": "^4.6.0",
+    "cordova-android": "9.1.0",
     "datatables.net": "^1.10.23",
     "datatables.net-dt": "^1.10.23",
     "iframe-resizer": "^4.3.0",
@@ -187,7 +188,8 @@
       "cordova-plugin-streaming-media": {}
     },
     "platforms": [
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
