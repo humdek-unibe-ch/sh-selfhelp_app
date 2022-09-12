@@ -10,7 +10,8 @@ export class UtilsService {
 
     // Build
     // ionic cordova build android --prod --release
-    // ionic cordova build android --prod --release -- -- --packageType=bundle
+    // ionic cordova build android --prod --release -- -- --packageType=bundle 
+    // cd .\platforms\android\ then ./gradlew bundle // this will generate .AAB bundle then sign it
 
     // appcenter codepush release-cordova -a TPF-UniBe/SelfHelp-ios -d Production
 
