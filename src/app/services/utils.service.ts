@@ -39,7 +39,7 @@ export class UtilsService {
     // ionic cordova prepare android --prod --release
     // ionic cordova prepare android // this one works better, check size
     // code-push  deployment history -a SelfHelp-android Production
-    // code-push release-cordova SelfHelp-android android -d Production --mandatory true     
+    // code-push release-cordova SelfHelp-android android -d Production --mandatory true --des "v2.0.7"     
     // code-push deployment clear SelfHelp-android Production
 
     //      IOS    
