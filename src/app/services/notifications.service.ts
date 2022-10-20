@@ -60,7 +60,7 @@ export class NotificationsService {
         if (message && message != " ") {
             const toast = await this.toastController.create({
                 message,
-                duration: 10000,
+                duration: 30000,
                 position: 'top',
                 buttons: [
                 {
