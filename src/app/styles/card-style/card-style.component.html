@@ -2,7 +2,7 @@
     <ion-card-header [color]="getFieldContent('type')" (click)="toggleCard()">
         <!-- <ion-card-title>{{getFieldContent('title')}}</ion-card-title> -->
         <ion-item [color]="getFieldContent('type')" lines="none">
-            <ion-label>{{getFieldContent('title')}}</ion-label>
+            <ion-label [innerHTML]="getFieldContent('title')"></ion-label>
             <ion-icon *ngIf="getFieldContent('is_collapsible') == '1'" slot="end"
                 [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'">
             </ion-icon>

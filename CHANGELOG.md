@@ -1,4 +1,7 @@
-# v2.0.7 (latest)
+# v2.0.8 (latest)
+ -  fix markdown text in `card` title
+
+# v2.0.7
  - fix icon load
  - fix `cordova-plugin-zip` - forked [from](https://github.com/bikubi/cordova-plugin-zip/)
 
