@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -57,6 +57,7 @@ export class SelfhelpService {
     public appBuildVersion: string;
     private lastToastMsg = '';
     private autoLoginAtempts = 0;
+    public skin_app: SkinApp = 'ios';
 
     constructor(
         private http: HttpClient,
@@ -80,12 +81,14 @@ export class SelfhelpService {
             } else {
                 this.isApp = false;
             }
-            this.appVersionPlugin.getVersionNumber().then((res) => {
-                this.appVersion = res;
-            });
+            if (this.isApp) {
+                this.appVersionPlugin.getVersionNumber().then((res) => {
+                    this.appVersion = res;
+                });
+            }
             this.appBuildVersion = version.version;
             // this.storage.remove(this.selfhelp_server); // enable for resetting the server when developing
-            // this.storage.remove(this.local_selfhelp); // enable for resetting the server when developing 
+            // this.storage.remove(this.local_selfhelp); // enable for resetting the server when developing   
             if (this.devApp) {
                 // give an option to select a server
                 if (await this.getServer()) {
@@ -155,7 +158,7 @@ export class SelfhelpService {
             params['mobile'] = true;
         }
         params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.selfhelp.value.default_language_id;
-        params['device_id'] = this.getDeviceID();
+        params['device_id'] = this.isApp ? this.getDeviceID() : "WEB";
         if (this.getIsApp()) {
             // use native calls
             params['device_token'] = await this.notificationsService.getToken();
@@ -186,10 +189,12 @@ export class SelfhelpService {
             const headers = new HttpHeaders({
                 'Content-Type': 'application/x-www-form-urlencoded'
             });
+            params['mobile_web'] = true;
             return new Promise((resolve, reject) => {
-                this.http.post(this.API_ENDPOINT_WEB + keyword, this.getPostParams(params), { headers, withCredentials: true })
+                this.http.post(this.API_ENDPOINT_NATIVE + keyword, this.getPostParams(params), { headers, withCredentials: true })
                     .toPromise()
                     .then(res => {
+                        console.log(res);
                         resolve(res as SelfHelpPageRequest);
                     })
                     .catch((err) => {
@@ -687,7 +692,7 @@ export class SelfhelpService {
         return false;
     }
 
-    public savePdf(pdfLink: string){
+    public savePdf(pdfLink: string) {
         this.inAppBrowser.create(pdfLink, "_system");
     }
 
@@ -754,7 +759,7 @@ export class SelfhelpService {
     }
 
     public getDeviceID(): string {
-        return this.device.uuid;
+        return this.isApp ? this.device.uuid : "WEB";
     }
 
     public async getModalComponent(component: any) {
@@ -829,32 +834,58 @@ export class SelfhelpService {
             'mobile': true,
             'device_id': this.getDeviceID()
         };
-        params['device_token'] = await this.notificationsService.getToken();
-        return new Promise((resolve, reject) => {
-            this.httpN.setDataSerializer('utf8');
-            this.httpN
-                .post(url, this.getNativeParams(params), { 'Content-Type': 'application/x-www-form-urlencoded' })
-                .then(
-                    response => {
+        params['device_token'] = this.isApp ? await this.notificationsService.getToken() : "WEB_TOKEN";
+        if (this.isApp) {
+            return new Promise((resolve, reject) => {
+                this.httpN.setDataSerializer('utf8');
+                this.httpN
+                    .post(url, this.getNativeParams(params), { 'Content-Type': 'application/x-www-form-urlencoded' })
+                    .then(
+                        response => {
+                            try {
+                                resolve(JSON.parse(response.data));
+                            } catch (error) {
+                                reject(error);
+                            }
+                        },
+                        error => {
+                            this.utils.debugLog('Cannot get servers', error)
+                            reject(error);
+                        }
+                    )
+                    .catch((err) => {
+                        reject(err);
+                    });
+            });
+        } else {
+            //use http requests
+            const headers = new HttpHeaders({
+                'Content-Type': 'application/x-www-form-urlencoded'
+            });
+            return new Promise((resolve, reject) => {
+                this.http.post(url, this.getPostParams(params))
+                    .toPromise()
+                    .then((response: any) => {
                         try {
-                            resolve(JSON.parse(response.data));
+                            resolve(response);
                         } catch (error) {
                             reject(error);
                         }
                     },
-                    error => {
-                        this.utils.debugLog('Cannot get servers', error)
-                        reject(error);
-                    }
-                )
-                .catch((err) => {
-                    reject(err);
-                });
-        });
+                        error => {
+                            this.utils.debugLog('Cannot get servers', error)
+                            reject(error);
+                        })
+                    .catch((err) => {
+                        console.log(err);
+                        reject(err);
+                    });
+            });
+        }
     }
 
     public getIcon(value: string): string {
-        if (!value){
+        if (!value) {
             return '';
         }
         const icons = value.split(' ');

@@ -1,4 +1,5 @@
 export type LocalSelfhelp = 'selfhelp';
+export type SkinApp = 'ios' | 'md';
 
 export interface TabMenuItem {
     keyword: string;
@@ -464,5 +465,5 @@ export interface SelfHelp {
     languages: Language[],
     locale: string,
     default_language_id: Number,
-    user_language: Number
+    user_language: Number,
 }
