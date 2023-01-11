@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { Component} from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -6,7 +6,6 @@ import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
 import { CodePush } from '@ionic-native/code-push/ngx';
-import { MobilePreviewComponent } from './mobile-preview/mobile-preview.component';
 declare const IonicDeeplink: any;
 
 @Component({
@@ -14,10 +13,7 @@ declare const IonicDeeplink: any;
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
-    @ViewChild('responsiveWindow', { static: false }) ResponsiveWindow: ElementRef;
-    doc: any;
-    compRef: ComponentRef<MobilePreviewComponent> | undefined;
+export class AppComponent {
 
     protected skinIOS: boolean = true;
 
@@ -29,10 +25,7 @@ export class AppComponent implements AfterViewInit {
         private androidFullScreen: AndroidFullScreen,
         private notificationsService: NotificationsService,
         protected selfhelpSerivce: SelfhelpService,
-        private codePush: CodePush,
-        private vcRef: ViewContainerRef,
-        private resolver: ComponentFactoryResolver,
-        private VcRef: ViewContainerRef
+        private codePush: CodePush
     ) {
         if (window.localStorage.getItem('skin_app') && window.localStorage.getItem('skin_app') == 'md') {
             this.skinIOS = false;
@@ -94,39 +87,4 @@ export class AppComponent implements AfterViewInit {
     public getAppSkin(): string {
         return this.selfhelpSerivce.skin_app;
     }
-
-    ngAfterViewInit(): void {
-        // this.createAndEmbedComponent();
-        // this.doc = this.ResponsiveWindow?.nativeElement.contentDocument || this.ResponsiveWindow?.nativeElement.CompFrame.contentWindow;
-        // this.createComponent();
-    }
-
-    private createComponent(): void {
-        const compFactory = this.resolver.resolveComponentFactory(MobilePreviewComponent);
-        this.compRef = this.VcRef.createComponent(compFactory);
-        this.compRef.location.nativeElement.id = 'propertyDisplay';
-        this.doc.body.appendChild(this.compRef.location.nativeElement);
-    }
-
-    private createAndEmbedComponent(): void {
-
-        const componentFactory = this.resolver.resolveComponentFactory(MobilePreviewComponent);
-        const componentInstance: ComponentRef<MobilePreviewComponent> = this.vcRef.createComponent(componentFactory);
-        const frame = this.ResponsiveWindow.nativeElement.contentDocument ||
-            this.ResponsiveWindow.nativeElement.contentWindow;
-
-        const iframeStyles = document.createElement('link');
-
-        iframeStyles.rel = 'stylesheet';
-        iframeStyles.type = 'text/css';
-        iframeStyles.href = 'nested_styles.css';
-
-        console.log(iframeStyles);
-
-        frame.head.appendChild(iframeStyles);
-        console.log(componentInstance.location.nativeElement);
-        frame.body.appendChild(componentInstance.location.nativeElement);
-
-    }
-
 }

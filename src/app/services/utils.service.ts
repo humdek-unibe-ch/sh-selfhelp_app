@@ -64,7 +64,8 @@ export class UtilsService {
     // code-push release-cordova Soapp-Plus-ios ios -d Production --mandatory true  
     // code-push deployment clear Soapp-Plus-ios Production
 
-    
+    // Local test with ip and ssl
+    // ionic serve --external --ssl
 
     private debugMode: boolean = false;
 

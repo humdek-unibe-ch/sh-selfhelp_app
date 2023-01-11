@@ -3,10 +3,10 @@
 </ion-app>
 <div *ngIf="!this.selfhelpSerivce.getIsApp()" class="w-100 h-100 d-flex justify-content-center align-items-center">
     <div class="d-flex flex-column">
-        <div class="d-flex  justify-content-center">
-            <ion-item lines="none" class="device-width">
+        <div class="d-flex justify-content-center">
+            <ion-item lines="none" class="md device-width">
                 <ion-label class="text-right">Android</ion-label>
-                <ion-toggle [checked]="skinIOS" (ionChange)="skinChanged($event)"></ion-toggle>
+                <ion-toggle mode="md" [checked]="skinIOS" (ionChange)="skinChanged($event)"></ion-toggle>
                 <ion-label>iOS</ion-label>
             </ion-item>
         </div>
@@ -19,7 +19,3 @@
         </div>
     </div>
 </div> 
-<!-- <app-mobile-preview></app-mobile-preview> -->
-<!-- <iframe #responsiveWindow class="responsiveWindow"></iframe> -->
-<!-- <embed #responsiveWindow class="responsiveWindow"> -->
-<!-- <iframe width="500px" height="500px" src="https://46.126.153.11:8101/home" ></iframe> -->
