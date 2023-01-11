@@ -66,8 +66,10 @@ export class UtilsService {
 
     // Local test with ip and ssl
     // ionic serve --external --ssl
+    // Build SelfHelpMobilePreview
+    // ng build --base-href "/SelfHelpMobilePreview/" --deploy-url "/SelfHelpMobilePreview/"
 
-    private debugMode: boolean = false;
+    private debugMode: boolean = true;
 
     constructor() { }
 
