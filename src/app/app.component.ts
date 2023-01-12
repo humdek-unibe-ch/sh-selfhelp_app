@@ -85,6 +85,10 @@ export class AppComponent {
     }
 
     public getAppSkin(): string {
-        return this.selfhelpSerivce.skin_app;
+        let skin_app = window.localStorage.getItem('skin_app');
+        if(!skin_app){
+            skin_app = 'ios';
+        }
+        return skin_app;
     }
 }

@@ -1,4 +1,7 @@
-# v2.0.8 (latest)
+# v2.0.9 (latest)
+ - add preview in the browser
+
+# v2.0.8
  -  fix markdown text in `card` title
 
 # v2.0.7
