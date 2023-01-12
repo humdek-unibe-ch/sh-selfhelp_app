@@ -904,4 +904,10 @@ export class SelfhelpService {
         this.translate.use(locale);
     }
 
+    public resetLocalData() {
+        this.storage.remove(this.selfhelp_server); 
+        this.storage.remove(this.local_selfhelp); 
+        window.localStorage.removeItem('skin_app');
+    }
+
 }

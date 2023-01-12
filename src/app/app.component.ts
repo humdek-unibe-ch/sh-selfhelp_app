@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -86,9 +86,21 @@ export class AppComponent {
 
     public getAppSkin(): string {
         let skin_app = window.localStorage.getItem('skin_app');
-        if(!skin_app){
+        if (!skin_app) {
             skin_app = 'ios';
         }
         return skin_app;
+    }
+
+    public resetPreview(): void {
+        this.selfhelpSerivce.presentAlertConfirm({
+            msg: 'Do you want to reset the selected SelfHelp instance?',
+            header: "Reset",
+            confirmLabel: "Reset",
+            callback: () => {
+                this.selfhelpSerivce.resetLocalData();
+                window.location.reload();
+            }
+        });        
     }
 }

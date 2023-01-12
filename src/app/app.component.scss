@@ -199,12 +199,23 @@ docs-demo {
 
 
 
-.device-width{
+.device-width {
   width: $device-width;
 }
 
-.responsiveWindow{
+.responsiveWindow {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.reset-btn {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  z-index: 1000;
+  color: red;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
