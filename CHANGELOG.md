@@ -1,3 +1,6 @@
+# v2.0.10 (unpublished)
+ - adjust `entryList` load, not table but just a normal style. Better for customization
+
 # v2.0.9 (latest)
  - add preview in the browser
 
