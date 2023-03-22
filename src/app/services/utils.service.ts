@@ -69,7 +69,7 @@ export class UtilsService {
     // Build SelfHelpMobilePreview
     // ng build --base-href "/SelfHelpMobilePreview/" --deploy-url "/SelfHelpMobilePreview/"
 
-    private debugMode: boolean = true;
+    private debugMode: boolean = false;
 
     constructor() { }
 

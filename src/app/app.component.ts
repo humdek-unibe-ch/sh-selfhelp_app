@@ -15,7 +15,7 @@ declare const IonicDeeplink: any;
 })
 export class AppComponent {
 
-    protected skinIOS: boolean = true;
+    public skinIOS: boolean = true;
 
     constructor(
         private platform: Platform,
@@ -24,7 +24,7 @@ export class AppComponent {
         private loadingCtrl: LoadingController,
         private androidFullScreen: AndroidFullScreen,
         private notificationsService: NotificationsService,
-        protected selfhelpSerivce: SelfhelpService,
+        public selfhelpSerivce: SelfhelpService,
         private codePush: CodePush
     ) {
         if (window.localStorage.getItem('skin_app') && window.localStorage.getItem('skin_app') == 'md') {

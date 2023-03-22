@@ -149,9 +149,9 @@
       "cordova-plugin-androidx-adapter": {},
       "cordova-plugin-code-push": {},
       "ionic-plugin-deeplinks": {
-        "URL_SCHEME": "selfact",
+        "URL_SCHEME": "habitwalk",
         "DEEPLINK_SCHEME": "https",
-        "DEEPLINK_HOST": "selfact.psy.unibe.ch",
+        "DEEPLINK_HOST": "habitwalk.psy.unibe.ch",
         "ANDROID_PATH_PREFIX": "/",
         "ANDROID_2_PATH_PREFIX": "/",
         "ANDROID_3_PATH_PREFIX": "/",
