@@ -181,8 +181,8 @@
       "cordova-plugin-zip": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
