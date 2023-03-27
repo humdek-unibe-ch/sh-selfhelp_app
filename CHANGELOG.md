@@ -1,10 +1,10 @@
-# v2.0.11 (unpublished)
+# v2.0.11
  - load extra fields for validation style
 
 # v2.0.10
  - adjust `entryList` load, not table but just a normal style. Better for customization
 
-# v2.0.9 (latest)
+# v2.0.9
  - add preview in the browser
 
 # v2.0.8
