@@ -44,6 +44,7 @@
                         <ion-radio slot="start" [value]="3"></ion-radio>
                     </ion-item>
                 </ion-radio-group>
+                <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="form"></app-basic-style> 
                 <ion-button [color]="'primary'" [disabled]="!form.valid" (click)="validate(form.value)"
                     class="w-100 mt-3" [disabled]="!form.valid">
                     {{getFieldContent('label_activate')}}</ion-button>

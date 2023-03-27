@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Style } from './../../selfhelpInterfaces';
 import { IonContent } from '@ionic/angular';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-basic-style',
@@ -11,6 +12,7 @@ export class BasicStyleComponent implements OnInit {
     @Input() style: Style;
     @Input() url: string;
     @Input() ionContent: IonContent;
+    @Input() parentForm: FormGroup;
 
     constructor() { }
 
