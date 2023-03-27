@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp } from './../selfhelpInterfaces';
+import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -27,7 +27,7 @@ export class SelfhelpService {
     public devApp: boolean = false; // change to false when we prepare a specific build
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
-    // private API_ENDPOINT_NATIVE = 'http://178.38.58.178/selfhelp';
+    // private API_ENDPOINT_NATIVE = 'http://46.126.153.11/selfhelp';
     // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
     public API_ENDPOINT_NATIVE = 'https://habitwalk.psy.unibe.ch';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
@@ -908,6 +908,26 @@ export class SelfhelpService {
         this.storage.remove(this.selfhelp_server); 
         this.storage.remove(this.local_selfhelp); 
         window.localStorage.removeItem('skin_app');
+    }
+
+    public isFormField(field: any): boolean {
+        return field.style_name &&
+            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea');
+    }
+
+    public getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle {
+        switch (formField.style_name) {
+            case 'input':
+                return <InputStyle>formField;
+            case 'radio':
+                return <RadioStyle>formField;
+            case 'select':
+                return <SelectStyle>formField;
+            case 'textarea':
+                return <TextAreaStyle>formField;
+            default:
+                return formField;
+        }
     }
 
 }

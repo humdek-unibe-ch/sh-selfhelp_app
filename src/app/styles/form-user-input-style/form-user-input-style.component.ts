@@ -28,8 +28,8 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
             if (formField['children'] && formField['children'].length > 0) {
                 this.collectFormFields(formField);
             }
-            else if (this.isFormField(formField)) {
-                const input = this.getFormField(formField);
+            else if (this.selfhelpService.isFormField(formField)) {
+                const input = this.selfhelpService.getFormField(formField);
                 let value: any = input.value ? input.value.content : ''; // if there is a default value we assign it
                 if (this.getFieldContent('is_log') != '1' && input.last_value) {
                     value = input.last_value; // the form is not a log, get the last value
@@ -61,8 +61,8 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         let params = {};
         params['__form_name'] = this.getFieldContent('name');
         this.inputStyles.forEach(formField => {
-            if (this.isFormField(formField)) {
-                const input = this.getFormField(formField);
+            if (this.selfhelpService.isFormField(formField)) {
+                const input = this.selfhelpService.getFormField(formField);
                 let fieldValue = value[input.name.content.toString()];
                 if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox') {
                     // assign values to true/false for checkbox. Ionic need them as boolean
@@ -75,27 +75,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
             }
         });
         return params;
-    }
-
-    protected getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle {
-        switch (formField.style_name) {
-            case 'input':
-                return <InputStyle>formField;
-            case 'radio':
-                return <RadioStyle>formField;
-            case 'select':
-                return <SelectStyle>formField;
-            case 'textarea':
-                return <TextAreaStyle>formField;
-            default:
-                return formField;
-        }
-    }
-
-    protected isFormField(field: any): boolean {
-        return field.style_name &&
-            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea');
-    }
+    }    
 
     public async submitForm(value: { [key: string]: any; }) {
         const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));

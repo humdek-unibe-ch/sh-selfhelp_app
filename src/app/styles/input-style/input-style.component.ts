@@ -18,7 +18,7 @@ export class InputStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     ngOnInit() { 
-        console.log(this.style);
+
     }
 
     formatDate(controlName){
