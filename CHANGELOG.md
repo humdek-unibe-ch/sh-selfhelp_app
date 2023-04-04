@@ -1,3 +1,7 @@
+# v2.1.0
+ - update `cordova-plugin-firebasex` to v16.0.0. Now the notifications work on Android 12+
+ - fork `cordova-plugin-code-push` to `MaximBelov/cordova-plugin-code-push#2.0.0-custom`. The auto-update works with corodova-android 10.1.1 - `ionic cordova platform add android@10.1.1`
+
 # v2.0.11
  - load extra fields for validation style
 
