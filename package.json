@@ -98,7 +98,7 @@
     "cordova-plugin-streaming-media": "^2.3.0",
     "cordova-plugin-whitelist": "^1.3.3",
     "cordova-plugin-wkwebview-file-xhr": "^3.0.0",
-    "cordova-plugin-zip": "^3.1.0",
+    "cordova-plugin-zip": "github:bikubi/cordova-plugin-zip",
     "ionic-plugin-deeplinks": "^1.0.22",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
