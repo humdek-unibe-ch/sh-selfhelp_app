@@ -48,7 +48,7 @@ export class UtilsService {
     // code-push app add SelfHelp-ios ios cordova
     // ionic cordova prepare ios  --prod --release // this one works better, check size
     // code-push  deployment history -a SelfHelp-ios Production
-    // code-push release-cordova SelfHelp-ios ios -d Production --mandatory true     
+    // code-push release-cordova SelfHelp-ios ios -d Production --mandatory true --des "v2.0.7"      
     // code-push deployment clear SelfHelp-ios Production
 
 

@@ -24,7 +24,7 @@ export class SelfhelpService {
 
     private defaultAppLocale = 'de-CH';
     private isApp: boolean = true;
-    public devApp: boolean = false; // change to false when we prepare a specific build
+    public devApp: boolean = true; // change to false when we prepare a specific build
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://46.126.153.11/selfhelp';
