@@ -66,8 +66,8 @@ export class UtilsService {
     // code-push release-cordova Soapp-Plus-ios ios -d Production --mandatory true  
     // code-push deployment clear Soapp-Plus-ios Production
 
-    // Local test with ip and ssl
-    // ionic serve --external --ssl
+    // Local test with ip and ssl then select the ip address, in my case https://46.126.153.11:8100
+    // ionic serve --external --ssl 
     // Build SelfHelpMobilePreview
     // ng build --base-href "/SelfHelpMobilePreview/" --deploy-url "/SelfHelpMobilePreview/"
 

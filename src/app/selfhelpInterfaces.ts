@@ -368,6 +368,17 @@ export interface CalendarStyle extends Style {
     config: StyleField,
 }
 
+export interface SurveyJSStyle extends Style {
+    alert: string,
+    restart_on_refresh: StyleField,
+    close_modal_at_end: StyleField,
+    redirect_at_end: StyleField,
+    save_pdf: StyleField,
+    survey_js_theme: StyleField,
+    show_survey: boolean,
+    survey_json: object, // survey_js json structure
+}
+
 export interface MessageBoardMessage {
     color: string,
     icon_counter: any,

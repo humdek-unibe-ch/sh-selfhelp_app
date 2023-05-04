@@ -30,6 +30,7 @@ import localeDe from '@angular/common/locales/de';
 import { NgxIonicImageViewerModule } from 'ngx-ionic-image-viewer';
 import { SkinApp } from './selfhelpInterfaces';
 import { MobilePreviewComponent } from './mobile-preview/mobile-preview.component';
+import { SurveyModule } from "survey-angular-ui";
 registerLocaleData(localeDe);
 
 export function createTranslateLoader(http: HttpClient) {
@@ -54,7 +55,7 @@ export function getAppSkin(): SkinApp {
 @NgModule({
     declarations: [
         AppComponent,
-        MobilePreviewComponent,
+        MobilePreviewComponent
     ],
     imports: [
         BrowserModule,
@@ -65,6 +66,7 @@ export function getAppSkin(): SkinApp {
         HttpClientModule,
         IonicStorageModule.forRoot(),
         NgCalendarModule,
+        SurveyModule,
         NgxIonicImageViewerModule,
         TranslateModule.forRoot({
             loader: {

@@ -55,6 +55,14 @@
                             {
                                 "input": "src/assets//css/iconselect.css",
                                 "inject": true
+                            },
+                            {
+                                "input": "node_modules/survey-core/defaultV2.min.css",
+                                "inject": true
+                            },
+                            {
+                                "input": "node_modules/survey-core/modern.min.css",
+                                "inject": true
                             }
                         ],
                         "scripts": [

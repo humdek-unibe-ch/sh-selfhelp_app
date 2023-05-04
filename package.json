@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^12.0.0",
     "@angular/common": "~12.2.5",
     "@angular/core": "~12.2.5",
     "@angular/forms": "~12.2.5",
@@ -44,6 +45,7 @@
     "angular-datatables": "^12.0.0",
     "angular-plotly.js": "^3.0.0",
     "bootstrap": "^4.6.0",
+    "browserslist": "^4.21.5",
     "datatables.net": "^1.10.23",
     "datatables.net-dt": "^1.10.23",
     "iframe-resizer": "^4.3.0",
@@ -57,6 +59,7 @@
     "rxjs": "~6.5.5",
     "rxjs-compat": "^6.6.3",
     "safe-pipe": "^1.0.3",
+    "survey-angular-ui": "^1.9.86",
     "tslib": "^2.0.0",
     "turbocommons-ts": "^3.7.0",
     "zone.js": "~0.11.4"

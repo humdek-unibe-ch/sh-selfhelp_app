@@ -67,6 +67,8 @@ import { AppVersionComponent } from '../components/app-version/app-version.compo
 import { TranslateModule } from '@ngx-translate/core';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
+import { SurveyJSStyleComponent } from '../styles/survey-js-style/survey-js-style.component';
+import { SurveyModule } from 'survey-angular-ui';
 
 const routes: Routes = [
     {
@@ -105,7 +107,8 @@ const routes: Routes = [
         DataTablesModule,
         NgCalendarModule,
         TranslateModule,
-        PdfViewerModule
+        PdfViewerModule,
+        SurveyModule
     ],
     exports: [
         RouterModule
@@ -167,7 +170,8 @@ const routes: Routes = [
         RecordMediaStyleComponent,
         LanguageSelectComponent,
         AppVersionComponent,
-        PdfViewerComponent
+        PdfViewerComponent,
+        SurveyJSStyleComponent
     ]
 })
 export class NavigationPageModule {
