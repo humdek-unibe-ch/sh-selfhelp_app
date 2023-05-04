@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { Model, StylesManager  } from "survey-core";
+import { Model, StylesManager } from "survey-core";
 
 @Component({
     selector: 'app-survey-js-style',
@@ -21,7 +21,9 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         console.log(this.style);
         console.log(this.url);
         StylesManager.applyTheme(this.getFieldContent('survey-js-theme'));
-        this.surveyModel = new Model(this.style.survey_json);
+        let survey = new Model(this.style.survey_json);
+        survey.locale = this.selfhelp.getUserLanguage().locale;
+        this.surveyModel = survey;
     }
 
     private saveSurveyJS(surveyFields, survey) {

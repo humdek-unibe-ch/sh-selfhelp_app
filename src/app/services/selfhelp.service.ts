@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -905,8 +905,8 @@ export class SelfhelpService {
     }
 
     public resetLocalData() {
-        this.storage.remove(this.selfhelp_server); 
-        this.storage.remove(this.local_selfhelp); 
+        this.storage.remove(this.selfhelp_server);
+        this.storage.remove(this.local_selfhelp);
         window.localStorage.removeItem('skin_app');
     }
 
@@ -928,6 +928,10 @@ export class SelfhelpService {
             default:
                 return formField;
         }
+    }
+
+    public getUserLanguage(): Language {
+        return this.selfhelp.value.languages.find(lang => lang.id === this.selfhelp.value.user_language);
     }
 
 }
