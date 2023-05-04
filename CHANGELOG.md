@@ -1,3 +1,6 @@
+# 2.1.2
+ - add style `surveyJS`
+
 # 2.1.1
  - add style `loop`
 

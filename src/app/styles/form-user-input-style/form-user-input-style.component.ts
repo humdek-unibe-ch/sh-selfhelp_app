@@ -94,7 +94,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         if (res && this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal();
         }
-        if (this.getFieldContent('redirect_at_end') != '') {
+        if (this.getFieldContent('redirect_at_end') != '') { 
             this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
         }
     }
