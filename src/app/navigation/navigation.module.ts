@@ -69,6 +69,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 import { SurveyJSStyleComponent } from '../styles/survey-js-style/survey-js-style.component';
 import { SurveyModule } from 'survey-angular-ui';
+import { LabJsStyleComponent } from '../styles/lab-js-style/lab-js-style.component';
 
 const routes: Routes = [
     {
@@ -171,7 +172,8 @@ const routes: Routes = [
         LanguageSelectComponent,
         AppVersionComponent,
         PdfViewerComponent,
-        SurveyJSStyleComponent
+        SurveyJSStyleComponent,
+        LabJsStyleComponent
     ]
 })
 export class NavigationPageModule {

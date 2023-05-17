@@ -1,6 +1,7 @@
 <ng-container [ngSwitch]="true">
     <app-accordion-list-style *ngSwitchCase="isStyle('accordionList')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-accordion-list-style>
-    <app-alert-style *ngSwitchCase="isStyle('alert')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-alert-style>
+    <!-- <app-alert-style *ngSwitchCase="isStyle('alert')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-alert-style> -->
+    <app-lab-js-style *ngSwitchCase="isStyle('alert')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-lab-js-style>
     <app-audio-style *ngSwitchCase="isStyle('audio')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-audio-style>
     <app-button-style *ngSwitchCase="isStyle('button')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-button-style>
     <app-calendar-style *ngSwitchCase="isStyle('calendar')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-calendar-style>

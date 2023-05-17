@@ -73,7 +73,9 @@
                             "node_modules/plotly.js/dist/plotly.min.js",
                             "node_modules/datatables.net/js/jquery.dataTables.js",
                             "src/assets/js/iconselect.js",
-                            "src/assets/js/iscroll.js"
+                            "src/assets/js/iscroll.js",
+                            "src/assets/js/lab.legacy.js",
+                            "src/assets/js/lab.fallback.js"
                         ],
                         "aot": false,
                         "vendorChunk": true,
