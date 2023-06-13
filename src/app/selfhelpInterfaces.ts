@@ -339,6 +339,9 @@ export interface ValidateStyle extends Style {
     label_activate: StyleField,
     pw_placeholder: StyleField,
     success: StyleField,
+    anonymous_users: Boolean,
+    user_name: String,
+    css_gender: String
 }
 
 export interface MessageBoardStyle extends Style {
@@ -462,6 +465,11 @@ export interface Language {
 }
 
 export interface RegistrationResult {
+    result: Boolean,
+    url: string | Boolean,
+}
+
+export interface ValidationResult {
     result: Boolean,
     url: string | Boolean,
 }

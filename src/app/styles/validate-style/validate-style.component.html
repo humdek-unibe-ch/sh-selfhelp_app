@@ -13,11 +13,18 @@
                     <input type="text" class="form-control" name="phone7h92jP" autocomplete="off">
                 </div>
 
-                <ion-item>
+                <ion-item *ngIf="!this.style.anonymous_users">
                     <ion-label position="stacked">{{getFieldContent('label_name')}}</ion-label>
                     <ion-input type="text" formControlName="name" [placeholder]="getFieldContent('name_placeholder')">
                     </ion-input>
                 </ion-item>
+
+                <ion-item *ngIf="this.style.anonymous_users">
+                    <ion-label position="stacked">{{getFieldContent('label_name')}}</ion-label>
+                    <ion-input type="text" formControlName="name" disabled="">
+                    </ion-input>
+                </ion-item>
+
                 <ion-item>
                     <ion-label position="stacked">{{getFieldContent('label_pw')}}</ion-label>
                     <ion-input type="password" formControlName="pw" [placeholder]="getFieldContent('pw_placeholder')">
@@ -28,7 +35,7 @@
                         [placeholder]="getFieldContent('label_pw_confirm')">
                     </ion-input>
                 </ion-item>
-                <ion-radio-group formControlName="gender">
+                <ion-radio-group formControlName="gender" [class]="this.style.css_gender">
                     <ion-list-header>
                         <ion-label>{{getFieldContent('label_gender')}}</ion-label>
                     </ion-list-header>

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { MustMatch } from 'src/app/_helpers/must-match.validator';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { InputStyle, SelectStyle, ValidateStyle, ValidateValues } from './../../selfhelpInterfaces';
+import { InputStyle, SelectStyle, ValidateStyle, ValidateValues, ValidationResult } from './../../selfhelpInterfaces';
 
 @Component({
     selector: 'app-validate-style',
@@ -26,11 +26,12 @@ export class ValidateStyleComponent extends BasicStyleComponent implements OnIni
 
     private initForm(): void {
         this.collectFormFields(this.style);
+        let def_gender = parseInt(this.getFieldContent('value_gender'));
         let defaultValidationFields = {
-            name: new FormControl('', Validators.required),
+            name: new FormControl(this.style.anonymous_users ? this.style.user_name : '', Validators.required),
             pw: new FormControl('', [Validators.required, Validators.minLength(8)]),
             pw_verify: new FormControl('', Validators.required),
-            gender: new FormControl(1, Validators.required),
+            gender: new FormControl(def_gender, Validators.required),
         };
         let mergedFields = Object.assign({}, defaultValidationFields, this.extraFormFields);
         this.form = this.formBuilder.group(mergedFields, {
@@ -67,14 +68,18 @@ export class ValidateStyleComponent extends BasicStyleComponent implements OnIni
 
     validate(value: ValidateValues) {
         this.selfhelpService.validate(value, this.url)
-            .then((res: boolean) => {
-                if (res) {
+            .then((res: ValidationResult) => {
+                if (res.result) {
                     this.selfhelpService.closeModal();
-                    this.selfhelpService.openUrl(this.selfhelpService.API_LOGIN);
+                    if (res.url) {
+                        this.selfhelpService.openUrl(res.url as string);
+                    } else {
+                        this.selfhelpService.openUrl(this.selfhelpService.API_LOGIN);
+                    }
                 }
             })
             .catch((err) => {
-                console.log(err); 
+                console.log(err);
             });
     }
 }

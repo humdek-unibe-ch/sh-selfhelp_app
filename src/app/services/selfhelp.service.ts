@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -107,6 +107,7 @@ export class SelfhelpService {
     public loadApp() {
         this.getLocalSelfhelp();
         this.getPage(this.API_HOME);
+        // this.openUrl('/validate/51/4f4ba70e04f15a6bbedda5a5603bb7f5');
     }
 
     public getServer(): Promise<boolean> {
@@ -406,15 +407,21 @@ export class SelfhelpService {
             });
     }
 
-    public validate(validateValues: ValidateValues, url: string): Promise<boolean> {
+    public validate(validateValues: ValidateValues, url: string): Promise<ValidationResult> {
         return this.execServerRequest(url, validateValues)
             .then((res: SelfHelpPageRequest) => {
                 const result = this.output_messages(res.content);
-                return result;
+                return {
+                    result: result,
+                    url: res.redirect_url
+                }
             })
             .catch((err) => {
                 console.log(err);
-                return false;
+                return {
+                    result: false,
+                    url: false
+                };
             });
     }
 
