@@ -4,8 +4,12 @@
     </ion-card-header>
     <ion-card-content>
         <form [formGroup]="form" [class]="getCss()" (keyup.enter)="login(form.value)">
-            <ion-item>
+            <ion-item *ngIf="!this.style.anonymous_users">
                 <ion-input type="email" inputmode="email" autocomplete="email" formControlName="email" [placeholder]="getFieldContent('label_user')">
+                </ion-input>
+            </ion-item>
+            <ion-item *ngIf="this.style.anonymous_users">
+                <ion-input type="text" formControlName="user_name" [placeholder]="getFieldContent('label_user')">
                 </ion-input>
             </ion-item>
             <ion-item>

@@ -281,7 +281,8 @@ export interface LoginStyle extends Style {
     label_login: StyleField,
     label_pw_reset: StyleField,
     alert_fail: StyleField,
-    login_title: StyleField
+    login_title: StyleField,
+    anonymous_users: Boolean,
 }
 
 export interface RegisterStyle extends Style {

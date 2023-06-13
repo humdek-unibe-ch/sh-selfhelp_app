@@ -22,10 +22,18 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     private initForm(): void {
-        this.form = this.formBuilder.group({
-            email: new FormControl('', Validators.required),
-            password: new FormControl('', Validators.required)
-        });
+        if (this.style.anonymous_users) {
+            this.form = this.formBuilder.group({
+                user_name: new FormControl('', Validators.required),
+                password: new FormControl('', Validators.required)
+            });
+
+        } else {
+            this.form = this.formBuilder.group({
+                email: new FormControl('', Validators.required),
+                password: new FormControl('', Validators.required)
+            });
+        }
     }
 
     public login(value: LoginValues): void {
