@@ -294,7 +294,9 @@ export interface RegisterStyle extends Style {
     title: StyleField,
     alert_success: StyleField,
     success: StyleField,
-    label_submit: StyleField
+    label_submit: StyleField,
+    anonymous_users: Boolean,
+    security_questions: ValueItem[]
 }
 
 export interface ProfileStyle extends Style {
@@ -444,7 +446,8 @@ export interface SelfHelpPageRequest {
     avatar: string,
     external_css: string,
     languages: Language[],
-    user_language: Number
+    user_language: Number,
+    redirect_url: string | Boolean
 }
 
 export interface CachedPage {
@@ -456,6 +459,11 @@ export interface Language {
     id: Number,
     locale: string,
     title: string,
+}
+
+export interface RegistrationResult {
+    result: Boolean,
+    url: string | Boolean,
 }
 
 export interface Url {

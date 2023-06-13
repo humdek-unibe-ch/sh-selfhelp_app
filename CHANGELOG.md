@@ -1,3 +1,6 @@
+# 2.1.3 (Unpublished)
+ - add anonymous users functionality
+
 # 2.1.2
  - add style `surveyJS`
 

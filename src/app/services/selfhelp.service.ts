@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -378,12 +378,13 @@ export class SelfhelpService {
         this.setSelfhelp(currSelfhelp, true);
     }
 
-    public register(regValues: RegistrationValues): Promise<boolean> {
+    public register(regValues: RegistrationValues): Promise<RegistrationResult> {
         let data = regValues;
         data['type'] = 'register';
         return this.execServerRequest(this.API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
+                console.log(res);
                 const result = this.output_messages(res.content);
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
@@ -391,11 +392,17 @@ export class SelfhelpService {
                     this.getPage(currSelfhelp.navigation[0].url);
                     this.setNav(currSelfhelp.navigation[0].url);
                 }
-                return result;
+                return {
+                    result: result,
+                    url: res.redirect_url
+                }
             })
             .catch((err) => {
                 console.log(err);
-                return false;
+                return {
+                    result: false,
+                    url: false
+                };
             });
     }
 
