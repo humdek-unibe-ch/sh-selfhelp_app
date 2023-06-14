@@ -56,7 +56,12 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
         // this.selfhelpService.login(value, null);
         // this.selfhelpService.getPage('/');
         // this.selfhelpService.closeModal();
+        this.selfhelpService.closeModal();
         this.selfhelpService.openUrl('/reset');
+    }
+
+    public outputResetPassword() {        
+        return Boolean(!this.style.anonymous_users) || Boolean(this.style.is_reset_password_enabled);
     }
 
 }

@@ -1,4 +1,4 @@
-# 2.1.3 (Unpublished)
+# 2.1.3
  - add anonymous users functionality
 
 # 2.1.2

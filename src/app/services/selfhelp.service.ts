@@ -3,7 +3,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult } from './../selfhelpInterfaces';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { StringUtils } from 'turbocommons-ts';
@@ -24,7 +24,7 @@ export class SelfhelpService {
 
     private defaultAppLocale = 'de-CH';
     private isApp: boolean = true;
-    public devApp: boolean = false; // change to false when we prepare a specific build
+    public devApp: boolean = true; // change to false when we prepare a specific build
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://46.126.153.11/selfhelp';
@@ -33,7 +33,7 @@ export class SelfhelpService {
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     private API_SERVER_SELECTION = 'https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects';
     public API_LOGIN = '/login';
-    private API_RESET = '/reset';
+    public API_RESET = '/reset';
     public API_HOME = '/home';
     public selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
@@ -107,7 +107,8 @@ export class SelfhelpService {
     public loadApp() {
         this.getLocalSelfhelp();
         this.getPage(this.API_HOME);
-        // this.openUrl('/validate/51/4f4ba70e04f15a6bbedda5a5603bb7f5');
+        // this.openUrl('/validate/24/2dfa5a96f81fdec67eff37a2f81825b6'); 
+        
     }
 
     public getServer(): Promise<boolean> {
@@ -425,15 +426,23 @@ export class SelfhelpService {
             });
     }
 
-    public resetPassword(resetValues: ResetPasswordValues): Promise<boolean> {
+    public resetPassword(resetValues: ResetPasswordValues): Promise<ResetPasswordResult> {
         let data = resetValues;
         return this.execServerRequest(this.API_RESET, data)
             .then((res: SelfHelpPageRequest) => {
-                return this.output_messages(res.content);
+                return {
+                    result: this.output_messages(res.content),
+                    url: res.redirect_url,
+                    selfhelp_res: res
+                }
             })
             .catch((err) => {
                 console.log(err);
-                return false;
+                return {
+                    result: false,
+                    url: false,
+                    selfhelp_res: null
+                };
             });
     }
 

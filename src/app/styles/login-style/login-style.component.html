@@ -20,7 +20,7 @@
                 (click)="login(form.value)" class="w-100 mt-3" [disabled]="!form.valid">
                 {{getFieldContent('label_login')}}</ion-button>
         </form>
-        <a [class]="'small float-right text-'+getFieldContent('type')" (click)="forgottenPassword()">
+        <a *ngIf="this.outputResetPassword()" [class]="'small float-right text-'+getFieldContent('type')" (click)="forgottenPassword()">
             {{getFieldContent('label_pw_reset')}}
         </a>
     </ion-card-content>

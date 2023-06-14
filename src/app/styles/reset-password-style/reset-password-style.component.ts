@@ -1,13 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ResetPasswordStyle, ResetPasswordValues } from 'src/app/selfhelpInterfaces';
+import { ResetPasswordResult, ResetPasswordStyle, ResetPasswordValues } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 
 @Component({
-  selector: 'app-reset-password-style',
-  templateUrl: './reset-password-style.component.html',
-  styleUrls: ['./reset-password-style.component.scss'],
+    selector: 'app-reset-password-style',
+    templateUrl: './reset-password-style.component.html',
+    styleUrls: ['./reset-password-style.component.scss'],
 })
 export class ResetPasswordStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() style: ResetPasswordStyle;
@@ -23,16 +23,44 @@ export class ResetPasswordStyleComponent extends BasicStyleComponent implements 
     }
 
     private initForm(): void {
-        this.form = this.formBuilder.group({
+        if (this.style.anonymous_users) {
+            let form_controls = {
+                user_name: new FormControl(this.style.reset_user_name, Validators.required),
+                reset_anonymous_user: new FormControl(true, Validators.required)
+            };
+            this.style.security_questions_labels.forEach(question => {
+                form_controls[question.id] = new FormControl('', Validators.required)
+            });
+            if (this.style.security_questions_labels.length > 0) {
+                form_controls['reset_anonymous_user_sec_q'] = new FormControl(true, Validators.required);
+            }
+            this.form = this.formBuilder.group(form_controls);
+        } else {
+            this.form = this.formBuilder.group({
                 email_user: new FormControl('', Validators.required)
             });
+        }
     }
 
-    public reset(value:ResetPasswordValues): void {
+    public reset(value: ResetPasswordValues): void {
         this.selfhelpService.resetPassword(value)
-            .then((res: boolean) => {
-                if(res){
-                    this.selfhelpService.closeModal();
+            .then((res: ResetPasswordResult) => {
+                if (res.result) {
+                    if (this.style.anonymous_users) {
+                        if (this.style.reset_user_name) {
+                            // close it, we are on security questions check
+                            this.selfhelpService.closeModal();
+                        } else {
+                            // load the questions
+                            this.selfhelpService.setPage(this.selfhelpService.API_RESET, res.selfhelp_res);
+                        }
+                        if (res.url) {
+                            console.log(res.url);
+                            this.selfhelpService.openUrl(res.url as string);
+                        }
+                    } else {
+                        this.selfhelpService.closeModal();
+                    }
                 }
             })
             .catch((err) => {

@@ -177,3 +177,7 @@ ion-select-popover {
 ion-select::part(text) {
   white-space: normal !important;
 }
+
+ion-select::part(placeholder) {
+  white-space: normal !important;
+}

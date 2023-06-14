@@ -283,6 +283,7 @@ export interface LoginStyle extends Style {
     alert_fail: StyleField,
     login_title: StyleField,
     anonymous_users: Boolean,
+    is_reset_password_enabled: Boolean
 }
 
 export interface RegisterStyle extends Style {
@@ -319,6 +320,10 @@ export interface ResetPasswordStyle extends Style {
     alert_success: StyleField,
     success: StyleField,
     placeholder: StyleField,
+    anonymous_users: Boolean,
+    is_reset_password_enabled: Boolean,
+    security_questions_labels: SecurityQuestion[]
+    reset_user_name: string
 }
 
 export interface ValidateStyle extends Style {
@@ -454,6 +459,11 @@ export interface SelfHelpPageRequest {
     redirect_url: string | Boolean
 }
 
+export interface SecurityQuestion {
+    id: string,
+    text: string,
+}
+
 export interface CachedPage {
     content: Styles,
     title: string,
@@ -473,6 +483,12 @@ export interface RegistrationResult {
 export interface ValidationResult {
     result: Boolean,
     url: string | Boolean,
+}
+
+export interface ResetPasswordResult {
+    result: Boolean,
+    url: string | Boolean,
+    selfhelp_res: SelfHelpPageRequest,
 }
 
 export interface Url {
