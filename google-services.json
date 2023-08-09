@@ -1,0 +1,262 @@
+{
+  "project_info": {
+    "project_number": "500227861670",
+    "project_id": "tpf-selfhelp",
+    "storage_bucket": "tpf-selfhelp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:f78dedc60868bddc141867",
+        "android_client_info": {
+          "package_name": "tpf.selfhelp.soapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:08d00b377e82accd141867",
+        "android_client_info": {
+          "package_name": "unibe.tpf.habitwalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:aa05a0f15430bcf1141867",
+        "android_client_info": {
+          "package_name": "unibe.tpf.selfact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:2ed97009775a7e45141867",
+        "android_client_info": {
+          "package_name": "unibe.tpf.selfhelp_dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:ab59333df7218339141867",
+        "android_client_info": {
+          "package_name": "unibe.tpf.soapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:a034a5c5b022177e141867",
+        "android_client_info": {
+          "package_name": "unibe.tpf.soapp_plus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:82b984dae97aa4ba141867",
+        "android_client_info": {
+          "package_name": "unibe.tpf.stable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
