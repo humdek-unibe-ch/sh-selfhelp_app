@@ -29,4 +29,9 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+/resources
 
+resources/**
+config.xml
+google-services.json
+GoogleService-Info.plist
