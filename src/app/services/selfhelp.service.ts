@@ -24,12 +24,12 @@ export class SelfhelpService {
 
     private defaultAppLocale = 'de-CH';
     private isApp: boolean = true;
-    public devApp: boolean = true; // change to false when we prepare a specific build
+    public devApp: boolean = false; // change to false when we prepare a specific build
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://46.126.153.11/selfhelp';
     // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
-    public API_ENDPOINT_NATIVE = 'https://habitwalk.psy.unibe.ch';
+    public API_ENDPOINT_NATIVE = 'https://stable-study.psy.unibe.ch';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     private API_SERVER_SELECTION = 'https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects';
     public API_LOGIN = '/login';
