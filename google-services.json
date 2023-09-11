@@ -256,6 +256,42 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500227861670:android:0ac9d50ad6f114ae141867",
+        "android_client_info": {
+          "package_name": "unibe.tpf.studybuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtx06ia5e5iCN92wgmjwthxQLafUVQHNc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500227861670-fdifh076g36d5v0q68bdco1oij932hfv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500227861670-0ljvv072n9pt7uik2ejt5b47q7fpsml4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "unibe.tpf.selfhelp-dev"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

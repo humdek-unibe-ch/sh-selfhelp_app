@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="unibe.tpf.stable" version="3.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>STABLE</name>
-    <description>STABLE</description>
+<widget id="unibe.tpf.studybuddy" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Studybuddy</name>
+    <description>Studybuddy</description>
     <author email="stefan.kodzhabashev@unibe.ch" href="https://www.tpf.philhum.unibe.ch">Technology Platform for Research, UNIBE</author>
     <content src="index.html" />
     <access origin="*" />
@@ -22,7 +22,7 @@
     <platform name="android">
         <preference name="AndroidXEnabled" value="true" />
         <preference name="android-targetSdkVersion" value="33" />
-        <preference name="CodePushDeploymentKey" value="uwMOU8atyEwVK3K1C8w0QIjF7TbI4ksvOXqog" />
+        <preference name="CodePushDeploymentKey" value="R0EZRjrHCBkxBHHGr8nqAhSbFZRy4ksvOXqog" />
         <preference name="CodePushServerUrl" value="https://codepush.philhum.unibe.ch" />
         <preference name="APP_SECRET" value="f979a0c3-b701-4c47-8650-c71855958665" />
         <preference name="AndroidLaunchMode" value="singleTask" />

@@ -29,7 +29,7 @@ export class SelfhelpService {
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://46.126.153.11/selfhelp';
     // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
-    public API_ENDPOINT_NATIVE = 'https://stable-study.psy.unibe.ch';
+    public API_ENDPOINT_NATIVE = 'https://studybuddy.edu.unibe.ch';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     private API_SERVER_SELECTION = 'https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects';
     public API_LOGIN = '/login';
