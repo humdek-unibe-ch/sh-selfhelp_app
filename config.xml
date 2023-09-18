@@ -59,7 +59,7 @@
             <array />
         </edit-config>
         <preference name="WKWebViewOnly" value="true" />
-        <preference name="CodePushDeploymentKey" value="vjpK3SWgSsB9OJVLYRlOx7aXO3i54ksvOXqog" />
+        <preference name="CodePushDeploymentKey" value="40MssX2jVZewBsAW8g6UJHAF1J924ksvOXqog" />
         <preference name="CodePushServerUrl" value="https://codepush.philhum.unibe.ch" />
         <preference name="hostname" value="eu.qualtrics.com" />
         <allow-intent href="itms:*" />
