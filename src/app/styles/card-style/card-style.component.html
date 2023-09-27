@@ -1,12 +1,8 @@
 <ion-card [id]="getFieldContent('id')" [class]="'m-0 ' + getCss()">
-    <ion-card-header [color]="getFieldContent('type')" (click)="toggleCard()">
-        <!-- <ion-card-title>{{getFieldContent('title')}}</ion-card-title> -->
-        <ion-item [color]="getFieldContent('type')" lines="none">
-            <ion-label [innerHTML]="getFieldContent('title')"></ion-label>
-            <ion-icon *ngIf="getFieldContent('is_collapsible') == '1'" slot="end"
-                [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'">
-            </ion-icon>
-        </ion-item>
+    <ion-card-header [color]="getFieldContent('type')">
+        <ion-card-title>{{getFieldContent('title')}}
+            <ion-icon style="float: right;" (click)="toggleCard()" [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+        </ion-card-title>
     </ion-card-header>
     <ion-card-content [hidden]="!isCardExpanded">
         <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent">
