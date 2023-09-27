@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { isNumeric } from 'rxjs/internal-compatibility';
 import { ShowUserInputStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
@@ -11,9 +10,9 @@ import { SelfHelpPageRequest } from './../../selfhelpInterfaces';
     styleUrls: ['./show-user-input-style.component.scss'],
 })
 export class ShowUserInputStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: ShowUserInputStyle;
-    header = [];
-    rows = [];
+    @Input() override style!: ShowUserInputStyle;
+    header: string[] = [];
+    rows: any[] = [];
     dtOptions: DataTables.Settings = {
         autoWidth: true,
         pagingType: 'full_numbers',
@@ -21,23 +20,23 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
         searching: false,
         paging: false,
         info: false,
-        scrollX: true
+        // scrollX: true
     };
 
     constructor(private selfhelp: SelfhelpService) {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.prepareOptions();
         this.prepareDataTable();
     }
 
     private prepareDataTable(): void {
-        let tableRows = {};
+        let tableRows: { [key: string]: any } = {};
         this.header = [this.getFieldContent('label_date_time')];
         this.rows = [];
-        this.style.fields.forEach(field => {
+        this.style.fields.forEach((field: any) => {
             this.header.push(field['field_label']);
             if (!tableRows[field['id_user_input_record']]) {
                 tableRows[field['id_user_input_record']] = {};
@@ -81,8 +80,8 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
         for (let i = 0; i < ordered.length; i++) {
             const ordClassElements = ordered[i].split('-');
             if (ordClassElements.length == 4) {
-                //correct order pattern                
-                if (isNumeric(ordClassElements[2]) && (ordClassElements[3] === 'asc' || ordClassElements[3] === 'desc')) {
+                //correct order pattern
+                if (this.selfhelp.isNumeric(ordClassElements[2]) && (ordClassElements[3] === 'asc' || ordClassElements[3] === 'desc')) {
                     // check is 3 element number and 4 asc or desc
                     orderedColumnDef.push([ordClassElements[2], ordClassElements[3]])
                 }
@@ -96,8 +95,8 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
         for (let i = 0; i < hidden.length; i++) {
             const hiddenClassElements = hidden[i].split('-');
             if (hiddenClassElements.length == 3) {
-                //correct order pattern                
-                if (isNumeric(hiddenClassElements[2])) {
+                //correct order pattern
+                if (this.selfhelp.isNumeric(hiddenClassElements[2])) {
                     // check is 3 element number and 4 asc or desc
                     this.dtOptions.columnDefs.push({
                         targets: [parseInt(hiddenClassElements[2], 10)],
@@ -106,6 +105,7 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
                 }
             }
         }
+        console.log('options', this.dtOptions);
     }
 
     public deleteAlert(row: any): void {

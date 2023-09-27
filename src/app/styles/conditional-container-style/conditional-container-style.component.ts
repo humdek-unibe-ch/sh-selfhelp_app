@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./conditional-container-style.component.scss'],
 })
 export class ConditionalContainerStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: ConditionalContainerStyle;
+    @Input() override style!: ConditionalContainerStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

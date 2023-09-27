@@ -9,16 +9,16 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 })
 export class BasicComponentComponent implements OnInit {
 
-    public selfhelp: SelfHelp;
-    public url: string;
-    public selfhelpService: SelfhelpService;
+    public selfHelp!: SelfHelp;
+    public url!: string;
+    public selfHelpService: SelfhelpService;
 
     constructor(protected injector: Injector, protected zone: NgZone) {
-        this.selfhelpService = this.injector.get(SelfhelpService);
-        this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
+        this.selfHelpService = this.injector.get(SelfhelpService);
+        this.selfHelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
             this.zone.run(() => {
                 if (selfhelp) {
-                    this.selfhelp = selfhelp;
+                    this.selfHelp = selfhelp;
                 }
             });
         });
@@ -26,16 +26,16 @@ export class BasicComponentComponent implements OnInit {
 
     ngOnInit() {
         if (this.url) {
-            this.selfhelpService.getPage(this.url);
+            this.selfHelpService.getPage(this.url);
         }
     }
 
     public async close() {
-        this.selfhelpService.closeModal();
+        this.selfHelpService.closeModal();
     }
 
     public getTitle(): string {
-        return this.selfhelp.urls[this.url] && this.selfhelp.urls[this.url].title ? this.selfhelp.urls[this.url].title : ''; 
+        return this.selfHelp.urls[this.url] && this.selfHelp.urls[this.url].title ? this.selfHelp.urls[this.url].title : '';
     }
 
 }

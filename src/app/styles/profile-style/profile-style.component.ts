@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./profile-style.component.scss'],
 })
 export class ProfileStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: ProfileStyle;
+    @Input() override style!: ProfileStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

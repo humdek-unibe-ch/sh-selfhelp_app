@@ -8,12 +8,12 @@ import { GraphStyle } from './../../selfhelpInterfaces';
     styleUrls: ['./graph-style.component.scss'],
 })
 export class GraphStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: GraphStyle;
+    @Input() override style!: GraphStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

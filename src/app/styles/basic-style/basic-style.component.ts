@@ -9,15 +9,14 @@ import { FormGroup } from '@angular/forms';
     styleUrls: ['./basic-style.component.scss'],
 })
 export class BasicStyleComponent implements OnInit {
-    @Input() style: Style;
-    @Input() url: string;
-    @Input() ionContent: IonContent;
-    @Input() parentForm: FormGroup;
+    @Input() style!: Style;
+    @Input() url!: string;
+    @Input() ionContent!: IonContent;
+    @Input() parentForm!: FormGroup;
 
     constructor() { }
 
-    ngOnInit() {
-    }
+    ngOnInit() { }
 
     /**
      * @description Return the style
@@ -26,8 +25,8 @@ export class BasicStyleComponent implements OnInit {
      * @returns {Style}
      * @memberof BasicStyleComponent
      */
-    public getStyle(): Style {
-        return this.style;
+    public getStyle(): any {
+        return this.style!;
     }
 
     /**
@@ -39,7 +38,7 @@ export class BasicStyleComponent implements OnInit {
      * @memberof BasicStyleComponent
      */
     public isStyle(styleName: string): boolean {
-        return this.style && this.style.style_name == styleName;
+        return this.style! && this.style.style_name == styleName;
     }
 
     public isChildStyle(child: Style, styleName: string): boolean {
@@ -93,8 +92,8 @@ export class BasicStyleComponent implements OnInit {
         }
     }
 
-    public getFieldContent(fieldName: string): string {
-        return this.style[fieldName] ? this.style[fieldName].content : '';
+    public getFieldContent(fieldName: string): any {
+        return this.style && this.style[fieldName] ? this.style[fieldName].content : '';
     }
 
     public getChildFieldContent(child: Style, fieldName: string): string {
@@ -102,18 +101,18 @@ export class BasicStyleComponent implements OnInit {
     }
 
     public getFieldDefaut(fieldName: string): string {
-        return this.style[fieldName] ? this.style[fieldName].default : '';
+        return this.style && this.style[fieldName] ? this.style[fieldName].default : '';
     }
 
     public getChildFieldDefault(child: Style, fieldName: string): string {
         return child[fieldName] ? child[fieldName].default : '';
     }
 
-    public getID(): number {
-        return this.style.id ? parseInt(this.style.id.content.toString()) : null;
+    public getID(): number | null {
+        return this.style && this.style && this.style.id ? parseInt(this.style.id.content.toString()) : null;
     }
 
-    public getChildID(child: Style): number {
+    public getChildID(child: Style): number | null {
         return child.id ? parseInt(child.id.content.toString()) : null;
     }
 

@@ -10,21 +10,21 @@ import { BasicStyleComponent } from './../basic-style/basic-style.component';
     styleUrls: ['./form-user-input-style.component.scss'],
 })
 export class FormUserInputStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: FormUserInputStyle;
-    public form: FormGroup;
-    private formFields = {};
-    inputStyles = [];
+    @Input() override style!: FormUserInputStyle;
+    public form!: FormGroup;
+    private formFields: { [key: string]: any } = {};
+    inputStyles: any[] = [];
 
     constructor(protected formBuilder: FormBuilder, protected selfhelpService: SelfhelpService) {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.initForm();
     }
 
     private collectFormFields(style: any) {
-        style.children.forEach(formField => {
+        style.children.forEach((formField: any) => {
             if (formField['children'] && formField['children'].length > 0) {
                 this.collectFormFields(formField);
             }
@@ -58,7 +58,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     protected prepareParams(value: { [key: string]: any; }): any {
-        let params = {};
+        let params: { [key: string]: any } = {};
         params['__form_name'] = this.getFieldContent('name');
         this.inputStyles.forEach(formField => {
             if (this.selfhelpService.isFormField(formField)) {
@@ -75,7 +75,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
             }
         });
         return params;
-    }    
+    }
 
     public async submitForm(value: { [key: string]: any; }) {
         const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));
@@ -94,7 +94,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         if (res && this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal();
         }
-        if (this.getFieldContent('redirect_at_end') != '') { 
+        if (this.getFieldContent('redirect_at_end') != '') {
             this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
         }
     }

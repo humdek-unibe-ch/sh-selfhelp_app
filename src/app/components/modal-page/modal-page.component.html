@@ -6,7 +6,7 @@
         <ion-title>{{getTitle()}}</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content #content *ngIf="selfhelp.urls[url]"  fullscreen>
-    <app-basic-style *ngFor="let style of selfhelp.urls[url].content" [style]="style" [url]="url" [ionContent]="content"></app-basic-style>
+<ion-content #content *ngIf="selfHelp.urls[url]"  fullscreen>
+    <app-basic-style *ngFor="let style of selfHelp.urls[url].content" [style]="style" [url]="url" [ionContent]="content"></app-basic-style>
     <div *ngIf="isMissing()"  class="p-5">Missing page</div>
 </ion-content>

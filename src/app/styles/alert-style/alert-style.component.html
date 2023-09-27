@@ -1,5 +1,5 @@
 <div [class]="'alert ' + getCss() + ' alert-' + getFieldContent('type')">
-    <button *ngIf="getFieldContent('is_dismissable') == '1'" type="button" class="close" data-dismiss="alert"
+    <button *ngIf="getFieldContent('is_dismissable') === '1'" type="button" class="close" data-dismiss="alert"
         aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>

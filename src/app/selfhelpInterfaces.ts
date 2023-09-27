@@ -52,7 +52,8 @@ export interface Style {
     css: string,
     success_msgs?: string[],
     fail_msgs?: string[],
-    css_mobile?: StyleField
+    css_mobile?: StyleField,
+    [key: string]: any; // Index signature for dynamic property access
 }
 
 export interface CardStyle extends Style {
@@ -105,8 +106,13 @@ export interface RadioStyle extends FormField {
     items: StyleField
 }
 
+export interface SelectItem {
+    value: any;
+    text: string;
+}
+
 export interface SelectStyle extends FormField {
-    items: any[],
+    items: SelectItem[],
     is_multiple: StyleField,
     max: StyleField,
     live_search: StyleField,
@@ -424,12 +430,14 @@ export interface ConfirmAlert {
 
 export interface LoginValues {
     email: string,
-    password: string
+    password: string,
+    type?: string,
 }
 
 export interface RegistrationValues {
     email: string,
-    code?: string
+    code?: string,
+    type?: string,
 }
 
 export interface ValidateValues {
@@ -497,18 +505,18 @@ export interface Url {
 
 export interface SelfHelp {
     navigation: SelfHelpNavigation[],
-    selectedMenu: SelfHelpNavigation,
-    selectedSubMenu: SelfHelpNavigation,
+    selectedMenu?: SelfHelpNavigation,
+    selectedSubMenu?: SelfHelpNavigation,
     urls: Url,
-    logged_in: boolean,
+    logged_in?: boolean,
     base_path: string,
     current_url: string,
     current_modal_url: string,
     credentials?: LoginValues,
     avatar: string,
     external_css: string,
-    languages: Language[],
-    locale: string,
-    default_language_id: Number,
-    user_language: Number,
+    languages?: Language[],
+    locale?: string,
+    default_language_id?: Number | null,
+    user_language?: Number | null,
 }

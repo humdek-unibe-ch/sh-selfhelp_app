@@ -8,12 +8,12 @@ import { AccordionListStyle } from './../../selfhelpInterfaces';
     styleUrls: ['./accordion-list-style.component.scss'],
 })
 export class AccordionListStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: AccordionListStyle;
+    @Input() override style!: AccordionListStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

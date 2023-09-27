@@ -7,20 +7,20 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
     styleUrls: ['./modal-page.component.scss'],
 })
 export class ModalPageComponent extends BasicComponentComponent implements OnInit {
-    @Input() url_param: string;
+    @Input() url_param!: string;
 
     constructor(injector: Injector,zone: NgZone) {
-        super(injector, zone);           
+        super(injector, zone);
     }
 
-    async ngOnInit(){
+    override async ngOnInit(){
         this.url = this.url_param;
         // this.selfhelpService.getPage(this.url);
-    } 
+    }
 
     isMissing():boolean{
-        if(this.selfhelp.urls[this.url].content.length > 0){
-            if(String(this.selfhelp.urls[this.url].content[0]) == 'missing'){
+        if(this.selfHelp.urls[this.url].content.length > 0){
+            if(String(this.selfHelp.urls[this.url].content[0]) == 'missing'){
                 return true;
             }else{
                 return false;
@@ -28,6 +28,6 @@ export class ModalPageComponent extends BasicComponentComponent implements OnIni
         }else{
             return false;
         }
-    }   
+    }
 
 }

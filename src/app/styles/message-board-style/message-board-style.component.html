@@ -5,10 +5,10 @@
             <div class="mb-0 d-flex align-items-center">
                 <!-- <i class="fas fa-chart-line mr-3"></i> -->
                 <!-- {{getFieldContent('title')}} -->
-                <ion-avatar class="avatar" slot="start" *ngIf="message.avatar != ''">
+                <ion-avatar class="avatar" slot="start" *ngIf="message.avatar !== ''">
                     <img [src]="getAvatar(message.avatar)">
                 </ion-avatar>
-                <ion-icon *ngIf="message.avatar == ''" class="no-avatar" name="person-circle-outline" color="medium">
+                <ion-icon *ngIf="message.avatar === ''" class="no-avatar" name="person-circle-outline" color="medium">
                 </ion-icon>
                 <h5 class="user_name">{{message.user}}</h5>
                 <small class="text-muted ml-auto" [title]="message.time">
@@ -27,10 +27,10 @@
                 <div *ngFor="let reply of message.reply_messages" class="card mb-1">
                     <div class="card-body py-2">
                         <div class="d-flex align-items-center flex-wrap">
-                            <ion-avatar class="avatar" slot="start" *ngIf="reply.avatar != ''">
+                            <ion-avatar class="avatar" slot="start" *ngIf="reply.avatar !== ''">
                                 <img [src]="getAvatar(reply.avatar)">
                             </ion-avatar>
-                            <ion-icon *ngIf="reply.avatar == ''" class="no-avatar" name="person-circle-outline"
+                            <ion-icon *ngIf="reply.avatar === ''" class="no-avatar" name="person-circle-outline"
                                 color="medium">
                             </ion-icon>
                             <div class="mr-2"><strong>
@@ -52,10 +52,10 @@
                 <app-submit-comment *ngFor="let icon of this.getFieldContent('icons')" [url]="message.url"
                     [parent_url]="url" [reply_id]="style.id_reply" [reply_value]="icon" [link_id]="style.id_link"
                     [link_value]="message.record_id" [icons]="true" [icon_counter]="message.icon_counter"
-                    [disabled]="message.color=='primary'" [form_name]="getFieldContent('name')">
+                    [disabled]="message.color==='primary'" [form_name]="getFieldContent('name')">
                 </app-submit-comment>
             </div>
-            <div *ngIf="message.color=='success'" class="ml-auto">
+            <div *ngIf="message.color==='success'" class="ml-auto">
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

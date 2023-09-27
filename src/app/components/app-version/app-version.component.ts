@@ -12,6 +12,6 @@ export class AppVersionComponent extends BasicComponentComponent implements OnIn
         super(injector, zone);
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

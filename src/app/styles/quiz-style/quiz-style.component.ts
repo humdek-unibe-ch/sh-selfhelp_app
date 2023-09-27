@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./quiz-style.component.scss'],
 })
 export class QuizStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: QuizStyle;
+    @Input() override style!: QuizStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

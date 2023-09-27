@@ -11,16 +11,16 @@ import { InputStyle, SelectStyle, ValidateStyle, ValidateValues, ValidationResul
     styleUrls: ['./validate-style.component.scss'],
 })
 export class ValidateStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: ValidateStyle;
-    public form: FormGroup;
-    private extraFormFields = {};
-    inputStyles = [];
+    @Input() override style!: ValidateStyle;
+    public form!: FormGroup;
+    private extraFormFields: { [key: string]: any } = {};
+    inputStyles: any[] = [];
 
     constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.initForm();
     }
 
@@ -40,7 +40,7 @@ export class ValidateStyleComponent extends BasicStyleComponent implements OnIni
     }
 
     private collectFormFields(style: any) {
-        style.children.forEach(formField => {
+        style.children.forEach((formField: any) => {
             if (formField['children'] && formField['children'].length > 0) {
                 this.collectFormFields(formField);
             }

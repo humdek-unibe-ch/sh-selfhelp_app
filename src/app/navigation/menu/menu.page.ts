@@ -12,34 +12,34 @@ import { ProfileComponent } from 'src/app/components/profile/profile.component';
 })
 export class MenuPage {
 
-    public selfhelp: SelfHelp;
+    public selfHelp?: SelfHelp;
 
-    constructor(private selfhelpService: SelfhelpService, private zone: NgZone) {
-        this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
+    constructor(private selfHelpService: SelfhelpService, private zone: NgZone) {
+        this.selfHelpService.observeSelfhelp().subscribe((selfHelp: SelfHelp) => {
             this.zone.run(() => {
-                if (selfhelp) {
-                    this.selfhelp = selfhelp;
+                if (selfHelp) {
+                    this.selfHelp = selfHelp;
                 }
             });
         });
     }
 
     public getContent(nav: SelfHelpNavigation) {
-        return this.selfhelpService.getContent(nav);
+        return this.selfHelpService.getContent(nav);
     }
 
     public profileOrLogin(): void {
-        if (this.selfhelp.logged_in) {
+        if (this.selfHelp && this.selfHelp.logged_in) {
             // show profile
-            this.selfhelpService.getModalComponent(ProfileComponent);
+            this.selfHelpService.getModalComponent(ProfileComponent);
         } else {
             // show login page
-            this.selfhelpService.getModalComponent(LoginComponent);
+            this.selfHelpService.getModalComponent(LoginComponent);
         }
     }
 
     public getAvatar(): string {
-        return this.selfhelpService.getAvatarImg();
+        return this.selfHelpService.getAvatarImg();
     }
 
 }

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { VideoStyle, MediaContent } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { StringUtils } from 'turbocommons-ts';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 @Component({
@@ -10,21 +9,21 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     styleUrls: ['./video-style.component.scss'],
 })
 export class VideoStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: VideoStyle;
+    @Input() override style!: VideoStyle;
 
     constructor(private selfhelp: SelfhelpService) {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
-    public getVideoSource(): MediaContent[] {
+    public getVideoSource(): MediaContent[] | null {
         return this.style.sources ?  <MediaContent[]>this.style.sources.content : null;
     }
 
     public getVideoUrl(videoUrl: MediaContent): string {
-        if (StringUtils.isUrl(videoUrl.source)) {
-            return videoUrl.source; 
+        if (this.selfhelp.isURL(videoUrl.source)) {
+            return videoUrl.source;
         } else {
             let res = this.selfhelp.getApiEndPointNative() + '/' + videoUrl.source;
             return res;

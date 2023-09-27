@@ -4,29 +4,35 @@ import { ResetPasswordResult, ResetPasswordStyle, ResetPasswordValues } from 'sr
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 
+interface FormControls {
+    user_name: FormControl;
+    reset_anonymous_user: FormControl;
+    [key: string]: FormControl; // Add an index signature for dynamic properties
+  }
+
 @Component({
     selector: 'app-reset-password-style',
     templateUrl: './reset-password-style.component.html',
     styleUrls: ['./reset-password-style.component.scss'],
 })
 export class ResetPasswordStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: ResetPasswordStyle;
-    public form: FormGroup;
+    @Input() override style!: ResetPasswordStyle;
+    public form!: FormGroup;
     public reg_success = false;
 
     constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.initForm();
     }
 
     private initForm(): void {
         if (this.style.anonymous_users) {
-            let form_controls = {
+            let form_controls: FormControls = {
                 user_name: new FormControl(this.style.reset_user_name, Validators.required),
-                reset_anonymous_user: new FormControl(true, Validators.required)
+                reset_anonymous_user: new FormControl(true, Validators.required),
             };
             this.style.security_questions_labels.forEach(question => {
                 form_controls[question.id] = new FormControl('', Validators.required)

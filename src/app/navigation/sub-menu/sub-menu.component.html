@@ -1,16 +1,16 @@
-<ion-segment scrollable [(ngModel)]="segment" (ionChange)="setSelectedSubMenu()">
+<ion-segment *ngIf="selfhelp.selectedMenu && selfhelp.selectedMenu.children"  scrollable [(ngModel)]="segment" (ionChange)="setSelectedSubMenu()">
     <ion-segment-button *ngFor="let subNav of selfhelp.selectedMenu.children; let i = index" [value]="i">
         <!-- <ion-icon [name]="subNav.keyword"></ion-icon> -->
         <ion-label>{{subNav.title}}</ion-label>
     </ion-segment-button>
 </ion-segment>
 
-<ion-slides #slides (ionSlideDidChange)="slideChanged()">
-    <ion-slide *ngFor="let subNav of selfhelp.selectedMenu.children; let i = index" 
-        [ngSwitch]="selfhelp.selectedSubMenu && selfhelp.selectedSubMenu.keyword == subNav.keyword" scrollbar="true">
+<swiper-container #slides (slidechange)="slideChanged()" class="swiper-height">
+    <swiper-slide *ngFor="let subNav of selfhelp.selectedMenu?.children; let i = index"
+        [ngSwitch]="selfhelp.selectedSubMenu && selfhelp.selectedSubMenu.keyword === subNav.keyword" scrollbar="true">
         <ion-content center class="subMenuSlide" scrollbar="true">
             <app-basic-style *ngFor="let style of getContent(subNav)" [style]="style" [url]="subNav.url">
             </app-basic-style>
         </ion-content>
-    </ion-slide>
-</ion-slides>
+    </swiper-slide>
+</swiper-container>

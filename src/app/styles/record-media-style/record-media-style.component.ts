@@ -17,7 +17,7 @@ const MEDIA_FOLDER_NAME = 'my_media';
     styleUrls: ['./record-media-style.component.scss'],
 })
 export class RecordMediaStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: Style;
+    @Input() override style!: Style;
     @ViewChild('myvideo') myVideo: any;
     files = [];
 
@@ -25,7 +25,7 @@ export class RecordMediaStyleComponent extends BasicStyleComponent implements On
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.plt.ready().then(() => {
             let path = this.file.dataDirectory;
             this.file.checkDir(path, MEDIA_FOLDER_NAME).then(

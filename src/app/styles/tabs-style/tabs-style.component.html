@@ -8,9 +8,9 @@
     </ion-segment-button>
 </ion-segment>
 
-<ion-slides #tabContent (ionSlideDidChange)="tabChanged()" [options]="sliderConfig">
-    <ion-slide *ngFor="let tab of style.children; let i = index" [ngSwitch]="selectedTab == i" scrollbar="true">
+<swiper-container #tabContent (slidechange)="tabChanged()" [options]="sliderConfig">
+    <swiper-slide *ngFor="let tab of style.children; let i = index" [ngSwitch]="selectedTab === i" scrollbar="true">
         <app-basic-style *ngFor="let child of tab.children" [style]="child" [url]="url">
         </app-basic-style>
-    </ion-slide>
-</ion-slides>
+    </swiper-slide>
+</swiper-container>

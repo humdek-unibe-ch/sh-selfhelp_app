@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./nested-list-style.component.scss'],
 })
 export class NestedListStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: NestedListStyle;
+    @Input() override style!: NestedListStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

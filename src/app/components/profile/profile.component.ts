@@ -15,23 +15,14 @@ export class ProfileComponent extends BasicComponentComponent implements OnInit 
     }
 
     public getProfileTitle(): string {
-        if (this.selfhelp.urls[this.url]) {
-            console.log(this.selfhelp.urls[this.url]);
-            console.log(this.selfhelp);
-            return this.selfhelp.urls[this.url]['title'];
-            for (let i = 0; i < this.selfhelp.urls[this.url].content.length; i++) {
-                const style = this.selfhelp.urls[this.url].content[i];
-                const prof = <ProfileStyle>style;
-                if (prof.profile_title) {
-                    return prof.profile_title;
-                }
-            }
+        if (this.selfHelp.urls[this.url]) {
+            return this.selfHelp.urls[this.url]['title'];
         }
         return '';
     }
 
     public logout(): void{
-        this.selfhelpService.logout();
-        this.selfhelpService.closeModal();
+        this.selfHelpService.logout();
+        this.selfHelpService.closeModal();
     }
 }

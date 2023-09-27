@@ -8,13 +8,13 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./progress-bar-style.component.scss'],
 })
 export class ProgressBarStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: ProgressBarStyle;
+    @Input() override style!: ProgressBarStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
     public getProgress(): number {
         return 100 * parseInt(this.getFieldContent('count')) / parseInt(this.getFieldContent('count_max'));

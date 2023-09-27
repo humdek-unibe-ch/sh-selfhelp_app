@@ -10,15 +10,15 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./register-style.component.scss'],
 })
 export class RegisterStyleComponen extends BasicStyleComponent implements OnInit {
-    @Input() style: RegisterStyle;
-    public form: FormGroup;
+    @Input() override style!: RegisterStyle;
+    public form!: FormGroup;
     public reg_success = false;
 
     constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
         super();
     }
 
-    ngOnInit() {        
+    override ngOnInit() {
         this.initForm();
     }
 

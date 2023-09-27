@@ -3,7 +3,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { Model, StylesManager } from "survey-core";
-import { Storage } from '@ionic/storage';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
     selector: 'app-survey-js-style',
@@ -11,15 +11,15 @@ import { Storage } from '@ionic/storage';
     styleUrls: ['./survey-js-style.component.css']
 })
 export class SurveyJSStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: SurveyJSStyle;
-    surveyModel: Model;
-    autoSaveTimers = {};
+    @Input() override style!: SurveyJSStyle;
+    surveyModel!: Model;
+    autoSaveTimers: { [key: string]: any } = {};
 
-    constructor(private selfhelpService: SelfhelpService, private storage: Storage) {
+    constructor(private selfhelpService: SelfhelpService) {
         super();
     }
 
-    async ngOnInit() {
+    override async ngOnInit() {
         if (this.style.show_survey) {
             StylesManager.applyTheme(this.getFieldContent('survey-js-theme'));
             let survey = new Model(this.style.survey_json);
@@ -59,7 +59,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     clearInterval(this.autoSaveTimers[this.style.survey_generated_id]);
                 }
                 sender.setValue('trigger_type', 'finished');
-                this.saveSurveyJS(sender);                
+                this.saveSurveyJS(sender);
             });
             this.surveyModel = survey;
         }
@@ -69,13 +69,17 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         let data = { ...survey.data };
         data.pageNo = survey.currentPageNo;
         if (this.getFieldContent('restart_on_refresh') == '0' && data['survey_generated_id']) {
-            this.storage.set(data['survey_generated_id'], JSON.stringify(data));
+            Preferences.set({
+                key: data['survey_generated_id'],
+                value: JSON.stringify(data),
+            });
+
         }
         data['_json'] = JSON.stringify(data);
         this.selfhelpService.execServerRequest(this.url, data).then((res) => {
             if (data['trigger_type'] == 'finished') {
                 // on successful save on completed survey remove the local storage data
-                this.storage.remove(data['survey_generated_id']);
+                Preferences.remove({ key: data['survey_generated_id'] });
                 this.endSurvey();
             }
         })
@@ -86,13 +90,9 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     }
 
     private getLocalSurvey(): object | boolean {
-        return this.storage.get(this.style.survey_generated_id).then((val) => {
-            if (val) {
-                try {
-                    return JSON.parse(val);
-                } catch (error) {
-                    return false;
-                }
+        return Preferences.get({ key: this.style.survey_generated_id }).then((val) => {
+            if (val.value) {
+                return JSON.parse(val.value);
             } else {
                 return false;
             }

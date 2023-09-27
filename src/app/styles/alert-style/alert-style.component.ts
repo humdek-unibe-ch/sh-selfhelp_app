@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./alert-style.component.scss'],
 })
 export class AlertStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: AlertStyle;
+    @Input() override style!: AlertStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

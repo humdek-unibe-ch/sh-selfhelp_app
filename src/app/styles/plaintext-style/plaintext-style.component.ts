@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./plaintext-style.component.scss'],
 })
 export class PlaintextStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: PlaintextStyle;
+    @Input() override style!: PlaintextStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

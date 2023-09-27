@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { SelectStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { StringUtils } from 'turbocommons-ts';
 declare const IconSelect: any;
 
 @Component({
@@ -12,14 +11,14 @@ declare const IconSelect: any;
     styleUrls: ['./select-style.component.scss'],
 })
 export class SelectStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: SelectStyle;
-    @Input() parentForm: FormGroup;
+    @Input() override style!: SelectStyle;
+    @Input() override parentForm!: FormGroup;
 
     constructor(private selfhelp: SelfhelpService) {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
     ngAfterViewInit(): void {
         if (this.getFieldContent('image_selector') == '1') {
@@ -32,16 +31,19 @@ export class SelectStyleComponent extends BasicStyleComponent implements OnInit 
         let el = document.getElementById('image_selector-' + this.getFieldContent('id'));
         let fieldName = this.getFieldContent('name');
         let pForm = this.parentForm;
-        $(el).on('changed', function (e) {
-            let newValue = {};
-            newValue[fieldName] = iconSelect.getSelectedValue();
-            pForm.setValue(newValue);
-        });
+        if (el) {
+            el.addEventListener('change', (e) => {
+                const newValue: { [key: string]: any } = {};
+                newValue[fieldName] = (e.target as HTMLInputElement).value;
+                // Assuming 'pForm' is a reference to a form element or an object that can be used to set values
+                pForm.setValue(newValue);
+            });
+        }
 
-        var icons = [];
+        var icons: any[] = [];
         this.style.items.forEach(value => {
             let text = value['text'];
-            if (!StringUtils.isUrl(text)) {
+            if (!this.selfhelp.isURL(text)) {
                 text = this.selfhelp.getApiEndPointNative() + '/' + text;
             }
             if (value['value'] == this.style.last_value) {

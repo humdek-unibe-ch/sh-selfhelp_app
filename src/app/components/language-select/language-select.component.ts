@@ -7,17 +7,17 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
     styleUrls: ['./language-select.component.scss'],
 })
 export class LanguageSelectComponent extends BasicComponentComponent implements OnInit {
-    @Input() url: string;
+    @Input() override url!: string;
 
     constructor(injector: Injector, zone: NgZone) {
         super(injector, zone);
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
     refreshAfterLanguageChange() {
-        this.selfhelpService.loadLanguage();
-        this.selfhelpService.getPage(this.url);
+        this.selfHelpService.loadLanguage();
+        this.selfHelpService.getPage(this.url);
     }
 
 }

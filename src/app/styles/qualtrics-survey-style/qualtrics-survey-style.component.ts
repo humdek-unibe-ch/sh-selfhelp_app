@@ -10,17 +10,17 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     styleUrls: ['./qualtrics-survey-style.component.scss'],
 })
 export class QualtricsSurveyStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: QualtricsSurveyStyle;
-    @ViewChild('iframe') iframe: ElementRef;
+    @Input() override style!: QualtricsSurveyStyle;
+    @ViewChild('iframe') iframe!: ElementRef;
     private time = (new Date()).getTime();
-    private component: IFrameComponent;
+    private component!: IFrameComponent | null;
     public init = false;
 
     constructor(private selfhelpService: SelfhelpService) {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
     }
 
     ngAfterViewInit() {
@@ -80,7 +80,8 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     }
 
     isContainer(): boolean {
-        return this.getFieldContent('use_as_container') && this.getFieldContent('use_as_container') == '1';
+        const fieldContent = this.getFieldContent('use_as_container');
+        return typeof fieldContent === 'string' ? fieldContent === '1' : !!fieldContent;
     }
 
 }

@@ -10,14 +10,14 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     styleUrls: ['./login-style.component.scss'],
 })
 export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: LoginStyle;
-    public form: FormGroup;
+    @Input() override style!: LoginStyle;
+    public form!: FormGroup;
 
     constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.initForm();
     }
 
@@ -60,7 +60,7 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
         this.selfhelpService.openUrl('/reset');
     }
 
-    public outputResetPassword() {        
+    public outputResetPassword() {
         return Boolean(!this.style.anonymous_users) || Boolean(this.style.is_reset_password_enabled);
     }
 

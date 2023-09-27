@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { AndroidFullScreen } from '@ionic-native/android-full-screen/ngx';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { StatusBar, Style } from '@capacitor/status-bar';
+// import { AndroidFullScreen } from '@awesome-cordova-plugins/android-full-screen';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
-import { CodePush } from '@ionic-native/code-push/ngx';
+// import { CodePush } from '@ionic-native/code-push/ngx';
 declare const IonicDeeplink: any;
+import { register } from 'swiper/element/bundle';
+register();
 
 @Component({
     selector: 'app-root',
@@ -19,13 +21,10 @@ export class AppComponent {
 
     constructor(
         private platform: Platform,
-        private splashScreen: SplashScreen,
-        private statusBar: StatusBar,
         private loadingCtrl: LoadingController,
-        private androidFullScreen: AndroidFullScreen,
         private notificationsService: NotificationsService,
-        public selfhelpSerivce: SelfhelpService,
-        private codePush: CodePush
+        public selfhelpSerivce: SelfhelpService
+        // private codePush: CodePush
     ) {
         if (window.localStorage.getItem('skin_app') && window.localStorage.getItem('skin_app') == 'md') {
             this.skinIOS = false;
@@ -34,25 +33,26 @@ export class AppComponent {
     }
 
     initializeApp() {
-        this.platform.ready().then(() => {
+        this.platform.ready().then(async () => {
             this.presentLoadingWithOptions();
             if (this.selfhelpSerivce.getIsApp()) {
                 this.checkForUpdate();
                 this.initDeepLinking();
-                this.androidFullScreen.isImmersiveModeSupported()
-                    .then(() => this.androidFullScreen.immersiveMode())
-                    .catch(err => console.log(err));
-                this.statusBar.styleDefault();
-                this.splashScreen.hide();
-                this.notificationsService.initFirebaseX();
+                // AndroidFullScreen.isImmersiveModeSupported()
+                //     .then(() => AndroidFullScreen.immersiveMode())
+                //     .catch(console.warn);
+                StatusBar.setStyle({ style: Style.Default });
+                await SplashScreen.hide();
+                this.notificationsService.initPushNotifications();
             }
         });
     }
 
     private async presentLoadingWithOptions() {
+        console.log('navigator', window.name, navigator);
         const loading = await this.loadingCtrl.create({
             // message: '<ion-img src="/assets/loading.gif" alt="loading..."></ion-img>',
-            message: '<div class="loader">Loading ' + name + '...</div>',
+            message: '<div class="loader">Loading ' + window.name + '...</div>',
             cssClass: 'scale-down-center',
             translucent: true,
             showBackdrop: false,
@@ -63,22 +63,22 @@ export class AppComponent {
     }
 
     private checkForUpdate() {
-        const downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
-        this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+        // const downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
+        // this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
     }
 
     initDeepLinking() {
-        IonicDeeplink.onDeepLink((link) => {
-            if (link['path']) {
-                const pathArr = link.path.split('/');
-                if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
-                    this.selfhelpSerivce.openUrl(link.path);
-                }
-            }
-        });
+        // IonicDeeplink.onDeepLink((link) => {
+        //     if (link['path']) {
+        //         const pathArr = link.path.split('/');
+        //         if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
+        //             this.selfhelpSerivce.openUrl(link.path);
+        //         }
+        //     }
+        // });
     }
 
-    public skinChanged(event): void {
+    public skinChanged(event: any): void {
         this.selfhelpSerivce.skin_app = event.detail.checked ? "ios" : "md";
         window.localStorage.setItem('skin_app', this.selfhelpSerivce.skin_app);
         window.location.reload();
@@ -101,6 +101,6 @@ export class AppComponent {
                 this.selfhelpSerivce.resetLocalData();
                 window.location.reload();
             }
-        });        
+        });
     }
 }

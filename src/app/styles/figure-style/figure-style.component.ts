@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./figure-style.component.scss'],
 })
 export class FigureStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: FigureStyle;
+    @Input() override style!: FigureStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

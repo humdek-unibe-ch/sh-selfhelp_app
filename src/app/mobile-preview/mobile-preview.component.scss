@@ -1,375 +1,392 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
-
-@import "~@ionic/angular/css/core.css";
-
-/* Core CSS required for Ionic components to work properly */
-@import "~@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
-@import "~@ionic/angular/css/normalize.css";
-@import "~@ionic/angular/css/structure.css";
-@import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
-
-/* Optional CSS utils that can be commented out */
-@import "~@ionic/angular/css/padding.css";
-@import "~@ionic/angular/css/float-elements.css";
-@import "~@ionic/angular/css/text-alignment.css";
-@import "~@ionic/angular/css/text-transformation.css";
-@import "~@ionic/angular/css/flex-utils.css";
-
-@import "~bootstrap/dist/css/bootstrap.min.css";
-@import "~@fortawesome/fontawesome-free/css/all.css";
-@import "~datatables.net-dt/css/jquery.dataTables.css";
-
-
-:root {
-  /** primary **/
-  --ion-color-primary: #007bff;
-  --ion-color-secondary: #6c757d;
-  --ion-color-success: #28a745;
-  --ion-color-danger: #dc3545;
-  --ion-color-warning: #ffc107;
-  --ion-color-info: #17a2b8;
-  --ion-color-light: #f8f9fa;
-  --ion-color-dark: #343a40;
-  --ion-color-white: #fff;
-}
-
-.ion-color-info {
-  --ion-color-base: var(--ion-color-info);
-  --ion-color-base-rgb: var(--ion-color-primary-rgb);
-  --ion-color-contrast: var(--ion-color-primary-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
-  --ion-color-shade: var(--ion-color-primary-shade);
-  --ion-color-tint: var(--ion-color-primary-tint);
-}
-
-ion-loading{
-    --max-height: 100% !important;
-    --max-width: 100% !important;
-}
-
-ion-loading .loading-wrapper{
-    height: 100% !important;
-    width: 100% !important;
-    max-height: 100% !important;
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0;
-    background-color: #eaecfa !important;
-    border-radius: 0 !important;
-}
-
-// $color-loader: --ion-color-primar;
-
-.loader {
-  width: 250px;
-  height: 50px;
-  line-height: 50px;
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  font-family: helvetica, arial, sans-serif;
-  text-transform: uppercase;
-  font-weight: 900;
-  color: var(--ion-color-primary);
-  letter-spacing: 0.2em;
-  
-  &::before, &::after {
-    content: "";
-    display: block;
-    width: 15px;
-    height: 15px;
-    background: var(--ion-color-primary);
-    position: absolute;
-    animation: load .7s infinite alternate ease-in-out;
-  }
-  
-  &::before {
-    top: 0;
-  }
-  
-  &::after {
-    bottom: 0;
-  }
-}
-
-@keyframes load {
-  0% { left: 0; height: 30px; width: 15px }
-  50% { height: 8px; width: 40px }
-  100% { left: 235px; height: 30px; width: 15px}
-}
-
-/*
- * This adds a scroll bar to ionic alerts
- */
-.alert-radio-group::-webkit-scrollbar, .alert-checkbox-group::-webkit-scrollbar {
-    width: 0.7em;
-    display: block !important;
-}
-
-.alert-radio-group::-webkit-scrollbar-track, .alert-checkbox-group::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-}
-
-.alert-radio-group::-webkit-scrollbar-thumb, .alert-checkbox-group::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
-}
-
-.modal-fullscreen {
-    .modal-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
-}
-
-.selectServer .alert-wrapper {
-    width: 80%;
-    max-width: 80%;
-}
-
-.cal-modal {
-    --height: 80%;
-    --border-radius: 10px;
-    padding: 25px;
-}
-
-.dataTables_wrapper.no-footer .dataTables_scrollBody {
-    border-bottom: none !important;
-}
-
-.test{
-    border: 5px solid red;
-}
-
-
-.scale-down-center {
-  -webkit-animation: scale-down-center 0.6s cubic-bezier(0.175, 0.885, 0.320, 1.275) infinite alternate both;
-  animation: scale-down-center 0.6s cubic-bezier(0.175, 0.885, 0.320, 1.275) infinite alternate both;
-}
-
-// CUSTOM ANIMATION KEYFRAMS********************
-@-webkit-keyframes scale-down-center {
-  0% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-
-  100% {
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-  }
-}
-
-@keyframes scale-down-center {
-  0% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-
-  100% {
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-  }
-}
-
-// CUSTOM ANIMATION KEYFRAMS********************
-
-$device-padding: 1rem;
-$device-width: 344px;
-$device-height: 704px;
-$device-frame-width: 12px;
-
-docs-demo {
-  display: block;
-}
-
-.docs-demo-device {
-  --device-padding: 1rem;
-  --device-width: 344px;
-  --device-height: 704px;
-  --device-frame-width: 12px;
-
-  padding: var(--device-padding);
-  /* position: sticky; */
-  /* top: 0; */
-}
-
-.docs-demo-mode-toggle {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-
-  margin: 1rem auto 0;
-
-  width: 128px;
-  height: 28px;
-
-  background: #ecf0f5;
-
-  border-radius: 18px;
-}
-
-.docs-demo-mode-toggle button {
-  background-color: transparent;
-  border: none;
-  border-radius: 16px;
-
-  color: #5b708b;
-
-  cursor: pointer;
-  font-family: var(--font-family);
-  font-size: 11px;
-  letter-spacing: -0.02em;
-  width: calc(50% - 2px);
-  line-height: 21px;
-  padding-top: 2px;
-
-  transition: 200ms background-color ease, 200ms color ease;
-}
-
-.docs-demo-mode-toggle button:focus,
-.docs-demo-mode-toggle button:active {
-  outline: none;
-}
-
-.docs-demo-mode-toggle button.is-selected {
-  background-color: white;
-  color: black;
-
-  font-weight: 600;
-  box-shadow: 0px 2px 3px rgba(0, 16, 46, 0.15);
-}
-
-.docs-demo-device>figure {
-  margin: 0;
-
-  background-size: contain;
-  background-repeat: no-repeat;
-
-  box-shadow: 0px 2px 8px rgba(2, 8, 20, 0.1), 0px 8px 16px rgba(2, 8, 20, 0.08);
-
-  width: var(--device-width);
-  height: var(--device-height);
-
-  overflow: hidden;
-
-  position: relative;
-
-  z-index: 1;
-}
-
-.docs-demo-device>figure>.selfhelp-app {
-  position: absolute;
-
-  top: 0;
-  left: 0;
-
-  margin: var(--device-frame-width);
-
-  width: calc(100% - var(--device-frame-width) * 2);
-  height: calc(100% - var(--device-frame-width) * 2);
-
-  border: none;
-
-  overflow: hidden;
-
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-
-  z-index: 1;
-}
-
-.docs-demo-device.ios figure {
-  background-image: url('/assets/preview/iphone-device-skin.png');
-
-  border-radius: 54px;
-}
-
-.docs-demo-device.ios>figure>.selfhelp-app {
-  border-radius: 38px;
-}
-
-.docs-demo-device.md figure {
-  background-image: url('/assets/preview/android-device-skin.png');
-
-  border-radius: 44px;
-}
-
-.docs-demo-device.md>figure>.selfhelp-app {
-  border-radius: 32px;
-}
-
-.docs-demo-device.ios figure:after {
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 2px;
-  bottom: 18px;
-  content: '';
-  display: none;
-  height: 4px;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
-  width: 35%;
-  z-index: 1;
-}
-
-.docs-demo-device__ios-notch {
-  display: none;
-  fill: #090a0d;
-  left: 50%;
-  position: absolute;
-  top: 12px;
-  transform: translateX(-50%);
-  width: 165px;
-  z-index: 2;
-}
-
-.docs-demo-device.ios .docs-demo-device__ios-notch,
-.docs-demo-device.ios figure:after {
-  display: block;
-}
-
-.docs-demo-device__md-bar {
-  display: none;
-}
-
-.docs-demo-device.md .docs-demo-device__md-bar {
-  display: block;
-  fill: rgba(125, 125, 125, 0.3);
-  padding: 0.5rem 2.2rem;
-  position: relative;
-  width: 100%;
-  z-index: 2;
-  top: 12px;
-}
-
-
-
-
-.device-width{
-  width: $device-width;
-}
-
-.responsiveWindow{
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+// /*
+//  * App Global CSS
+//  * ----------------------------------------------------------------------------
+//  * Put style rules here that you want to apply globally. These styles are for
+//  * the entire app and not just one component. Additionally, this file can be
+//  * used as an entry point to import other CSS/Sass files to be included in the
+//  * output CSS.
+//  * For more information on global stylesheets, visit the documentation:
+//  * https://ionicframework.com/docs/layout/global-stylesheets
+//  */
+
+// @import "~@ionic/angular/css/core.css";
+
+// /* Core CSS required for Ionic components to work properly */
+// @import "~@ionic/angular/css/core.css";
+
+// /* Basic CSS for apps built with Ionic */
+// @import "~@ionic/angular/css/normalize.css";
+// @import "~@ionic/angular/css/structure.css";
+// @import "~@ionic/angular/css/typography.css";
+// @import '~@ionic/angular/css/display.css';
+
+// /* Optional CSS utils that can be commented out */
+// @import "~@ionic/angular/css/padding.css";
+// @import "~@ionic/angular/css/float-elements.css";
+// @import "~@ionic/angular/css/text-alignment.css";
+// @import "~@ionic/angular/css/text-transformation.css";
+// @import "~@ionic/angular/css/flex-utils.css";
+
+// @import "~bootstrap/dist/css/bootstrap.min.css";
+// // @import "~@fortawesome/fontawesome-free/css/all.css";
+// // @import "~datatables.net-dt/css/jquery.dataTables.css";
+
+
+// :root {
+//     /** primary **/
+//     --ion-color-primary: #007bff;
+//     --ion-color-secondary: #6c757d;
+//     --ion-color-success: #28a745;
+//     --ion-color-danger: #dc3545;
+//     --ion-color-warning: #ffc107;
+//     --ion-color-info: #17a2b8;
+//     --ion-color-light: #f8f9fa;
+//     --ion-color-dark: #343a40;
+//     --ion-color-white: #fff;
+// }
+
+// .ion-color-info {
+//     --ion-color-base: var(--ion-color-info);
+//     --ion-color-base-rgb: var(--ion-color-primary-rgb);
+//     --ion-color-contrast: var(--ion-color-primary-contrast);
+//     --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
+//     --ion-color-shade: var(--ion-color-primary-shade);
+//     --ion-color-tint: var(--ion-color-primary-tint);
+// }
+
+// ion-loading {
+//     --max-height: 100% !important;
+//     --max-width: 100% !important;
+// }
+
+// ion-loading .loading-wrapper {
+//     height: 100% !important;
+//     width: 100% !important;
+//     max-height: 100% !important;
+//     max-width: 100% !important;
+//     padding: 0 !important;
+//     margin: 0;
+//     background-color: #eaecfa !important;
+//     border-radius: 0 !important;
+// }
+
+// // $color-loader: --ion-color-primar;
+
+// .loader {
+//     width: 250px;
+//     height: 50px;
+//     line-height: 50px;
+//     text-align: center;
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     font-family: helvetica, arial, sans-serif;
+//     text-transform: uppercase;
+//     font-weight: 900;
+//     color: var(--ion-color-primary);
+//     letter-spacing: 0.2em;
+
+//     &::before,
+//     &::after {
+//         content: "";
+//         display: block;
+//         width: 15px;
+//         height: 15px;
+//         background: var(--ion-color-primary);
+//         position: absolute;
+//         animation: load .7s infinite alternate ease-in-out;
+//     }
+
+//     &::before {
+//         top: 0;
+//     }
+
+//     &::after {
+//         bottom: 0;
+//     }
+// }
+
+// @keyframes load {
+//     0% {
+//         left: 0;
+//         height: 30px;
+//         width: 15px
+//     }
+
+//     50% {
+//         height: 8px;
+//         width: 40px
+//     }
+
+//     100% {
+//         left: 235px;
+//         height: 30px;
+//         width: 15px
+//     }
+// }
+
+// /*
+//  * This adds a scroll bar to ionic alerts
+//  */
+// .alert-radio-group::-webkit-scrollbar,
+// .alert-checkbox-group::-webkit-scrollbar {
+//     width: 0.7em;
+//     display: block !important;
+// }
+
+// .alert-radio-group::-webkit-scrollbar-track,
+// .alert-checkbox-group::-webkit-scrollbar-track {
+//     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+//     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+// }
+
+// .alert-radio-group::-webkit-scrollbar-thumb,
+// .alert-checkbox-group::-webkit-scrollbar-thumb {
+//     background-color: darkgrey;
+//     outline: 1px solid slategrey;
+// }
+
+// .modal-fullscreen {
+//     .modal-wrapper {
+//         position: absolute;
+//         top: 0;
+//         left: 0;
+//         display: block;
+//         width: 100%;
+//         height: 100%;
+//     }
+// }
+
+// .selectServer .alert-wrapper {
+//     width: 80%;
+//     max-width: 80%;
+// }
+
+// .cal-modal {
+//     --height: 80%;
+//     --border-radius: 10px;
+//     padding: 25px;
+// }
+
+// .dataTables_wrapper.no-footer .dataTables_scrollBody {
+//     border-bottom: none !important;
+// }
+
+// .test {
+//     border: 5px solid red;
+// }
+
+
+// .scale-down-center {
+//     -webkit-animation: scale-down-center 0.6s cubic-bezier(0.175, 0.885, 0.320, 1.275) infinite alternate both;
+//     animation: scale-down-center 0.6s cubic-bezier(0.175, 0.885, 0.320, 1.275) infinite alternate both;
+// }
+
+// // CUSTOM ANIMATION KEYFRAMS********************
+// @-webkit-keyframes scale-down-center {
+//     0% {
+//         -webkit-transform: scale(1);
+//         transform: scale(1);
+//     }
+
+//     100% {
+//         -webkit-transform: scale(0.5);
+//         transform: scale(0.5);
+//     }
+// }
+
+// @keyframes scale-down-center {
+//     0% {
+//         -webkit-transform: scale(1);
+//         transform: scale(1);
+//     }
+
+//     100% {
+//         -webkit-transform: scale(0.5);
+//         transform: scale(0.5);
+//     }
+// }
+
+// // CUSTOM ANIMATION KEYFRAMS********************
+
+// $device-padding: 1rem;
+// $device-width: 344px;
+// $device-height: 704px;
+// $device-frame-width: 12px;
+
+// docs-demo {
+//     display: block;
+// }
+
+// .docs-demo-device {
+//     --device-padding: 1rem;
+//     --device-width: 344px;
+//     --device-height: 704px;
+//     --device-frame-width: 12px;
+
+//     padding: var(--device-padding);
+//     /* position: sticky; */
+//     /* top: 0; */
+// }
+
+// .docs-demo-mode-toggle {
+//     align-items: center;
+//     display: flex;
+//     justify-content: center;
+
+//     margin: 1rem auto 0;
+
+//     width: 128px;
+//     height: 28px;
+
+//     background: #ecf0f5;
+
+//     border-radius: 18px;
+// }
+
+// .docs-demo-mode-toggle button {
+//     background-color: transparent;
+//     border: none;
+//     border-radius: 16px;
+
+//     color: #5b708b;
+
+//     cursor: pointer;
+//     font-family: var(--font-family);
+//     font-size: 11px;
+//     letter-spacing: -0.02em;
+//     width: calc(50% - 2px);
+//     line-height: 21px;
+//     padding-top: 2px;
+
+//     transition: 200ms background-color ease, 200ms color ease;
+// }
+
+// .docs-demo-mode-toggle button:focus,
+// .docs-demo-mode-toggle button:active {
+//     outline: none;
+// }
+
+// .docs-demo-mode-toggle button.is-selected {
+//     background-color: white;
+//     color: black;
+
+//     font-weight: 600;
+//     box-shadow: 0px 2px 3px rgba(0, 16, 46, 0.15);
+// }
+
+// .docs-demo-device>figure {
+//     margin: 0;
+
+//     background-size: contain;
+//     background-repeat: no-repeat;
+
+//     box-shadow: 0px 2px 8px rgba(2, 8, 20, 0.1), 0px 8px 16px rgba(2, 8, 20, 0.08);
+
+//     width: var(--device-width);
+//     height: var(--device-height);
+
+//     overflow: hidden;
+
+//     position: relative;
+
+//     z-index: 1;
+// }
+
+// .docs-demo-device>figure>.selfhelp-app {
+//     position: absolute;
+
+//     top: 0;
+//     left: 0;
+
+//     margin: var(--device-frame-width);
+
+//     width: calc(100% - var(--device-frame-width) * 2);
+//     height: calc(100% - var(--device-frame-width) * 2);
+
+//     border: none;
+
+//     overflow: hidden;
+
+//     -webkit-mask-image: -webkit-radial-gradient(white, black);
+
+//     z-index: 1;
+// }
+
+// .docs-demo-device.ios figure {
+//     background-image: url('/assets/preview/iphone-device-skin.png');
+
+//     border-radius: 54px;
+// }
+
+// .docs-demo-device.ios>figure>.selfhelp-app {
+//     border-radius: 38px;
+// }
+
+// .docs-demo-device.md figure {
+//     background-image: url('/assets/preview/android-device-skin.png');
+
+//     border-radius: 44px;
+// }
+
+// .docs-demo-device.md>figure>.selfhelp-app {
+//     border-radius: 32px;
+// }
+
+// .docs-demo-device.ios figure:after {
+//     background-color: rgba(0, 0, 0, 0.5);
+//     border-radius: 2px;
+//     bottom: 18px;
+//     content: '';
+//     display: none;
+//     height: 4px;
+//     left: 50%;
+//     position: absolute;
+//     transform: translateX(-50%);
+//     width: 35%;
+//     z-index: 1;
+// }
+
+// .docs-demo-device__ios-notch {
+//     display: none;
+//     fill: #090a0d;
+//     left: 50%;
+//     position: absolute;
+//     top: 12px;
+//     transform: translateX(-50%);
+//     width: 165px;
+//     z-index: 2;
+// }
+
+// .docs-demo-device.ios .docs-demo-device__ios-notch,
+// .docs-demo-device.ios figure:after {
+//     display: block;
+// }
+
+// .docs-demo-device__md-bar {
+//     display: none;
+// }
+
+// .docs-demo-device.md .docs-demo-device__md-bar {
+//     display: block;
+//     fill: rgba(125, 125, 125, 0.3);
+//     padding: 0.5rem 2.2rem;
+//     position: relative;
+//     width: 100%;
+//     z-index: 2;
+//     top: 12px;
+// }
+
+
+
+
+// .device-width {
+//     width: $device-width;
+// }
+
+// .responsiveWindow {
+//     width: 100%;
+//     height: 100%;
+//     border: none;
+// }

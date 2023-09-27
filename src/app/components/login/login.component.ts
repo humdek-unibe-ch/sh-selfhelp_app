@@ -10,7 +10,7 @@ export class LoginComponent extends BasicComponentComponent implements OnInit {
 
     constructor(injector: Injector,zone: NgZone) {
         super(injector, zone);
-        this.url = '/login'
+        this.url = '/login';
     }
 
 }

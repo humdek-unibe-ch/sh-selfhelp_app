@@ -10,42 +10,24 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "~@ionic/angular/css/core.css";
+@import "@ionic/angular/css/core.css";
 
 /* Basic CSS for apps built with Ionic */
-@import "~@ionic/angular/css/normalize.css";
-@import "~@ionic/angular/css/structure.css";
-@import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import '@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "~@ionic/angular/css/padding.css";
-@import "~@ionic/angular/css/float-elements.css";
-@import "~@ionic/angular/css/text-alignment.css";
-@import "~@ionic/angular/css/text-transformation.css";
-@import "~@ionic/angular/css/flex-utils.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
 
-:root {
-    /** primary **/
-    --ion-color-primary: #007bff;
-    --ion-color-secondary: #6c757d;
-    --ion-color-success: #28a745;
-    --ion-color-danger: #dc3545;
-    --ion-color-warning: #ffc107;
-    --ion-color-info: #17a2b8;
-    --ion-color-light: #f8f9fa;
-    --ion-color-dark: #343a40;
-    --ion-color-white: #fff;
-}
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
-.ion-color-info {
-    --ion-color-base: var(--ion-color-info);
-    --ion-color-base-rgb: var(--ion-color-primary-rgb);
-    --ion-color-contrast: var(--ion-color-primary-contrast);
-    --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
-    --ion-color-shade: var(--ion-color-primary-shade);
-    --ion-color-tint: var(--ion-color-primary-tint);
-}
+@import 'swiper/css';
 
 ion-loading {
     --max-height: 100% !important;

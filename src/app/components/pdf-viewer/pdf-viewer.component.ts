@@ -8,16 +8,16 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
 })
 export class PdfViewerComponent extends BasicComponentComponent implements OnInit {
 
-    pdfUrl: string;
+    pdfUrl!: string;
 
     constructor(injector: Injector, zone: NgZone) {
         super(injector, zone);
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
     downloadPdf(){
-        this.selfhelpService.savePdf(this.pdfUrl);
+        this.selfHelpService.savePdf(this.pdfUrl);
     }
 
 }

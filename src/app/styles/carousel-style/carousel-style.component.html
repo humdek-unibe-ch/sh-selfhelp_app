@@ -1,14 +1,14 @@
 <div [id]="getFieldContent('id_prefix') + '-carousel'"
-    [class]="'carousel slide ' + getCss() + (getFieldContent('has_crossfade') == '1' ? ' carousel-fade' : '')"
+    [class]="'carousel slide ' + getCss() + (getFieldContent('has_crossfade') === '1' ? ' carousel-fade' : '')"
     data-ride="carousel">
-    <ol *ngIf="getFieldContent('has_indicators') == '1'" class="carousel-indicators">
+    <ol *ngIf="getFieldContent('has_indicators') === '1'" class="carousel-indicators">
         <li *ngFor="let item of getFieldContent('sources'); let i = index"
             [attr.data-target]="'#' + getFieldContent('id_prefix') + '-carousel'" [attr.data-slide-to]="i"
-            [class]="i == 0 ? 'active' : ''"></li>
+            [class]="i === 0 ? 'active' : ''"></li>
     </ol>
     <div class="carousel-inner">
         <div *ngFor="let item of getFieldContent('sources'); let i = index"
-            [class]="'carousel-item' + (i == 0 ? ' active' : '')">
+            [class]="'carousel-item' + (i === 0 ? ' active' : '')">
             <img class="d-block w-100" [src]="getSrc( item.source)" [alt]="getFieldContent('alt')">
             <div class="carousel-caption d-none d-md-block">
                 <p>{{getFieldContent('caption')}}</p>

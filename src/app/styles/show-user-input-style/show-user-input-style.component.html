@@ -1,4 +1,4 @@
-<table *ngIf="style.fields.length > 0 && getFieldContent('is_log') == '1'" datatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
+<table *ngIf="style.fields.length > 0 && getFieldContent('is_log') === '1'" datatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
     <thead>
         <tr>
             <th *ngFor="let label of header">{{label}}</th>
@@ -13,13 +13,13 @@
     </tbody>
 </table>
 
-<div *ngIf="style.fields.length > 0 && getFieldContent('is_log') == '0'" [class]="getCss()">
+<div *ngIf="style.fields.length > 0 && getFieldContent('is_log') === '0'" [class]="getCss()">
     <ion-item *ngFor="let field of style.fields">
         <ion-label>{{field.field_label}}</ion-label>
         <ion-text>{{field.value}}</ion-text>
     </ion-item>
 </div>
 
-<div *ngIf="style.fields.length == 0" >
+<div *ngIf="style.fields.length === 0" >
     No Data
 </div>

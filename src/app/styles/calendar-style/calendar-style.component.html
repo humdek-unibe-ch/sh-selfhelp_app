@@ -51,7 +51,7 @@
     </ion-row>
 
     <calendar [eventSource]="eventSource" [calendarMode]="calendar.calendarMode" [currentDate]="calendar.currentDate"
-        (onCurrentDateChanged)="onCurrentDateChanged($event)" (onEventSelected)="onEventSelected($event)"
+        (onCurrentDateChanged)="onCurrentDateChanged($event)" (onEventSelected)="onEventSelected()"
         (onTitleChanged)="onViewTitleChanged($event)" [monthviewDisplayEventTemplate]="template"
         (onRangeChanged)="onRangeChanged($event)" [queryMode]="'remote'" [startingDayMonth]="calendar.startingDayMonth"
         [formatDay]="calendar.formatDay" [formatDayHeader]="calendar.formatDayHeader"

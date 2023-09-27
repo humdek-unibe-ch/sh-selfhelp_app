@@ -1,11 +1,38 @@
 import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { Calendar } from '@ionic-native/calendar/ngx';
+import { Calendar } from '@awesome-cordova-plugins/calendar/ngx';
 import { Platform } from '@ionic/angular';
-import { CalendarComponent } from 'ionic2-calendar';
+import { CalendarComponent, CalendarMode } from 'ionic2-calendar';
 import { CalendarStyle } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import * as moment from 'moment';
 
+interface CalendarOptions {
+    calendarMode: CalendarMode;
+    currentDate: Date;
+    formatDay: string;
+    formatDayHeader: string;
+    formatDayTitle: string;
+    formatWeekTitle: string;
+    formatMonthTitle: string;
+    formatWeekViewDayHeader: string;
+    formatHourColumn: string;
+    showEventDetail: boolean;
+    startingDayMonth: number;
+    startingDayWeek: number;
+    allDayLabel: string;
+    noEventsLabel: string;
+    step: number;
+    timeInterval: number;
+    autoSelect: boolean;
+    dir: string;
+    scrollToHour: number;
+    preserveScrollPosition: boolean;
+    lockSwipeToPrev: boolean;
+    lockSwipes: boolean;
+    locale: string;
+    startHour: number;
+    endHour: number;
+    sliderOptions: Record<string, any>;
+  }
 
 @Component({
     selector: 'app-calendar-style',
@@ -13,13 +40,13 @@ import * as moment from 'moment';
     styleUrls: ['./calendar-style.component.scss'],
 })
 export class CalendarStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: CalendarStyle;
+    @Input() override style!: CalendarStyle;
 
-    eventSource = [];
-    viewTitle: string;
+    eventSource: any[] = [];
+    viewTitle!: string;
     selectedDate: Date = new Date();
 
-    calendar = {
+    calendar: CalendarOptions = {
         calendarMode: 'month',
         currentDate: new Date(),
         formatDay: 'dd',
@@ -52,7 +79,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     events = [];
     dataRange: any;
 
-    @ViewChild(CalendarComponent) myCal: CalendarComponent;
+    @ViewChild(CalendarComponent) myCal!: CalendarComponent;
 
     constructor(
         private nativeCal: Calendar,
@@ -64,10 +91,11 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         });
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         let config = this.getFieldContent('config');
         if (config) {
             for (let key of Object.keys(config)) {
+                // @ts-ignore
                 this.calendar[key] = config[key];
             }
         }
@@ -82,15 +110,15 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         this.myCal.slidePrev();
     }
 
-    // Selected date reange and hence title changed
-    onViewTitleChanged(title) {
+    // Selected date range and hence title changed
+    onViewTitleChanged(title: any) {
         this.viewTitle = title;
     }
 
     // Calendar event was clicked
-    async onEventSelected(event) {
+    async onEventSelected() {
         // if (this.plt.is('ios')){
-        //     this.nativeCal.modifyEvent(event.title, event.location, event.notes, event.startDate, event.endDate, 'new title', event.location, event.notes, event.startDate, event.endDate); 
+        //     this.nativeCal.modifyEvent(event.title, event.location, event.notes, event.startDate, event.endDate, 'new title', event.location, event.notes, event.startDate, event.endDate);
         // }else {
         this.nativeCal.openCalendar(this.selectedDate).then(
             (msg) => { console.log(msg); },
@@ -99,11 +127,11 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         // }
     }
 
-    changeMode(mode) {
+    changeMode(mode: CalendarMode) {
         this.calendar.calendarMode = mode;
     }
 
-    onRangeChanged(event) {
+    onRangeChanged(event: any) {
         this.dataRange = event;
         if (this.plt.is('ios')) {
             // this.nativeCal.findAllEventsInNamedCalendar("stefan.kodzhabashev@gmail.com").then(data => {
@@ -129,14 +157,16 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     loadEventsInCalendar(events: any) {
         this.eventSource = [];
         const isIOS = this.plt.is('ios');
-        events.forEach(event => {
+        events.forEach((event: any) => {
             if (!isIOS) {
                 event['allDay'] = event.allDay == 1;
             } else {
                 // event['allDay'] = moment(event.endDate).format('HH:mm:ss') === '23:59:59';
             }
-            event['endTime'] = new Date(isIOS ? moment(event.endDate).toDate() : event.dtend);
-            event['startTime'] = new Date(isIOS ? moment(event.startDate).toDate() : event.dtstart);
+            event['endTime'] = new Date(isIOS ? new Date(event.endDate).getTime() : new Date(event.dtend).getTime());
+
+            event['endTime'] = new Date(isIOS ? new Date(event.endDate).getTime() : event.dtend);
+            event['startTime'] = new Date(isIOS ? new Date(event.startDate).getTime(): event.dtstart);
             this.eventSource.push(event);
         });
     }
@@ -149,7 +179,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         });
     }
 
-    onCurrentDateChanged(ev) {
+    onCurrentDateChanged(ev: any) {
         this.selectedDate = ev;
     }
 

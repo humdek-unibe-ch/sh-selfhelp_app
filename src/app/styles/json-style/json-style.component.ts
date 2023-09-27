@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./json-style.component.scss'],
 })
 export class JsonStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: JsonStyle;
+    @Input() override style!: JsonStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./jumbotron-style.component.scss'],
 })
 export class JumbotronStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: Style;
+    @Input() override style!: Style;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

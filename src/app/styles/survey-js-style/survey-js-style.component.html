@@ -1,4 +1,4 @@
 <survey *ngIf="this.style.show_survey" [model]="surveyModel"></survey>
-<div *ngIf="!this.style.show_survey && style.alert != ''" class="m-3 alert alert-danger">
+<div *ngIf="!this.style.show_survey && style.alert !== ''" class="m-3 alert alert-danger">
     <div [innerHTML]="style['alert']"></div>
 </div>

@@ -6,7 +6,6 @@ import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
 import { SafePipeModule } from 'safe-pipe';
-import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { DataTablesModule } from 'angular-datatables';
 import { LoginComponent } from '../components/login/login.component';
 import { ProfileComponent } from '../components/profile/profile.component';
@@ -14,6 +13,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BasicStyleComponent } from '../styles/basic-style/basic-style.component';
 import { BasicComponentComponent } from '../components/basic-component/basic-component.component';
 import { ModalPageComponent } from '../components/modal-page/modal-page.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { MenuPage } from './menu/menu.page';
+import { LanguageSelectComponent } from '../components/language-select/language-select.component';
+import { AppVersionComponent } from '../components/app-version/app-version.component';
 import { CardStyleComponent } from '../styles/card-style/card-style.component';
 import { MarkdownStyleComponent } from '../styles/markdown-style/markdown-style.component';
 import { ContainerStyleComponent } from '../styles/container-style/container-style.component';
@@ -53,7 +56,7 @@ import { LoginStyleComponent } from '../styles/login-style/login-style.component
 import { RegisterStyleComponen } from '../styles/register-style/register-style.component';
 import { ProfileStyleComponent } from '../styles/profile-style/profile-style.component';
 import { FormStyleComponent } from '../styles/form-style/form-style.component';
-import { MenuPage } from './menu/menu.page';
+
 import { ResetPasswordStyleComponent } from '../styles/reset-password-style/reset-password-style.component';
 import { ValidateStyleComponent } from '../styles/validate-style/validate-style.component';
 import { MessageBoardStyleComponent } from '../styles/message-board-style/message-board-style.component';
@@ -61,14 +64,15 @@ import { SubmitCommentComponent } from '../styles/message-board-style/submit-com
 import { EntryListComponent } from '../styles/entry-list/entry-list.component';
 import { CalendarStyleComponent } from '../styles/calendar-style/calendar-style.component';
 import { NgCalendarModule } from 'ionic2-calendar';
-import { RecordMediaStyleComponent } from '../styles/record-media-style/record-media-style.component';
-import { LanguageSelectComponent } from '../components/language-select/language-select.component';
-import { AppVersionComponent } from '../components/app-version/app-version.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
+// import { RecordMediaStyleComponent } from '../styles/record-media-style/record-media-style.component';
+// import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 import { SurveyJSStyleComponent } from '../styles/survey-js-style/survey-js-style.component';
 import { SurveyModule } from 'survey-angular-ui';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
+PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
     {
@@ -96,6 +100,7 @@ const routes: Routes = [
 
 
 @NgModule({
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
         IonicModule,
         CommonModule,
@@ -103,12 +108,12 @@ const routes: Routes = [
         FormsModule,
         ReactiveFormsModule,
         SafePipeModule,
-        PlotlyViaWindowModule,
         DataTablesModule,
-        NgCalendarModule,
         TranslateModule,
-        PdfViewerModule,
-        SurveyModule
+        // PdfViewerModule,
+        SurveyModule,
+        NgCalendarModule,
+        PlotlyModule
     ],
     exports: [
         RouterModule
@@ -120,7 +125,6 @@ const routes: Routes = [
         ProfileComponent,
         BasicComponentComponent,
         ModalPageComponent,
-        BasicStyleComponent,
         BasicStyleComponent,
         CardStyleComponent,
         MarkdownStyleComponent,
@@ -167,7 +171,7 @@ const routes: Routes = [
         SubmitCommentComponent,
         EntryListComponent,
         CalendarStyleComponent,
-        RecordMediaStyleComponent,
+        // RecordMediaStyleComponent,
         LanguageSelectComponent,
         AppVersionComponent,
         PdfViewerComponent,
@@ -206,17 +210,19 @@ export class NavigationPageModule {
             if (firstTab === '') {
                 firstTab = this.selfhelpService.getUrl(nav).replace('/', '');
             }
-            newRoutes[0].children.push(
-                {
-                    path: this.selfhelpService.getUrl(nav).replace('/', ''),
-                    // component: MenuComponent
-                    loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
+            if (newRoutes.length > 0 && newRoutes[0].children) {
+                newRoutes[0].children.push(
+                    {
+                        path: this.selfhelpService.getUrl(nav).replace('/', ''),
+                        // component: MenuComponent
+                        loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
+                    }
+                );
+                if (selectedTab === '' && selectedTab != firstTab) {
+                    selectedTab = firstTab;
                 }
-            );
-            if (selectedTab === '' && selectedTab != firstTab) {
-                selectedTab = firstTab;
+                newRoutes[1].redirectTo = '/' + selectedTab;
             }
-            newRoutes[1].redirectTo = '/' + selectedTab;
 
         });
         const currConfig = this.router.config;

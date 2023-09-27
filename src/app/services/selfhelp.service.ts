@@ -1,21 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HTTP } from '@ionic-native/http/ngx';
+import { CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult } from './../selfhelpInterfaces';
-import { Storage } from '@ionic/storage';
+import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
-import { StringUtils } from 'turbocommons-ts';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Device } from '@ionic-native/device/ngx';
+// import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Device } from '@capacitor/device';
 import { NotificationsService } from './notifications.service';
 import { ModalPageComponent } from '../components/modal-page/modal-page.component';
-import { AppVersion } from '@ionic-native/app-version/ngx';
 import version from '../../../package.json';
 import { UtilsService } from './utils.service';
 import { TranslateService } from '@ngx-translate/core';
-import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
+// import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +21,7 @@ export class SelfhelpService {
 
     private defaultAppLocale = 'de-CH';
     private isApp: boolean = true;
-    public devApp: boolean = false; // change to false when we prepare a specific build
+    public devApp: boolean = true; // change to false when we prepare a specific build
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
     // private API_ENDPOINT_NATIVE = 'http://46.126.153.11/selfhelp';
@@ -32,63 +29,54 @@ export class SelfhelpService {
     public API_ENDPOINT_NATIVE = 'https://studybuddy.edu.unibe.ch';
     private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
     private API_SERVER_SELECTION = 'https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects';
+    // private API_SERVER_SELECTION = 'http://192.168.0.58/selfhelp/mobile_projects';
     public API_LOGIN = '/login';
     public API_RESET = '/reset';
     public API_HOME = '/home';
     public selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
-        selectedMenu: null,
-        selectedSubMenu: null,
         urls: {},
-        logged_in: null,
         base_path: '',
         current_url: '/',
         current_modal_url: '',
         avatar: '',
         external_css: '',
-        languages: null,
-        locale: null,
-        default_language_id: null,
-        user_language: null
+        default_language_id: 2,
+        user_language: 2
     });
     private initApp = false;
     private messageDuration = 10000;
-    public appVersion: string;
-    public appBuildVersion: string;
+    public appVersion!: string;
+    public appBuildVersion!: string;
     private lastToastMsg = '';
     private autoLoginAtempts = 0;
     public skin_app: SkinApp = 'ios';
 
     constructor(
-        private http: HttpClient,
-        private httpN: HTTP,
         private platform: Platform,
-        private storage: Storage,
         private toastController: ToastController,
         private alertController: AlertController,
         private router: Router,
-        private inAppBrowser: InAppBrowser,
+        // private inAppBrowser: InAppBrowser,
         private modalController: ModalController,
-        private device: Device,
         private notificationsService: NotificationsService,
-        private appVersionPlugin: AppVersion,
         private utils: UtilsService,
         private translate: TranslateService
     ) {
         this.platform.ready().then(async () => {
-            if (this.platform.is('cordova')) {
+            if (this.platform.is('capacitor')) {
                 this.isApp = true;
             } else {
                 this.isApp = false;
             }
             if (this.isApp) {
-                this.appVersionPlugin.getVersionNumber().then((res) => {
-                    this.appVersion = res;
-                });
+                // this.appVersionPlugin.getVersionNumber().then((res) => {
+                //     this.appVersion = res;
+                // });
             }
             this.appBuildVersion = version.version;
-            // this.storage.remove(this.selfhelp_server); // enable for resetting the server when developing
-            // this.storage.remove(this.local_selfhelp); // enable for resetting the server when developing   
+            // Preferences.remove({ key: this.selfhelp_server }); // enable for resetting the server when developing
+            // Preferences.remove({ key: this.local_selfhelp }); // enable for resetting the server when developing
             if (this.devApp) {
                 // give an option to select a server
                 if (await this.getServer()) {
@@ -107,14 +95,14 @@ export class SelfhelpService {
     public loadApp() {
         this.getLocalSelfhelp();
         this.getPage(this.API_HOME);
-        // this.openUrl('/validate/24/2dfa5a96f81fdec67eff37a2f81825b6'); 
-        
+        // this.openUrl('/validate/24/2dfa5a96f81fdec67eff37a2f81825b6');
+
     }
 
     public getServer(): Promise<boolean> {
-        return this.storage.get(this.selfhelp_server).then((val) => {
-            if (val) {
-                this.API_ENDPOINT_NATIVE = val;
+        return Preferences.get({ key: this.selfhelp_server }).then((val) => {
+            if (val.value) {
+                this.API_ENDPOINT_NATIVE = <string>val.value;
                 return true;
             } else {
                 this.utils.debugLog('No server is selected', null);
@@ -160,93 +148,34 @@ export class SelfhelpService {
             params['mobile'] = true;
         }
         params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.selfhelp.value.default_language_id;
-        params['device_id'] = this.isApp ? this.getDeviceID() : "WEB";
-        if (this.getIsApp()) {
-            // use native calls
-            params['device_token'] = await this.notificationsService.getToken();
-            return new Promise((resolve, reject) => {
-                this.httpN.setDataSerializer('utf8');
-                this.httpN
-                    .post(this.API_ENDPOINT_NATIVE + keyword, this.getNativeParams(params), { 'Content-Type': 'application/x-www-form-urlencoded' })
-                    .then(
-                        response => {
-                            try {
-                                resolve(JSON.parse(response.data));
-                            } catch (error) {
-                                this.utils.debugLog('error', response.data);
-                                reject(error);
-                            }
-                        },
-                        error => {
-                            console.log(keyword, error);
-                            reject(error);
-                        }
-                    )
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        } else {
-            //use http requests
-            const headers = new HttpHeaders({
-                'Content-Type': 'application/x-www-form-urlencoded'
-            });
-            params['mobile_web'] = true;
-            return new Promise((resolve, reject) => {
-                this.http.post(this.API_ENDPOINT_NATIVE + keyword, this.getPostParams(params), { headers, withCredentials: true })
-                    .toPromise()
-                    .then(res => {
-                        console.log(res);
-                        resolve(res as SelfHelpPageRequest);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        reject(err); // Here.
-                    });
-            });
+        params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
+        params['mobile_web'] = true;
+        if (this.notificationsService.getToken() !== '') {
+            params['device_token'] = this.notificationsService.getToken();
         }
-    }
-
-    /**
-     * @description Format object to post  params for browser request
-     * @author Stefan Kodzhabashev
-     * @date 2020-12-11
-     * @private
-     * @param {*} value
-     * @returns {string}
-     * @memberof SelfhelpService
-     */
-    private getPostParams(value: any): HttpParams {
-        let s = [];
-
-        let add = (k: string, v: any) => {
-            v = typeof v === 'function' ? v() : v;
-            v = v === null ? '' : v === undefined ? '' : v;
-            s.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
-        };
-
-        let buildParams = (prefix: string, obj: any) => {
-            if (prefix) {
-                if (Array.isArray(obj)) {
-                    obj.forEach((v, i) => buildParams(prefix + '[' + (typeof v === 'object' && v ? i : '') + ']', v));
-                } else if (String(obj) === '[object Object]') {
-                    Object.keys(obj)
-                        .forEach(key => buildParams(prefix + '[' + key + ']', obj[key]));
-                } else {
-                    add(prefix, obj);
-                }
-            } else if (Array.isArray(obj)) {
-                obj.forEach(v => add(v.name, v.value));
-            } else {
-                Object.keys(obj)
-                    .forEach(key => buildParams(key, obj[key]));
+        this.utils.debugLog('Exec params', params);
+        const options: HttpOptions = {
+            url: this.API_ENDPOINT_NATIVE + keyword,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: this.getNativeParams(params),
+            webFetchExtra: {
+                credentials: "include",
             }
-            return s;
         };
-
-        let params = buildParams(null, value).join('&');
-
-        return new HttpParams({ fromString: params });
+        return new Promise((resolve, reject) => {
+            CapacitorHttp.post(options).then(response => {
+                try {
+                    resolve(JSON.parse(response.data));
+                } catch (error) {
+                    this.utils.debugLog('error', response.data);
+                    reject(error);
+                }
+            })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err); // Here.
+                });
+        });
     }
 
     public setPage(url: string, page: SelfHelpPageRequest): void {
@@ -354,6 +283,7 @@ export class SelfhelpService {
         data['type'] = 'login';
         return this.execServerRequest(this.API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
+                console.log('Login res', res);
                 let currSelfhelp = this.selfhelp.value;
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
@@ -441,7 +371,7 @@ export class SelfhelpService {
                 return {
                     result: false,
                     url: false,
-                    selfhelp_res: null
+                    selfhelp_res: null as unknown as SelfHelpPageRequest
                 };
             });
     }
@@ -530,9 +460,9 @@ export class SelfhelpService {
     }
 
     private getLocalSelfhelp() {
-        this.storage.get(this.local_selfhelp).then((val) => {
-            if (val) {
-                let currSelfhelp = <SelfHelp>JSON.parse(val);
+        Preferences.get({ key: this.local_selfhelp }).then((val) => {
+            if (val.value) {
+                let currSelfhelp = <SelfHelp>JSON.parse(val.value);
                 currSelfhelp.current_modal_url = '';
                 this.setSelfhelp(currSelfhelp, false);
                 this.loadLanguage();
@@ -541,14 +471,21 @@ export class SelfhelpService {
     }
 
     private saveLocalSelfhelp() {
-        this.storage.set(this.local_selfhelp, JSON.stringify(this.selfhelp.value));
+        Preferences.set({
+            key: this.local_selfhelp,
+            value: JSON.stringify(this.selfhelp.value),
+        });
     }
 
     private saveSelfhelpServer(server: string) {
-        this.storage.set(this.selfhelp_server, server);
+        Preferences.set({
+            key: this.selfhelp_server,
+            value: server,
+        });
     }
 
     public submitForm(keyword: string, params: any): Promise<boolean> {
+        console.log('form params', params);
         return this.execServerRequest(keyword, params)
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
@@ -593,49 +530,49 @@ export class SelfhelpService {
         return res;
     }
 
-    private getNativeParams(params): string {
-        var prefix, s, add, name, r20, output;
-        s = [];
-        r20 = /%20/g;
-        add = function (key, value) {
-            // If value is a function, invoke it and return its value
-            value = (typeof value == 'function') ? value() : (value == null ? "" : value);
-            s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
-        };
-        if (params instanceof Array) {
-            for (name in params) {
-                add(name, params[name]);
-            }
-        } else {
-            for (prefix in params) {
-                this.buildParams(prefix, params[prefix], add);
-            }
-        }
-        output = s.join("&").replace(r20, "+");
-        return output;
-    };
+    // private getNativeParams(params): string {
+    //     var prefix, s, add, name, r20, output;
+    //     s = [];
+    //     r20 = /%20/g;
+    //     add = function (key, value) {
+    //         // If value is a function, invoke it and return its value
+    //         value = (typeof value == 'function') ? value() : (value == null ? "" : value);
+    //         s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
+    //     };
+    //     if (params instanceof Array) {
+    //         for (name in params) {
+    //             add(name, params[name]);
+    //         }
+    //     } else {
+    //         for (prefix in params) {
+    //             this.buildParams(prefix, params[prefix], add);
+    //         }
+    //     }
+    //     output = s.join("&").replace(r20, "+");
+    //     return output;
+    // };
 
-    private buildParams(prefix, obj, add): void {
-        var name, i, l, rbracket;
-        rbracket = /\[\]$/;
-        if (obj instanceof Array) {
-            for (i = 0, l = obj.length; i < l; i++) {
-                if (rbracket.test(prefix)) {
-                    add(prefix, obj[i]);
-                } else {
-                    this.buildParams(prefix + "[" + (typeof obj[i] === "object" ? i : "") + "]", obj[i], add);
-                }
-            }
-        } else if (typeof obj == "object") {
-            // Serialize object item.
-            for (name in obj) {
-                this.buildParams(prefix + "[" + name + "]", obj[name], add);
-            }
-        } else {
-            // Serialize scalar item.
-            add(prefix, obj);
-        }
-    }
+    // private buildParams(prefix, obj, add): void {
+    //     var name, i, l, rbracket;
+    //     rbracket = /\[\]$/;
+    //     if (obj instanceof Array) {
+    //         for (i = 0, l = obj.length; i < l; i++) {
+    //             if (rbracket.test(prefix)) {
+    //                 add(prefix, obj[i]);
+    //             } else {
+    //                 this.buildParams(prefix + "[" + (typeof obj[i] === "object" ? i : "") + "]", obj[i], add);
+    //             }
+    //         }
+    //     } else if (typeof obj == "object") {
+    //         // Serialize object item.
+    //         for (name in obj) {
+    //             this.buildParams(prefix + "[" + name + "]", obj[name], add);
+    //         }
+    //     } else {
+    //         // Serialize scalar item.
+    //         add(prefix, obj);
+    //     }
+    // }
 
     async presentToast(msg: string, color: string) {
         const toast = await this.toastController.create({
@@ -716,26 +653,26 @@ export class SelfhelpService {
     }
 
     public savePdf(pdfLink: string) {
-        this.inAppBrowser.create(pdfLink, "_system");
+        // this.inAppBrowser.create(pdfLink, "_system");
     }
 
     public openUrl(url: string): boolean {
         if (this.selfhelp.value.urls[url]) {
 
-            // 
+            //
             this.getPage(url);
             if (!this.setNav(url)) {
                 this.getModalPage(url);
             }
-            // this.setSelectedMenu(this.selfhelp.value.urls[url]);            
-        } else if (StringUtils.isUrl(url)) {
+            // this.setSelectedMenu(this.selfhelp.value.urls[url]);
+        } else if (this.isURL(url)) {
             // it is web link, open in the browser
             console.log('browser');
             if (url.match(".pdf")) {
                 // this.inAppBrowser.create(url, "_system");
                 this.getDocumentViewer(url);
             } else {
-                this.inAppBrowser.create(url);
+                // this.inAppBrowser.create(url);
             }
         } else {
             console.log('page');
@@ -755,7 +692,6 @@ export class SelfhelpService {
                 componentProps: {
                     url_param: url
                 },
-                swipeToClose: true,
                 backdropDismiss: true,
                 showBackdrop: true,
                 cssClass: 'modal-fullscreen'
@@ -775,20 +711,20 @@ export class SelfhelpService {
 
     public async logout() {
         let currSelfhelp = this.selfhelp.value;
-        currSelfhelp.credentials = null;
+        delete currSelfhelp.credentials;
         this.setSelfhelp(currSelfhelp, true);
         await this.getPage(this.API_LOGIN);
         this.getPage(currSelfhelp.navigation[0].url); // set first tab on logout
     }
 
-    public getDeviceID(): string {
-        return this.isApp ? this.device.uuid : "WEB";
+    public async getDeviceID(): Promise<string> {
+        return this.isApp ? (await Device.getId()).identifier : "WEB";
     }
 
     public async getModalComponent(component: any) {
         const modal = await this.modalController.create({
             component: component,
-            swipeToClose: true,
+            // swipeToClose: true,
             backdropDismiss: true,
             showBackdrop: true,
             cssClass: 'modal-fullscreen'
@@ -797,30 +733,34 @@ export class SelfhelpService {
     }
 
     public async getDocumentViewer(url: string) {
-        const modal = await this.modalController.create({
-            component: PdfViewerComponent,
-            componentProps: {
-                pdfUrl: url,
-            },
-            swipeToClose: true,
-            backdropDismiss: true,
-            showBackdrop: true,
-            cssClass: 'modal-fullscreen'
-        });
-        return await modal.present();
+        // const modal = await this.modalController.create({
+        //     component: PdfViewerComponent,
+        //     componentProps: {
+        //         pdfUrl: url,
+        //     },
+        //     // swipeToClose: true,
+        //     backdropDismiss: true,
+        //     showBackdrop: true,
+        //     cssClass: 'modal-fullscreen'
+        // });
+        // return await modal.present();
     }
 
     public getAvatarImg(): string {
         let currSelfhelp = this.selfhelp.value;
-        if (currSelfhelp.avatar && !StringUtils.isUrl(currSelfhelp.avatar)) {
+        if (currSelfhelp.avatar && !this.isURL(currSelfhelp.avatar)) {
             return this.getApiEndPointNative() + '/' + currSelfhelp.avatar;
         }
         return '';
     }
 
     async selectServer() {
-        let servers: ValueItem[] = (await this.getServers(this.API_SERVER_SELECTION)).content[0]['items']['content'];
-        let inputs = [];
+        console.log('wait2w');
+        let serversList = await this.getServers(this.API_SERVER_SELECTION);
+        console.log(serversList);
+        let servers: ValueItem[] = serversList.content[0]['items']['content'];
+        console.log(servers);
+        let inputs: any[] = [];
         servers.forEach(server => {
             inputs.push(
                 {
@@ -854,57 +794,28 @@ export class SelfhelpService {
 
     public async getServers(url: string): Promise<SelfHelpPageRequest> {
         let params = {
-            'mobile': true,
-            'device_id': this.getDeviceID()
+            'mobile': "true",
+            'device_id': await this.getDeviceID()
         };
-        params['device_token'] = this.isApp ? await this.notificationsService.getToken() : "WEB_TOKEN";
-        if (this.isApp) {
-            return new Promise((resolve, reject) => {
-                this.httpN.setDataSerializer('utf8');
-                this.httpN
-                    .post(url, this.getNativeParams(params), { 'Content-Type': 'application/x-www-form-urlencoded' })
-                    .then(
-                        response => {
-                            try {
-                                resolve(JSON.parse(response.data));
-                            } catch (error) {
-                                reject(error);
-                            }
-                        },
-                        error => {
-                            this.utils.debugLog('Cannot get servers', error)
-                            reject(error);
-                        }
-                    )
-                    .catch((err) => {
-                        reject(err);
-                    });
-            });
-        } else {
-            //use http requests
-            const headers = new HttpHeaders({
-                'Content-Type': 'application/x-www-form-urlencoded'
-            });
-            return new Promise((resolve, reject) => {
-                this.http.post(url, this.getPostParams(params))
-                    .toPromise()
-                    .then((response: any) => {
-                        try {
-                            resolve(response);
-                        } catch (error) {
-                            reject(error);
-                        }
-                    },
-                        error => {
-                            this.utils.debugLog('Cannot get servers', error)
-                            reject(error);
-                        })
-                    .catch((err) => {
-                        console.log(err);
-                        reject(err);
-                    });
-            });
-        }
+        const options: HttpOptions = {
+            url: url,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: new URLSearchParams(params).toString(),
+            webFetchExtra: {
+                credentials: "include",
+            }
+        };
+        console.log('servers2', options);
+        return new Promise((resolve, reject) => {
+            CapacitorHttp.post(options).then(response => {
+                console.log(response);
+                resolve(JSON.parse(response.data));
+            })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err); // Here.
+                });
+        });
     }
 
     public getIcon(value: string): string {
@@ -928,9 +839,9 @@ export class SelfhelpService {
     }
 
     public resetLocalData() {
-        this.storage.remove(this.selfhelp_server);
-        this.storage.remove(this.local_selfhelp);
-        window.localStorage.removeItem('skin_app');
+        Preferences.remove({ key: this.selfhelp_server });
+        Preferences.remove({ key: this.local_selfhelp });
+        Preferences.remove({ key: 'skin_app' });
     }
 
     public isFormField(field: any): boolean {
@@ -954,7 +865,68 @@ export class SelfhelpService {
     }
 
     public getUserLanguage(): Language {
-        return this.selfhelp.value.languages.find(lang => lang.id === this.selfhelp.value.user_language);
+        if (this.selfhelp.value.languages) {
+            return <Language>this.selfhelp.value.languages.find(lang => lang.id === this.selfhelp.value.user_language);
+        } else {
+            return {
+                id: 1,
+                locale: "de-de",
+                title: "German"
+            }
+        }
+    }
+
+    public isURL(str: string): boolean {
+        const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+        return urlPattern.test(str);
+    }
+
+    public isNumeric(val: any) {
+        return /^[0-9]+$/.test(val);
+    }
+
+    private getNativeParams(params: any): string {
+        var prefix, s: any[], add, name, r20, output;
+        s = [];
+        r20 = /%20/g;
+        add = function (key: string, value: any) {
+            // If value is a function, invoke it and return its value
+            value = (typeof value == 'function') ? value() : (value == null ? "" : value);
+            s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
+        };
+        if (params instanceof Array) {
+            for (name in params) {
+                add(name, params[name]);
+            }
+        } else {
+            for (prefix in params) {
+                this.buildParams(prefix, params[prefix], add);
+            }
+        }
+        output = s.join("&").replace(r20, "+");
+        return output;
+    };
+
+    private buildParams(prefix: string, obj: any, add: any): void {
+        var name, i, l, rbracket;
+        rbracket = /\[\]$/;
+        if (obj instanceof Array) {
+            for (i = 0, l = obj.length; i < l; i++) {
+                if (rbracket.test(prefix)) {
+                    add(prefix, obj[i]);
+                } else {
+                    this.buildParams(prefix + "[" + (typeof obj[i] === "object" ? i : "") + "]", obj[i], add);
+                }
+            }
+        } else if (typeof obj == "object") {
+            // Serialize object item.
+            for (name in obj) {
+                this.buildParams(prefix + "[" + name + "]", obj[name], add);
+            }
+        } else {
+            // Serialize scalar item.
+            add(prefix, obj);
+        }
     }
 
 }

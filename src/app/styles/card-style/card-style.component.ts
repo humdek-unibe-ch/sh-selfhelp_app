@@ -8,14 +8,14 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./card-style.component.scss'],
 })
 export class CardStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: CardStyle;
-    isCardExpanded: boolean;
+    @Input() override style!: CardStyle;
+    isCardExpanded!: boolean;
 
     constructor() {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         this.isCardExpanded = this.getFieldContent('is_expanded') == '1';
     }
 

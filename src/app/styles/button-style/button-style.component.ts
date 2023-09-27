@@ -9,13 +9,13 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./button-style.component.scss'],
 })
 export class ButtonStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: ButtonStyle;
+    @Input() override style!: ButtonStyle;
 
     constructor(private selfhelp: SelfhelpService) {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
     public btnClick(): void {
         const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath(), '');

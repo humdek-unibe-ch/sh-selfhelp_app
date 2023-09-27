@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./markdown-inline-style.component.scss'],
 })
 export class MarkdownInlineStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: MarkdownInlineStyle;
+    @Input() override style!: MarkdownInlineStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

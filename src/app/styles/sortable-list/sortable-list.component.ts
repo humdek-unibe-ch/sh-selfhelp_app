@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./sortable-list.component.scss'],
 })
 export class SortableListComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: SortableListStyle;
+    @Input() override style!: SortableListStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

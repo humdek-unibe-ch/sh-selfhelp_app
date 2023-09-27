@@ -10,13 +10,13 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
 })
 
 export class RadioStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: RadioStyle;
-    @Input() parentForm: FormGroup;
+    @Input() override style!: RadioStyle;
+    @Input() override parentForm!: FormGroup;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Style, TabStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
@@ -10,8 +9,8 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./tabs-style.component.scss'],
 })
 export class TabsStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: Style;
-    @ViewChild('tabContent', { static: true }) slider: IonSlides;
+    @Input() override style!: Style;
+    @ViewChild('tabContent', { static: true }) swiperRef!: ElementRef;
     selectedTab = 0;
     sliderConfig = {
         autoHeight: true
@@ -21,22 +20,22 @@ export class TabsStyleComponent extends BasicStyleComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
         for (let i = 0; i < this.style.children.length; i++) {
             const tab = <TabStyle>this.style.children[i];
             if (this.getChildFieldContent(tab, 'is_expanded') == '1') {
-                this.slider.slideTo(i);
+                this.swiperRef?.nativeElement.swiper.slideTo(i);
                 break;
             }
         }
     }
 
     async setSelectedTab() {
-        await this.slider.slideTo(this.selectedTab);
+        await this.swiperRef?.nativeElement.swiper.slideTo(this.selectedTab);
     }
 
-    async tabChanged() {
-        this.selectedTab = await this.slider.getActiveIndex();
+    tabChanged() {
+        this.selectedTab = this.swiperRef?.nativeElement.swiper.activeIndex;
     }
 
     getIcon(style: Style): string {

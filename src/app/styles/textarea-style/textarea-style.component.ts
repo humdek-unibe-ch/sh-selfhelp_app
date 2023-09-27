@@ -9,13 +9,13 @@ import { TextAreaStyle } from './../../selfhelpInterfaces';
     styleUrls: ['./textarea-style.component.scss'],
 })
 export class TextareaStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: TextAreaStyle;
-    @Input() parentForm: FormGroup;
+    @Input() override style!: TextAreaStyle;
+    @Input() override parentForm!: FormGroup;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

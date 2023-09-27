@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./navigation-container-style.component.scss'],
 })
 export class NavigationContainerStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: NavigationContainerStyle;
+    @Input() override style!: NavigationContainerStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

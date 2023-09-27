@@ -6,19 +6,19 @@
         <ion-item>
             <ion-label>App version:</ion-label>
             <ion-text color="primary">
-                <h1>{{selfhelpService.appVersion}}</h1>
+                <h1>{{selfHelpService.appVersion}}</h1>
             </ion-text>
         </ion-item>
         <ion-item>
             <ion-label>App build:</ion-label>
             <ion-text color="primary">
-                <h1>{{selfhelpService.appBuildVersion}}</h1>
+                <h1>{{selfHelpService.appBuildVersion}}</h1>
             </ion-text>
         </ion-item>
-        <ion-item *ngIf="selfhelpService.devApp">
+        <ion-item *ngIf="selfHelpService.devApp">
             <ion-label>Server:</ion-label>
             <ion-text color="primary">
-                <h1>{{selfhelpService.API_ENDPOINT_NATIVE}}</h1>
+                <h1>{{selfHelpService.API_ENDPOINT_NATIVE}}</h1>
             </ion-text>
         </ion-item>
     </ion-card-content>

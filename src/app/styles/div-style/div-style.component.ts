@@ -9,14 +9,14 @@ import { FormGroup } from '@angular/forms';
     styleUrls: ['./div-style.component.scss'],
 })
 export class DivStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: Style;
-    @Input() parentForm: FormGroup;
+    @Input() override style!: Style;
+    @Input() override parentForm!: FormGroup;
 
     constructor() {
         super();
     }
 
-    ngOnInit() {
+    override ngOnInit() {
      }
 
 }

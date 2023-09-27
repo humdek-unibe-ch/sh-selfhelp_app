@@ -1,3 +1,7 @@
+# 3.0.0 (Unpublished)
+ - update `Angular` to `v16`
+ - migrate from `cordova` to `capacitor`
+
 # 2.1.3
  - add anonymous users functionality
 

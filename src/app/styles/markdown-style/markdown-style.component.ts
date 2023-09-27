@@ -8,12 +8,12 @@ import { MarkdownStyle } from './../../selfhelpInterfaces';
     styleUrls: ['./markdown-style.component.scss'],
 })
 export class MarkdownStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: MarkdownStyle;
+    @Input() override style!: MarkdownStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

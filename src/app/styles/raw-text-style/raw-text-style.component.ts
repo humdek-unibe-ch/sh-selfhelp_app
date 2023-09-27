@@ -8,12 +8,12 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     styleUrls: ['./raw-text-style.component.scss'],
 })
 export class RawTextStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: RawTextStyle;
+    @Input() override style!: RawTextStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

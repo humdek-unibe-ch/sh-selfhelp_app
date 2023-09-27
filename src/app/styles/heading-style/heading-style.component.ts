@@ -8,12 +8,12 @@ import { HeadingStyle } from './../../selfhelpInterfaces';
     styleUrls: ['./heading-style.component.scss'],
 })
 export class HeadingStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() style: HeadingStyle;
+    @Input() override style!: HeadingStyle;
 
     constructor() {
         super();
     }
 
-    ngOnInit() { }
+    override ngOnInit() { }
 
 }

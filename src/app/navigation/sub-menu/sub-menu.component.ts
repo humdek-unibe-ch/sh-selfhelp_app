@@ -1,5 +1,4 @@
-import { Component, OnInit, Input, ViewChild, NgZone } from '@angular/core';
-import { IonSlides } from '@ionic/angular';
+import { Component, OnInit, Input, ViewChild, NgZone, ElementRef } from '@angular/core';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { SelfHelp, SelfHelpNavigation, Styles } from '../../selfhelpInterfaces';
 
@@ -9,8 +8,8 @@ import { SelfHelp, SelfHelpNavigation, Styles } from '../../selfhelpInterfaces';
     styleUrls: ['./sub-menu.component.scss'],
 })
 export class SubMenuComponent implements OnInit {
-    @Input() selfhelp: SelfHelp;
-    @ViewChild('slides', { static: true }) slider: IonSlides;
+    @Input() selfhelp!: SelfHelp;
+    @ViewChild('slides', { static: true }) swiperRef!: ElementRef;
     segment = 0;
 
     constructor(private selfhelpService: SelfhelpService, private zone: NgZone) {
@@ -26,19 +25,20 @@ export class SubMenuComponent implements OnInit {
     ngOnInit() { }
 
     async setSelectedSubMenu() {
-        this.selfhelpService.setSelectedSubMenu(this.selfhelp.selectedMenu.children[this.segment]);
-        this.selfhelpService.getPage(this.selfhelpService.getUrl(this.selfhelp.selectedMenu.children[this.segment]));
-        await this.slider.slideTo(this.segment);
+        if (this.selfhelp && this.selfhelp.selectedMenu) {
+            this.selfhelpService.setSelectedSubMenu(this.selfhelp.selectedMenu.children[this.segment]);
+            this.selfhelpService.getPage(this.selfhelpService.getUrl(this.selfhelp.selectedMenu.children[this.segment]));
+            console.log(this.getContent(this.selfhelp.selectedMenu.children[0]));
+            await this.swiperRef?.nativeElement.swiper.slideTo(this.segment);
+        }
     }
 
-    async slideChanged() {
-        this.segment = await this.slider.getActiveIndex();
+    slideChanged() {
+        this.segment = this.swiperRef?.nativeElement.swiper.activeIndex;
     }
 
-    public getContent(nav: SelfHelpNavigation): Styles {
-        const res = this.selfhelpService.getContent(nav);
-        // console.log(this.selfhelp.selectedMenu.keyword, res);
-        return res;
-    }    
+    public getContent(nav: SelfHelpNavigation): Styles | null {
+        return this.selfhelpService.getContent(nav);
+    }
 
 }
