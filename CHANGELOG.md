@@ -2,6 +2,10 @@
  - update `Angular` to `v16`
  - migrate from `cordova` to `capacitor`
 
+## Bugfix
+ - improve the title in style `card`
+ - add dismiss functionality in style `alert`
+
 # 2.1.3
  - add anonymous users functionality
 
