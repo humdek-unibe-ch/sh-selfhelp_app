@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
-// import { AndroidFullScreen } from '@awesome-cordova-plugins/android-full-screen';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
 // import { CodePush } from '@ionic-native/code-push/ngx';
@@ -38,9 +37,6 @@ export class AppComponent {
             if (this.selfhelpSerivce.getIsApp()) {
                 this.checkForUpdate();
                 this.initDeepLinking();
-                // AndroidFullScreen.isImmersiveModeSupported()
-                //     .then(() => AndroidFullScreen.immersiveMode())
-                //     .catch(console.warn);
                 StatusBar.setStyle({ style: Style.Default });
                 await SplashScreen.hide();
                 this.notificationsService.initPushNotifications();
