@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
     appId: 'unibe.tpf.selfhelp_dev',
-    appName: 'Selfhelp',
+    appName: 'SelfHelp',
     webDir: 'www',
     server: {
         androidScheme: 'https',
