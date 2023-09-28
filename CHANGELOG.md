@@ -1,6 +1,7 @@
 # 3.0.0 (Unpublished)
  - update `Angular` to `v16`
  - migrate from `cordova` to `capacitor`
+ - add official SelfHelp icons
 
 ## Bugfix
  - improve the title in style `card`
