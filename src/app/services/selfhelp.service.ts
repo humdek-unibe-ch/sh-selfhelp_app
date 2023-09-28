@@ -13,6 +13,9 @@ import version from '../../../package.json';
 import { UtilsService } from './utils.service';
 import { TranslateService } from '@ngx-translate/core';
 // import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
+import packageJson from './../../../package.json'; // Replace with the actual path to your package.json file
+const appVersion = packageJson.version;
+
 
 @Injectable({
     providedIn: 'root'
@@ -70,9 +73,7 @@ export class SelfhelpService {
                 this.isApp = false;
             }
             if (this.isApp) {
-                // this.appVersionPlugin.getVersionNumber().then((res) => {
-                //     this.appVersion = res;
-                // });
+                this.appVersion = appVersion;
             }
             this.appBuildVersion = version.version;
             // Preferences.remove({ key: this.selfhelp_server }); // enable for resetting the server when developing
