@@ -12,7 +12,8 @@ Sub pages are organized as sub-menus
  - for `android` copy file `google-services.json` in `android/app` folder 
  - `ionic cap build`
  - `ionic cap sync`
- - `ionic capacitor run android -l --external` for local testing; check firewall and ports if it does not work on device but works on emulator. Also the device should be in the same network.
+ - `npx ionic cap run android --target=ce09193988d5244e0d7e  --livereload --external --configuration=production` - local command for Stefan's tablet
+ - `ionic capacitor run android -l --external` for local testing; check firewall and ports if it does not work on device but works on emulator. Also the device should be in the same network. Check if node is added.
 
 
 
