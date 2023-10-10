@@ -15,5 +15,12 @@ Sub pages are organized as sub-menus
  - `npx ionic cap run android --target=ce09193988d5244e0d7e  --livereload --external --configuration=production` - local command for Stefan's tablet
  - `ionic capacitor run android -l --external` for local testing; check firewall and ports if it does not work on device but works on emulator. Also the device should be in the same network. Check if node is added.
 
+# Instructions App center Code-Push
+ - Install: `npm install -g appcenter-cli`
+ - Login: `appcenter login`
+ - Create: create react-native app in the [appcenter](https://appcenter.ms) web interface
+ - Publish: `ionic cap build`, `ionic cap sync`, `appcenter codepush release -a TPF-UniBe/SelfHelp-Android -c android/app/src/main/assets/public/ -d Production -t 1.0.0 --description 'My Description' --mandatory true`
+ - History: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-Android Production`
+
 
 

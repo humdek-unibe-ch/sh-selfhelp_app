@@ -4,9 +4,10 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
-// import { CodePush } from '@ionic-native/code-push/ngx';
+import { InstallMode, codePush } from '@dwimcore/capacitor-codepush';
 declare const IonicDeeplink: any;
 import { register } from 'swiper/element/bundle';
+import { UtilsService } from './services/utils.service';
 register();
 
 @Component({
@@ -22,8 +23,8 @@ export class AppComponent {
         private platform: Platform,
         private loadingCtrl: LoadingController,
         private notificationsService: NotificationsService,
-        public selfhelpSerivce: SelfhelpService
-        // private codePush: CodePush
+        public selfhelpSerivce: SelfhelpService,
+        public utils: UtilsService
     ) {
         if (window.localStorage.getItem('skin_app') && window.localStorage.getItem('skin_app') == 'md') {
             this.skinIOS = false;
@@ -61,6 +62,22 @@ export class AppComponent {
     private checkForUpdate() {
         // const downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
         // this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
+        this.utils.debugLog('Check code Push', null);
+        codePush.checkForUpdate((update) => {
+            if (!update) {
+                console.log("The app is up to date.");
+            } else {
+                console.log("An update is available! Should we download it?");
+            }
+        });
+        codePush.sync({ updateDialog: true, installMode: InstallMode.IMMEDIATE });
+        // codePush.checkForUpdate().then(function (update) {
+        //     if (!update) {
+        //         console.log("The app is up to date.");
+        //     } else {
+        //         console.log("An update is available! Should we download it?");
+        //     }
+        // });
     }
 
     initDeepLinking() {
