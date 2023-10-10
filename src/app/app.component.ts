@@ -5,7 +5,6 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
 import { InstallMode, codePush } from '@dwimcore/capacitor-codepush';
-declare const IonicDeeplink: any;
 import { register } from 'swiper/element/bundle';
 import { UtilsService } from './services/utils.service';
 register();
@@ -60,27 +59,13 @@ export class AppComponent {
     }
 
     private checkForUpdate() {
-        // const downloadProgress = (progress) => { console.log(`Downloaded ${progress.receivedBytes} of ${progress.totalBytes}`); }
-        // this.codePush.sync({}, downloadProgress).subscribe((syncStatus) => console.log(syncStatus));
-        this.utils.debugLog('Check code Push', null);
-        codePush.checkForUpdate((update) => {
-            if (!update) {
-                console.log("The app is up to date.");
-            } else {
-                console.log("An update is available! Should we download it?");
-            }
-        });
-        codePush.sync({ updateDialog: true, installMode: InstallMode.IMMEDIATE });
-        // codePush.checkForUpdate().then(function (update) {
-        //     if (!update) {
-        //         console.log("The app is up to date.");
-        //     } else {
-        //         console.log("An update is available! Should we download it?");
-        //     }
-        // });
+        codePush.sync({ updateDialog: false, installMode: InstallMode.IMMEDIATE });
     }
 
     initDeepLinking() {
+
+        // WHEN ADDING DEEP LINK, WE CAN ADD AUTOFILL FOR THE PASSWORDS
+
         // IonicDeeplink.onDeepLink((link) => {
         //     if (link['path']) {
         //         const pathArr = link.path.split('/');
