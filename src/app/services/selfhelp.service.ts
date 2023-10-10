@@ -5,13 +5,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult } from './../selfhelpInterfaces';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
-// import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Device } from '@capacitor/device';
 import { NotificationsService } from './notifications.service';
 import { ModalPageComponent } from '../components/modal-page/modal-page.component';
 import version from '../../../package.json';
 import { UtilsService } from './utils.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Browser } from '@capacitor/browser';
 // import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 import packageJson from './../../../package.json'; // Replace with the actual path to your package.json file
 const appVersion = packageJson.version;
@@ -60,7 +60,6 @@ export class SelfhelpService {
         private toastController: ToastController,
         private alertController: AlertController,
         private router: Router,
-        // private inAppBrowser: InAppBrowser,
         private modalController: ModalController,
         private notificationsService: NotificationsService,
         private utils: UtilsService,
@@ -671,9 +670,10 @@ export class SelfhelpService {
             console.log('browser');
             if (url.match(".pdf")) {
                 // this.inAppBrowser.create(url, "_system");
-                this.getDocumentViewer(url);
+                // this.getDocumentViewer(url);
+                Browser.open({ url: url });
             } else {
-                // this.inAppBrowser.create(url);
+                Browser.open({ url: url });
             }
         } else {
             console.log('page');

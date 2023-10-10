@@ -2,6 +2,8 @@
  - update `Angular` to `v16`
  - migrate from `cordova` to `capacitor`
  - add official SelfHelp icons
+ - use appcenter for code-push with app-center-cli
+ - use capacitor browser for opening external links and pdf files
 
 ## Bugfix
  - improve the title in style `card`

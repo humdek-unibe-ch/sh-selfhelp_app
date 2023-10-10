@@ -4,7 +4,6 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy, isPlatform } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-// import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FormBuilder } from '@angular/forms';
 import { NgCalendarModule } from 'ionic2-calendar';
 import { registerLocaleData } from '@angular/common';

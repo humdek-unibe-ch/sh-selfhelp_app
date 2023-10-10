@@ -24,6 +24,7 @@
         "@awesome-cordova-plugins/calendar": "^6.4.0",
         "@capacitor/android": "5.4.0",
         "@capacitor/app": "5.0.6",
+        "@capacitor/browser": "^5.1.0",
         "@capacitor/core": "5.4.0",
         "@capacitor/haptics": "5.0.6",
         "@capacitor/keyboard": "5.0.6",
