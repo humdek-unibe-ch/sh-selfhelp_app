@@ -5,6 +5,7 @@
  - add official SelfHelp icons
  - use appcenter for code-push with app-center-cli
  - use capacitor browser for opening external links and pdf files
+ - add `min` and `max` characters config for `input` from type `text` and `textarea`
 
 ## Bugfix
  - improve the title in style `card`
