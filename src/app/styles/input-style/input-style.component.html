@@ -1,7 +1,8 @@
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'text'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
     <ion-input [formControlName]="getFieldContent('name')"
-        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''" [minlength]="getFieldContent('min')"
+        [maxlength]="getFieldContent('max')"></ion-input>
 </ion-item>
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'date'" [formGroup]="parentForm" [class]="getCss()">
@@ -11,7 +12,7 @@
     <ion-modal [keepContentsMounted]="true">
         <ng-template>
             <ion-datetime presentation="date" id="datetime" [formControlName]="getFieldContent('name')"
-            (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
+                (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
         </ng-template>
     </ion-modal>
 </ion-item>
@@ -24,7 +25,7 @@
     <ion-modal [keepContentsMounted]="true">
         <ng-template>
             <ion-datetime id="datetime" [formControlName]="getFieldContent('name')"
-            (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>
+                (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>
         </ng-template>
     </ion-modal>
 </ion-item>

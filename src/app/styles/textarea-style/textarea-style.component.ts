@@ -16,6 +16,6 @@ export class TextareaStyleComponent extends BasicStyleComponent implements OnIni
         super();
     }
 
-    override ngOnInit() { }
+    override ngOnInit() {console.log('min', this.getFieldContent('min')); }
 
 }
