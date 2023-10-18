@@ -517,6 +517,5 @@ export interface SelfHelp {
     external_css: string,
     languages?: Language[],
     locale?: string,
-    default_language_id?: Number | null,
     user_language?: Number | null,
 }

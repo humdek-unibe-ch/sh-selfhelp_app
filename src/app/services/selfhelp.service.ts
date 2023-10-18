@@ -44,8 +44,7 @@ export class SelfhelpService {
         current_modal_url: '',
         avatar: '',
         external_css: '',
-        default_language_id: 2,
-        user_language: 2
+        user_language: null
     });
     private initApp = false;
     private messageDuration = 10000;
@@ -147,7 +146,9 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
-        params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.selfhelp.value.default_language_id;
+        if(this.selfhelp.value.user_language){
+            params['id_languages'] = this.selfhelp.value.user_language
+        }
         params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
         params['mobile_web'] = true;
         if (this.notificationsService.getToken() !== '') {
