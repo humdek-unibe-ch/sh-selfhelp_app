@@ -15,6 +15,7 @@ import { SkinApp } from './selfhelpInterfaces';
 import { MobilePreviewComponent } from './mobile-preview/mobile-preview.component';
 import { SurveyModule } from "survey-angular-ui";
 import { AppComponent } from './app.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 registerLocaleData(localeDe);
 
 export function createTranslateLoader(http: HttpClient) {
@@ -51,7 +52,7 @@ export function getAppSkin(): SkinApp {
         HttpClientModule,
         NgCalendarModule,
         SurveyModule,
-        // NgxIonicImageViewerModule,
+        FullCalendarModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

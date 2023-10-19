@@ -64,14 +64,13 @@ import { SubmitCommentComponent } from '../styles/message-board-style/submit-com
 import { EntryListComponent } from '../styles/entry-list/entry-list.component';
 import { CalendarStyleComponent } from '../styles/calendar-style/calendar-style.component';
 import { NgCalendarModule } from 'ionic2-calendar';
-// import { RecordMediaStyleComponent } from '../styles/record-media-style/record-media-style.component';
-// import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 import { SurveyJSStyleComponent } from '../styles/survey-js-style/survey-js-style.component';
 import { SurveyModule } from 'survey-angular-ui';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
+import { FullCalendarModule } from '@fullcalendar/angular';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -110,7 +109,7 @@ const routes: Routes = [
         SafePipeModule,
         DataTablesModule,
         TranslateModule,
-        // PdfViewerModule,
+        FullCalendarModule,
         SurveyModule,
         NgCalendarModule,
         PlotlyModule

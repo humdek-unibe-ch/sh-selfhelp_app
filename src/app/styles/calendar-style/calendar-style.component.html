@@ -50,7 +50,7 @@
         </ion-col>
     </ion-row>
 
-    <calendar [eventSource]="eventSource" [calendarMode]="calendar.calendarMode" [currentDate]="calendar.currentDate"
+    <!-- <calendar [eventSource]="eventSource" [calendarMode]="calendar.calendarMode" [currentDate]="calendar.currentDate"
         (onCurrentDateChanged)="onCurrentDateChanged($event)" (onEventSelected)="onEventSelected()"
         (onTitleChanged)="onViewTitleChanged($event)" [monthviewDisplayEventTemplate]="template"
         (onRangeChanged)="onRangeChanged($event)" [queryMode]="'remote'" [startingDayMonth]="calendar.startingDayMonth"
@@ -64,7 +64,9 @@
         [preserveScrollPosition]="calendar.preserveScrollPosition" [lockSwipeToPrev]="calendar.lockSwipeToPrev"
         [lockSwipes]="calendar.lockSwipes" [locale]="calendar.locale" [startHour]="calendar.startHour"
         [endHour]="calendar.endHour" [sliderOptions]="calendar.sliderOptions">
-    </calendar>
+    </calendar> -->
+
+    <full-calendar [options]="calendarOptions"></full-calendar>
 
     <ng-template #template let-view="view" let-row="row" let-col="col">
         <div [class.with-event]="view.dates[row*7+col].events.length">
