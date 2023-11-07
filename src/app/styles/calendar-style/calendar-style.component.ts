@@ -38,7 +38,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     setCalendarOptions() {
         let calendar_data = this.style['calendar_values'];
         let events = this.style['events'];
-        console.log('calendar',events);
+        console.log('calendar', events);
         let buttons = this.get_custom_buttons(calendar_data);
         this.calendarOptions = {
             initialView: 'dayGridMonth',
@@ -72,6 +72,9 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             // height: 'auto',
             firstDay: 1,
             events: this.prepare_events(events, calendar_data['config']),
+            eventClick: () => {
+                alert('event')
+            }
         };
     }
 
@@ -157,7 +160,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 }
             }
         });
-        console.log('calendar',events);
+        console.log('calendar', events);
         return events;
     }
 
