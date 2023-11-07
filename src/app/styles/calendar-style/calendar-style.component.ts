@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CalendarStyle } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { CalendarOptions, EventSourceInput } from '@fullcalendar/core';
+import { CalendarOptions } from '@fullcalendar/core';
 import { addDays, format } from 'date-fns';
+import { ModalStyleComponent } from '../modal-style/modal-style.component';
+declare var $: any;
 
 @Component({
     selector: 'app-calendar-style',
@@ -12,6 +14,7 @@ import { addDays, format } from 'date-fns';
 })
 export class CalendarStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: CalendarStyle;
+    @ViewChild('modalAddEvent') modalAddEvent?: ModalStyleComponent;
 
     eventSource: any[] = [];
     viewTitle!: string;
@@ -73,7 +76,12 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             firstDay: 1,
             events: this.prepare_events(events, calendar_data['config']),
             eventClick: () => {
-                alert('event')
+                console.log($('#myModal'));
+                if (this.modalAddEvent) {
+                    console.log(this.modalAddEvent);
+                    this.modalAddEvent.openModal();
+                }
+                // $('#myModal').modal(); // Open the modal using Bootstrap's modal() function
             }
         };
     }

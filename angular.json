@@ -57,6 +57,7 @@
               "src/assets/js/iconselect.js",
               "src/assets/js/iscroll.js",
               "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.min.js"
             ]
           },

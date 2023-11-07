@@ -58,7 +58,12 @@ export interface Style {
 
 export interface CardStyle extends Style {
     title: StyleField,
-    childrn: any
+    children: any
+}
+
+export interface ModalStyle extends Style {
+    title: StyleField,
+    children: any
 }
 
 export interface ContainerStyle extends Style {

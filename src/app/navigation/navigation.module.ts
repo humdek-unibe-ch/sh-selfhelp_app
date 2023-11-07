@@ -71,6 +71,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { ModalStyleComponent } from '../styles/modal-style/modal-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -174,7 +175,8 @@ const routes: Routes = [
         LanguageSelectComponent,
         AppVersionComponent,
         PdfViewerComponent,
-        SurveyJSStyleComponent
+        SurveyJSStyleComponent,
+        ModalStyleComponent
     ]
 })
 export class NavigationPageModule {
