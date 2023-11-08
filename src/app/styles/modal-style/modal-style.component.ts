@@ -3,6 +3,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { ModalStyle } from 'src/app/selfhelpInterfaces';
 import { ModalController } from '@ionic/angular';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
+declare var $: any;
 
 @Component({
     selector: 'app-modal-style',
@@ -12,12 +13,11 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 export class ModalStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ModalStyle;
 
-    constructor(private selfhelpService: SelfhelpService, public modalController: ModalController) {
+    constructor(private modalController: ModalController, public selfhelpService: SelfhelpService) {
         super();
     }
 
     override ngOnInit() {
-
     }
 
     public closeModal() {
@@ -25,12 +25,16 @@ export class ModalStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     public async openModal() {
+        console.log($('#modal-holder'));
+        console.log('modal',this.style.children);
         const modal = await this.modalController.create({
             component: ModalStyleComponent,
             componentProps: {
-                // src: this.getImgSource()
+                style: this.style,
+                url: this.url,
+                ionContent: this.ionContent
             },
-            cssClass: 'ion-img-viewer',
+            cssClass: '',
             keyboardClose: true,
             showBackdrop: true
         });

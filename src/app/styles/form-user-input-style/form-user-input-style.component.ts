@@ -20,6 +20,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     override ngOnInit() {
+        console.log('init   form');
         this.initForm();
     }
 
@@ -43,7 +44,9 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                     value = value == 1;
                     value = { value: value, disabled: true };
                 }
-                const req = input.is_required.content == '1' ? Validators.required : null;
+                const req = input['is_required'] && input.is_required.content == '1' ? Validators.required : null;
+                console.log('is_log', this.getFieldContent('is_log'));
+                console.log('form group', this.form);
                 this.inputStyles.push(formField);
                 this.formFields[input.name.content.toString()] = new FormControl(value, req);
             }

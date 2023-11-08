@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions } from '@fullcalendar/core';
 import { addDays, format } from 'date-fns';
 import { ModalStyleComponent } from '../modal-style/modal-style.component';
+import { ModalController } from '@ionic/angular';
 declare var $: any;
 
 @Component({
@@ -29,12 +30,13 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         plugins: [dayGridPlugin]
     };
 
-    constructor() {
+    constructor(private modalController: ModalController) {
         super();
     }
 
     override ngOnInit() {
         console.log("calendar", this.style);
+        console.log("calendar form", this.style['style_add_event']);
         this.setCalendarOptions();
     }
 
@@ -75,12 +77,20 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             // height: 'auto',
             firstDay: 1,
             events: this.prepare_events(events, calendar_data['config']),
-            eventClick: () => {
-                console.log($('#myModal'));
-                if (this.modalAddEvent) {
-                    console.log(this.modalAddEvent);
-                    this.modalAddEvent.openModal();
-                }
+            eventClick: async () => {
+                const modal = await this.modalController.create({
+                    component: ModalStyleComponent,
+                    componentProps: {
+                        style: this.style['style_add_event'],
+                        url: this.url,
+                        ionContent: this.ionContent
+                    },
+                    cssClass: '',
+                    keyboardClose: true,
+                    showBackdrop: true
+                });
+
+                return await modal.present();
                 // $('#myModal').modal(); // Open the modal using Bootstrap's modal() function
             }
         };
