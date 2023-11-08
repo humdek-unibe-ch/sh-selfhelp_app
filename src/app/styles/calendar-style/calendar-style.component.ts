@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { CalendarStyle } from 'src/app/selfhelpInterfaces';
+import { CalendarStyle, Style } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CalendarOptions } from '@fullcalendar/core';
 import { addDays, format } from 'date-fns';
 import { ModalStyleComponent } from '../modal-style/modal-style.component';
 import { ModalController } from '@ionic/angular';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 declare var $: any;
 
 @Component({
@@ -23,14 +24,14 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     calendars = [];
     events = [];
     dataRange: any;
-
     calendarOptions: CalendarOptions = {
         initialView: 'dayGridMonth',
         themeSystem: 'bootstrap',
         plugins: [dayGridPlugin]
     };
+    calendarFormFields: any;
 
-    constructor(private modalController: ModalController) {
+    constructor(private modalController: ModalController, private selfhelpService: SelfhelpService) {
         super();
     }
 
@@ -77,7 +78,22 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             // height: 'auto',
             firstDay: 1,
             events: this.prepare_events(events, calendar_data['config']),
-            eventClick: async () => {
+            eventClick: async (info) => {
+                let entryValues = info.event.extendedProps;
+                this.calendarFormFields = {}; //reset them
+                console.log(entryValues);
+                console.log(this.calendarFormFields);
+                let eventInfo: any = {};
+                Object.keys(entryValues).forEach(key => {
+                    if (key.startsWith("_")) {
+                        // set the value from the event
+                        let fieldName = key.replace('_', '');
+                        eventInfo[fieldName] = entryValues[key];
+                    }
+                });
+                console.log(eventInfo);
+                this.propagateFields(this.style['style_edit_event'].children, eventInfo);
+                console.log("calendar form", this.style['style_edit_event']);
                 const modal = await this.modalController.create({
                     component: ModalStyleComponent,
                     componentProps: {
@@ -105,8 +121,6 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 addEventButton: {
                     text: calendar_data['label_calendar_add_event'],
                     click: async () => {
-                        console.log('style_add_event', this.style['style_add_event']);
-                        console.log('style_add_event', this.url);
                         const modal = await this.modalController.create({
                             component: ModalStyleComponent,
                             componentProps: {
@@ -247,6 +261,26 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
 
         // If the color format is not recognized, assume it's not light
         return false;
+    }
+
+    /**
+     * @description Loop all children in the calendar and pick these which are form fields and set their value
+     * @author Stefan Kodzhabashev
+     * @date 08/11/2023
+     * @param {Style[]} styles
+     * @param {any} eventInfo
+     * @memberof CalendarStyleComponent
+     */
+    propagateFields(styles: Style[], eventInfo: any) {
+        styles.forEach((formField: Style) => {
+            if (formField['children'] && formField['children'].length > 0) {
+                this.propagateFields(formField['children'], eventInfo);
+            }
+            else if (this.selfhelpService.isFormField(formField)) {
+                formField['value']['content'] = 'ss';
+                formField['last_value'] = 'ss';
+            }
+        });
     }
 
 }

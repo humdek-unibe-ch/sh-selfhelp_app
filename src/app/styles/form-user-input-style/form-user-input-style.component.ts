@@ -20,7 +20,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     override ngOnInit() {
-        console.log('init   form');
         this.initForm();
     }
 
@@ -45,8 +44,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                     value = { value: value, disabled: true };
                 }
                 const req = input['is_required'] && input.is_required.content == '1' ? Validators.required : null;
-                console.log('is_log', this.getFieldContent('is_log'));
-                console.log('form group', this.form);
                 this.inputStyles.push(formField);
                 this.formFields[input.name.content.toString()] = new FormControl(value, req);
             }
@@ -58,8 +55,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         this.inputStyles = [];
         this.collectFormFields(this.style);
         this.form = this.formBuilder.group(this.formFields);
-        console.log('url', this.url);
-        console.log('urlForm', this.getFieldContent('url'));
     }
 
     protected prepareParams(value: { [key: string]: any; }): any {
@@ -73,9 +68,14 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                     // assign values to true/false for checkbox. Ionic need them as boolean
                     fieldValue = fieldValue ? this.getChildFieldDefault(formField, 'value') : null;
                 }
-                params[input.name.content.toString()] = {
-                    id: input.id.content,
-                    value: fieldValue
+                if (input.id) {
+                    params[input.name.content.toString()] = {
+                        id: input.id.content,
+                        value: fieldValue
+                    }
+                } else {
+                    // custom input not in DB, there is no id
+                    params[input.name.content.toString()] = fieldValue;
                 }
             }
         });
