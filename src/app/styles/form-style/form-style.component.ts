@@ -14,8 +14,8 @@ export class FormStyleComponent extends FormUserInputStyleComponent {
         super(formBuilder, selfhelpService);
     }
 
-    protected override prepareParams(value: { [key: string]: any; }): any {
-        return value;
-    }
+    // protected override prepareParams(value: { [key: string]: any; }): any {
+    //     return value;
+    // }
 
 }

@@ -58,6 +58,8 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         this.inputStyles = [];
         this.collectFormFields(this.style);
         this.form = this.formBuilder.group(this.formFields);
+        console.log('url', this.url);
+        console.log('urlForm', this.getFieldContent('url'));
     }
 
     protected prepareParams(value: { [key: string]: any; }): any {

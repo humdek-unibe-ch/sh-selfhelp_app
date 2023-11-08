@@ -106,6 +106,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                     text: calendar_data['label_calendar_add_event'],
                     click: async () => {
                         console.log('style_add_event', this.style['style_add_event']);
+                        console.log('style_add_event', this.url);
                         const modal = await this.modalController.create({
                             component: ModalStyleComponent,
                             componentProps: {
