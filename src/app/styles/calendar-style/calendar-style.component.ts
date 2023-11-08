@@ -81,7 +81,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 const modal = await this.modalController.create({
                     component: ModalStyleComponent,
                     componentProps: {
-                        style: this.style['style_add_event'],
+                        style: this.style['style_edit_event'],
                         url: this.url,
                         ionContent: this.ionContent
                     },
