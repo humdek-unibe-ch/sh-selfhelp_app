@@ -24,22 +24,4 @@ export class ModalStyleComponent extends BasicStyleComponent implements OnInit {
         this.selfhelpService.closeModal();
     }
 
-    public async openModal() {
-        console.log($('#modal-holder'));
-        console.log('modal',this.style.children);
-        const modal = await this.modalController.create({
-            component: ModalStyleComponent,
-            componentProps: {
-                style: this.style,
-                url: this.url,
-                ionContent: this.ionContent
-            },
-            cssClass: '',
-            keyboardClose: true,
-            showBackdrop: true
-        });
-
-        return await modal.present();
-    }
-
 }

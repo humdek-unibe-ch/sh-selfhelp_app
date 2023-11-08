@@ -89,9 +89,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                     keyboardClose: true,
                     showBackdrop: true
                 });
-
                 return await modal.present();
-                // $('#myModal').modal(); // Open the modal using Bootstrap's modal() function
             }
         };
     }
@@ -106,14 +104,37 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             customButtons: {
                 addEventButton: {
                     text: calendar_data['label_calendar_add_event'],
-                    click: () => {
-                        alert('asd')
+                    click: async () => {
+                        console.log('style_add_event', this.style['style_add_event']);
+                        const modal = await this.modalController.create({
+                            component: ModalStyleComponent,
+                            componentProps: {
+                                style: this.style['style_add_event'],
+                                url: this.url,
+                                ionContent: this.ionContent
+                            },
+                            cssClass: '',
+                            keyboardClose: true,
+                            showBackdrop: true
+                        });
+                        return await modal.present();
                     }
                 },
                 addCalendarButton: {
                     text: calendar_data['label_add_calendar'],
-                    click: function () {
-                        // addNewCalendar();
+                    click: async () => {
+                        // const modal = await this.modalController.create({
+                        //     component: ModalStyleComponent,
+                        //     componentProps: {
+                        //         style: this.style['style_edit_event'],
+                        //         url: this.url,
+                        //         ionContent: this.ionContent
+                        //     },
+                        //     cssClass: '',
+                        //     keyboardClose: true,
+                        //     showBackdrop: true
+                        // });
+                        // return await modal.present();
                     }
                 }
             },
