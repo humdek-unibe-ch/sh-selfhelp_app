@@ -165,15 +165,21 @@ ion-select::part(placeholder) {
 }
 
 @media screen and (max-width:767px) {
-    // .fc-toolbar.fc-header-toolbar {
-    //     flex-direction: column;
-    // }
+    .fc-toolbar.fc-header-toolbar {
+        flex-direction: column;
+        width: 100%;
+    }
 
-    // .fc-toolbar-chunk {
-    //     display: table-row;
-    //     text-align: center;
-    //     padding: 5px 0;
-    // }
+    .fc-toolbar-chunk {
+        display: table-row;
+        text-align: center;
+        padding: 5px 0;
+        width: 100%;
+    }
+
+    .fc-button-group{
+        width: 100%;
+    }
 }
 
 .delete-event-form {
