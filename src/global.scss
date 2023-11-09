@@ -175,3 +175,10 @@ ion-select::part(placeholder) {
     //     padding: 5px 0;
     // }
 }
+
+.delete-event-form {
+    position: absolute;
+    -webkit-transform: translate(0, -100%);
+    right: 0;
+}
+
