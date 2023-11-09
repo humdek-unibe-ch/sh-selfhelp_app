@@ -6,12 +6,12 @@
 </ion-item>
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'date'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
-    <ion-datetime-button datetime="datetime"></ion-datetime-button>
+    <ion-label *ngIf="style.label">{{getFieldContent('label')}} {{getFieldContent('name')}}</ion-label>
+    <ion-datetime-button [datetime]="'datetime-'+getFieldContent('name')"></ion-datetime-button>
 
     <ion-modal [keepContentsMounted]="true">
         <ng-template>
-            <ion-datetime presentation="date" id="datetime" [formControlName]="getFieldContent('name')"
+            <ion-datetime presentation="date" [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
                 (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
         </ng-template>
     </ion-modal>
@@ -20,11 +20,11 @@
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'datetime'" [formGroup]="parentForm"
     [class]="getCss()">
     <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
-    <ion-datetime-button datetime="datetime"></ion-datetime-button>
+    <ion-datetime-button [datetime]="'datetime-'+getFieldContent('name')"></ion-datetime-button>
 
     <ion-modal [keepContentsMounted]="true">
         <ng-template>
-            <ion-datetime id="datetime" [formControlName]="getFieldContent('name')"
+            <ion-datetime [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
                 (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>
         </ng-template>
     </ion-modal>
