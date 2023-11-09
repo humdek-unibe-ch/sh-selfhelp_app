@@ -41,10 +41,17 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         this.setCalendarOptions();
     }
 
+
+    /**
+     * @description Set Full calendar options
+     * @author Stefan Kodzhabashev
+     * @date 09/11/2023
+     * @memberof CalendarStyleComponent
+     */
     setCalendarOptions() {
         let calendar_data = this.style['calendar_values'];
         let events = this.style['events'];
-        console.log('calendar', events);
+        console.log('calendar', calendar_data);
         let buttons = this.get_custom_buttons(calendar_data);
         this.calendarOptions = {
             initialView: 'dayGridMonth',
@@ -75,7 +82,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             weekNumberFormat: {
                 week: 'short'
             },
-            // height: 'auto',
+            height: calendar_data['config']['height'] ? calendar_data['config']['height'] : 'auto',
             firstDay: 1,
             events: this.prepare_events(events, calendar_data['config']),
             eventClick: async (info) => {
@@ -110,6 +117,14 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         };
     }
 
+    /**
+     * @description Load custom buttons for the calendar
+     * @author Stefan Kodzhabashev
+     * @date 09/11/2023
+     * @param {*} calendar_data the calendar data
+     * @return {*} return object with the custom buttons
+     * @memberof CalendarStyleComponent
+     */
     get_custom_buttons(calendar_data: any) {
         var buttons = 'prev,next,today,addEventButton';
         if (calendar_data['show_add_calendar_button'] == '1') {
@@ -121,6 +136,8 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 addEventButton: {
                     text: calendar_data['label_calendar_add_event'],
                     click: async () => {
+                        console.log('style_add_event', this.style['style_add_event']);
+                        this.initEventFields(this.style['style_add_event'].children);
                         const modal = await this.modalController.create({
                             component: ModalStyleComponent,
                             componentProps: {
@@ -157,6 +174,19 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         }
         console.log(res)
         return res;
+    }
+
+
+    initEventFields(styles: Style[]) {
+        styles.forEach((formField: Style) => {
+            if (formField['children'] && formField['children'].length > 0) {
+                this.initEventFields(formField['children']);
+            } else if (this.selfhelpService.isFormField(formField)) {
+                if (formField['last_value']) {
+                    formField['last_value'] = null; // clear the form
+                }
+            }
+        });
     }
 
     /**

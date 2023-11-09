@@ -19,12 +19,14 @@ export class InputStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     override ngOnInit() {
+        console.log(this.getFieldContent('name'));
         if(this.getFieldContent('name') === 'datetime' || this.getFieldContent('name') === 'date'){
             this.parentForm.controls[this.getFieldContent('name')].setValue(formatISO(new Date(this.parentForm.controls[this.getFieldContent('name')].value)));
         }
     }
 
     formatDate(controlName: any){
+        console.log(controlName);
         this.parentForm.controls[controlName].setValue(this.parentForm.controls[controlName].value.split('T')[0]);
     }
 
