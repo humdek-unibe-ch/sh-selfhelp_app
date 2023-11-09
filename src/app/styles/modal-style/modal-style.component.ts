@@ -21,7 +21,7 @@ export class ModalStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     public closeModal() {
-        this.selfhelpService.closeModal();
+        this.selfhelpService.closeModal('cancel');
     }
 
 }

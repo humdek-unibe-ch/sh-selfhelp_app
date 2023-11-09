@@ -40,7 +40,7 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
         this.selfhelpService.login(value, this.getFieldContent('alert_fail'))
             .then((res: boolean) => {
                 if (res) {
-                    this.selfhelpService.closeModal();
+                    this.selfhelpService.closeModal('submit');
                 }
             })
             .catch((err) => {
@@ -56,7 +56,7 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
         // this.selfhelpService.login(value, null);
         // this.selfhelpService.getPage('/');
         // this.selfhelpService.closeModal();
-        this.selfhelpService.closeModal();
+        this.selfhelpService.closeModal('cancel');
         this.selfhelpService.openUrl('/reset');
     }
 

@@ -1,5 +1,6 @@
 export type LocalSelfhelp = 'selfhelp';
 export type SkinApp = 'ios' | 'md';
+export type ModalCloseType = 'submit' | 'cancel';
 
 export interface TabMenuItem {
     keyword: string;

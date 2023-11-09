@@ -9,6 +9,7 @@
  - automatically detect user locale and load the app based on that locale if the language is supported
  - rework the `calendar` style base on [Full Calendar](https://fullcalendar.io) library
  - add style `modal`
+ - add `role` when closing a `modal`
 
 
 ## Bugfix

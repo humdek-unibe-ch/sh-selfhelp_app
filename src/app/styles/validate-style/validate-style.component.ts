@@ -70,7 +70,7 @@ export class ValidateStyleComponent extends BasicStyleComponent implements OnIni
         this.selfhelpService.validate(value, this.url)
             .then((res: ValidationResult) => {
                 if (res.result) {
-                    this.selfhelpService.closeModal();
+                    this.selfhelpService.closeModal('submit');
                     if (res.url) {
                         this.selfhelpService.openUrl(res.url as string);
                     } else {

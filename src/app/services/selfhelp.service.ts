@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType } from './../selfhelpInterfaces';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { Device } from '@capacitor/device';
@@ -704,11 +704,11 @@ export class SelfhelpService {
         }
     }
 
-    public async closeModal() {
+    public async closeModal(role: ModalCloseType) {
         let curSelfhelp = this.selfhelp.value;
         curSelfhelp.current_modal_url = '';
         this.setSelfhelp(curSelfhelp, false);
-        await this.modalController.dismiss(null, undefined);
+        await this.modalController.dismiss(null, role);
     }
 
     public async logout() {

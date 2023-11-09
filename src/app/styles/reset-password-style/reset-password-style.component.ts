@@ -55,7 +55,7 @@ export class ResetPasswordStyleComponent extends BasicStyleComponent implements 
                     if (this.style.anonymous_users) {
                         if (this.style.reset_user_name) {
                             // close it, we are on security questions check
-                            this.selfhelpService.closeModal();
+                            this.selfhelpService.closeModal('submit');
                         } else {
                             // load the questions
                             this.selfhelpService.setPage(this.selfhelpService.API_RESET, res.selfhelp_res);
@@ -65,7 +65,7 @@ export class ResetPasswordStyleComponent extends BasicStyleComponent implements 
                             this.selfhelpService.openUrl(res.url as string);
                         }
                     } else {
-                        this.selfhelpService.closeModal();
+                        this.selfhelpService.closeModal('submit');
                     }
                 }
             })

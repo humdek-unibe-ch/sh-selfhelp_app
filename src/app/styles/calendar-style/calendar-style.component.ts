@@ -112,6 +112,13 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                     keyboardClose: true,
                     showBackdrop: true
                 });
+                // Add a callback when the modal is dismissed
+                modal.onDidDismiss().then((data) => {
+                    if (data.role === 'submit') {
+                        // refresh the calendar
+                        this.selfhelpService.openUrl(this.url);
+                    }
+                });
                 return await modal.present();
             }
         };
@@ -148,6 +155,13 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                             cssClass: '',
                             keyboardClose: true,
                             showBackdrop: true
+                        });
+                        // Add a callback when the modal is dismissed
+                        modal.onDidDismiss().then((data) => {
+                            if (data.role === 'submit') {
+                                // refresh the calendar
+                                this.selfhelpService.openUrl(this.url);
+                            }
                         });
                         return await modal.present();
                     }

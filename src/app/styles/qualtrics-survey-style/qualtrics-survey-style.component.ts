@@ -57,7 +57,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     removeIFrame() {
         this.iframe.nativeElement.remove();
         if (this.getFieldContent('close_modal_at_end') == '1') {
-            this.selfhelpService.closeModal();
+            this.selfhelpService.closeModal('submit');
             if (this.getFieldContent('redirect_at_end') != '') {
                 this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
             } else {

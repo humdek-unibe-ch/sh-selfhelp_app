@@ -23,6 +23,6 @@ export class ProfileComponent extends BasicComponentComponent implements OnInit 
 
     public logout(): void{
         this.selfHelpService.logout();
-        this.selfHelpService.closeModal();
+        this.selfHelpService.closeModal('submit');
     }
 }

@@ -63,7 +63,7 @@ export class RegisterStyleComponen extends BasicStyleComponent implements OnInit
             .then((res: RegistrationResult) => {
                 if (res.result) {
                     this.reg_success = true;
-                    this.selfhelpService.closeModal();
+                    this.selfhelpService.closeModal('submit');
                     if (res.url) {
                         this.selfhelpService.openUrl(res.url as string);
                     }

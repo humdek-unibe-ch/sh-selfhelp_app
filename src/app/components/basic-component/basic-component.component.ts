@@ -31,7 +31,7 @@ export class BasicComponentComponent implements OnInit {
     }
 
     public async close() {
-        this.selfHelpService.closeModal();
+        this.selfHelpService.closeModal('cancel');
     }
 
     public getTitle(): string {
