@@ -12,7 +12,6 @@
  - add `role` when closing a `modal`
  - add `color` type to the `input` style
 
-
 ## Bugfix
  - improve the title in style `card`
  - add dismiss functionality in style `alert`

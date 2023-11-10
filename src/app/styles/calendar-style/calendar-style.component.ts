@@ -303,20 +303,20 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
      * @author Stefan Kodzhabashev
      * @date 08/11/2023
      * @param {Style[]} styles
-     * @param {any} eventInfo
+     * @param {any} fieldsInfo
      * @memberof CalendarStyleComponent
      */
-    propagateFormFields(styles: Style[], eventInfo: any) {
+    propagateFormFields(styles: Style[], fieldsInfo: any) {
         styles.forEach((formField: Style) => {
             if (formField['children'] && formField['children'].length > 0) {
-                this.propagateFormFields(formField['children'], eventInfo);
+                this.propagateFormFields(formField['children'], fieldsInfo);
             }
             else if (this.selfhelpService.isFormField(formField)) {
                 if (formField['name']['content'] == 'delete_record_id' || formField['name']['content'] == 'selected_record_id') {
                     // set the record id on these special fields
-                    formField['last_value'] = eventInfo['record_id'];
+                    formField['last_value'] = fieldsInfo['record_id'];
                 } else {
-                    formField['last_value'] = eventInfo[formField['name']['content']];
+                    formField['last_value'] = fieldsInfo[formField['name']['content']];
                 }
             }
         });

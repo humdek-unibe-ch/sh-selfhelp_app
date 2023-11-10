@@ -188,3 +188,9 @@ ion-select::part(placeholder) {
     right: 0;
 }
 
+.delete-calendar-form {
+    position: absolute;
+    -webkit-transform: translate(0, -100%);
+    right: 0;
+}
+

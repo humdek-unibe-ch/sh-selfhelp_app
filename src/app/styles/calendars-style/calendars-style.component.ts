@@ -21,6 +21,13 @@ export class CalendarsStyleComponent extends CalendarStyleComponent implements O
         console.log("calendars", this.style);
     }
 
+    /**
+     * @description Add new calendar modal form load
+     * @author Stefan Kodzhabashev
+     * @date 10/11/2023
+     * @return {*}
+     * @memberof CalendarsStyleComponent
+     */
     async addNewCalendar() {
         this.initFormFields(this.style['style_add_calendar'].children);
         const modal = await this.modalController.create({
@@ -44,7 +51,35 @@ export class CalendarsStyleComponent extends CalendarStyleComponent implements O
         return await modal.present();
     }
 
-    editCalendar(recordId: any) {
-        alert('Edit ' + recordId);
+    /**
+     * @description Edit calendar modal form
+     * @author Stefan Kodzhabashev
+     * @date 10/11/2023
+     * @param {*} calendarInfo the selected calendar
+     * @return {*}
+     * @memberof CalendarsStyleComponent
+     */
+    async editCalendar(calendarInfo: any) {
+        console.log('edit', calendarInfo);
+        this.propagateFormFields(this.style['style_edit_calendar'].children, calendarInfo);
+        const modal = await this.modalController.create({
+            component: ModalStyleComponent,
+            componentProps: {
+                style: this.style['style_edit_calendar'],
+                url: this.url,
+                ionContent: this.ionContent
+            },
+            cssClass: '',
+            keyboardClose: true,
+            showBackdrop: true
+        });
+        // Add a callback when the modal is dismissed
+        modal.onDidDismiss().then((data) => {
+            if (data.role === 'submit') {
+                // refresh the calendar
+                this.selfhelpService.openUrl(this.url);
+            }
+        });
+        return await modal.present();
     }
 }
