@@ -7,6 +7,7 @@ import { addDays, format } from 'date-fns';
 import { ModalStyleComponent } from '../modal-style/modal-style.component';
 import { ModalController } from '@ionic/angular';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import listPlugin from '@fullcalendar/list';
 declare var $: any;
 
 @Component({
@@ -56,11 +57,11 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         this.calendarOptions = {
             initialView: 'dayGridMonth',
             themeSystem: 'bootstrap',
-            plugins: [dayGridPlugin],
+            plugins: [dayGridPlugin, listPlugin ],
             locale: calendar_data['locale'],
             headerToolbar: {
                 left: buttons['buttons'],
-                // center: 'title',
+                center: 'title',
                 right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek'
             },
             customButtons: buttons['customButtons'],
