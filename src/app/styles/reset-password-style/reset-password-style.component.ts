@@ -61,7 +61,6 @@ export class ResetPasswordStyleComponent extends BasicStyleComponent implements 
                             this.selfhelpService.setPage(this.selfhelpService.API_RESET, res.selfhelp_res);
                         }
                         if (res.url) {
-                            console.log(res.url);
                             this.selfhelpService.openUrl(res.url as string);
                         }
                     } else {

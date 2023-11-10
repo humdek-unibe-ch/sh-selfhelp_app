@@ -42,7 +42,6 @@ export class InputStyleComponent extends BasicStyleComponent implements OnInit {
     formatDateTime(controlName: any) {
         if (this.parentForm.controls[controlName].value.includes('+')) {
             let time = this.parentForm.controls[controlName].value.split('+')[0];
-            console.log(time.split('T')[0] + " " + time.split('T')[1]);
             this.parentForm.controls[controlName].setValue(time.split('T')[0] + " " + time.split('T')[1]);
         }
     }

@@ -105,7 +105,6 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
                 }
             }
         }
-        console.log('options', this.dtOptions);
     }
 
     public deleteAlert(row: any): void {

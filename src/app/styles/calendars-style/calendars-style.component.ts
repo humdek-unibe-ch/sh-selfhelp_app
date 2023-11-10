@@ -18,7 +18,6 @@ export class CalendarsStyleComponent extends CalendarStyleComponent implements O
     }
 
     override ngOnInit() {
-        console.log("calendars", this.style);
     }
 
     /**
@@ -60,7 +59,6 @@ export class CalendarsStyleComponent extends CalendarStyleComponent implements O
      * @memberof CalendarsStyleComponent
      */
     async editCalendar(calendarInfo: any) {
-        console.log('edit', calendarInfo);
         this.propagateFormFields(this.style['style_edit_calendar'].children, calendarInfo);
         const modal = await this.modalController.create({
             component: ModalStyleComponent,

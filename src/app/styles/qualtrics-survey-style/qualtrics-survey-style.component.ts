@@ -48,7 +48,6 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     }
 
     iframeMessage(data: IFrameMessageData) {
-        console.log(data);
         if (data.message == 'closeIFrame') {
             this.removeIFrame();
         }
