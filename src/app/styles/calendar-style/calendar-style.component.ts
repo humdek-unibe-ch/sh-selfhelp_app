@@ -32,7 +32,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     };
     calendarFormFields: any;
 
-    constructor(private modalController: ModalController, private selfhelpService: SelfhelpService) {
+    constructor(protected modalController: ModalController, protected selfhelpService: SelfhelpService) {
         super();
     }
 
@@ -94,7 +94,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                         eventInfo[fieldName] = entryValues[key];
                     }
                 });
-                this.propagateFields(this.style['style_edit_event'].children, eventInfo);
+                this.propagateFormFields(this.style['style_edit_event'].children, eventInfo);
                 const modal = await this.modalController.create({
                     component: ModalStyleComponent,
                     componentProps: {
@@ -137,7 +137,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 addEventButton: {
                     text: calendar_data['label_calendar_add_event'],
                     click: async () => {
-                        this.initEventFields(this.style['style_add_event'].children);
+                        this.initFormFields(this.style['style_add_event'].children);
                         const modal = await this.modalController.create({
                             component: ModalStyleComponent,
                             componentProps: {
@@ -183,10 +183,10 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     }
 
 
-    initEventFields(styles: Style[]) {
+    initFormFields(styles: Style[]) {
         styles.forEach((formField: Style) => {
             if (formField['children'] && formField['children'].length > 0) {
-                this.initEventFields(formField['children']);
+                this.initFormFields(formField['children']);
             } else if (this.selfhelpService.isFormField(formField)) {
                 if (formField['last_value']) {
                     formField['last_value'] = null; // clear the form
@@ -306,10 +306,10 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
      * @param {any} eventInfo
      * @memberof CalendarStyleComponent
      */
-    propagateFields(styles: Style[], eventInfo: any) {
+    propagateFormFields(styles: Style[], eventInfo: any) {
         styles.forEach((formField: Style) => {
             if (formField['children'] && formField['children'].length > 0) {
-                this.propagateFields(formField['children'], eventInfo);
+                this.propagateFormFields(formField['children'], eventInfo);
             }
             else if (this.selfhelpService.isFormField(formField)) {
                 if (formField['name']['content'] == 'delete_record_id' || formField['name']['content'] == 'selected_record_id') {

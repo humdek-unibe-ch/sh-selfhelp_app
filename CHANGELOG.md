@@ -10,6 +10,7 @@
  - rework the `calendar` style base on [Full Calendar](https://fullcalendar.io) library
  - add style `modal`
  - add `role` when closing a `modal`
+ - add `color` type to the `input` style
 
 
 ## Bugfix

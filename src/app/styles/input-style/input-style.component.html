@@ -11,7 +11,8 @@
 
     <ion-modal [keepContentsMounted]="true">
         <ng-template>
-            <ion-datetime presentation="date" [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
+            <ion-datetime presentation="date" [id]="'datetime-'+getFieldContent('name')"
+                [formControlName]="getFieldContent('name')"
                 (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
         </ng-template>
     </ion-modal>
@@ -58,4 +59,10 @@
 <ion-item *ngIf="getFieldContent('type_input') === 'checkbox'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
     <ion-checkbox color="primary" [formControlName]="getFieldContent('name')" slot="start"></ion-checkbox>
+</ion-item>
+
+<ion-item *ngIf="getFieldContent('type_input') === 'color'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
+    <ngx-colors ngx-colors-trigger
+        [formControlName]="getFieldContent('name')"></ngx-colors>
 </ion-item>

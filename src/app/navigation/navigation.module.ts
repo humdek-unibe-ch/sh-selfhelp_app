@@ -72,6 +72,7 @@ import { PlotlyModule } from 'angular-plotly.js';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ModalStyleComponent } from '../styles/modal-style/modal-style.component';
 import { CalendarsStyleComponent } from '../styles/calendars-style/calendars-style.component';
+import { NgxColorsModule } from 'ngx-colors';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -113,7 +114,8 @@ const routes: Routes = [
         FullCalendarModule,
         SurveyModule,
         NgCalendarModule,
-        PlotlyModule
+        PlotlyModule,
+        NgxColorsModule
     ],
     exports: [
         RouterModule

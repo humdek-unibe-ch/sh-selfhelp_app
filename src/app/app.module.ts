@@ -16,6 +16,8 @@ import { MobilePreviewComponent } from './mobile-preview/mobile-preview.componen
 import { SurveyModule } from "survey-angular-ui";
 import { AppComponent } from './app.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { NgxColorsModule } from 'ngx-colors';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 registerLocaleData(localeDe);
 
 export function createTranslateLoader(http: HttpClient) {
@@ -44,6 +46,7 @@ export function getAppSkin(): SkinApp {
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         IonicModule.forRoot({
             mode: getAppSkin(),
             innerHTMLTemplatesEnabled: true
@@ -53,6 +56,7 @@ export function getAppSkin(): SkinApp {
         NgCalendarModule,
         SurveyModule,
         FullCalendarModule,
+        NgxColorsModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

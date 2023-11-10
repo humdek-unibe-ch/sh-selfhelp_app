@@ -391,7 +391,7 @@ export interface CalendarStyle extends Style {
     config: StyleField,
 }
 
-export interface CalendarsStyle extends Style {
+export interface CalendarsStyle extends CalendarStyle {
     label_calendar: StyleField,
     label_card_title_calendars: StyleField,
     label_delete_calendar: StyleField,
