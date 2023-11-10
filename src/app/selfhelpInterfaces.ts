@@ -391,6 +391,15 @@ export interface CalendarStyle extends Style {
     config: StyleField,
 }
 
+export interface CalendarsStyle extends Style {
+    label_calendar: StyleField,
+    label_card_title_calendars: StyleField,
+    label_delete_calendar: StyleField,
+    label_edit_calendar: StyleField,
+    name: StyleField,
+    calendars: any
+}
+
 export interface SurveyJSStyle extends Style {
     alert: string,
     restart_on_refresh: StyleField,

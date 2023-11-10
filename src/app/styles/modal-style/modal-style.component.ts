@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { ModalStyle } from 'src/app/selfhelpInterfaces';
-import { ModalController } from '@ionic/angular';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 declare var $: any;
 
@@ -13,7 +12,7 @@ declare var $: any;
 export class ModalStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ModalStyle;
 
-    constructor(private modalController: ModalController, public selfhelpService: SelfhelpService) {
+    constructor(public selfhelpService: SelfhelpService) {
         super();
     }
 

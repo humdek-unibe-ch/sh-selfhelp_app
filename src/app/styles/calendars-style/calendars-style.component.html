@@ -1,0 +1,25 @@
+<div id="calendars-holder" [class]="getCss()">
+    <app-basic-style [style]="this.style.calendars" [url]="url" [ionContent]="ionContent"></app-basic-style>
+    <ion-card [class]="'m-0 '">
+        <ion-card-header class="mobile-card-header" color="light">
+            <ion-card-title>{{getFieldContent('label_card_title_calendars')}}
+                <ion-icon style="float: right;" (click)="addNewCalendar()" name="create-outline"></ion-icon>
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="mobile-body-header">
+            <!-- <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent">
+            </app-basic-style> -->
+            <div *ngFor="let calendar of style.calendars"
+                class="calendar-row border-bottom mb-1 p-2 d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div *ngIf="calendar['color']" class="mr-3 rounded-circle border calendar-color-circle"
+                        [style]="'background-color:' + calendar['color'] ">
+                    </div>
+                    <div class="calendar-name">{{calendar['calendar_name'] ? calendar['calendar_name'] : 'Please use input with name `calendar_name`'}}</div>
+                </div>
+                <button class="calendar-edit-btn btn-sm ml-3 btn-primary"
+                    (click)="editCalendar(calendar['record_id'])">{{getFieldContent('label_edit_calendar')}}</button>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</div>

@@ -37,8 +37,6 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     }
 
     override ngOnInit() {
-        console.log("calendar", this.style);
-        console.log("calendar form", this.style['style_add_event']);
         this.setCalendarOptions();
     }
 
@@ -52,7 +50,6 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
     setCalendarOptions() {
         let calendar_data = this.style['calendar_values'];
         let events = this.style['events'];
-        console.log('calendar', calendar_data);
         let buttons = this.get_custom_buttons(calendar_data);
         this.calendarOptions = {
             initialView: 'dayGridMonth',
@@ -89,8 +86,6 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             eventClick: async (info) => {
                 let entryValues = info.event.extendedProps;
                 this.calendarFormFields = {}; //reset them
-                console.log(entryValues);
-                console.log(this.calendarFormFields);
                 let eventInfo: any = {};
                 Object.keys(entryValues).forEach(key => {
                     if (key.startsWith("_")) {
@@ -99,9 +94,7 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                         eventInfo[fieldName] = entryValues[key];
                     }
                 });
-                console.log(eventInfo);
                 this.propagateFields(this.style['style_edit_event'].children, eventInfo);
-                console.log("calendar form", this.style['style_edit_event']);
                 const modal = await this.modalController.create({
                     component: ModalStyleComponent,
                     componentProps: {
@@ -144,7 +137,6 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 addEventButton: {
                     text: calendar_data['label_calendar_add_event'],
                     click: async () => {
-                        console.log('style_add_event', this.style['style_add_event']);
                         this.initEventFields(this.style['style_add_event'].children);
                         const modal = await this.modalController.create({
                             component: ModalStyleComponent,
@@ -187,7 +179,6 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
             },
             buttons: buttons
         }
-        console.log(res)
         return res;
     }
 
@@ -259,7 +250,6 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 }
             }
         });
-        console.log('calendar', events);
         return events;
     }
 

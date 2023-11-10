@@ -56,7 +56,6 @@ import { LoginStyleComponent } from '../styles/login-style/login-style.component
 import { RegisterStyleComponen } from '../styles/register-style/register-style.component';
 import { ProfileStyleComponent } from '../styles/profile-style/profile-style.component';
 import { FormStyleComponent } from '../styles/form-style/form-style.component';
-
 import { ResetPasswordStyleComponent } from '../styles/reset-password-style/reset-password-style.component';
 import { ValidateStyleComponent } from '../styles/validate-style/validate-style.component';
 import { MessageBoardStyleComponent } from '../styles/message-board-style/message-board-style.component';
@@ -72,6 +71,7 @@ import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ModalStyleComponent } from '../styles/modal-style/modal-style.component';
+import { CalendarsStyleComponent } from '../styles/calendars-style/calendars-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -171,12 +171,12 @@ const routes: Routes = [
         SubmitCommentComponent,
         EntryListComponent,
         CalendarStyleComponent,
-        // RecordMediaStyleComponent,
         LanguageSelectComponent,
         AppVersionComponent,
         PdfViewerComponent,
         SurveyJSStyleComponent,
-        ModalStyleComponent
+        ModalStyleComponent,
+        CalendarsStyleComponent
     ]
 })
 export class NavigationPageModule {
