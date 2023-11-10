@@ -21,7 +21,16 @@ export class InputStyleComponent extends BasicStyleComponent implements OnInit {
     override ngOnInit() {
         if (this.getFieldContent('type_input') === 'datetime' || this.getFieldContent('type_input') === 'date') {
             if (this.parentForm.controls[this.getFieldContent('name')].value) {
-                this.parentForm.controls[this.getFieldContent('name')].setValue(formatISO(new Date(this.parentForm.controls[this.getFieldContent('name')].value)));
+                if (this.getFieldContent('type_input') === 'datetime') {
+                    this.parentForm.controls[this.getFieldContent('name')].setValue(formatISO(new Date(this.parentForm.controls[this.getFieldContent('name')].value)));
+                } else if (this.getFieldContent('type_input') === 'datetime') {
+                    const date = new Date(this.parentForm.controls[this.getFieldContent('name')].value);
+                    // Convert to ISO string
+                    const isoString = date.toISOString();
+                    // Extract only the date part (YYYY-MM-DD)
+                    const dateOnly = isoString.split('T')[0];
+                    this.parentForm.controls[this.getFieldContent('name')].setValue(dateOnly);
+                }
             }
         }
     }
