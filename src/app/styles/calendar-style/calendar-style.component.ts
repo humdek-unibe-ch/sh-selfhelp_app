@@ -162,18 +162,12 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 addCalendarButton: {
                     text: calendar_data['label_add_calendar'],
                     click: async () => {
-                        // const modal = await this.modalController.create({
-                        //     component: ModalStyleComponent,
-                        //     componentProps: {
-                        //         style: this.style['style_edit_event'],
-                        //         url: this.url,
-                        //         ionContent: this.ionContent
-                        //     },
-                        //     cssClass: '',
-                        //     keyboardClose: true,
-                        //     showBackdrop: true
-                        // });
-                        // return await modal.present();
+                        const addNewCalendarBtn = document.getElementById('add-new-calendar');
+                        if (addNewCalendarBtn) {
+                            addNewCalendarBtn.click();
+                        } else {
+                            alert('Please add calendars style');
+                        }
                     }
                 }
             },
