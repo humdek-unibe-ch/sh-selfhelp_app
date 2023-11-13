@@ -28,7 +28,6 @@ export class SubMenuComponent implements OnInit {
         if (this.selfhelp && this.selfhelp.selectedMenu) {
             this.selfhelpService.setSelectedSubMenu(this.selfhelp.selectedMenu.children[this.segment]);
             this.selfhelpService.getPage(this.selfhelpService.getUrl(this.selfhelp.selectedMenu.children[this.segment]));
-            console.log(this.getContent(this.selfhelp.selectedMenu.children[0]));
             await this.swiperRef?.nativeElement.swiper.slideTo(this.segment);
         }
     }

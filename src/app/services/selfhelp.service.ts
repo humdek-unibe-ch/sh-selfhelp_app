@@ -284,7 +284,6 @@ export class SelfhelpService {
         data['type'] = 'login';
         return this.execServerRequest(this.API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
-                console.log('Login res', res);
                 let currSelfhelp = this.selfhelp.value;
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
@@ -317,7 +316,6 @@ export class SelfhelpService {
         return this.execServerRequest(this.API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
-                console.log(res);
                 const result = this.output_messages(res.content);
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
@@ -434,7 +432,6 @@ export class SelfhelpService {
             this.execServerRequest(keyword, {})
                 .then((res: SelfHelpPageRequest) => {
                     if (res) {
-                        console.log(keyword, 'getPage', res);
                         this.setPage(keyword, res);
                         resolve(res);
                     }
@@ -486,7 +483,6 @@ export class SelfhelpService {
     }
 
     public submitForm(keyword: string, params: any): Promise<boolean> {
-        console.log('form params', params);
         return this.execServerRequest(keyword, params)
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
@@ -624,7 +620,6 @@ export class SelfhelpService {
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);
         } else if (this.isURL(url)) {
             // it is web link, open in the browser
-            console.log('browser');
             if (url.match(".pdf")) {
                 // this.inAppBrowser.create(url, "_system");
                 // this.getDocumentViewer(url);
@@ -633,7 +628,6 @@ export class SelfhelpService {
                 Browser.open({ url: url });
             }
         } else {
-            console.log('page');
             this.getPage(url);
             this.getModalPage(url);
         }
@@ -713,11 +707,8 @@ export class SelfhelpService {
     }
 
     async selectServer() {
-        console.log('wait2w');
         let serversList = await this.getServers(this.API_SERVER_SELECTION);
-        console.log(serversList);
         let servers: ValueItem[] = serversList.content[0]['items']['content'];
-        console.log(servers);
         let inputs: any[] = [];
         servers.forEach(server => {
             inputs.push(
@@ -763,10 +754,8 @@ export class SelfhelpService {
                 credentials: "include",
             }
         };
-        console.log('servers2', options);
         return new Promise((resolve, reject) => {
             CapacitorHttp.post(options).then(response => {
-                console.log(response);
                 resolve(JSON.parse(response.data));
             })
                 .catch((err) => {

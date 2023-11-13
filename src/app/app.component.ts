@@ -45,7 +45,6 @@ export class AppComponent {
     }
 
     private async presentLoadingWithOptions() {
-        console.log('navigator', window.name, navigator);
         const loading = await this.loadingCtrl.create({
             // message: '<ion-img src="/assets/loading.gif" alt="loading..."></ion-img>',
             message: '<div class="loader">Loading ' + window.name + '...</div>',
