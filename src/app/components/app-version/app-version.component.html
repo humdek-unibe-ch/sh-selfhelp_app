@@ -21,5 +21,9 @@
                 <h1>{{selfHelpService.API_ENDPOINT_NATIVE}}</h1>
             </ion-text>
         </ion-item>
+        <ion-item *ngIf="selfHelpService.devApp">
+            <ion-button color="danger w-100" (click)="this.selfHelpService.resetServerSelection()">Reset Server
+                Selection</ion-button>
+        </ion-item>
     </ion-card-content>
 </ion-card>

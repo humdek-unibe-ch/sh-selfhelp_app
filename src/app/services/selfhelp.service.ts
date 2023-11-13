@@ -146,7 +146,7 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
-        if(this.selfhelp.value.user_language){
+        if (this.selfhelp.value.user_language) {
             params['id_languages'] = this.selfhelp.value.user_language
         }
         params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
@@ -874,6 +874,25 @@ export class SelfhelpService {
             // Serialize scalar item.
             add(prefix, obj);
         }
+    }
+
+
+    /**
+     * @description Reset the server selection for the dev app
+     * @author Stefan Kodzhabashev
+     * @date 13/11/2023
+     * @memberof SelfhelpService
+     */
+    public resetServerSelection() {
+        this.presentAlertConfirm({
+            msg: 'Do you want to reset the selected SelfHelp instance?',
+            header: "Reset",
+            confirmLabel: "Reset",
+            callback: () => {
+                this.resetLocalData();
+                window.location.reload();
+            }
+        });
     }
 
 }

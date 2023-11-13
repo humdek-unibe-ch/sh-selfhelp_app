@@ -90,14 +90,6 @@ export class AppComponent {
     }
 
     public resetPreview(): void {
-        this.selfhelpSerivce.presentAlertConfirm({
-            msg: 'Do you want to reset the selected SelfHelp instance?',
-            header: "Reset",
-            confirmLabel: "Reset",
-            callback: () => {
-                this.selfhelpSerivce.resetLocalData();
-                window.location.reload();
-            }
-        });
+        this.selfhelpSerivce.resetServerSelection();
     }
 }

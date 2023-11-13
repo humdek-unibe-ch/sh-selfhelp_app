@@ -1,5 +1,6 @@
 import { Component, Injector, NgZone, OnInit } from '@angular/core';
 import { BasicComponentComponent } from '../basic-component/basic-component.component';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 @Component({
     selector: 'app-app-version',
@@ -8,7 +9,7 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
 })
 export class AppVersionComponent extends BasicComponentComponent implements OnInit {
 
-    constructor(injector: Injector, zone: NgZone) {
+    constructor(injector: Injector, zone: NgZone, selfhelpService: SelfhelpService) {
         super(injector, zone);
     }
 

@@ -11,6 +11,7 @@
  - add style `modal`
  - add `role` when closing a `modal`
  - add `color` type to the `input` style
+ - add `reset server` button to the dev app
 
 ## Bugfix
  - improve the title in style `card`
