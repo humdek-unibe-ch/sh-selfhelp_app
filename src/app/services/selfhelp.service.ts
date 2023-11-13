@@ -531,50 +531,6 @@ export class SelfhelpService {
         return res;
     }
 
-    // private getNativeParams(params): string {
-    //     var prefix, s, add, name, r20, output;
-    //     s = [];
-    //     r20 = /%20/g;
-    //     add = function (key, value) {
-    //         // If value is a function, invoke it and return its value
-    //         value = (typeof value == 'function') ? value() : (value == null ? "" : value);
-    //         s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(value);
-    //     };
-    //     if (params instanceof Array) {
-    //         for (name in params) {
-    //             add(name, params[name]);
-    //         }
-    //     } else {
-    //         for (prefix in params) {
-    //             this.buildParams(prefix, params[prefix], add);
-    //         }
-    //     }
-    //     output = s.join("&").replace(r20, "+");
-    //     return output;
-    // };
-
-    // private buildParams(prefix, obj, add): void {
-    //     var name, i, l, rbracket;
-    //     rbracket = /\[\]$/;
-    //     if (obj instanceof Array) {
-    //         for (i = 0, l = obj.length; i < l; i++) {
-    //             if (rbracket.test(prefix)) {
-    //                 add(prefix, obj[i]);
-    //             } else {
-    //                 this.buildParams(prefix + "[" + (typeof obj[i] === "object" ? i : "") + "]", obj[i], add);
-    //             }
-    //         }
-    //     } else if (typeof obj == "object") {
-    //         // Serialize object item.
-    //         for (name in obj) {
-    //             this.buildParams(prefix + "[" + name + "]", obj[name], add);
-    //         }
-    //     } else {
-    //         // Serialize scalar item.
-    //         add(prefix, obj);
-    //     }
-    // }
-
     async presentToast(msg: string, color: string) {
         const toast = await this.toastController.create({
             message: msg,
