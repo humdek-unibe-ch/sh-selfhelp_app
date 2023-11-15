@@ -532,5 +532,5 @@ export interface SelfHelp {
     external_css: string,
     languages?: Language[],
     locale?: string,
-    user_language?: Number | null,
+    user_language: Number | null,
 }

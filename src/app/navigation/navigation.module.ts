@@ -1,5 +1,5 @@
 import { IonicModule } from '@ionic/angular';
-import { LOCALE_ID, NgModule, NgZone } from '@angular/core';
+import { NgModule, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationPage } from './navigation.page';
 import { Router, RouterModule, Routes } from '@angular/router';
@@ -184,6 +184,7 @@ const routes: Routes = [
 export class NavigationPageModule {
 
     constructor(private selfhelpService: SelfhelpService, private router: Router, private zone: NgZone) {
+        this.selfhelpService.navigation_module_loaded = true;
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
             this.zone.run(() => {
                 if (selfhelp && selfhelp.navigation && selfhelp.navigation.length > 0) {

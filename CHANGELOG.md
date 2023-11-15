@@ -11,11 +11,12 @@
  - add style `modal`
  - add `role` when closing a `modal`
  - add `color` type to the `input` style
- - add `reset server` button to the dev app
+ - add `reset server` button to the dev app 
 
 ## Bugfix
  - improve the title in style `card`
  - add dismiss functionality in style `alert`
+ - properly load the language
 
 # 2.1.3
  - add anonymous users functionality

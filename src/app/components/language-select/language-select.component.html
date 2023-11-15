@@ -1,7 +1,8 @@
-<ion-item>
+<ion-item *ngIf="selfHelp.languages && selfHelp.user_language">
     <ion-label>{{'language' | translate}}</ion-label>
-    <ion-select interface="action-sheet" [(ngModel)]="selfHelp.user_language" (ionChange)="refreshAfterLanguageChange()">
-        <ion-select-option *ngFor="let lang of selfHelp.languages" [value]="lang.id">{{lang.title}}
+    <ion-select interface="action-sheet" [(ngModel)]="this.selfHelp.user_language" [compareWith]="compareWith"
+        (ionChange)="refreshAfterLanguageChange()">
+        <ion-select-option *ngFor="let lang of this.selfHelp.languages" [value]="lang.id">{{lang.title}}
         </ion-select-option>
     </ion-select>
 </ion-item>

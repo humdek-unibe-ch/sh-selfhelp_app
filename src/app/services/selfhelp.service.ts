@@ -53,6 +53,7 @@ export class SelfhelpService {
     private lastToastMsg = '';
     private autoLoginAtempts = 0;
     public skin_app: SkinApp = 'ios';
+    public navigation_module_loaded: Boolean = false;
 
     constructor(
         private platform: Platform,
@@ -93,9 +94,7 @@ export class SelfhelpService {
 
     public loadApp() {
         this.getLocalSelfhelp();
-        this.getPage(this.API_HOME);
         // this.openUrl('/validate/24/2dfa5a96f81fdec67eff37a2f81825b6');
-
     }
 
     public getServer(): Promise<boolean> {
@@ -146,15 +145,12 @@ export class SelfhelpService {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
-        if (this.selfhelp.value.user_language) {
-            params['id_languages'] = this.selfhelp.value.user_language
-        }
+        params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.getUserLanguage().id;
         params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
         params['mobile_web'] = true;
         if (this.notificationsService.getToken() !== '') {
             params['device_token'] = this.notificationsService.getToken();
         }
-        this.utils.debugLog('Exec params', params);
         const options: HttpOptions = {
             url: this.API_ENDPOINT_NATIVE + keyword,
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -166,6 +162,7 @@ export class SelfhelpService {
         return new Promise((resolve, reject) => {
             CapacitorHttp.post(options).then(response => {
                 try {
+                    this.utils.debugLog(keyword, JSON.parse(response.data));
                     resolve(JSON.parse(response.data));
                 } catch (error) {
                     this.utils.debugLog('error', response.data);
@@ -190,7 +187,7 @@ export class SelfhelpService {
             const nav = currSelfhelp.navigation[i];
             if (this.getUrl(nav) == url) {
                 urlFound = true;
-                if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
+                if (!currSelfhelp.urls[url] || currSelfhelp.urls[url].title != page.title || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                     // if url is not in menu and it is not in external url we assign it. If it is in the urls but changed update too
                     currSelfhelp.urls[url] = {
                         content: page.content,
@@ -204,7 +201,7 @@ export class SelfhelpService {
                     const subNav = nav.children[j];
                     if (this.getUrl(subNav) == url) {
                         urlFound = true;
-                        if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
+                        if (!currSelfhelp.urls[url] || currSelfhelp.urls[url].title != page.title || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
                             // if url is not in menu and it is not in external url we assign it. If it is in the urls but changed update too
                             currSelfhelp.urls[url] = {
                                 content: page.content,
@@ -218,8 +215,8 @@ export class SelfhelpService {
             }
         }
         if (!urlFound) {
-            if (!currSelfhelp.urls[url] || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
-                // if url is not in menues and it is not in external ursl we assign it. If it is in the urls but changed update too
+            if (!currSelfhelp.urls[url] || currSelfhelp.urls[url].title != page.title || !this.isEqual(currSelfhelp.urls[url].content, page.content)) {
+                // if url is not in menus and it is not in external urls we assign it. If it is in the urls but changed update too
                 currSelfhelp.urls[url] = {
                     content: page.content,
                     title: page.title
@@ -433,6 +430,7 @@ export class SelfhelpService {
                 .then((res: SelfHelpPageRequest) => {
                     if (res) {
                         this.setPage(keyword, res);
+                        this.utils.debugLog(keyword, res);
                         resolve(res);
                     }
                 })
@@ -465,6 +463,7 @@ export class SelfhelpService {
                 this.setSelfhelp(currSelfhelp, false);
                 this.loadLanguage();
             }
+            this.getPage(this.API_HOME);
         });
     }
 
@@ -613,10 +612,11 @@ export class SelfhelpService {
         if (this.selfhelp.value.urls[url]) {
 
             //
-            this.getPage(url);
-            if (!this.setNav(url)) {
-                this.getModalPage(url);
-            }
+            this.getPage(url).then(() => {
+                if (!this.setNav(url)) {
+                    this.getModalPage(url);
+                }
+            });
             // this.setSelectedMenu(this.selfhelp.value.urls[url]);
         } else if (this.isURL(url)) {
             // it is web link, open in the browser
@@ -628,29 +628,40 @@ export class SelfhelpService {
                 Browser.open({ url: url });
             }
         } else {
-            this.getPage(url);
-            this.getModalPage(url);
+            this.getPage(url).then(() => {
+                this.getModalPage(url);
+            });
+
+
         }
         return true;
     }
 
     private async getModalPage(url: string) {
-        if (this.selfhelp.value.current_modal_url != url) {
-            let curSelfhelp = this.selfhelp.value;
-            curSelfhelp.current_modal_url = url;
-            this.setSelfhelp(curSelfhelp, false);
-            const modal = await this.modalController.create({
-                component: ModalPageComponent,
-                componentProps: {
-                    url_param: url
-                },
-                backdropDismiss: true,
-                showBackdrop: true,
-                cssClass: 'modal-fullscreen'
-            });
-            return await modal.present();
+        if (!this.navigation_module_loaded) {
+            //wait and try again
+            setTimeout(() => {
+                this.getModalPage(url);
+            }, 0);
         } else {
-            return null;
+            // all loaded go on
+            if (this.selfhelp.value.current_modal_url != url) {
+                let curSelfhelp = this.selfhelp.value;
+                curSelfhelp.current_modal_url = url;
+                this.setSelfhelp(curSelfhelp, false);
+                const modal = await this.modalController.create({
+                    component: ModalPageComponent,
+                    componentProps: {
+                        url_param: url
+                    },
+                    backdropDismiss: true,
+                    showBackdrop: true,
+                    cssClass: 'modal-fullscreen'
+                });
+                return await modal.present();
+            } else {
+                return null;
+            }
         }
     }
 
@@ -780,15 +791,16 @@ export class SelfhelpService {
     }
 
     public loadLanguage() {
-        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.defaultAppLocale;
+        let locale = this.selfhelp.value.locale ? this.selfhelp.value.locale : this.getUserLanguage().locale;
         this.translate.setDefaultLang(locale);
+        this.setSelfhelp(this.selfhelp.value, true); //set the language locally
         this.translate.use(locale);
     }
 
     public resetLocalData() {
         Preferences.remove({ key: this.selfhelp_server });
         Preferences.remove({ key: this.local_selfhelp });
-        Preferences.remove({ key: 'skin_app' });
+        Preferences.remove({ key: 'skin_app ' });
     }
 
     public isFormField(field: any): boolean {
@@ -813,13 +825,15 @@ export class SelfhelpService {
 
     public getUserLanguage(): Language {
         if (this.selfhelp.value.languages) {
-            return <Language>this.selfhelp.value.languages.find(lang => lang.id === this.selfhelp.value.user_language);
-        } else {
-            return {
-                id: 1,
-                locale: "de-de",
-                title: "German"
+            let lang = <Language>this.selfhelp.value.languages.find(lang => lang.id == this.selfhelp.value.user_language);
+            if (lang) {
+                return lang;
             }
+        }
+        return {
+            id: 2,
+            locale: this.defaultAppLocale,
+            title: "German"
         }
     }
 

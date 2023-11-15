@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="true">
+<ng-container *ngIf="this.style" [ngSwitch]="true">
     <app-accordion-list-style *ngSwitchCase="isStyle('accordionList')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-accordion-list-style>
     <app-alert-style *ngSwitchCase="isStyle('alert')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-alert-style>
     <app-audio-style *ngSwitchCase="isStyle('audio')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-audio-style>
@@ -45,13 +45,6 @@
     <app-validate-style *ngSwitchCase="isStyle('validate')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-validate-style>
     <app-video-style *ngSwitchCase="isStyle('video')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-video-style>
     <app-input-style *ngSwitchCase="isStyle('input')" [style]="getStyle()" [parentForm]="parentForm"></app-input-style>
-        <!-- <app-radio-style *ngIf="child.style_name == 'radio'" [style]="child" [parentForm]="form"></app-radio-style>
-        <app-select-style *ngIf="child.style_name == 'select'" [style]="child" [parentForm]="form"></app-select-style>
-        <app-textarea-style *ngIf="child.style_name == 'textarea'" [style]="child" [parentForm]="form"></app-textarea-style> -->
     <ng-container *ngSwitchCase="getStyle() === null"></ng-container>
     <div *ngSwitchDefault><span *ngIf="getStyle().style_name"><code>{{getStyle().style_name}}Style</code> is not implemented</span></div>
 </ng-container>
-
-
-
-<!-- <app-record-media-style *ngIf="isStyle('calendar')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-record-media-style> -->

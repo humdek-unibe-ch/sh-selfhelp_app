@@ -58,7 +58,10 @@ export class AppComponent {
     }
 
     private checkForUpdate() {
-        codePush.sync({ updateDialog: false, installMode: InstallMode.IMMEDIATE });
+        if (!this.utils.getDebugMode()) {
+            // sync only if it is not in debug mode
+            codePush.sync({ updateDialog: false, installMode: InstallMode.IMMEDIATE });
+        }
     }
 
     initDeepLinking() {
