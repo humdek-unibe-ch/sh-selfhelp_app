@@ -7,7 +7,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { NgCalendarModule } from 'ionic2-calendar';
 import { registerLocaleData } from '@angular/common';
-import { Calendar } from '@awesome-cordova-plugins/calendar/ngx';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import localeDe from '@angular/common/locales/de';
@@ -68,8 +67,7 @@ export function getAppSkin(): SkinApp {
     providers: [
         FormBuilder,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        { provide: LOCALE_ID, useValue: 'de-DE' },
-        Calendar
+        { provide: LOCALE_ID, useValue: 'de-DE' }
     ],
     bootstrap: [AppComponent]
 })
