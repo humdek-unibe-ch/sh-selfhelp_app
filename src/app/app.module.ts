@@ -5,7 +5,6 @@ import { IonicModule, IonicRouteStrategy, isPlatform } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
-import { NgCalendarModule } from 'ionic2-calendar';
 import { registerLocaleData } from '@angular/common';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -52,7 +51,6 @@ export function getAppSkin(): SkinApp {
         }),
         AppRoutingModule,
         HttpClientModule,
-        NgCalendarModule,
         SurveyModule,
         FullCalendarModule,
         NgxColorsModule,

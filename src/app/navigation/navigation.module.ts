@@ -62,7 +62,6 @@ import { MessageBoardStyleComponent } from '../styles/message-board-style/messag
 import { SubmitCommentComponent } from '../styles/message-board-style/submit-comment/submit-comment.component';
 import { EntryListComponent } from '../styles/entry-list/entry-list.component';
 import { CalendarStyleComponent } from '../styles/calendar-style/calendar-style.component';
-import { NgCalendarModule } from 'ionic2-calendar';
 import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 import { SurveyJSStyleComponent } from '../styles/survey-js-style/survey-js-style.component';
 import { SurveyModule } from 'survey-angular-ui';
@@ -113,7 +112,6 @@ const routes: Routes = [
         TranslateModule,
         FullCalendarModule,
         SurveyModule,
-        NgCalendarModule,
         PlotlyModule,
         NgxColorsModule
     ],
