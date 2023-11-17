@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-    appId: 'unibe.tpf.selfhelp-dev',
+    appId: 'unibe.tpf.selfhelp_dev',
     appName: 'SelfHelp',
     webDir: 'www',
     server: {

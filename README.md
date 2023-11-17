@@ -21,7 +21,10 @@ Sub pages are organized as sub-menus
  - run `ionic cap build` 
  - run `ionic cap copy`
  - run `ionic cap sync`
- - then in Android studio generate bundle and sign it
+ - then in Android / Xcode studio generate bundle and sign it
+
+# iOS Push notifications
+ - [instructions](https://capacitorjs.com/docs/guides/push-notifications-firebase) 
 
 # Instructions App center Code-Push
  - Install: `npm install -g appcenter-cli`
@@ -30,8 +33,14 @@ Sub pages are organized as sub-menus
  - Publish: 
   - `ionic cap build`
   - `ionic cap sync`
-  - `appcenter codepush release -a TPF-UniBe/SelfHelp-Android -c android/app/src/main/assets/public/ -d Production -t 1.0.0 --description 'My Description' --mandatory true`
- - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-Android Production`
+  - Android
+   - `appcenter codepush release -a TPF-UniBe/SelfHelp-Android -c android/app/src/main/assets/public/ -d Production -t 1.0.0 --description 'My Description' --mandatory true`
+   - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-Android Production`
+  - iOS
+   - create production: `appcenter codepush deployment add -a TPF-UniBe/SelfHelp-ios Production`
+   - check keys: `appcenter codepush deployment list -k --app TPF-UniBe/SelfHelp-ios`
+   - `appcenter codepush release -a TPF-UniBe/SelfHelp-ios -c ios/App/App/public/ -d Production -t 1.0.0 --description 'My Description' --mandatory true`
+   - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-ios Production`
 
 
 

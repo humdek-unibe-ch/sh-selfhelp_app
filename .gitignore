@@ -67,5 +67,7 @@ testem.log
 .DS_Store
 Thumbs.db
 /android
+/ios
 
 resources/android/**/*
+resources/ios/**/*
