@@ -1,4 +1,4 @@
-# 3.0.0 (Unpublished)
+# 3.0.0
 ## New Features
  - update `Angular` to `v16`
  - migrate from `cordova` to `capacitor`
