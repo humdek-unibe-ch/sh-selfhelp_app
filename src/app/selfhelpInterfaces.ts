@@ -400,6 +400,12 @@ export interface CalendarsStyle extends CalendarStyle {
     calendars: any
 }
 
+export interface SbAsterChart extends Style{
+    label_started: StyleField,
+    label_finished: StyleField,
+    data: any
+}
+
 export interface SurveyJSStyle extends Style {
     alert: string,
     restart_on_refresh: StyleField,

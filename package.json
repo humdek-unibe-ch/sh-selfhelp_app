@@ -1,6 +1,6 @@
 {
     "name": "SelfHelp",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "author": "Stefan Kodzhabashev",
     "homepage": "https://www.tpf.philhum.unibe.ch",
     "scripts": {
@@ -42,6 +42,8 @@
         "angular-datatables": "^16.0.0",
         "angular-plotly.js": "^5.2.2",
         "bootstrap": "4.6",
+        "d3": "^3.5.17",
+        "d3-tip": "^0.6.7",
         "datatables.net": "^1.11.3",
         "datatables.net-dt": "^1.11.3",
         "date-fns": "^2.30.0",

@@ -1,3 +1,7 @@
+# 3.1.0 (Unpublished)
+## New Features
+ - add style `sbAsterChart`
+
 # 3.0.0
 ## New Features
  - update `Angular` to `v16`

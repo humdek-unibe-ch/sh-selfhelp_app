@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CapacitorHttp, HttpOptions } from '@capacitor/core';
+import { Capacitor, CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType } from './../selfhelpInterfaces';
@@ -66,11 +66,7 @@ export class SelfhelpService {
         private translate: TranslateService
     ) {
         this.platform.ready().then(async () => {
-            if (this.platform.is('capacitor')) {
-                this.isApp = true;
-            } else {
-                this.isApp = false;
-            }
+            this.isApp = await Capacitor.isNativePlatform();
             if (this.isApp) {
                 this.appVersion = appVersion;
             }

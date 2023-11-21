@@ -60,7 +60,9 @@ export class AppComponent {
     private checkForUpdate() {
         if (!this.utils.getDebugMode()) {
             // sync only if it is not in debug mode
-            codePush.sync({ updateDialog: false, installMode: InstallMode.IMMEDIATE });
+            if (this.selfhelpSerivce.getIsApp()) {
+                codePush.sync({ updateDialog: false, installMode: InstallMode.IMMEDIATE });
+            }
         }
     }
 

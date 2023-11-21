@@ -72,6 +72,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { ModalStyleComponent } from '../styles/modal-style/modal-style.component';
 import { CalendarsStyleComponent } from '../styles/calendars-style/calendars-style.component';
 import { NgxColorsModule } from 'ngx-colors';
+import { SbAsterChartStyleComponent } from '../styles/sb-aster-chart-style/sb-aster-chart-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -176,7 +177,8 @@ const routes: Routes = [
         PdfViewerComponent,
         SurveyJSStyleComponent,
         ModalStyleComponent,
-        CalendarsStyleComponent
+        CalendarsStyleComponent,
+        SbAsterChartStyleComponent
     ]
 })
 export class NavigationPageModule {
