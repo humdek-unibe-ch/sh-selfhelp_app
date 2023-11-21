@@ -41,7 +41,7 @@ Sub pages are organized as sub-menus
   - iOS
    - create production: `appcenter codepush deployment add -a TPF-UniBe/SelfHelp-ios Production`
    - check keys: `appcenter codepush deployment list -k --app TPF-UniBe/SelfHelp-ios`
-   - `appcenter codepush release -a TPF-UniBe/SelfHelp-ios -c ios/App/App/public/ -d Production -t 1.0.0 --description 'My Description' --mandatory true`
+   - `appcenter codepush release -a TPF-UniBe/SelfHelp-ios -c ios/App/App/public/ -d Production -t 3.0.0 --description 'My Description' --mandatory true`
    - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-ios Production`
 
 
