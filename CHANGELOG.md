@@ -1,4 +1,4 @@
-# 3.0.1 (Unpublished)
+# 3.0.1
 ## New Features
  - add style `sbAsterChart`
 

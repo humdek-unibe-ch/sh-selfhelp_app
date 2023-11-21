@@ -31,8 +31,10 @@ Sub pages are organized as sub-menus
  - Login: `appcenter login`
  - Create: create react-native app in the [appcenter](https://appcenter.ms) web interface
  - Publish: 
-  - `ionic cap build`
-  - `ionic cap sync`
+  - `ionic cap build android`
+  - `ionic cap build ios`
+  - `ionic cap sync android`
+  - `ionic cap sync ios`
   - Android
    - `appcenter codepush release -a TPF-UniBe/SelfHelp-Android -c android/app/src/main/assets/public/ -d Production -t 1.0.0 --description 'My Description' --mandatory true`
    - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-Android Production`
