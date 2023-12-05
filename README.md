@@ -18,9 +18,10 @@ Sub pages are organized as sub-menus
  - `ionic capacitor run android -l --external` for local testing; check firewall and ports if it does not work on device but works on emulator. Also the device should be in the same network. Check if node is added.
 
 # Instructions for build and release
+## General
  - run `ionic cap build` 
  - run `ionic cap copy`
- - run `ionic cap sync`
+ - run `ionic cap sync` 
  - then in Android / Xcode studio generate bundle and sign it
 
 # iOS Push notifications
