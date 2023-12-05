@@ -23,6 +23,20 @@ Sub pages are organized as sub-menus
  - run `ionic cap copy`
  - run `ionic cap sync` 
  - then in Android / Xcode studio generate bundle and sign it
+## Based on project
+ - Set the environmental variable. Check the options in `capacitor.config.ts`
+    - Windows:
+      - CMD: `set NODE_ENV=habirupt` , check: `echo %NODE_ENV%`
+      - Powershell: `$env:NODE_ENV = "habirupt"` , check `echo $env:NODE_ENV`
+    - Unix: 
+      - `NODE_ENV=habirupt`
+ - Run the commands
+    - run `ionic cap build` 
+    - run `ionic cap copy`
+    - run `ionic cap sync`
+ - Update the android or iOS project: `npx trapeze run ./projects/habirupt/config.yaml --android-project android`
+ - Generate the icons: `npx capacitor-assets generate --assetPath "./projects/habirupt"`
+
 
 # iOS Push notifications
  - [instructions](https://capacitorjs.com/docs/guides/push-notifications-firebase) 
