@@ -1,3 +1,6 @@
+# 3.1.0
+ - add `trapeze` configuration for handling multiple builds
+
 # 3.0.1
 ## New Features
  - add style `sbAsterChart`
