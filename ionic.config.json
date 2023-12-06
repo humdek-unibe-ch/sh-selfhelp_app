@@ -1,7 +1,7 @@
 {
-  "name": "Selfhelp",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
+    "name": "Selfhelp",
+    "integrations": {
+        "capacitor": {}
+    },
+    "type": "angular-standalone"
 }

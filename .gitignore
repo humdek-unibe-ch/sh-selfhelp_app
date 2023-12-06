@@ -70,3 +70,4 @@ Thumbs.db
 
 resources/android/**/*
 resources/ios/**/*
+projects/*

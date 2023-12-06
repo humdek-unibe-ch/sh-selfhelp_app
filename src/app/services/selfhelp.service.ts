@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Browser } from '@capacitor/browser';
 // import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 import packageJson from './../../../package.json'; // Replace with the actual path to your package.json file
+import config from 'capacitor.config';
 const appVersion = packageJson.version;
 
 
@@ -85,6 +86,7 @@ export class SelfhelpService {
                 // load the app
                 this.loadApp();
             }
+            console.log(config);
         });
     }
 

@@ -8,6 +8,8 @@ Sub pages are organized as sub-menus
 
 # Instructions
  - require JAVA 17
+ - set the NODE_ENV: see the commands bellow in the section `based on projects`
+ - generate file `./src/env/project.config.ts` with command: `node ./src/env/script.js`
  - `ionic cap add android`
  - for `android` copy file `google-services.json` in `android/app` folder 
  - `npx capacitor-assets generate` - add resources
@@ -21,7 +23,7 @@ Sub pages are organized as sub-menus
 ## General
  - run `ionic cap build` 
  - run `ionic cap copy`
- - run `ionic cap sync` 
+ - run `ionic cap sync`
  - then in Android / Xcode studio generate bundle and sign it
 ## Based on project
  - Set the environmental variable. Check the options in `capacitor.config.ts`
