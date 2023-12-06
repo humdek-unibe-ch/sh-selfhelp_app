@@ -1,8 +1,9 @@
 import { CapacitorConfig } from '@capacitor/cli';
 import { AppConfig } from 'src/app/selfhelpInterfaces';
+
 let capacitorConfig: CapacitorConfig = {
-    appId: 'unibe.tpf.selfhelp-dev',
-    appName: 'SelfHelp',
+    appId: 'unibe.tpf.habirupt',
+    appName: 'Habirupt',
     webDir: 'www',
     server: {
         androidScheme: 'https',
@@ -17,7 +18,7 @@ let capacitorConfig: CapacitorConfig = {
         },
         CodePush: {
             IOS_DEPLOY_KEY: "cO7ZGiZpaU1MApJX93jGv0fYzWrjNHgZaiFC1",
-            ANDROID_DEPLOY_KEY: "TLt7woDy4QrIzXiyl9epcE6e3s9HNifjcUAvv",
+            ANDROID_DEPLOY_KEY: "5ONwaVaLVyKRo0E9eVDdaHb8u0pfwiHhXxjzA",
             SERVER_URL: "https://codepush.appcenter.ms/"
         }
     }
@@ -25,8 +26,7 @@ let capacitorConfig: CapacitorConfig = {
 
 let appConfig: AppConfig = {
     capacitorConfig: capacitorConfig,
-    server: "https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects",
-    devApp: true
+    server: "https://habirupt.psy.unibe.ch"
 }
 
 export default appConfig;
