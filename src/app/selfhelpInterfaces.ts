@@ -544,5 +544,9 @@ export interface SelfHelp {
 }
 
 export interface AppConfig {
-    capacitor_config: CapacitorConfig
+    capacitorConfig: CapacitorConfig,
+    server: string,
+    defaultAppLocale?: string,
+    devApp?: boolean,
+    messageDuration?: number
 }

@@ -6,7 +6,7 @@ function copyEnvFileSync() {
         env = "selfhelp-dev"
     }
     var fileData = fs.readFileSync(path.join(__dirname, './../../projects/' + env.trim() + '/config.ts'), 'utf-8')
-    fs.writeFileSync('src/env/project.config.ts', fileData, 'utf-8');
+    fs.writeFileSync('src/env/app.config.ts', fileData, 'utf-8');
     console.log('Environment file copied successfully')
 }
 copyEnvFileSync();

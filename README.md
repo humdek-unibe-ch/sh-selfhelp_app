@@ -36,8 +36,10 @@ Sub pages are organized as sub-menus
     - run `ionic cap build` 
     - run `ionic cap copy`
     - run `ionic cap sync`
- - Update the android or iOS project: `npx trapeze run ./projects/habirupt/config.yaml --android-project android`
- - Generate the icons: `npx capacitor-assets generate --assetPath "./projects/habirupt"`
+- Generate the icons:
+  - Powershell: `npx capacitor-assets generate --assetPath "./projects/$env:NODE_ENV"`
+ - Update the android or iOS project: 
+  - Powershell: `npx trapeze run .\projects\$env:NODE_ENV\config.yaml --android-project android` Be sure that the files are not locked when executed. Sometimes a java process is not closed and keep the files locked. Kill it.
 
 
 # iOS Push notifications

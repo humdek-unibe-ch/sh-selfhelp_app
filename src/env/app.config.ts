@@ -1,9 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 import { AppConfig } from 'src/app/selfhelpInterfaces';
-
-let capacitor_config: CapacitorConfig = {
-    appId: 'unibe.tpf.habirupt',
-    appName: 'Habirupt',
+let capacitorConfig: CapacitorConfig = {
+    appId: 'unibe.tpf.selfhelp-dev',
+    appName: 'SelfHelp',
     webDir: 'www',
     server: {
         androidScheme: 'https',
@@ -24,8 +23,10 @@ let capacitor_config: CapacitorConfig = {
     }
 };
 
-let project_config: AppConfig = {
-    capacitor_config: capacitor_config
+let appConfig: AppConfig = {
+    capacitorConfig: capacitorConfig,
+    server: "https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects",
+    devApp: true
 }
 
-export default project_config;
+export default appConfig;

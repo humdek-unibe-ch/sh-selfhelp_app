@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
-import project_config from './src/env/project.config';
+import appConfig from './src/env/app.config';
 
 // default config
-let config: CapacitorConfig = project_config.capacitor_config;
+let config: CapacitorConfig = appConfig.capacitorConfig;
 
 
 export default config;

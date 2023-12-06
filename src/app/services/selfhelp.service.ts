@@ -15,6 +15,7 @@ import { Browser } from '@capacitor/browser';
 // import { PdfViewerComponent } from '../components/pdf-viewer/pdf-viewer.component';
 import packageJson from './../../../package.json'; // Replace with the actual path to your package.json file
 import config from 'capacitor.config';
+import appConfig from 'src/env/app.config';
 const appVersion = packageJson.version;
 
 
@@ -23,17 +24,13 @@ const appVersion = packageJson.version;
 })
 export class SelfhelpService {
 
-    private defaultAppLocale = 'de-CH';
+    private defaultAppLocale = appConfig.defaultAppLocale ? appConfig.defaultAppLocale : 'de-CH';
     private isApp: boolean = true;
-    public devApp: boolean = true; // change to false when we prepare a specific build
+    public devApp: boolean = appConfig.devApp ? appConfig.devApp : false; // by default is not devApp, set it in the selfhelp-dev config and use it
     private local_selfhelp: LocalSelfhelp = 'selfhelp';
     private selfhelp_server: string = 'server';
-    // private API_ENDPOINT_NATIVE = 'http://46.126.153.11/selfhelp';
-    // private API_ENDPOINT_NATIVE = 'https://becccs.psy.unibe.ch';
-    public API_ENDPOINT_NATIVE = 'https://studybuddy.edu.unibe.ch';
-    private API_ENDPOINT_WEB = 'http://localhost/selfhelp';
-    private API_SERVER_SELECTION = 'https://tpf-test.humdek.unibe.ch/SelfHelpMobile/mobile_projects';
-    // private API_SERVER_SELECTION = 'http://192.168.0.58/selfhelp/mobile_projects';
+    public API_ENDPOINT_NATIVE = appConfig.server;
+    private API_SERVER_SELECTION = appConfig.server;
     public API_LOGIN = '/login';
     public API_RESET = '/reset';
     public API_HOME = '/home';
@@ -48,11 +45,11 @@ export class SelfhelpService {
         user_language: null
     });
     private initApp = false;
-    private messageDuration = 10000;
+    private messageDuration = appConfig.messageDuration ? appConfig.messageDuration : 10000;
     public appVersion!: string;
     public appBuildVersion!: string;
     private lastToastMsg = '';
-    private autoLoginAtempts = 0;
+    private autoLoginAttempts = 0;
     public skin_app: SkinApp = 'ios';
     public navigation_module_loaded: Boolean = false;
 
@@ -256,8 +253,8 @@ export class SelfhelpService {
             newSelfhelp.user_language = page.user_language;
             this.setSelfhelp(newSelfhelp, true);
         }
-        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET) && this.autoLoginAtempts == 0) {
-            this.autoLoginAtempts++; // try to autologin only once
+        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET) && this.autoLoginAttempts == 0) {
+            this.autoLoginAttempts++; // try to autologin only once
             this.autoLogin();
         }
         this.setSelfhelp(currSelfhelp, true);
