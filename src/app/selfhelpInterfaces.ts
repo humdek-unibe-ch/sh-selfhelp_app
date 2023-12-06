@@ -1,3 +1,5 @@
+import { CapacitorConfig } from "@capacitor/cli";
+
 export type LocalSelfhelp = 'selfhelp';
 export type SkinApp = 'ios' | 'md';
 export type ModalCloseType = 'submit' | 'cancel';
@@ -539,4 +541,8 @@ export interface SelfHelp {
     languages?: Language[],
     locale?: string,
     user_language: Number | null,
+}
+
+export interface AppConfig {
+    capacitor_config: CapacitorConfig
 }

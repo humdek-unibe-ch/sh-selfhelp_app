@@ -1,5 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
-let project_config: CapacitorConfig = {
+import { AppConfig } from 'src/app/selfhelpInterfaces';
+
+let capacitor_config: CapacitorConfig = {
     appId: 'unibe.tpf.habirupt',
     appName: 'Habirupt',
     webDir: 'www',
@@ -21,5 +23,9 @@ let project_config: CapacitorConfig = {
         }
     }
 };
+
+let project_config: AppConfig = {
+    capacitor_config: capacitor_config
+}
 
 export default project_config;
