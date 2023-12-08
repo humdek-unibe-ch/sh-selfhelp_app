@@ -7,6 +7,7 @@ import { SelfhelpService } from './services/selfhelp.service';
 import { InstallMode, codePush } from '@dwimcore/capacitor-codepush';
 import { register } from 'swiper/element/bundle';
 import { UtilsService } from './services/utils.service';
+import { App, URLOpenListenerEvent } from '@capacitor/app';
 register();
 
 @Component({
@@ -69,15 +70,14 @@ export class AppComponent {
     initDeepLinking() {
 
         // WHEN ADDING DEEP LINK, WE CAN ADD AUTOFILL FOR THE PASSWORDS
-
-        // IonicDeeplink.onDeepLink((link) => {
-        //     if (link['path']) {
-        //         const pathArr = link.path.split('/');
-        //         if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
-        //             this.selfhelpSerivce.openUrl(link.path);
-        //         }
-        //     }
-        // });
+        console.log('deeplink-init');
+        App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
+            const pathArr = event.url.split('/');
+            console.log('deeplink',event.url);
+            if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
+                this.selfhelpSerivce.openUrl(event.url);
+            }
+        });
     }
 
     public skinChanged(event: any): void {

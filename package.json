@@ -1,6 +1,6 @@
 {
     "name": "SelfHelp",
-    "version": "3.0.1",
+    "version": "3.1.0",
     "author": "Stefan Kodzhabashev",
     "homepage": "https://www.tpf.philhum.unibe.ch",
     "scripts": {
@@ -9,13 +9,7 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "lint": "ng lint",
-        "ionic:serve:before": "node ./src/env/script.js",
-        "ionic:build:before": "node ./src/env/script.js",
-        "before-capacitor-run": "node ./src/env/script.js",
-        "android": "npm run before-capacitor-run && ionic capacitor run android -l --external",
-        "before-capacitor-build": "node ./src/env/script.js",
-        "ionic:capacitor:build": "npm run before-capacitor-build && ionic capacitor build"
+        "lint": "ng lint"
     },
     "private": true,
     "dependencies": {
@@ -45,7 +39,6 @@
         "@ionic/angular": "^7.0.0",
         "@ngx-translate/core": "^15.0.0",
         "@ngx-translate/http-loader": "^8.0.0",
-        "@trapezedev/configure": "^7.0.10",
         "angular-datatables": "^16.0.0",
         "angular-plotly.js": "^5.2.2",
         "bootstrap": "4.6",
@@ -78,7 +71,6 @@
         "@angular/compiler-cli": "^16.0.0",
         "@angular/language-service": "^16.0.0",
         "@capacitor-community/http": "^2.0.0-0",
-        "@capacitor/assets": "^3.0.1",
         "@capacitor/cli": "^5.5.1",
         "@capacitor/device": "^5.0.6",
         "@capacitor/dialog": "^5.0.6",
