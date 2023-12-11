@@ -1,3 +1,6 @@
+# 3.1.1
+ - adjust `enc/script.js` to work with folder `configs`
+
 # 3.1.0
  - add `trapeze` configuration for handling multiple builds
 
