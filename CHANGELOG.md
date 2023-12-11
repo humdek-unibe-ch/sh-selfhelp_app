@@ -1,3 +1,6 @@
+# 3.1.2
+ - remove web icons file from tracking
+
 # 3.1.1
  - adjust `enc/script.js` to work with folder `configs`
 
