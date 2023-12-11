@@ -33,7 +33,7 @@
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'email'" [formGroup]="parentForm" [class]="getCss()">
     <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
-    <ion-input [formControlName]="getFieldContent('name')" email required
+    <ion-input [formControlName]="getFieldContent('name')" email required appAutofill autocomplete="email"
         [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
 </ion-item>
 
@@ -46,7 +46,7 @@
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'password'" [formGroup]="parentForm"
     [class]="getCss()">
     <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
-    <ion-input [formControlName]="getFieldContent('name')" type="password"
+    <ion-input [formControlName]="getFieldContent('name')" type="password" appAutofill autocomplete="current-password"
         [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
 </ion-item>
 
