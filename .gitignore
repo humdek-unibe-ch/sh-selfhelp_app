@@ -72,3 +72,6 @@ resources/android/**/*
 resources/ios/**/*
 projects/*
 /icons
+
+src/env/app.config.ts
+
