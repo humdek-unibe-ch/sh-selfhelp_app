@@ -16,6 +16,7 @@ import { Browser } from '@capacitor/browser';
 import packageJson from './../../../package.json'; // Replace with the actual path to your package.json file
 import config from 'capacitor.config';
 import appConfig from 'src/env/app.config';
+import { SavePassword } from 'capacitor-ios-autofill-save-password';
 const appVersion = packageJson.version;
 
 
@@ -296,10 +297,16 @@ export class SelfhelpService {
             });
     }
 
-    private saveCredentials(loginValues: LoginValues) {
+    private async saveCredentials(loginValues: LoginValues) {
         let currSelfhelp = this.selfhelp.value;
         currSelfhelp.credentials = loginValues;
         this.setSelfhelp(currSelfhelp, true);
+        if (Capacitor.getPlatform() === 'ios') {
+            await SavePassword.promptDialog({
+                username: '[the username that was entered]',
+                password: '[the password that was entered]'
+            });
+        }
     }
 
     public register(regValues: RegistrationValues): Promise<RegistrationResult> {
