@@ -1,3 +1,6 @@
+# 3.1.3
+ - add autofill for passwords
+
 # 3.1.2
  - remove web icons file from tracking
 
