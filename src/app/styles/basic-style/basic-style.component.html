@@ -20,6 +20,7 @@
     <app-graph-style *ngSwitchCase="isStyle('graph')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-graph-style>
     <app-heading-style *ngSwitchCase="isStyle('heading')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-heading-style>
     <app-image-style *ngSwitchCase="isStyle('image')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-image-style>
+    <app-input-style *ngSwitchCase="isStyle('input')" [style]="getStyle()" [parentForm]="parentForm"></app-input-style>
     <app-json-style *ngSwitchCase="isStyle('json')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-json-style>
     <app-jumbotron-style *ngSwitchCase="isStyle('jumbotron')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-jumbotron-style>
     <app-link-style *ngSwitchCase="isStyle('link')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-link-style>
@@ -39,13 +40,13 @@
     <app-register-style *ngSwitchCase="isStyle('register')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-register-style>
     <app-sb-aster-chart-style *ngSwitchCase="isStyle('sbAsterChart')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-sb-aster-chart-style>
     <app-show-user-input-style *ngSwitchCase="isStyle('showUserInput')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-show-user-input-style>
+    <app-select-style *ngSwitchCase="isStyle('select')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-select-style>
     <app-sortable-list *ngSwitchCase="isStyle('sortableList')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-sortable-list>
     <app-survey-js-style *ngSwitchCase="isStyle('surveyJS')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-survey-js-style>
     <app-tabs-style *ngSwitchCase="isStyle('tabs')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-tabs-style>
     <app-qualtrics-survey-style *ngSwitchCase="isStyle('qualtricsSurvey')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-qualtrics-survey-style>
     <app-validate-style *ngSwitchCase="isStyle('validate')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-validate-style>
     <app-video-style *ngSwitchCase="isStyle('video')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-video-style>
-    <app-input-style *ngSwitchCase="isStyle('input')" [style]="getStyle()" [parentForm]="parentForm"></app-input-style>
     <ng-container *ngSwitchCase="getStyle() === null"></ng-container>
     <div *ngSwitchDefault><span *ngIf="getStyle().style_name"><code>{{getStyle().style_name}}Style</code> is not implemented</span></div>
 </ng-container>

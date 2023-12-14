@@ -8,6 +8,7 @@ import { InstallMode, codePush } from '@dwimcore/capacitor-codepush';
 import { register } from 'swiper/element/bundle';
 import { UtilsService } from './services/utils.service';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
 register();
 
 @Component({
@@ -35,7 +36,7 @@ export class AppComponent {
     initializeApp() {
         this.platform.ready().then(async () => {
             this.presentLoadingWithOptions();
-            if (this.selfhelpSerivce.getIsApp()) {
+            if (await Capacitor.isNativePlatform()) {
                 this.checkForUpdate();
                 this.initDeepLinking();
                 StatusBar.setStyle({ style: Style.Default });

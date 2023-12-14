@@ -1,3 +1,7 @@
+# 3.1.6
+ - fix `select` style loading in forms
+ - check push update only for native devices
+
 # 3.1.5
  - add styling `info` to style `button`, `form`, `formUserInput`, `login`, `register` and `card`
 
