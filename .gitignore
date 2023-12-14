@@ -75,3 +75,4 @@ projects/*
 
 src/env/app.config.ts
 src/manifest.webmanifest
+package-lock.json
