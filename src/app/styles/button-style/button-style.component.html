@@ -1,3 +1,4 @@
-<ion-button [color]="getFieldContent('type')" size='small' [class]="getCss()" (click)="btnClick()">
+<ion-button [color]="getFieldContent('type')" size='small' [class]="'btn-' + getFieldContent('type')+ ' ' +  getCss()"
+    (click)="btnClick()">
     {{getFieldContent('label')}}
 </ion-button>

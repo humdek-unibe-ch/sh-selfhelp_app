@@ -1,3 +1,6 @@
+# 3.1.5
+ - add styling `info` to style `button`, `form`, `formUserInput`, `login`, `register` and `card`
+
 # 3.1.4
  - show all styles in `form` styles and not only inputs
 

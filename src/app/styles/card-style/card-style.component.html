@@ -1,7 +1,8 @@
 <ion-card [id]="getFieldContent('id')" [class]="'m-0 ' + getCss()">
-    <ion-card-header class="mobile-card-header" [color]="getFieldContent('type')">
+    <ion-card-header [class]="'mobile-card-header card-' + getFieldContent('type')" [color]="getFieldContent('type')">
         <ion-card-title>{{getFieldContent('title')}}
-            <ion-icon style="float: right;" (click)="toggleCard()" [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+            <ion-icon style="float: right;" (click)="toggleCard()"
+                [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
         </ion-card-title>
     </ion-card-header>
     <ion-card-content class="mobile-body-header" [hidden]="!isCardExpanded">
