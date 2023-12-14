@@ -15,8 +15,6 @@ export class ButtonStyleComponent extends BasicStyleComponent implements OnInit 
         super();
     }
 
-    override ngOnInit() { }
-
     public btnClick(): void {
         const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath(), '');
         this.selfhelp.openUrl(url);

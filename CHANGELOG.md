@@ -1,3 +1,6 @@
+# 3.1.7
+ - fix HTML codes loading in button label. Now use `innerHTML`
+
 # 3.1.6
  - fix `select` style loading in forms
  - check push update only for native devices

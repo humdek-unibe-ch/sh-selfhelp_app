@@ -21,7 +21,6 @@ export class SelectStyleComponent extends BasicStyleComponent implements OnInit 
     override ngOnInit() { }
 
     ngAfterViewInit(): void {
-        console.log('select', this.style)
         if (this.getFieldContent('image_selector') == '1') {
             this.initImageSelector();
         }
