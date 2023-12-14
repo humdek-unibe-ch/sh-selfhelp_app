@@ -1,3 +1,6 @@
+# 3.1.4
+ - show all styles in `form` styles and not only inputs
+
 # 3.1.3
  - add autofill for passwords
 

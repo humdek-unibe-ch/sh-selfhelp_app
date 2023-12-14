@@ -16,7 +16,4 @@ export class DivStyleComponent extends BasicStyleComponent implements OnInit {
         super();
     }
 
-    override ngOnInit() {
-     }
-
 }
