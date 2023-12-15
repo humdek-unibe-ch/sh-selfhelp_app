@@ -73,6 +73,7 @@ import { ModalStyleComponent } from '../styles/modal-style/modal-style.component
 import { CalendarsStyleComponent } from '../styles/calendars-style/calendars-style.component';
 import { NgxColorsModule } from 'ngx-colors';
 import { SbAsterChartStyleComponent } from '../styles/sb-aster-chart-style/sb-aster-chart-style.component';
+import { AutofillDirective } from '../autofill.directive';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -178,7 +179,8 @@ const routes: Routes = [
         SurveyJSStyleComponent,
         ModalStyleComponent,
         CalendarsStyleComponent,
-        SbAsterChartStyleComponent
+        SbAsterChartStyleComponent,
+        AutofillDirective
     ]
 })
 export class NavigationPageModule {

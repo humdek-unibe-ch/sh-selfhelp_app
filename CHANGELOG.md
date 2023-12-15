@@ -1,3 +1,6 @@
+# 3.1.8
+ - disable autofill credentials
+
 # 3.1.7
  - fix HTML codes loading in button label. Now use `innerHTML`
 

@@ -302,10 +302,10 @@ export class SelfhelpService {
         currSelfhelp.credentials = loginValues;
         this.setSelfhelp(currSelfhelp, true);
         if (Capacitor.getPlatform() === 'ios') {
-            await SavePassword.promptDialog({
-                username: '[the username that was entered]',
-                password: '[the password that was entered]'
-            });
+            // await SavePassword.promptDialog({
+            //     username: loginValues.email,
+            //     password: loginValues.password
+            // });
         }
     }
 
