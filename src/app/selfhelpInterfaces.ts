@@ -550,3 +550,21 @@ export interface AppConfig {
     devApp?: boolean,
     messageDuration?: number
 }
+
+export interface SurveyJSMetaData {
+    user_agent: string;
+    screen_width: number;
+    screen_height: number;
+    pixel_ratio: number;
+    viewport_width: number;
+    viewport_height: number;
+    start_time: Date;
+    pages: SurveyJSMetaDataPage[];
+}
+
+export interface SurveyJSMetaDataPage {
+    pageNo: number;
+    start_time: Date;
+    end_time?: Date;
+    duration?: number;
+}

@@ -1,3 +1,7 @@
+# 3.1.9
+ - check field `timeout` in style `surveyJS` and if the time has passed since the survey was started it will start a new survey.
+ - collect metadata for `surveyJS`: `start_time`, `end_time`, `duration`, `pages`, `user_agent`, etc.
+
 # 3.1.8
  - disable autofill credentials
 
