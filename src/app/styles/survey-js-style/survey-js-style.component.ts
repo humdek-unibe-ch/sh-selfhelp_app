@@ -174,7 +174,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             var start_time = new Date(localSurvey['_meta']['start_time']).getTime();
             var time_now = Date.now();
             var time_passed = (time_now - start_time) / (1000 * 60); // in minutes
-            console.log('time', time_passed);
             if (time_passed > timeout) {
                 return true;
             } else {
