@@ -1,3 +1,6 @@
+# 3.1.10
+ - load `toggle switch` when it is enabled for a input from type `checkbox`
+
 # 3.1.9
  - check field `timeout` in style `surveyJS` and if the time has passed since the survey was started it will start a new survey.
  - collect metadata for `surveyJS`: `start_time`, `end_time`, `duration`, `pages`, `user_agent`, etc.
