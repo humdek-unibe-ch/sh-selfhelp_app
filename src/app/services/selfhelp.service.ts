@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor, CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts } from './../selfhelpInterfaces';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { Device } from '@capacitor/device';
@@ -17,6 +17,7 @@ import packageJson from './../../../package.json'; // Replace with the actual pa
 import config from 'capacitor.config';
 import appConfig from 'src/env/app.config';
 import { SavePassword } from 'capacitor-ios-autofill-save-password';
+import { NativeSettings, AndroidSettings, IOSSettings } from 'capacitor-native-settings';
 const appVersion = packageJson.version;
 
 
@@ -909,6 +910,27 @@ export class SelfhelpService {
                 window.location.reload();
             }
         });
+    }
+
+    public openOSShortcut(shortcut: OSShortcuts) {
+        let ios = Capacitor.getPlatform() === 'ios';
+        if (shortcut === 'general_settings') {
+            if (ios) {
+                NativeSettings.openIOS({
+                    option: IOSSettings.General,
+                });
+            } else {
+                NativeSettings.openAndroid({
+                    option: AndroidSettings.Settings
+                })
+            }
+        } else if (shortcut === 'screen_time') {
+            if (ios) {
+                NativeSettings.openIOS({
+                    option: IOSSettings.ScreenTime,
+                });
+            }
+        }
     }
 
 }

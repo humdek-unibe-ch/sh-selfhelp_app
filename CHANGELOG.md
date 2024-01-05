@@ -1,3 +1,6 @@
+# 3.2.0
+ - add [capacitor-native-settings](https://github.com/RaphaelWoude/capacitor-native-settings) v5.0.1
+
 # 3.1.10
  - load `toggle switch` when it is enabled for a input from type `checkbox`
 

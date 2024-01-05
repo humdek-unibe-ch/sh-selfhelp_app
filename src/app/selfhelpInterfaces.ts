@@ -3,6 +3,7 @@ import { CapacitorConfig } from "@capacitor/cli";
 export type LocalSelfhelp = 'selfhelp';
 export type SkinApp = 'ios' | 'md';
 export type ModalCloseType = 'submit' | 'cancel';
+export type OSShortcuts = 'general_settings' | 'screen_time';
 
 export interface TabMenuItem {
     keyword: string;

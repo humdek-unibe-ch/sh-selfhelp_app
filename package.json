@@ -44,6 +44,7 @@
         "angular-plotly.js": "^5.2.2",
         "bootstrap": "4.6",
         "capacitor-ios-autofill-save-password": "^2.0.0",
+        "capacitor-native-settings": "github:Kodzhabashev/capacitor-native-settings",
         "d3": "^3.5.17",
         "d3-tip": "^0.6.7",
         "datatables.net": "^1.11.3",
