@@ -64,5 +64,8 @@ Sub pages are organized as sub-menus
    - `appcenter codepush release -a TPF-UniBe/SelfHelp-ios -c ios/App/App/public/ -d Production -t 3.0.0 --description 'My Description' --mandatory true`
    - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-ios Production`
 
+# Add new style
+ - `ionic g component styles\myCoolStyle` - the command should be executed in the SelfHelpMobile folder
+
 
 
