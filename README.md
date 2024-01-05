@@ -18,6 +18,7 @@ Sub pages are organized as sub-menus
  - `ionic cap sync --inline` for debugging add source maps
  - `npx ionic cap run android --target=ce09193988d5244e0d7e  --livereload --external --configuration=production` - local command for Stefan's tablet
  - `ionic capacitor run android -l --external` for local testing; check firewall and ports if it does not work on device but works on emulator. Also the device should be in the same network. Check if node is added.
+ - `ionic cap run ios -l --external` - iOS - after the error, go to the folder and rename `your_app.app` to `App.app` [fix](https://stackoverflow.com/questions/72969163/problem-with-debugging-on-physical-device-on-ios/73546894#73546894)
 
 # Instructions for build and release
 ## General
