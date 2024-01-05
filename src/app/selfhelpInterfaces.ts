@@ -4,6 +4,7 @@ export type LocalSelfhelp = 'selfhelp';
 export type SkinApp = 'ios' | 'md';
 export type ModalCloseType = 'submit' | 'cancel';
 export type OSShortcuts = 'general_settings' | 'screen_time';
+export type MobilePlatform = 'ios' | 'android';
 
 export interface TabMenuItem {
     keyword: string;
@@ -235,6 +236,13 @@ export interface ShowUserInputStyle extends Style {
 
 export interface ButtonStyle extends Style {
     url: StyleField,
+    type: StyleField,
+    label: StyleField
+}
+
+export interface ShortcutButtonStyle extends Style {
+    shortcut_ios: StyleField,
+    shortcut_android: StyleField,
     type: StyleField,
     label: StyleField
 }
