@@ -75,6 +75,7 @@ import { NgxColorsModule } from 'ngx-colors';
 import { SbAsterChartStyleComponent } from '../styles/sb-aster-chart-style/sb-aster-chart-style.component';
 import { AutofillDirective } from '../autofill.directive';
 import { ShortcutButtonStyleComponent } from '../styles/shortcut-button-style/shortcut-button-style.component';
+import { OpenAppButtonStyleComponent } from '../styles/open-app-button-style/open-app-button-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -182,7 +183,8 @@ const routes: Routes = [
         CalendarsStyleComponent,
         SbAsterChartStyleComponent,
         AutofillDirective,
-        ShortcutButtonStyleComponent
+        ShortcutButtonStyleComponent,
+        OpenAppButtonStyleComponent
     ]
 })
 export class NavigationPageModule {

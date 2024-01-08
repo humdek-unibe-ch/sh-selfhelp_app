@@ -247,6 +247,14 @@ export interface ShortcutButtonStyle extends Style {
     label: StyleField
 }
 
+export interface OpenAppButtonStyle extends Style {
+    installation_ios_url: StyleField,
+    installation_android_url: StyleField,
+    app_url: StyleField,
+    type: StyleField,
+    label: StyleField
+}
+
 export interface LinkStyle extends Style {
     url: StyleField,
     open_in_new_tab: StyleField,

@@ -18,7 +18,6 @@ import config from 'capacitor.config';
 import appConfig from 'src/env/app.config';
 import { SavePassword } from 'capacitor-ios-autofill-save-password';
 import { App } from '@capacitor/app';
-import { AppLauncher } from '@capacitor/app-launcher';
 const appVersion = packageJson.version;
 
 
@@ -913,15 +912,4 @@ export class SelfhelpService {
             }
         });
     }
-
-    async openAnotherApp() {
-        const packageName = "https://play.google.com/store/apps/details?id=com.burockgames.timeclocker&hl=en&gl=US"; // Replace with the package name of the app you want to open
-
-        try {
-          await AppLauncher.openUrl({ url: packageName });
-          console.log('Successfully opened the app');
-        } catch (error) {
-          console.error('Error opening the app:', error);
-        }
-      }
 }
