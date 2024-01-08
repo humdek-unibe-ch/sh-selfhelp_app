@@ -1,6 +1,7 @@
 # 3.2.0
  - add [capacitor-native-settings](https://github.com/RaphaelWoude/capacitor-native-settings) v5.0.1
  - add style `shortcutButton` - open native window
+ - add [capacitor/app-launcher](https://capacitorjs.com/docs/apis/app-launcher)
 
 # 3.1.10
  - load `toggle switch` when it is enabled for a input from type `checkbox`
