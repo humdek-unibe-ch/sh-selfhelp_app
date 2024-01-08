@@ -24,11 +24,20 @@ export class OpenAppButtonStyleComponent extends BasicStyleComponent implements 
      * @memberof OpenAppButtonStyleComponent
      */
     public async openApp() {
+        let app_url;
+        if (this.selfhelp.mobilePlatform === 'ios') {
+            app_url = this.getFieldContent('app_url_ios');
+        } else if (this.selfhelp.mobilePlatform === 'android') {
+            app_url = this.getFieldContent('app_url_android');
+        }
+        if(!app_url){
+            return this.openInstallationLink();
+        }
         if (await AppLauncher.canOpenUrl({
-            url: this.getFieldContent('app_url')
+            url: app_url
         })) {
             await AppLauncher.openUrl({
-                url: this.getFieldContent('app_url')
+                url: app_url
             }).then((res: OpenURLResult) => {
                 if (!res.completed) {
                     this.openInstallationLink();

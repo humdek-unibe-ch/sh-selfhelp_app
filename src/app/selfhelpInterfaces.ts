@@ -250,7 +250,8 @@ export interface ShortcutButtonStyle extends Style {
 export interface OpenAppButtonStyle extends Style {
     installation_ios_url: StyleField,
     installation_android_url: StyleField,
-    app_url: StyleField,
+    app_url_android: StyleField,
+    app_url_ios: StyleField,
     type: StyleField,
     label: StyleField
 }
