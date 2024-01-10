@@ -54,12 +54,12 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
         this.calendarOptions = {
             initialView: 'dayGridMonth',
             themeSystem: 'bootstrap',
-            plugins: [dayGridPlugin, listPlugin ],
+            plugins: [dayGridPlugin, listPlugin],
             locale: calendar_data['locale'],
             headerToolbar: {
-                left: buttons['buttons'],
+                start: buttons['buttons'],
                 center: 'title',
-                right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek'
+                end: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek'
             },
             customButtons: buttons['customButtons'],
             buttonText: {
@@ -116,6 +116,18 @@ export class CalendarStyleComponent extends BasicStyleComponent implements OnIni
                 return await modal.present();
             }
         };
+        if (calendar_data['config']['initialView']) {
+            this.calendarOptions['initialView'] = calendar_data['config']['initialView'];
+        }
+        if (calendar_data['config']['headerToolbar_start'] && this.calendarOptions.headerToolbar) {
+            this.calendarOptions.headerToolbar.start = calendar_data['config']['headerToolbar_start'];
+        }
+        if (calendar_data['config']['headerToolbar_center'] && this.calendarOptions.headerToolbar) {
+            this.calendarOptions.headerToolbar.center = calendar_data['config']['headerToolbar_center'];
+        }
+        if (calendar_data['config']['headerToolbar_end'] && this.calendarOptions.headerToolbar) {
+            this.calendarOptions.headerToolbar.end = calendar_data['config']['headerToolbar_end'];
+        }
     }
 
     /**
