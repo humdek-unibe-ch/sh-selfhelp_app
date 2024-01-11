@@ -6,7 +6,7 @@
 </ion-item>
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'date'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label">{{getFieldContent('label')}} {{getFieldContent('name')}}</ion-label>
+    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
     <ion-datetime-button [datetime]="'datetime-'+getFieldContent('name')"></ion-datetime-button>
 
     <ion-modal [keepContentsMounted]="true">
