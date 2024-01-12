@@ -1,7 +1,6 @@
 <ion-item *ngIf="parentForm && style.items && getFieldContent('image_selector') !== '1'" [formGroup]="parentForm"
     [class]="getCss()">
-    <ion-label>{{getFieldContent('label')}}</ion-label>
-    <ion-select [multiple]="getFieldContent('is_multiple') === '1'" interface="popover"
+    <ion-select [label]="getFieldContent('label')" [multiple]="getFieldContent('is_multiple') === '1'" interface="popover"
         [formControlName]="getFieldContent('name')" [placeholder]="getFieldContent('alt')">
         <ion-select-option *ngFor="let item of style.items" [value]="item.value">{{item.text}}
         </ion-select-option>

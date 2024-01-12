@@ -1,6 +1,5 @@
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'text'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
-    <ion-input [formControlName]="getFieldContent('name')"
+    <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')"
         [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''" [minlength]="getFieldContent('min')"
         [maxlength]="getFieldContent('max')"></ion-input>
 </ion-item>
@@ -32,21 +31,18 @@
 </ion-item>
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'email'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
-    <ion-input [formControlName]="getFieldContent('name')" email required appAutofill autocomplete="email"
+    <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')" email required appAutofill autocomplete="email"
         [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
 </ion-item>
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'number'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
-    <ion-input [formControlName]="getFieldContent('name')" type="number"
+    <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')" type="number"
         [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
 </ion-item>
 
 <ion-item *ngIf="parentForm && getFieldContent('type_input') === 'password'" [formGroup]="parentForm"
     [class]="getCss()">
-    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
-    <ion-input [formControlName]="getFieldContent('name')" type="password" appAutofill autocomplete="current-password"
+    <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')" type="password" appAutofill autocomplete="current-password"
         [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
 </ion-item>
 
