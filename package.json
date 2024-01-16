@@ -15,6 +15,7 @@
     "private": true,
     "dependencies": {
         "@angular/animations": "^16.0.0",
+        "@angular/cdk": "^16.2.13",
         "@angular/common": "^16.0.0",
         "@angular/compiler": "^16.0.0",
         "@angular/core": "^16.0.0",
@@ -59,7 +60,7 @@
         "rimraf": "^5.0.5",
         "rxjs": "~7.8.0",
         "safe-pipe": "^2.0.5-0",
-        "survey-angular-ui": "^1.9.109",
+        "survey-angular-ui": "^1.9.125",
         "swiper": "^10.2.0",
         "tslib": "^2.3.0",
         "zone.js": "~0.13.0"

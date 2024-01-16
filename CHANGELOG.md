@@ -7,6 +7,7 @@
  - use `initialView`, `headerToolbar_start`, `headerToolbar_center` and `headerToolbar_end` from the config in style `calendar`
  - add `radioStyle` to be load in the basic style
  - add `checkboxStyle`
+ - update `survey-angular-ui` from `1.9.109` to `1.9.125`
 
 ### Bugfix
  - #2 - fix the validation, `url` is correctly recognized with the capacitor.
