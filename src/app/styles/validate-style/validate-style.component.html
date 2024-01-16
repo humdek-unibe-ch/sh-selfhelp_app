@@ -9,25 +9,25 @@
         <div class="card-body">
             <form [formGroup]="form" [class]="getCss()" (keyup.enter)="validate(form.value)">
                 <div class="form-group d-none">
-                    <label>Leave this field empty</label>
-                    <input type="text" class="form-control" name="phone7h92jP" autocomplete="off">
+                    <input label="Leave this field empty" type="text" class="form-control" name="phone7h92jP"
+                        autocomplete="off">
                 </div>
 
                 <ion-item *ngIf="!this.style.anonymous_users">
-                    <ion-label position="stacked">{{getFieldContent('label_name')}}</ion-label>
-                    <ion-input type="text" formControlName="name" [placeholder]="getFieldContent('name_placeholder')">
+                    <ion-input [label]="getFieldContent('label_name')" labelPlacement="stacked" type="text"
+                        formControlName="name" [placeholder]="getFieldContent('name_placeholder')">
                     </ion-input>
                 </ion-item>
 
                 <ion-item *ngIf="this.style.anonymous_users">
-                    <ion-label position="stacked">{{getFieldContent('label_name')}}</ion-label>
-                    <ion-input type="text" formControlName="name">
+                    <ion-input [label]="getFieldContent('label_name')" labelPlacement="stacked" type="text"
+                        formControlName="name">
                     </ion-input>
                 </ion-item>
 
                 <ion-item>
-                    <ion-label position="stacked">{{getFieldContent('label_pw')}}</ion-label>
-                    <ion-input type="password" formControlName="pw" [placeholder]="getFieldContent('pw_placeholder')">
+                    <ion-input [label]="getFieldContent('label_name')" labelPlacement="stacked" type="password"
+                        formControlName="pw" [placeholder]="getFieldContent('pw_placeholder')">
                     </ion-input>
                 </ion-item>
                 <ion-item>
@@ -40,18 +40,16 @@
                         <ion-label>{{getFieldContent('label_gender')}}</ion-label>
                     </ion-list-header>
                     <ion-item>
-                        <ion-label>{{getFieldContent('gender_male')}}</ion-label>
-                        <ion-radio slot="start" [value]="1"></ion-radio>
+                        <ion-radio labelPlacement="end" [value]="1">{{getFieldContent('gender_male')}}</ion-radio>
                     </ion-item>
                     <ion-item>
-                        <ion-label>{{getFieldContent('gender_female')}}</ion-label>
-                        <ion-radio slot="start" [value]="2"></ion-radio>
+                        <ion-radio labelPlacement="end" [value]="2">{{getFieldContent('gender_female')}}</ion-radio>
                     </ion-item><ion-item>
-                        <ion-label>{{getFieldContent('gender_divers')}}</ion-label>
-                        <ion-radio slot="start" [value]="3"></ion-radio>
+                        <ion-radio labelPlacement="end" [value]="3">{{getFieldContent('gender_divers')}}</ion-radio>
                     </ion-item>
                 </ion-radio-group>
-                <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="form"></app-basic-style>
+                <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url"
+                    [ionContent]="ionContent" [parentForm]="form"></app-basic-style>
                 <ion-button [color]="'primary'" [disabled]="!form.valid" (click)="validate(form.value)"
                     class="w-100 mt-3" [disabled]="!form.valid">
                     {{getFieldContent('label_activate')}}</ion-button>
