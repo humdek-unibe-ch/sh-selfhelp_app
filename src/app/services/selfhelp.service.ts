@@ -92,7 +92,7 @@ export class SelfhelpService {
 
     public loadApp() {
         this.getLocalSelfhelp();
-        // this.openUrl('/validate/24/2dfa5a96f81fdec67eff37a2f81825b6');
+        this.openUrl('/validate/5/ac6e02a7162aa70f0fb607f824192b76');
     }
 
     public getServer(): Promise<boolean> {

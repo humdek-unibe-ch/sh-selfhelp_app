@@ -1,4 +1,5 @@
 # 3.2.0 (unpublished)
+### New Features
  - add [capacitor-native-settings](https://github.com/RaphaelWoude/capacitor-native-settings) v5.0.1
  - add style `shortcutButton` - open native window
  - add [capacitor/app-launcher](https://capacitorjs.com/docs/apis/app-launcher)
@@ -6,6 +7,9 @@
  - use `initialView`, `headerToolbar_start`, `headerToolbar_center` and `headerToolbar_end` from the config in style `calendar`
  - add `radioStyle` to be load in the basic style
  - add `checkboxStyle`
+
+### Bugfix
+ - #2 - fix the validation, `url` is correctly recognized with the capacitor.
 
 # 3.1.10
  - load `toggle switch` when it is enabled for a input from type `checkbox`

@@ -69,14 +69,14 @@ export class AppComponent {
     }
 
     initDeepLinking() {
-
-        // WHEN ADDING DEEP LINK, WE CAN ADD AUTOFILL FOR THE PASSWORDS
-        console.log('deeplink-init');
         App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
             const pathArr = event.url.split('/');
-            console.log('deeplink',event.url);
-            if (pathArr.length > 0 && pathArr.length == 4 && pathArr[1] == 'validate') {
-                this.selfhelpSerivce.openUrl(event.url);
+            if (pathArr.length > 0 && pathArr.length == 6 && pathArr[3] == 'validate') {
+                let url = '';
+                for (let i = 3; i < pathArr.length; i++) {
+                    url = url + '/' + pathArr[i];
+                }
+                this.selfhelpSerivce.openUrl(url);
             }
         });
     }
