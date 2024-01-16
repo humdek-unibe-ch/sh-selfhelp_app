@@ -4,6 +4,7 @@ import { SurveyJSMetaData, SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { Model, StylesManager } from "survey-core";
 import { Preferences } from '@capacitor/preferences';
+import "survey-core/survey.i18n";
 
 @Component({
     selector: 'app-survey-js-style',

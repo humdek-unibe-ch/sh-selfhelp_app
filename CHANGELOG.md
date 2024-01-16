@@ -10,6 +10,7 @@
 
 ### Bugfix
  - #2 - fix the validation, `url` is correctly recognized with the capacitor.
+ - #3 - properly load localization for `survey-js`
 
 # 3.1.10
  - load `toggle switch` when it is enabled for a input from type `checkbox`
