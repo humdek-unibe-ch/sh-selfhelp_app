@@ -112,6 +112,10 @@ export interface InputStyle extends FormField {
     format?: string
 }
 
+export interface CheckboxStyle extends FormField {
+    checkbox_value: StyleField
+}
+
 export interface RadioStyle extends FormField {
     items: StyleField
 }

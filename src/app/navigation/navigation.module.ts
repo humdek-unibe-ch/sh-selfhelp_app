@@ -76,6 +76,7 @@ import { SbAsterChartStyleComponent } from '../styles/sb-aster-chart-style/sb-as
 import { AutofillDirective } from '../autofill.directive';
 import { ShortcutButtonStyleComponent } from '../styles/shortcut-button-style/shortcut-button-style.component';
 import { OpenAppButtonStyleComponent } from '../styles/open-app-button-style/open-app-button-style.component';
+import { CheckboxStyleComponent } from '../styles/checkbox-style/checkbox-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -184,7 +185,8 @@ const routes: Routes = [
         SbAsterChartStyleComponent,
         AutofillDirective,
         ShortcutButtonStyleComponent,
-        OpenAppButtonStyleComponent
+        OpenAppButtonStyleComponent,
+        CheckboxStyleComponent
     ]
 })
 export class NavigationPageModule {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor, CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle } from './../selfhelpInterfaces';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { Device } from '@capacitor/device';
@@ -809,13 +809,15 @@ export class SelfhelpService {
 
     public isFormField(field: any): boolean {
         return field.style_name &&
-            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea');
+            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea' || field.style_name == 'checkbox');
     }
 
-    public getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle {
+    public getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle | CheckboxStyle {
         switch (formField.style_name) {
             case 'input':
                 return <InputStyle>formField;
+            case 'checkbox':
+                return <CheckboxStyle>formField;
             case 'radio':
                 return <RadioStyle>formField;
             case 'select':

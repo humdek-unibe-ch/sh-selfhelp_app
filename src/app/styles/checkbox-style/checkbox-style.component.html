@@ -1,0 +1,7 @@
+<ion-item *ngIf="getFieldContent('toggle_switch') === '0'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-checkbox color="primary" [formControlName]="getFieldContent('name')" slot="start">{{getFieldContent('label')}}</ion-checkbox>
+</ion-item>
+
+<ion-item *ngIf="getFieldContent('toggle_switch') === '1'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-toggle color="primary" [formControlName]="getFieldContent('name')">{{getFieldContent('label')}}</ion-toggle>
+</ion-item>

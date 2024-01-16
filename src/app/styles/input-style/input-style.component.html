@@ -52,13 +52,8 @@
     </ion-range>
 </ion-item>
 
-<ion-item *ngIf="getFieldContent('type_input') === 'checkbox' && getFieldContent('toggle_switch') === '0'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
-    <ion-checkbox color="primary" [formControlName]="getFieldContent('name')" slot="start"></ion-checkbox>
-</ion-item>
-
-<ion-item *ngIf="getFieldContent('type_input') === 'checkbox' && getFieldContent('toggle_switch') === '1'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-toggle color="primary" [formControlName]="getFieldContent('name')">{{getFieldContent('label')}}</ion-toggle>
+<ion-item *ngIf="getFieldContent('type_input') === 'checkbox'" [formGroup]="parentForm" [class]="getCss()">
+    <ion-checkbox [label] color="primary" [formControlName]="getFieldContent('name')" slot="start">{{getFieldContent('label')}}</ion-checkbox>
 </ion-item>
 
 <ion-item *ngIf="getFieldContent('type_input') === 'color'" [formGroup]="parentForm" [class]="getCss()">

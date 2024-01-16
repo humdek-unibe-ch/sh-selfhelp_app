@@ -38,6 +38,10 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                     // assign values to true/false for checkbox. Ionic need them as boolean
                     value = value != '';
                 }
+                if (input.style_name == 'checkbox') {
+                    // assign values to true/false for checkbox. Ionic need them as boolean
+                    value = value != '';
+                }
                 if (input.style_name == 'select' && (<SelectStyle>input).disabled.content == '1') {
                     // if select is disabled
                     value = value == 1;
@@ -65,6 +69,10 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
                 const input = this.selfhelpService.getFormField(formField);
                 let fieldValue = value[input.name.content.toString()];
                 if (input.style_name == 'input' && (<InputStyle>input).type_input.content == 'checkbox') {
+                    // assign values to true/false for checkbox. Ionic need them as boolean
+                    fieldValue = fieldValue ? this.getChildFieldDefault(formField, 'value') : null;
+                }
+                if (input.style_name == 'checkbox') {
                     // assign values to true/false for checkbox. Ionic need them as boolean
                     fieldValue = fieldValue ? this.getChildFieldDefault(formField, 'value') : null;
                 }
