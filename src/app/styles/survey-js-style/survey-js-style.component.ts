@@ -5,6 +5,10 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { Model, StylesManager } from "survey-core";
 import { Preferences } from '@capacitor/preferences';
 import "survey-core/survey.i18n";
+import { IDocOptions, SurveyPDF } from 'survey-pdf';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import packageJson from './../../../../package.json'; // Replace with the actual path to your package.json file
+
 
 @Component({
     selector: 'app-survey-js-style',
@@ -16,6 +20,9 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     surveyModel!: Model;
     autoSaveTimers: { [key: string]: any } = {};
     tempFileStorage: any = {};
+    pdfDocOptions: IDocOptions = {
+        fontSize: 12
+    };
 
     constructor(private selfhelpService: SelfhelpService) {
         super();
@@ -168,9 +175,45 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 options.callback("success");
             });
 
+            if (this.getFieldContent('save_pdf') == 1) {
+
+                const exportToPdfOptions = {};
+                survey['setLicenseKey'] = "ZWUzYjk4NjctYmYzMi00ZmFiLWFlODQtMGE4OTBjMTNiYTRkOzE9MjAyNC0wNC0yNSwyPTIwMjQtMDQtMjUsND0yMDI0LTA0LTI1";
+
+
+                survey.addNavigationItem({
+                    id: "pdf-export",
+                    title: "Save as PDF",
+                    action: () => this.savePdf(survey.data)
+                });
+            }
+
             this.surveyModel = survey;
         }
     }
+
+    /**
+     * Save a PDF document based on survey data.
+     *
+     * @param {any} surveyData - The survey data to be used for generating the PDF.
+     */
+    private async savePdf(surveyData: any) {
+        const surveyPdf = new SurveyPDF(this.style.survey_json, this.pdfDocOptions);
+        surveyPdf.data = surveyData;
+        // surveyPdf.save(this.style.survey_json.title.default || this.style.survey_json.title);
+        let fileName = (this.style.survey_json.title.default || this.style.survey_json.title) + '.pdf';
+        surveyPdf.raw().then(async function(raw) {
+            let res = await Filesystem.writeFile({
+                path: packageJson.name + "/" + fileName,
+                data: raw,
+                directory: Directory.Documents,
+                encoding: Encoding.UTF8,
+                recursive: true
+              });
+            console.log(res);
+            alert('Survey was exported as pdf and the file can be found in your documents folder: ' + packageJson.name);
+        });
+    };
 
     /**
      * Save a survey using SurveyJS data and trigger a server request.

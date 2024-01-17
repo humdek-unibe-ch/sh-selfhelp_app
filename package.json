@@ -62,6 +62,7 @@
         "safe-pipe": "^2.0.5-0",
         "survey-angular-ui": "^1.9.125",
         "survey-core": "^1.9.125",
+        "survey-pdf": "^1.9.126",
         "swiper": "^10.2.0",
         "tslib": "^2.3.0",
         "zone.js": "~0.13.0"
@@ -80,7 +81,7 @@
         "@capacitor/cli": "^5.5.1",
         "@capacitor/device": "^5.0.6",
         "@capacitor/dialog": "^5.0.6",
-        "@capacitor/filesystem": "^5.1.4",
+        "@capacitor/filesystem": "^5.2.0",
         "@dwimcore/capacitor-codepush": "github:Dwimcore/capacitor-codepush",
         "@ionic/angular-toolkit": "^9.0.0",
         "@types/datatables.net": "^1.10.25",

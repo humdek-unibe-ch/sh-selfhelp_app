@@ -9,6 +9,7 @@
  - add `checkboxStyle`
  - update `survey-angular-ui` from `1.9.109` to `1.9.125`
  - add an option to upload files to the server when uploaded with `survey-js`
+ - add `save as pdf` for `survey-js`
 
 ### Bugfix
  - #2 - fix the validation, `url` is correctly recognized with the capacitor.

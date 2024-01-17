@@ -438,7 +438,7 @@ export interface SurveyJSStyle extends Style {
     save_pdf: StyleField,
     survey_js_theme: StyleField,
     show_survey: boolean,
-    survey_json: object, // survey_js json structure
+    survey_json: any, // survey_js json structure
     survey_generated_id: string
 }
 
