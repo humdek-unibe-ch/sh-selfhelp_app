@@ -266,8 +266,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         } else {
             if (this.getFieldContent('redirect_at_end') != '') {
                 this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
-            } else {
-                this.selfhelpService.openUrl(this.url);
             }
         }
     }
