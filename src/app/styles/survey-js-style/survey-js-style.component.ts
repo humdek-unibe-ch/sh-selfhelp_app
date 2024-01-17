@@ -15,6 +15,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     @Input() override style!: SurveyJSStyle;
     surveyModel!: Model;
     autoSaveTimers: { [key: string]: any } = {};
+    tempFileStorage: any = {};
 
     constructor(private selfhelpService: SelfhelpService) {
         super();
@@ -100,12 +101,83 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     meta['pages'][meta['pages'].length - 1]['duration'] = ((dateNow - new Date(meta['pages'][meta['pages'].length - 1]['start_time']).getTime()) / 1000);
                     sender.setValue('_meta', meta);
                 }
-                this.saveSurveyJS(sender);
+                this.uploadFiles(sender)
+                    .then(() => {
+                        this.saveSurveyJS(sender);
+                    })
+                    .catch((error: any) => {
+                        // Handle any errors that occurred during uploads
+                        console.error("Upload error:", error);
+                    });
             });
+
+            // custom catch for upload files when storeDataAsText is false
+            survey.onUploadFiles.add((_, options) => {
+                // Add files to the temporary storage
+                if (this.tempFileStorage[options.name] !== undefined && this.tempFileStorage[options.name].length > 0) {
+                    this.tempFileStorage[options.name].concat(options.files);
+                } else {
+                    this.tempFileStorage[options.name] = options.files;
+                }
+                // Load file previews
+                const content: any[] = [];
+                options.files.forEach(file => {
+                    const fileReader = new FileReader();
+                    fileReader.onload = () => {
+                        content.push({
+                            name: file.name,
+                            type: file.type,
+                            content: fileReader.result,
+                            file: file
+                        });
+                        if (content.length === options.files.length) {
+                            // Return a file for preview as a { file, content } object
+                            options.callback(
+                                content.map(fileContent => {
+                                    return {
+                                        file: fileContent.file,
+                                        content: fileContent.content
+                                    };
+                                })
+                            );
+                        }
+                    };
+                    fileReader.readAsDataURL(file);
+                });
+
+            });
+
+            // Handles file removal
+            survey.onClearFiles.add((_, options) => {
+                // Empty the temporary file storage if "Clear All" is clicked
+                if (options.fileName === null) {
+                    this.tempFileStorage[options.name] = [];
+                    options.callback("success");
+                    return;
+                }
+
+                // Remove an individual file
+                const tempFiles = this.tempFileStorage[options.name];
+                if (!!tempFiles) {
+                    const fileInfoToRemove = tempFiles.filter((file: File) => file.name === options.fileName)[0];
+                    if (fileInfoToRemove) {
+                        const index = tempFiles.indexOf(fileInfoToRemove);
+                        tempFiles.splice(index, 1);
+                    }
+                }
+                options.callback("success");
+            });
+
             this.surveyModel = survey;
         }
     }
 
+    /**
+     * Save a survey using SurveyJS data and trigger a server request.
+     *
+     * @param {Model} survey - The SurveyJS model representing the survey.
+     * @returns {boolean} Returns true if the survey was successfully saved; otherwise, false.
+     */
     private saveSurveyJS(survey: Model) {
         let data = { ...survey.data };
         data.pageNo = survey.currentPageNo;
@@ -181,6 +253,78 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 return false;
             }
         }
+    }
+
+    /**
+ * Upload files associated with survey questions and update question values with metadata.
+ *
+ * @param {Survey} survey - The survey object containing questions and data.
+ * @returns {Promise} A Promise that resolves when all file uploads are completed successfully,
+ *                    or rejects if any of the uploads fail.
+ */
+    private uploadFiles(survey: Model) {
+        return new Promise<void>((resolve, reject) => {
+            const questionsToUpload = Object.keys(this.tempFileStorage);
+
+            if (questionsToUpload.length === 0) {
+                resolve(); // No files to upload, resolve immediately
+            } else {
+                const uploadPromises = [];
+
+                for (let i = 0; i < questionsToUpload.length; i++) {
+                    const questionName = questionsToUpload[i];
+                    const question = survey.getQuestionByName(questionName);
+                    const filesToUpload = this.tempFileStorage[questionName];
+
+                    const formData = new FormData();
+                    filesToUpload.forEach((file: File) => {
+                        formData.append(file.name, file);
+                    });
+
+                    formData.append("upload_files", "true");
+                    formData.append("response_id", survey.data['response_id']);
+                    formData.append("question_name", questionName);
+
+                    console.log(window.location.href);
+                    console.log(this.selfhelpService.API_ENDPOINT_NATIVE + this.url, formData);
+
+
+                    const uploadPromise = fetch(this.selfhelpService.API_ENDPOINT_NATIVE + this.url, {
+                        method: "POST",
+                        body: formData
+                    })
+                        .then((response) => {
+                            return response.json()
+                        })
+                        .then(data => {
+                            // Save metadata about uploaded files as the question value
+                            question.value = filesToUpload.map((file: File) => {
+                                return {
+                                    name: file.name,
+                                    type: file.type,
+                                    content: data[file.name]
+                                };
+                            });
+
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            reject(error); // Reject the promise if there's an error
+                        });
+
+                    uploadPromises.push(uploadPromise);
+                }
+
+                // Wait for all upload promises to complete before resolving
+                Promise.all(uploadPromises)
+                    .then(() => {
+                        resolve(); // All uploads completed successfully
+                    })
+                    .catch(error => {
+                        reject(error); // Reject if any of the uploads failed
+                    });
+            }
+        });
     }
 
 }
