@@ -61,6 +61,13 @@ export interface Style {
     [key: string]: any; // Index signature for dynamic property access
 }
 
+export interface DivStyle extends Style {
+    color_background: StyleField,
+    color_border: StyleField,
+    color_text: StyleField,
+    custom_style: string
+}
+
 export interface CardStyle extends Style {
     title: StyleField,
     children: any

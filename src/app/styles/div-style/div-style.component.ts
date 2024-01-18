@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { Style } from '../../selfhelpInterfaces';
+import { DivStyle } from '../../selfhelpInterfaces';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
     styleUrls: ['./div-style.component.scss'],
 })
 export class DivStyleComponent extends BasicStyleComponent implements OnInit {
-    @Input() override style!: Style;
+    @Input() override style!: DivStyle;
     @Input() override parentForm!: FormGroup;
 
     constructor() {
