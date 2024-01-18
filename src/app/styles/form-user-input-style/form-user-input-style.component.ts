@@ -25,10 +25,10 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
 
     private collectFormFields(style: any) {
         style.children.forEach((formField: any) => {
-            if (formField['children'] && formField['children'].length > 0) {
+            if (formField && formField['children'] && formField['children'].length > 0) {
                 this.collectFormFields(formField);
             }
-            else if (this.selfhelpService.isFormField(formField)) {
+            else if (formField && this.selfhelpService.isFormField(formField)) {
                 const input = this.selfhelpService.getFormField(formField);
                 let value: any = input.value ? input.value.content : ''; // if there is a default value we assign it
                 if (this.getFieldContent('is_log') != '1' && input.last_value) {

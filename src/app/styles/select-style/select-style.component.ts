@@ -18,8 +18,6 @@ export class SelectStyleComponent extends BasicStyleComponent implements OnInit 
         super();
     }
 
-    override ngOnInit() { }
-
     ngAfterViewInit(): void {
         if (this.getFieldContent('image_selector') == '1') {
             this.initImageSelector();
