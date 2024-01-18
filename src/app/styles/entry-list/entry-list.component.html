@@ -1,4 +1,4 @@
-<!-- <table datatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
+<table *ngIf="getFieldContent('load_as_table') === '1'" datatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
     <thead>
         <tr>
             <th class="d-none"></th>
@@ -11,7 +11,9 @@
             </td>
         </tr>
     </tbody>
-</table> -->
+</table>
 
-<app-basic-style *ngFor="let child of style.children" [url]="url" [ionContent]="ionContent"
-    [style]="child"></app-basic-style> 
+<div [className]="'entryListHolder ' + getCss()" *ngIf="getFieldContent('load_as_table') === '0'">
+    <app-basic-style *ngFor="let child of style.children" [url]="url" [ionContent]="ionContent"
+        [style]="child"></app-basic-style>
+</div>

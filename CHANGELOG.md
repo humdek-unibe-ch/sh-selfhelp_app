@@ -12,6 +12,7 @@
  - add `save as pdf` for `survey-js`
  - handle `edit_url` in `card` and show a button on the right side as in the web version
  - handle `custom_style` for style `div`. Adding the customization from `color_background`, `color_border` and `color_text` fields
+ - handle field `load_as_table` in style `entryList`
 
 ### Bugfix
  - #2 - fix the validation, `url` is correctly recognized with the capacitor.
