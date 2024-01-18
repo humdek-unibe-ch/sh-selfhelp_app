@@ -613,6 +613,7 @@ export class SelfhelpService {
     }
 
     public openUrl(url: string): boolean {
+        url = url.replace(this.getBasePath(), '');
         if (this.selfhelp.value.urls[url]) {
 
             //
