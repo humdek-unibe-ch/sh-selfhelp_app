@@ -1,8 +1,12 @@
 <ion-card [id]="getFieldContent('id')" [class]="'m-0 ' + getCss()">
     <ion-card-header [class]="'mobile-card-header card-' + getFieldContent('type')" [color]="getFieldContent('type')">
-        <ion-card-title (click)="toggleCard()">{{getFieldContent('title')}}
-            <ion-icon class="float-right" *ngIf="getFieldContent('is_collapsible') === '1'"
-                [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+        <ion-card-title class="d-flex align-items-center justify-content-between" (click)="toggleCard()">{{getFieldContent('title')}}
+            <div>
+                <ion-icon size="large" *ngIf="getFieldContent('is_collapsible') === '1'"
+                    [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+                <ion-icon size="large" class="ml-4" *ngIf="getFieldContent('url_edit') !== ''"
+                    name="create-outline" (click)="edit_link_clicked($event)"></ion-icon>
+            </div>
         </ion-card-title>
     </ion-card-header>
     <ion-card-content class="mobile-body-header" [hidden]="!isCardExpanded">
