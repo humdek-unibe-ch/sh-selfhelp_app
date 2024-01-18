@@ -1,7 +1,7 @@
 <ion-card [id]="getFieldContent('id')" [class]="'m-0 ' + getCss()">
     <ion-card-header [class]="'mobile-card-header card-' + getFieldContent('type')" [color]="getFieldContent('type')">
-        <ion-card-title>{{getFieldContent('title')}}
-            <ion-icon style="float: right;" (click)="toggleCard()"
+        <ion-card-title (click)="toggleCard()">{{getFieldContent('title')}}
+            <ion-icon class="float-right" *ngIf="getFieldContent('is_collapsible') === '1'"
                 [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
         </ion-card-title>
     </ion-card-header>

@@ -15,6 +15,7 @@
  - #2 - fix the validation, `url` is correctly recognized with the capacitor.
  - #3 - properly load localization for `survey-js`
  - [#5](http://phhum-a209-cp.unibe.ch:10012/SLP/plugins/survey-js/issues/5) - do not refresh the survey when end, this way the end message can be seen
+ - properly visual the collapsible icon for style `card`. Now the click event is registered when the header of the card is clicked rather than only the icon 
 
 # 3.1.10
  - load `toggle switch` when it is enabled for a input from type `checkbox`
