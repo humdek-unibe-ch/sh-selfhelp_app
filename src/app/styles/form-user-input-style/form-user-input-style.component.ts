@@ -21,8 +21,18 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
 
     override ngOnInit() {
         this.initForm();
+        console.log('form', this.style);
     }
 
+    /**
+     * Recursively collects and processes form fields from a style object.
+     *
+     * This function traverses through the provided `style` object and its children to collect form fields,
+     * and initializes form controls and validation rules based on the field properties.
+     *
+     * @param style - The style object to collect form fields from.
+     * @returns void
+     */
     private collectFormFields(style: any) {
         style.children.forEach((formField: any) => {
             if (formField && formField['children'] && formField['children'].length > 0) {
@@ -61,6 +71,12 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         this.form = this.formBuilder.group(this.formFields);
     }
 
+    /**
+     * Prepares and returns parameters for a form submission based on the provided value object.
+     *
+     * @param value - The value object containing form field values.
+     * @returns An object containing parameters for the form submission.
+     */
     protected prepareParams(value: { [key: string]: any; }): any {
         let params: { [key: string]: any } = {};
         params['__form_name'] = this.getFieldContent('name');
@@ -110,6 +126,11 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         if (this.getFieldContent('redirect_at_end') != '') {
             this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
         }
+    }
+
+    public cancelUrl() {
+        this.selfhelpService.closeModal('cancel');
+        this.selfhelpService.openUrl(this.getFieldContent('url_cancel'));
     }
 
 }

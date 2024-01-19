@@ -102,7 +102,12 @@ export interface FormUserInputStyle extends Style {
     submit_and_send_email: StyleField,
     submit_and_send_label: StyleField,
     close_modal_at_end: StyleField,
-    redirect_at_end: StyleField
+    redirect_at_end: StyleField,
+    confirmation_title: StyleField,
+    label_cancel: StyleField,
+    label_continue: StyleField,
+    label_message: StyleField,
+    url_cancel: StyleField,
 }
 
 export interface FormField extends Style {
