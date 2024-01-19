@@ -106,6 +106,23 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         return params;
     }
 
+    public formSubmitClick(formValues: { [key: string]: any; }){
+        if (this.getFieldContent('confirmation_title') != '') {
+            // check for confirmation first
+            this.selfhelpService.presentAlertConfirm({
+                msg: this.getFieldContent('label_message'),
+                header: this.getFieldContent('confirmation_title'),
+                confirmLabel: this.getFieldContent('label_continue'),
+                cancelLabel: this.getFieldContent('label_cancel'),
+                callback: () => {
+                    this.submitForm(formValues);
+                }
+            });
+        } else {
+            this.submitForm(formValues);
+        }
+    }
+
     public async submitForm(value: { [key: string]: any; }) {
         const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));
         if (res && this.getFieldContent('close_modal_at_end') == '1') {
