@@ -17,7 +17,20 @@ export class ButtonStyleComponent extends BasicStyleComponent implements OnInit 
 
     public btnClick(): void {
         const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath(), '');
-        this.selfhelp.openUrl(url);
+        if (this.getFieldContent('confirmation_title') != '') {
+            // check for confirmation first
+            this.selfhelp.presentAlertConfirm({
+                msg: this.getFieldContent('label_message'),
+                header: this.getFieldContent('confirmation_title'),
+                confirmLabel: this.getFieldContent('label_continue'),
+                cancelLabel: this.getFieldContent('label_cancel'),
+                callback: () => {
+                    this.selfhelp.openUrl(url);
+                }
+            });
+        } else {
+            this.selfhelp.openUrl(url);
+        }
     }
 
 }

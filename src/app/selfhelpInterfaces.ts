@@ -253,7 +253,11 @@ export interface ShowUserInputStyle extends Style {
 export interface ButtonStyle extends Style {
     url: StyleField,
     type: StyleField,
-    label: StyleField
+    label: StyleField,
+    label_cancel: StyleField,
+    label_continue: StyleField,
+    label_message: StyleField,
+    confirmation_title: StyleField,
 }
 
 export interface ShortcutButtonStyle extends Style {

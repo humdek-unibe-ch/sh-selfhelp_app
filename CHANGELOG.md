@@ -14,6 +14,7 @@
  - handle `custom_style` for style `div`. Adding the customization from `color_background`, `color_border` and `color_text` fields
  - handle field `load_as_table` in style `entryList`
  - add `url_cancel` to `formUserInput`
+ - add `confirmation message` functionality to style `button`
 
 ### Bugfix
  - #2 - fix the validation, `url` is correctly recognized with the capacitor.
