@@ -1,4 +1,4 @@
-# 3.2.0 (unpublished)
+# 3.2.0
 ### New Features
  - add [capacitor-native-settings](https://github.com/RaphaelWoude/capacitor-native-settings) v5.0.1
  - add style `shortcutButton` - open native window
