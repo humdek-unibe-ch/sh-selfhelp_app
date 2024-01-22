@@ -21,7 +21,6 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
 
     override ngOnInit() {
         this.initForm();
-        console.log('form', this.style);
     }
 
     /**

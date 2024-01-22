@@ -210,7 +210,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 encoding: Encoding.UTF8,
                 recursive: true
               });
-            console.log(res);
             alert('Survey was exported as pdf and the file can be found in your documents folder: ' + packageJson.name);
         });
     };
@@ -325,10 +324,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     formData.append("upload_files", "true");
                     formData.append("response_id", survey.data['response_id']);
                     formData.append("question_name", questionName);
-
-                    console.log(window.location.href);
-                    console.log(this.selfhelpService.API_ENDPOINT_NATIVE + this.url, formData);
-
 
                     const uploadPromise = fetch(this.selfhelpService.API_ENDPOINT_NATIVE + this.url, {
                         method: "POST",
