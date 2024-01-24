@@ -420,8 +420,8 @@ export interface MessageBoardStyle extends Style {
 }
 
 export interface EntryListStyle extends Style {
-    formName: StyleField,
-    load_as_table: StyleField,
+    formName?: StyleField,
+    load_as_table?: StyleField,
 }
 
 export interface CalendarStyle extends Style {

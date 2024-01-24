@@ -1,5 +1,6 @@
 # 3.2.1 (unpublished) 
-
+### Bugfix
+ - properly load `loop` style within `entryList`
 
 # 3.2.0
 ### New Features
