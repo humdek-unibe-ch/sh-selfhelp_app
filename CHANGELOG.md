@@ -1,4 +1,4 @@
-# 3.2.1 (unpublished) 
+# 3.2.1
 ### Bugfix
  - properly load `loop` style within `entryList`
 
