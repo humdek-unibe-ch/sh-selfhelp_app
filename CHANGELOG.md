@@ -1,3 +1,7 @@
+# 3.2.2
+### Bugfix
+ - when a `child page` link is opened it is properly selected. 
+
 # 3.2.1
 ### Bugfix
  - properly load `loop` style within `entryList`

@@ -10,7 +10,6 @@ import { SelfHelp, SelfHelpNavigation, Styles } from '../../selfhelpInterfaces';
 export class SubMenuComponent implements OnInit {
     @Input() selfhelp!: SelfHelp;
     @ViewChild('slides', { static: true }) swiperRef!: ElementRef;
-    segment = 0;
 
     constructor(private selfhelpService: SelfhelpService, private zone: NgZone) {
         this.selfhelpService.observeSelfhelp().subscribe((selfhelp: SelfHelp) => {
@@ -22,18 +21,32 @@ export class SubMenuComponent implements OnInit {
         });
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.setSelectedSubMenu();
+    }
+
+    getSubmenuIndex(): number {
+        if (this.selfhelp && this.selfhelp.selectedMenu) {
+            for (let index = 0; index < this.selfhelp.selectedMenu.children.length; index++) {
+                const child = this.selfhelp.selectedMenu.children[index];
+                if (child.url === this.selfhelp.current_url) {
+                    return index;
+                }
+            }
+        }
+        return 0;
+    }
 
     async setSelectedSubMenu() {
         if (this.selfhelp && this.selfhelp.selectedMenu) {
-            this.selfhelpService.setSelectedSubMenu(this.selfhelp.selectedMenu.children[this.segment]);
-            this.selfhelpService.getPage(this.selfhelpService.getUrl(this.selfhelp.selectedMenu.children[this.segment]));
-            await this.swiperRef?.nativeElement.swiper.slideTo(this.segment);
+            this.selfhelpService.setSelectedSubMenu(this.selfhelp.selectedMenu.children[this.getSubmenuIndex()]);
+            await this.selfhelpService.getPage(this.selfhelpService.getUrl(this.selfhelp.selectedMenu.children[this.getSubmenuIndex()]));
+            await this.swiperRef?.nativeElement.swiper.slideTo(this.getSubmenuIndex(), 500);
         }
     }
 
     slideChanged() {
-        this.segment = this.swiperRef?.nativeElement.swiper.activeIndex;
+        this.setSelectedSubMenu();
     }
 
     public getContent(nav: SelfHelpNavigation): Styles | null {
