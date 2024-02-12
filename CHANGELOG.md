@@ -1,3 +1,7 @@
+# 3.2.3
+### Bugfix
+ - properly use auto_login when the session expires or on modal url opnening from notification. This was mostly noticible in iOS.
+
 # 3.2.2
 ### Bugfix
  - when a `child page` link is opened it is properly selected. 

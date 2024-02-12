@@ -26,7 +26,6 @@ export class EntryListComponent extends BasicStyleComponent implements OnInit {
 
     override ngOnInit() {
         this.prepareOptions();
-        console.log(this.style.style_name, this.style.children);
     }
 
     private prepareOptions(): void {

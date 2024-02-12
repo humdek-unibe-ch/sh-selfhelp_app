@@ -70,7 +70,6 @@ export class AppComponent {
 
     initDeepLinking() {
         App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
-            console.log('test');
             const pathArr = event.url.split('/');
             if (pathArr.length > 0 && pathArr.length == 6 && pathArr[3] == 'validate') {
                 let url = '';

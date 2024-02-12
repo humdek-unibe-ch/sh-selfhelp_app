@@ -3,7 +3,7 @@ import { Capacitor, CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle } from './../selfhelpInterfaces';
-import { Preferences } from '@capacitor/preferences';
+import { GetResult, Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { Device } from '@capacitor/device';
 import { NotificationsService } from './notifications.service';
@@ -86,7 +86,7 @@ export class SelfhelpService {
                 // load the app
                 this.loadApp();
             }
-            this.mobilePlatform = <MobilePlatform> Capacitor.getPlatform();
+            this.mobilePlatform = <MobilePlatform>Capacitor.getPlatform();
         });
     }
 
@@ -160,7 +160,7 @@ export class SelfhelpService {
         return new Promise((resolve, reject) => {
             CapacitorHttp.post(options).then(response => {
                 try {
-                    this.utils.debugLog(keyword, JSON.parse(response.data));
+                    this.utils.debugLog('execServerRequest() ' + keyword, JSON.parse(response.data));
                     resolve(JSON.parse(response.data));
                 } catch (error) {
                     this.utils.debugLog('error', response.data);
@@ -174,7 +174,7 @@ export class SelfhelpService {
         });
     }
 
-    public setPage(url: string, page: SelfHelpPageRequest): void {
+    public async setPage(url: string, page: SelfHelpPageRequest): Promise<void> {
         if (page.navigation) {
             this.setNavigation(page.navigation);
         }
@@ -258,16 +258,20 @@ export class SelfhelpService {
         }
         if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET) && this.autoLoginAttempts == 0) {
             this.autoLoginAttempts++; // try to autologin only once
-            this.autoLogin();
+            await this.autoLogin();
         }
         this.setSelfhelp(currSelfhelp, true);
     }
 
     private async autoLogin() {
+        this.utils.debugLog('autoLogin', this.selfhelp.value.credentials);
         if (this.selfhelp.value.credentials) {
             const loginRes = await this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
+            this.utils.debugLog('autoLoginResult ', loginRes);
             if (!loginRes) {
                 this.openUrl(this.API_LOGIN);
+            }else{
+                this.autoLoginAttempts = 0;
             }
         } else {
             this.openUrl(this.API_LOGIN);
@@ -431,10 +435,10 @@ export class SelfhelpService {
     public getPage(keyword: string): Promise<SelfHelpPageRequest> {
         return new Promise((resolve, reject) => {
             this.execServerRequest(keyword, {})
-                .then((res: SelfHelpPageRequest) => {
+                .then(async (res: SelfHelpPageRequest) => {
                     if (res) {
-                        this.setPage(keyword, res);
-                        this.utils.debugLog(keyword, res);
+                        await this.setPage(keyword, res);
+                        this.utils.debugLog('getPage() ' + keyword, res);
                         resolve(res);
                     }
                 })
@@ -459,15 +463,15 @@ export class SelfhelpService {
         return this.selfhelp.value.urls[this.getUrl(nav)] ? this.selfhelp.value.urls[this.getUrl(nav)].content : null;
     }
 
-    private getLocalSelfhelp() {
-        Preferences.get({ key: this.local_selfhelp }).then((val) => {
+    public async getLocalSelfhelp() {
+        await Preferences.get({ key: this.local_selfhelp }).then(async (val) => {
             if (val.value) {
                 let currSelfhelp = <SelfHelp>JSON.parse(val.value);
                 currSelfhelp.current_modal_url = '';
                 this.setSelfhelp(currSelfhelp, false);
                 this.loadLanguage();
             }
-            this.getPage(this.API_HOME);
+            await this.getPage(this.API_HOME);
         });
     }
 
