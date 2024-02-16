@@ -1,4 +1,4 @@
-# 3.2.3
+# 3.2.3a
 ### Bugfix
  - properly use auto_login when the session expires or on modal url opnening from notification. This was mostly noticible in iOS.
 
