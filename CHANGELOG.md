@@ -1,4 +1,8 @@
-# 3.2.3a
+# 3.2.4
+### Bugfix
+ - properly load the password label in style `validation`
+
+# 3.2.3
 ### Bugfix
  - properly use auto_login when the session expires or on modal url opnening from notification. This was mostly noticible in iOS.
 
