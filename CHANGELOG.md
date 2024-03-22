@@ -1,6 +1,7 @@
 # 3.3.0 (Unpublished)
 ### New Features
  - update to angular 17
+ - add style `LabJS`
 
 # 3.2.4
 ### Bugfix
