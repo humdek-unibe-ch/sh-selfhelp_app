@@ -1,3 +1,7 @@
+# 3.3.0 (Unpublished)
+### New Features
+ - update to angular 17
+
 # 3.2.4
 ### Bugfix
  - properly load the password label in style `validation`
