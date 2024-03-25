@@ -459,6 +459,12 @@ export interface SurveyJSStyle extends Style {
     survey_generated_id: string
 }
 
+export interface LabJSStyle extends Style {
+    lab_json: any,
+    redirect_at_end: StyleField,
+    labjs_generated_id: string,
+}
+
 export interface MessageBoardMessage {
     color: string,
     icon_counter: any,

@@ -60,7 +60,8 @@
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.min.js",
               "src/assets/js/d3.v3.min.js",
-              "src/assets/js/d3.tip.v0.6.3.js"
+              "src/assets/js/d3.tip.v0.6.3.js",
+              "src/assets/js/lab.js"
             ]
           },
           "configurations": {
