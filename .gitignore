@@ -75,3 +75,5 @@ projects/*
 
 src/env/app.config.ts
 src/manifest.webmanifest
+
+/.nx
