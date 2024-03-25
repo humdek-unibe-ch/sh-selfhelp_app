@@ -3,6 +3,9 @@
  - update to angular 17
  - add style `LabJS`
 
+### Bugfix
+ - #12 - load `textareaStyle` properly
+
 # 3.2.4
 ### Bugfix
  - properly load the password label in style `validation`
