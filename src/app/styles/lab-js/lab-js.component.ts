@@ -22,20 +22,12 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     }
 
     override ngOnInit() {
-        console.log(this.style);
         this.loadExperiment(this.style.lab_json);
         this.initSaveFunction();
     }
 
     private initSaveFunction() {
-        (window as any).labjs_response_id = this.labjs_response_id;
-        (window as any).labjs_generated_id = this.style.labjs_generated_id;
-        (window as any).redirect_at_end = this.style.redirect_at_end;
-        (window as any).labjs_experiment = this.labjs_experiment;
-        (window as any).labjs_url = this.selfhelpService.API_ENDPOINT_NATIVE + this.url;
-        console.log((window as any).labjs_url);
-        (window as any).saveDataToSelfHelp = function (trigger_type: string, extra_data: any) {
-            console.log('in');
+        (window as any).saveDataToSelfHelp = (trigger_type: string, extra_data: any) => {
             if (!extra_data) {
                 extra_data = {
                     "trigger_type": trigger_type
@@ -43,15 +35,13 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
             } else {
                 extra_data['trigger_type'] = trigger_type;
             }
-            extra_data['labjs_response_id'] = (window as any).labjs_response_id;
-            extra_data['labjs_generated_id'] = (window as any).labjs_generated_id;
-            extra_data['redirect_at_end'] = (window as any).redirect_at_end;
-            (window as any).labjs_experiment.options.datastore.transmit((window as any).labjs_url, extra_data);
-            if (extra_data['trigger_type'] == 'finished' && extra_data['redirect_at_end'] && extra_data['redirect_at_end'] != '') {
+            extra_data['labjs_response_id'] = this.labjs_response_id;
+            extra_data['labjs_generated_id'] = this.style.labjs_generated_id;
+            this.labjs_experiment.options.datastore.transmit(this.selfhelpService.API_ENDPOINT_NATIVE + this.url, extra_data);
+            if (extra_data['trigger_type'] == 'finished') {
                 // redirect on finish and if redirect url is set
-                window.location.href = extra_data['redirect_at_end'];
+                this.labjs_finished();
             }
-            console.log('save', extra_data);
         };
     }
 
@@ -64,13 +54,11 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     private loadExperiment(exp: any): void {
         this.loadFiles(exp);
         const componentTree: any = this.makeComponentTree(exp.components, 'root');
-        console.log(componentTree);
 
         // Adjust plugins
         Object.entries(exp.components).forEach(([keyComp, comp]: [string, any]) => {
             if (comp.plugins) {
                 Object.entries(comp.plugins).forEach(([keyPlugin, plugin]: [string, any]) => {
-                    console.log(plugin);
                     if (plugin && plugin.type === 'fullscreen') {
                         plugin['path'] = 'lab.plugins.Fullscreen';
                         delete comp.plugins[keyPlugin];
@@ -80,7 +68,6 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
                 });
             }
         });
-        console.log(componentTree);
         this.labjs_experiment = lab.util.fromObject(componentTree);
         this.labjs_response_id = this.generate_labjs_response_id();
         this.labjs_experiment.run();
@@ -332,7 +319,6 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     private processResponses(responses: any) {
         // Process each of these objects into an array
         // of [responseParams, label] pairs
-        console.log(responses);
         const pairs = responses.map((r: any) => this.createResponsePair(r));
         // Finally, create an object of
         // { responseParams: label } mappings
@@ -388,6 +374,17 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
             // Extract column names
             g => g.map(c => c.name)
         )
+    }
+
+    public labjs_finished(){
+        if (this.getFieldContent('close_modal_at_end') == '1') {
+            this.selfhelpService.closeModal('submit');
+            if (this.getFieldContent('redirect_at_end') != '') {
+                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            } else {
+                this.selfhelpService.getPage(this.selfhelpService.API_HOME);
+            }
+        }
     }
 
 }

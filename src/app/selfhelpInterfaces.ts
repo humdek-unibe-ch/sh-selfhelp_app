@@ -462,6 +462,7 @@ export interface SurveyJSStyle extends Style {
 export interface LabJSStyle extends Style {
     lab_json: any,
     redirect_at_end: StyleField,
+    close_modal_at_end: StyleField,
     labjs_generated_id: string,
 }
 
