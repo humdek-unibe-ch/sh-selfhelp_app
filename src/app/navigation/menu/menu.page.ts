@@ -42,4 +42,8 @@ export class MenuPage {
         return this.selfHelpService.getAvatarImg();
     }
 
+    showHeader() {
+        return !this.selfHelp?.is_headless;
+    }
+
 }
