@@ -44,7 +44,8 @@ export class SelfhelpService {
         current_modal_url: '',
         avatar: '',
         external_css: '',
-        user_language: null
+        user_language: null,
+        is_headless: false
     });
     private initApp = false;
     private messageDuration = appConfig.messageDuration ? appConfig.messageDuration : 10000;
@@ -230,6 +231,11 @@ export class SelfhelpService {
             newSelfhelp.avatar = page.avatar;
             newSelfhelp.external_css = page.external_css;
             newSelfhelp.languages = page.languages;
+            this.setSelfhelp(newSelfhelp, true);
+        }
+        if (this.selfhelp.value.is_headless != page.is_headless) {
+            let newSelfhelp = this.selfhelp.value;
+            newSelfhelp.is_headless = page.is_headless;
             this.setSelfhelp(newSelfhelp, true);
         }
         if (this.selfhelp.value.avatar != page.avatar) {

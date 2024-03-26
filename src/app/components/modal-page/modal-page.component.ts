@@ -33,4 +33,8 @@ export class ModalPageComponent extends BasicComponentComponent implements OnIni
         }
     }
 
+    showHeader() {
+        return !this.selfHelp.is_headless;
+    }
+
 }

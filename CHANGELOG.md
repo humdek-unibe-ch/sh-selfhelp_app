@@ -2,6 +2,7 @@
 ### New Features
  - update to angular 17
  - add style `LabJS`
+ - load `headless` pages, require SelfHelp `v6.12.1+`
 
 ### Bugfix
  - #12 - load `textareaStyle` properly

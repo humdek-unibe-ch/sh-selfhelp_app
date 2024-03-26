@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header *ngIf="this.showHeader()">
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-back-button defaultHref="#" (click)="close()"></ion-back-button>
