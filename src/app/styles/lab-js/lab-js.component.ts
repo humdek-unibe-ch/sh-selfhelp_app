@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { LabJSStyle } from 'src/app/selfhelpInterfaces';
 import slugify from 'slug';
 import * as _ from 'lodash';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 declare const lab: any;
+declare var $: any;
 
 @Component({
     selector: 'app-lab-js',
@@ -17,8 +18,9 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     labjs_experiment: any
     private awaitRegex = /(^|[^\w])await\s+/m;
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(private selfhelpService: SelfhelpService, private elementRef: ElementRef){
         super();
+        $('app-lab-js').remove(); //remove any existing labjs leftover
     }
 
     override ngOnInit() {
@@ -71,6 +73,7 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
         this.labjs_experiment = lab.util.fromObject(componentTree);
         this.labjs_response_id = this.generate_labjs_response_id();
         this.labjs_experiment.run();
+
     }
 
     /**
@@ -376,7 +379,7 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
         )
     }
 
-    public labjs_finished(){
+    public labjs_finished() {
         if (this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal('submit');
             if (this.getFieldContent('redirect_at_end') != '') {
