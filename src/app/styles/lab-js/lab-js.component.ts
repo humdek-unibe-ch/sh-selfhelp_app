@@ -18,7 +18,7 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     labjs_experiment: any
     private awaitRegex = /(^|[^\w])await\s+/m;
 
-    constructor(private selfhelpService: SelfhelpService, private elementRef: ElementRef){
+    constructor(private selfhelpService: SelfhelpService, private elementRef: ElementRef) {
         super();
         $('app-lab-js').remove(); //remove any existing labjs leftover
     }
@@ -382,11 +382,11 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     public labjs_finished() {
         if (this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal('submit');
-            if (this.getFieldContent('redirect_at_end') != '') {
-                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
-            } else {
-                this.selfhelpService.getPage(this.selfhelpService.API_HOME);
-            }
+        }
+        if (this.getFieldContent('redirect_at_end') != '') {
+            this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+        } else {
+            this.selfhelpService.getPage(this.selfhelpService.API_HOME);
         }
     }
 
