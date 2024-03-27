@@ -78,6 +78,7 @@ import { ShortcutButtonStyleComponent } from '../styles/shortcut-button-style/sh
 import { OpenAppButtonStyleComponent } from '../styles/open-app-button-style/open-app-button-style.component';
 import { CheckboxStyleComponent } from '../styles/checkbox-style/checkbox-style.component';
 import { LabJSComponent } from '../styles/lab-js/lab-js.component';
+import { HtmlTagStyleComponent } from '../styles/html-tag-style/html-tag-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -188,7 +189,8 @@ const routes: Routes = [
         ShortcutButtonStyleComponent,
         OpenAppButtonStyleComponent,
         CheckboxStyleComponent,
-        LabJSComponent
+        LabJSComponent,
+        HtmlTagStyleComponent
     ]
 })
 export class NavigationPageModule {
