@@ -7,6 +7,7 @@
 
 ### Bugfix
  - #12 - load `textareaStyle` properly
+ - #5 - properly open mail link from style `link`
 
 # 3.2.4
 ### Bugfix

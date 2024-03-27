@@ -19,7 +19,12 @@ export class LinkStyleComponent extends BasicStyleComponent implements OnInit {
 
     public btnClick(): void {
         const url = this.getFieldContent('url').replace(this.selfhelp.getBasePath() + '/', '/').replace('/http', 'http');
-        this.selfhelp.openUrl(url);
+        if (url.startsWith('mailto:')) {
+            // it is a mail
+            window.location.href = url;
+        } else {
+            this.selfhelp.openUrl(url);
+        }
     }
 
 }
