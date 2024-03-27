@@ -466,6 +466,10 @@ export interface LabJSStyle extends Style {
     labjs_generated_id: string,
 }
 
+export interface HTMLTagStyle extends Style {
+    html_tag: StyleField;
+}
+
 export interface MessageBoardMessage {
     color: string,
     icon_counter: any,

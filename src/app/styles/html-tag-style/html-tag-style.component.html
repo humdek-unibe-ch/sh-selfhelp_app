@@ -1,3 +1,54 @@
-<p>
-  html-tag-style works!
-</p>
+<figure *ngIf="this.getFieldContent('html_tag') === 'figure'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</figure>
+
+<figcaption *ngIf="this.getFieldContent('html_tag') === 'figcaption'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</figcaption>
+
+<ul *ngIf="this.getFieldContent('html_tag') === 'ul'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</ul>
+
+<ol *ngIf="this.getFieldContent('html_tag') === 'ol'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</ol>
+
+<li *ngIf="this.getFieldContent('html_tag') === 'li'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</li>
+
+<table *ngIf="this.getFieldContent('html_tag') === 'table'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</table>
+
+<tr *ngIf="this.getFieldContent('html_tag') === 'tr'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</tr>
+
+<td *ngIf="this.getFieldContent('html_tag') === 'td'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</td>
+
+<th *ngIf="this.getFieldContent('html_tag') === 'th'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</th>
+
+<dd *ngIf="this.getFieldContent('html_tag') === 'dd'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</dd>
+
+<dl *ngIf="this.getFieldContent('html_tag') === 'dl'">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="parentForm"></app-basic-style>
+</dl>
