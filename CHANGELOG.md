@@ -1,4 +1,4 @@
-# 3.3.0 (Unpublished)
+# 3.2.5 (Unpublished)
 ### New Features
  - update to angular 17
  - add style `LabJS`
