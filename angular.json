@@ -51,7 +51,8 @@
                 "input": "node_modules/survey-core/modern.min.css",
                 "inject": true
               },
-              "node_modules/datatables.net-dt/css/jquery.dataTables.min.css"
+              "node_modules/datatables.net-dt/css/jquery.dataTables.min.css",
+              "node_modules/shepherd.js/dist/css/shepherd.css"
             ],
             "scripts": [
               "src/assets/js/iconselect.js",

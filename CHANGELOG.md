@@ -1,3 +1,7 @@
+# 3.2.6 (Unpublished)
+### New Features
+ - #13 add support for style `shepherdJS`.
+
 # 3.2.5
 ### New Features
  - update to angular 17

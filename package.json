@@ -1,6 +1,6 @@
 {
     "name": "SelfHelp",
-    "version": "3.2.5",
+    "version": "3.2.6",
     "author": "Stefan Kodzhabashev",
     "homepage": "https://www.tpf.philhum.unibe.ch",
     "scripts": {
@@ -43,6 +43,7 @@
         "@ngx-translate/http-loader": "^8.0.0",
         "angular-datatables": "^16.0.0",
         "angular-plotly.js": "^5.2.2",
+        "angular-shepherd": "^17.0.0",
         "bootstrap": "4.6",
         "capacitor-ios-autofill-save-password": "^2.0.0",
         "capacitor-native-settings": "github:Kodzhabashev/capacitor-native-settings",
