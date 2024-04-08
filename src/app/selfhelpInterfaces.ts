@@ -470,6 +470,13 @@ export interface HTMLTagStyle extends Style {
     html_tag: StyleField;
 }
 
+export interface ShepherdJSStyle extends Style {
+    options: StyleField;
+    steps: StyleField;
+    show_once: StyleField;
+    use_javascript: StyleField;
+}
+
 export interface MessageBoardMessage {
     color: string,
     icon_counter: any,

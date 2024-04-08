@@ -79,6 +79,7 @@ import { OpenAppButtonStyleComponent } from '../styles/open-app-button-style/ope
 import { CheckboxStyleComponent } from '../styles/checkbox-style/checkbox-style.component';
 import { LabJSComponent } from '../styles/lab-js/lab-js.component';
 import { HtmlTagStyleComponent } from '../styles/html-tag-style/html-tag-style.component';
+import { ShepherdJsStyleComponent } from '../styles/shepherd-js-style/shepherd-js-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -190,7 +191,8 @@ const routes: Routes = [
         OpenAppButtonStyleComponent,
         CheckboxStyleComponent,
         LabJSComponent,
-        HtmlTagStyleComponent
+        HtmlTagStyleComponent,
+        ShepherdJsStyleComponent
     ]
 })
 export class NavigationPageModule {
