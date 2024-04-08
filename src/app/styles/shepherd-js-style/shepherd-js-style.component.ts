@@ -2,6 +2,7 @@ import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { ShepherdService } from 'angular-shepherd';
 import { ShepherdJSStyle } from 'src/app/selfhelpInterfaces';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 declare var $: any;
 
 @Component({
@@ -12,21 +13,34 @@ declare var $: any;
 export class ShepherdJsStyleComponent extends BasicStyleComponent implements AfterViewInit {
     @Input() override style!: ShepherdJSStyle;
 
-    constructor(private shepherdService: ShepherdService) {
+    constructor(private tour: ShepherdService, private selfhelp: SelfhelpService) {
         super();
     }
 
     override ngOnInit(): void {
-        setTimeout(() => {
-            this.initiShepherd();
-        }, 1000);
+
     }
 
     ngAfterViewInit() {
         console.log('view');
         setTimeout(() => {
-            // this.initiShepherd();
-        }, 1000);
+            this.initiShepherd();
+        }, 2000);
+    }
+
+    getPredefinedButtonAction(action: string): Function {
+        if (action.includes('next')) {
+            return () => { return this.tour.next() };
+        } else if (action.includes('back')) {
+            return () => { return this.tour.back() };
+        } else if (action.includes('complete')) {
+            return () => { return this.tour.complete() };
+        } else {
+            return () => {
+                console.error(action);
+                alert('Wrong action, check the console log for more information!');
+            };
+        }
     }
 
     initiShepherd() {
@@ -39,40 +53,32 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                     if (this.getFieldContent('use_javascript') == "1") {
                         try {
                             button.action = eval(button.action);
+                            // button.action = () => {
+                            //     this.selfhelp.openUrl('/tasks');
+                            //     this.tour.next();
+
+                            // }
                         } catch (error) {
-                            if (button.action.includes('next')) {
-                                button.action = this.shepherdService.next;
-                            } else if (button.action.includes('back')) {
-                                button.action = this.shepherdService.back;
-                            } else if (button.action.includes('complete')) {
-                                button.action = this.shepherdService.complete;
-                            }
-                            console.log('Wrong code for: ', button.action, error);
+                            // console.error(error);
+                            button.action = this.getPredefinedButtonAction(button.action);
                         }
                     } else {
-                        if (button.action.includes('next')) {
-                            button.action = this.shepherdService.next;
-                        } else if (button.action.includes('back')) {
-                            button.action = this.shepherdService.back;
-                        } else if (button.action.includes('complete')) {
-                            button.action = this.shepherdService.complete;
-                        } else {
-                            button['orig_action'] = button['action'];
-                            button.action = () => {
-                                alert('Wrong action, check the console log for more information!');
-                            };
-                        }
+                        button.action = this.getPredefinedButtonAction(button.action);
                     }
                 }
             });
         });
         console.log('new steps', steps);
-        this.shepherdService.defaultStepOptions = this.style.options.content;
-        this.shepherdService.modal = true;
-        this.shepherdService.confirmCancel = false;
-        this.shepherdService.addSteps(steps);
-        this.shepherdService.start();
-        console.log('shepherd-service', this.shepherdService);
+        this.tour.defaultStepOptions = this.style.options.content;
+        this.tour.modal = true;
+        this.tour.confirmCancel = false;
+        this.tour.addSteps(steps);
+        if (!this.tour.isActive) {
+            // if not active start it
+            console.log('starttttttttttttttttttttttt');
+            this.tour.start();
+        }
+        console.log('shepherd-service', this.tour);
     }
 
 }
