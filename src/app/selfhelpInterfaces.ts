@@ -475,6 +475,7 @@ export interface ShepherdJSStyle extends Style {
     steps: StyleField;
     show_once: StyleField;
     use_javascript: StyleField;
+    state: any;
 }
 
 export interface MessageBoardMessage {
