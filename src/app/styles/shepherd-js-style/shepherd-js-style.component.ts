@@ -94,7 +94,9 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                 this.tour.confirmCancel = this.style.options.content['confirmCancel'];
             }
             this.tour.addSteps(steps);
-            this.tour.start();
+            setTimeout(() => {
+                this.tour.start();
+            }, this.selfhelp.loadingSpinnerDuration);
         } else {
             this.tour.show(this.style.state['step_index']);
         }

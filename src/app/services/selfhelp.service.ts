@@ -56,6 +56,7 @@ export class SelfhelpService {
     public skin_app: SkinApp = 'ios';
     public navigation_module_loaded: Boolean = false;
     public mobilePlatform!: MobilePlatform;
+    public loadingSpinnerDuration = 1000;
 
     constructor(
         private platform: Platform,

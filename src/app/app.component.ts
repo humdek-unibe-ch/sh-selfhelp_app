@@ -54,7 +54,7 @@ export class AppComponent {
             translucent: true,
             showBackdrop: false,
             spinner: null,
-            duration: 1000
+            duration: this.selfhelpSerivce.loadingSpinnerDuration
         });
         await loading.present();
     }
