@@ -54,6 +54,7 @@ export class NavigationPage {
     }
 
     async setTab(nav: SelfHelpNavigation) {
+        console.log('clickkkkkkkkkkkkkkkkkkkkkkkk', nav);
         this.selectMenu(nav);
         const res = await this.selfHelpService.getPage(this.selfHelpService.getUrl(nav));
     }

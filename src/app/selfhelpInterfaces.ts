@@ -441,7 +441,7 @@ export interface CalendarsStyle extends CalendarStyle {
     calendars: any
 }
 
-export interface SbAsterChart extends Style{
+export interface SbAsterChart extends Style {
     label_started: StyleField,
     label_finished: StyleField,
     data: any
@@ -476,6 +476,12 @@ export interface ShepherdJSStyle extends Style {
     show_once: StyleField;
     use_javascript: StyleField;
     state: any;
+}
+
+export interface ShepherdState {
+    step_index: number;
+    tourName: string;
+    trigger_type: "started" | "updated" | "finished";
 }
 
 export interface MessageBoardMessage {
