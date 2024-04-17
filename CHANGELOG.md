@@ -1,4 +1,7 @@
 # 3.2.6 (Unpublished)
+### Bugfix
+ - properly keep the last `page` and on start open that page.
+
 ### New Features
  - #13 add support for style `shepherdJS`.
 

@@ -272,7 +272,7 @@ export class NavigationPageModule {
             for (let i = 0; i < route1[0].children.length; i++) {
                 const element = route1[0].children[i];
                 if (route1[0].children.length > i) {
-                    if (route1[0].children[i].path != route2[0].children[i].path) {
+                    if (!route1[0].children[i].path || route2[0].children[i].path || route1[0].children[i].path != route2[0].children[i].path) {
                         // different path
                         return true;
                     }

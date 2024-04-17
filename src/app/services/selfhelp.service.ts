@@ -277,7 +277,7 @@ export class SelfhelpService {
             this.utils.debugLog('autoLoginResult ', loginRes);
             if (!loginRes) {
                 this.openUrl(this.API_LOGIN);
-            }else{
+            } else {
                 this.autoLoginAttempts = 0;
             }
         } else {
@@ -294,8 +294,8 @@ export class SelfhelpService {
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
                     this.setSelfhelp(currSelfhelp, true);
-                    this.getPage(currSelfhelp.navigation[0].url);
-                    this.setNav(currSelfhelp.navigation[0].url);
+                    this.getPage(currSelfhelp.current_url);
+                    this.setNav(currSelfhelp.current_url);
                 }
                 if (!res.logged_in && alert_fail) {
                     this.presentToast(alert_fail, 'danger');
@@ -394,8 +394,6 @@ export class SelfhelpService {
             this.setSelfhelp(currSelfhelp, true);
             if (!this.initApp) {
                 this.initApp = true;
-                // console.log('Init the app - take all menues');
-                // this.initAllMenuContent();
             }
         }
     }
@@ -472,13 +470,16 @@ export class SelfhelpService {
 
     public async getLocalSelfhelp() {
         await Preferences.get({ key: this.local_selfhelp }).then(async (val) => {
+            let page_url = this.API_HOME;
             if (val.value) {
                 let currSelfhelp = <SelfHelp>JSON.parse(val.value);
                 currSelfhelp.current_modal_url = '';
                 this.setSelfhelp(currSelfhelp, false);
                 this.loadLanguage();
+                page_url = currSelfhelp.current_url;
             }
-            await this.getPage(this.API_HOME);
+            await this.getPage(page_url);
+            this.openUrl(page_url);
         });
     }
 
