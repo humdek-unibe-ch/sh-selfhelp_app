@@ -1,17 +1,19 @@
-<ion-tabs #navigation>
-    <ion-tab-bar slot="bottom">
-        <ion-tab-button *ngFor="let nav of  this.selfHelp ? selfHelp.navigation : []" [tab]="getTabName(nav)" (click)="setTab(nav)">
-            <ion-icon *ngIf="getIcon(nav) !== ''" [name]="getIcon(nav)"></ion-icon>
-            <ion-label>{{nav.title}}</ion-label>
-        </ion-tab-button>
-    </ion-tab-bar>
-</ion-tabs>
-<ion-content *ngIf="selfHelp && selfHelp.navigation && selfHelp.navigation.length === 0">
-    <div class="h-100 w-100 d-flex justify-content-center align-items-center">
-        <div class=''>
-            <!-- Something went wrong -->
+<ng-container *ngIf="this.init">
+    <ion-tabs #navigation>
+        <ion-tab-bar slot="bottom">
+            <ion-tab-button *ngFor="let nav of  this.selfHelp ? selfHelp.navigation : []" [tab]="getTabName(nav)" (click)="setTab(nav)">
+                <ion-icon *ngIf="getIcon(nav) !== ''" [name]="getIcon(nav)"></ion-icon>
+                <ion-label>{{nav.title}}</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
+    <ion-content *ngIf="selfHelp && selfHelp.navigation && selfHelp.navigation.length === 0">
+        <div class="h-100 w-100 d-flex justify-content-center align-items-center">
+            <div class=''>
+                <!-- Something went wrong -->
+            </div>
         </div>
-    </div>
-</ion-content>
+    </ion-content>
+</ng-container>
 <!-- <app-menu></app-menu> -->
 

@@ -596,6 +596,7 @@ export class SelfhelpService {
     }
 
     public setNav(url: string): boolean {
+        this.utils.debugLog('Set selected menu: ', url);
         const currSelfhelp = this.selfhelp.value;
         for (let i = 0; i < currSelfhelp.navigation.length; i++) {
             const nav = currSelfhelp.navigation[i];

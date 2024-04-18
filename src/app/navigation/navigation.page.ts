@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, NgZone, ViewChild } from '@angular/core';
 import { IonTabs } from '@ionic/angular';
 import { SelfHelp } from '../selfhelpInterfaces';
 import { SelfhelpService } from '../services/selfhelp.service';
@@ -10,10 +10,11 @@ import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
     templateUrl: 'navigation.page.html',
     styleUrls: ['navigation.page.scss']
 })
-export class NavigationPage {
+export class NavigationPage implements AfterViewInit {
     public selfHelp?: SelfHelp;
-    private init = false;
+    public init = false;
     private external_css = 'external_css';
+    private selected_menu_url = '';
     @ViewChild('navigation') tabRef?: IonTabs;
 
     constructor(public selfHelpService: SelfhelpService, private zone: NgZone) {
@@ -21,13 +22,18 @@ export class NavigationPage {
             this.zone.run(() => {
                 if (selfHelp) {
                     this.selfHelp = selfHelp;
-                    if (!this.selfHelp.selectedMenu && selfHelp.navigation.length > 0) {
+                    if (this.init && this.selfHelp.selectedMenu && this.selected_menu_url != this.selfHelp.selectedMenu?.url) {
+                        this.selected_menu_url = this.selfHelp.selectedMenu?.url;
+                        this.selectMenu(this.selfHelp.selectedMenu);
+                    }
+                    if (!this.selfHelp.selectedMenu && selfHelp.navigation.length > 0 && !this.init) {
                         //set default tab if none is selected, used in the initialization
                         this.init = true;
                         this.setTab(this.selfHelp.navigation[0]);
                     } else if (this.selfHelp.selectedMenu && !this.init) {
                         this.init = true;
-                        this.selectMenu(this.selfHelp.selectedMenu);
+                        let selMenu = this.selfHelp.selectedMenu;
+                        this.setTab(selMenu);
                     }
                     let ext_css = document.getElementById(this.external_css);
                     if (ext_css) {
@@ -49,14 +55,19 @@ export class NavigationPage {
 
     ngOnInit(): void { }
 
+    ngAfterViewInit() {
+        if (this.selfHelpService.selfhelp.value.selectedMenu) {
+            this.selectMenu(this.selfHelpService.selfhelp.value.selectedMenu);
+        }
+    }
+
     getTabName(nav: SelfHelpNavigation): string {
         return this.selfHelpService.getUrl(nav).replace('/', '');
     }
 
     async setTab(nav: SelfHelpNavigation) {
-        console.log('clickkkkkkkkkkkkkkkkkkkkkkkk', nav);
-        this.selectMenu(nav);
         const res = await this.selfHelpService.getPage(this.selfHelpService.getUrl(nav));
+        this.selectMenu(nav);
     }
 
     selectMenu(nav: SelfHelpNavigation): void {
