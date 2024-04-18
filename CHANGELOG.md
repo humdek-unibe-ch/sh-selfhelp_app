@@ -1,4 +1,4 @@
-# 3.2.6 (Unpublished)
+# 3.2.6
 ### Bugfix
  - properly keep the last `page` and on start open that page.
  - properly mark the selected menu.
