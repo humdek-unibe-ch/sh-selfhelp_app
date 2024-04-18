@@ -202,14 +202,14 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         surveyPdf.data = surveyData;
         // surveyPdf.save(this.style.survey_json.title.default || this.style.survey_json.title);
         let fileName = (this.style.survey_json.title.default || this.style.survey_json.title) + '.pdf';
-        surveyPdf.raw().then(async function(raw) {
+        surveyPdf.raw().then(async function (raw) {
             let res = await Filesystem.writeFile({
                 path: packageJson.name + "/" + fileName,
                 data: raw,
                 directory: Directory.Documents,
                 encoding: Encoding.UTF8,
                 recursive: true
-              });
+            });
             alert('Survey was exported as pdf and the file can be found in your documents folder: ' + packageJson.name);
         });
     };
@@ -241,7 +241,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             .catch((err) => {
                 console.log(err);
                 return false;
-            });;
+            });
     }
 
     private getLocalSurvey(): object | boolean {

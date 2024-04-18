@@ -476,6 +476,8 @@ export interface ShepherdJSStyle extends Style {
     show_once: StyleField;
     use_javascript: StyleField;
     state: any;
+    page_keyword: string;
+    last_url: string;
 }
 
 export interface ShepherdState {
