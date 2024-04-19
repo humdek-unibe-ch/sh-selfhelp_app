@@ -1,3 +1,7 @@
+# 3.2.7 (Unpublished)
+### Bugfix
+ - #15 - add a check if the notifications are enabled and if they are then we generate the token.
+
 # 3.2.6
 ### Bugfix
  - properly keep the last `page` and on start open that page.

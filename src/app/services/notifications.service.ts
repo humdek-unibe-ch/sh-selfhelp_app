@@ -13,8 +13,17 @@ export class NotificationsService {
 
     constructor(private utils: UtilsService, private platform: Platform, public toastController: ToastController, private injector: Injector) { }
 
-    public initPushNotifications() {
+    public async initPushNotifications() {
         PushNotifications.requestPermissions().then((res) => {
+            if (res.receive === 'granted') {
+                // Register with Apple / Google to receive push via APNS/FCM
+                PushNotifications.register();
+            } else {
+                this.utils.debugLog('Error while registering for push notifications', null);
+            }
+        });
+
+        PushNotifications.checkPermissions().then((res) => {
             if (res.receive === 'granted') {
                 // Register with Apple / Google to receive push via APNS/FCM
                 PushNotifications.register();
