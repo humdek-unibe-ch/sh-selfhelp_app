@@ -302,7 +302,7 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     }
 
     private processItems(items: any[]) {
-        items
+        return items
             .filter((i: { label: string; }) => i.label !== '')
             .map((i: { type: string; name: any; label: any; }) => {
                 // Provide a default name based on the label

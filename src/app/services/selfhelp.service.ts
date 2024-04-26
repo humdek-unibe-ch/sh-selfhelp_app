@@ -476,7 +476,7 @@ export class SelfhelpService {
                 currSelfhelp.current_modal_url = '';
                 this.setSelfhelp(currSelfhelp, false);
                 this.loadLanguage();
-                page_url = currSelfhelp.current_url;
+                // page_url = currSelfhelp.current_url;
             }
             await this.getPage(page_url);
             this.openUrl(page_url);
