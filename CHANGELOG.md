@@ -2,6 +2,7 @@
 ### Bugfix
  - #15 - add a check if the notifications are enabled and if they are then we generate the token.
  - update lab.js `css`
+ - do not load last page when the app is started. It is awkward.
 
 # 3.2.6
 ### Bugfix
