@@ -6,6 +6,7 @@ declare var $: any;
 import { ShepherdService } from 'angular-shepherd';
 import { Preferences } from '@capacitor/preferences';
 import { GlobalsService } from 'src/app/services/globals.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
     selector: 'app-shepherd-js-style',
@@ -15,7 +16,7 @@ import { GlobalsService } from 'src/app/services/globals.service';
 export class ShepherdJsStyleComponent extends BasicStyleComponent implements AfterViewInit {
     @Input() override style!: ShepherdJSStyle;
 
-    constructor(private selfhelp: SelfhelpService, private tour: ShepherdService, private globals: GlobalsService) {
+    constructor(private selfhelp: SelfhelpService, private tour: ShepherdService, private globals: GlobalsService, private utils: UtilsService) {
         super();
     }
 
@@ -153,6 +154,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
             value: JSON.stringify(currentShepherdState),
         });
         if (saveOnServe) {
+            this.utils.debugLog('saveShepherd', 'saveShepherd');
             this.selfhelp.execServerRequest(this.url, currentShepherdState).then((res) => { })
                 .catch((err) => {
                     console.log(err);

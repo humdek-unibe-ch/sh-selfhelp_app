@@ -285,6 +285,7 @@ export class SelfhelpService {
     public login(loginValues: LoginValues, alert_fail: string): Promise<boolean> {
         let data = loginValues;
         data['type'] = 'login';
+        this.utils.debugLog('login', 'login');
         return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
@@ -322,6 +323,7 @@ export class SelfhelpService {
     public register(regValues: RegistrationValues): Promise<RegistrationResult> {
         let data = regValues;
         data['type'] = 'register';
+        this.utils.debugLog('register', 'register');
         return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
@@ -347,6 +349,7 @@ export class SelfhelpService {
     }
 
     public validate(validateValues: ValidateValues, url: string): Promise<ValidationResult> {
+        this.utils.debugLog('validate', 'validate');
         return this.execServerRequest(url, validateValues)
             .then((res: SelfHelpPageRequest) => {
                 const result = this.output_messages(res.content);
@@ -366,6 +369,7 @@ export class SelfhelpService {
 
     public resetPassword(resetValues: ResetPasswordValues): Promise<ResetPasswordResult> {
         let data = resetValues;
+        this.utils.debugLog('reset', 'reset');
         return this.execServerRequest(this.globals.SH_API_RESET, data)
             .then((res: SelfHelpPageRequest) => {
                 return {
@@ -435,6 +439,7 @@ export class SelfhelpService {
     }
 
     public getPage(keyword: string): Promise<SelfHelpPageRequest> {
+        this.utils.debugLog('getPage', 'getPage');
         return new Promise((resolve, reject) => {
             this.execServerRequest(keyword, {})
                 .then(async (res: SelfHelpPageRequest) => {
@@ -495,6 +500,7 @@ export class SelfhelpService {
     }
 
     public submitForm(keyword: string, params: any): Promise<boolean> {
+        this.utils.debugLog('submitForm', 'submitForm');
         return this.execServerRequest(keyword, params)
             .then((res: SelfHelpPageRequest) => {
                 if (res) {

@@ -9,6 +9,7 @@ import { IDocOptions, SurveyPDF } from 'survey-pdf';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import packageJson from './../../../../package.json'; // Replace with the actual path to your package.json file
 import { GlobalsService } from 'src/app/services/globals.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         fontSize: 12
     };
 
-    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService) {
+    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService, private utils: UtilsService) {
         super();
     }
 
@@ -232,6 +233,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
 
         }
         data['_json'] = JSON.stringify(data);
+        this.utils.debugLog('saveSurveyJS', 'saveSurveyJS');
         this.selfhelpService.execServerRequest(this.url, data).then((res) => {
             if (data['trigger_type'] == 'finished') {
                 // on successful save on completed survey remove the local storage data

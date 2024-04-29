@@ -3,6 +3,7 @@ import { ShowUserInputStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SelfHelpPageRequest } from './../../selfhelpInterfaces';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
     selector: 'app-show-user-input-style',
@@ -23,7 +24,7 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
         // scrollX: true
     };
 
-    constructor(private selfhelp: SelfhelpService) {
+    constructor(private selfhelp: SelfhelpService, private utils: UtilsService) {
         super();
     }
 
@@ -127,6 +128,7 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
                 }
             }
         }
+        this.utils.debugLog('deleteShowUserINput', 'deleteShowUserInput');
         this.selfhelp.execServerRequest(this.url, { "user_input_remove_id": user_input_remove_id })
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
