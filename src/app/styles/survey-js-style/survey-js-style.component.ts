@@ -8,6 +8,7 @@ import "survey-core/survey.i18n";
 import { IDocOptions, SurveyPDF } from 'survey-pdf';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import packageJson from './../../../../package.json'; // Replace with the actual path to your package.json file
+import { GlobalsService } from 'src/app/services/globals.service';
 
 
 @Component({
@@ -24,7 +25,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         fontSize: 12
     };
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService) {
         super();
     }
 
@@ -260,7 +261,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             if (this.getFieldContent('redirect_at_end') != '') {
                 this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
             } else {
-                this.selfhelpService.getPage(this.selfhelpService.API_HOME);
+                this.selfhelpService.getPage(this.globals.SH_API_HOME);
             }
         } else {
             if (this.getFieldContent('redirect_at_end') != '') {

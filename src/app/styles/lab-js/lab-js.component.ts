@@ -4,6 +4,7 @@ import { LabJSStyle } from 'src/app/selfhelpInterfaces';
 import slugify from 'slug';
 import * as _ from 'lodash';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { GlobalsService } from 'src/app/services/globals.service';
 declare const lab: any;
 declare var $: any;
 
@@ -18,7 +19,7 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
     labjs_experiment: any
     private awaitRegex = /(^|[^\w])await\s+/m;
 
-    constructor(private selfhelpService: SelfhelpService, private elementRef: ElementRef) {
+    constructor(private selfhelpService: SelfhelpService, private elementRef: ElementRef, private globals: GlobalsService) {
         super();
         $('app-lab-js').remove(); //remove any existing labjs leftover
     }
@@ -386,7 +387,7 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
         if (this.getFieldContent('redirect_at_end') != '') {
             this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
         } else {
-            this.selfhelpService.getPage(this.selfhelpService.API_HOME);
+            this.selfhelpService.getPage(this.globals.SH_API_HOME);
         }
     }
 

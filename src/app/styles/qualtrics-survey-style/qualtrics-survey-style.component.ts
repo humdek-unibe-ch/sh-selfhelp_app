@@ -3,6 +3,7 @@ import { QualtricsSurveyStyle } from '../../selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { IFrameComponent, IFrameMessageData, iframeResizer } from 'iframe-resizer';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { GlobalsService } from 'src/app/services/globals.service';
 
 @Component({
     selector: 'app-qualtrics-survey-style',
@@ -16,7 +17,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     private component!: IFrameComponent | null;
     public init = false;
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService) {
         super();
     }
 
@@ -60,7 +61,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
             if (this.getFieldContent('redirect_at_end') != '') {
                 this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
             } else {
-                this.selfhelpService.getPage(this.selfhelpService.API_HOME);
+                this.selfhelpService.getPage(this.globals.SH_API_HOME);
             }
         } else {
             setTimeout(() => {

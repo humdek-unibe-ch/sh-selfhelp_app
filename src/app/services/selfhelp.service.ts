@@ -18,6 +18,7 @@ import config from 'capacitor.config';
 import appConfig from 'src/env/app.config';
 import { SavePassword } from 'capacitor-ios-autofill-save-password';
 import { App } from '@capacitor/app';
+import { GlobalsService } from './globals.service';
 const appVersion = packageJson.version;
 
 
@@ -29,13 +30,8 @@ export class SelfhelpService {
     private defaultAppLocale = appConfig.defaultAppLocale ? appConfig.defaultAppLocale : 'de-CH';
     private isApp: boolean = true;
     public devApp: boolean = appConfig.devApp ? appConfig.devApp : false; // by default is not devApp, set it in the selfhelp-dev config and use it
-    private local_selfhelp: LocalSelfhelp = 'selfhelp';
-    private selfhelp_server: string = 'server';
     public API_ENDPOINT_NATIVE = appConfig.server;
     private API_SERVER_SELECTION = appConfig.server;
-    public API_LOGIN = '/login';
-    public API_RESET = '/reset';
-    public API_HOME = '/home';
     public selfhelp: BehaviorSubject<SelfHelp> = new BehaviorSubject<SelfHelp>({
         navigation: [],
         urls: {},
@@ -66,7 +62,8 @@ export class SelfhelpService {
         private modalController: ModalController,
         private notificationsService: NotificationsService,
         private utils: UtilsService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private globals: GlobalsService
     ) {
         this.platform.ready().then(async () => {
             this.isApp = await Capacitor.isNativePlatform();
@@ -98,7 +95,7 @@ export class SelfhelpService {
     }
 
     public getServer(): Promise<boolean> {
-        return Preferences.get({ key: this.selfhelp_server }).then((val) => {
+        return Preferences.get({ key: this.globals.SH_SELFHELP_SERVER }).then((val) => {
             if (val.value) {
                 this.API_ENDPOINT_NATIVE = <string>val.value;
                 return true;
@@ -263,7 +260,7 @@ export class SelfhelpService {
             newSelfhelp.user_language = page.user_language;
             this.setSelfhelp(newSelfhelp, true);
         }
-        if (!page.logged_in && url != this.API_LOGIN && !url.includes('/validate') && !url.includes(this.API_RESET) && this.autoLoginAttempts == 0) {
+        if (!page.logged_in && url != this.globals.SH_API_LOGIN && !url.includes('/validate') && !url.includes(this.globals.SH_API_RESET) && this.autoLoginAttempts == 0) {
             this.autoLoginAttempts++; // try to autologin only once
             await this.autoLogin();
         }
@@ -276,19 +273,19 @@ export class SelfhelpService {
             const loginRes = await this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
             this.utils.debugLog('autoLoginResult ', loginRes);
             if (!loginRes) {
-                this.openUrl(this.API_LOGIN);
+                this.openUrl(this.globals.SH_API_LOGIN);
             } else {
                 this.autoLoginAttempts = 0;
             }
         } else {
-            this.openUrl(this.API_LOGIN);
+            this.openUrl(this.globals.SH_API_LOGIN);
         }
     }
 
     public login(loginValues: LoginValues, alert_fail: string): Promise<boolean> {
         let data = loginValues;
         data['type'] = 'login';
-        return this.execServerRequest(this.API_LOGIN, data)
+        return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
                 if (currSelfhelp.logged_in != res.logged_in) {
@@ -325,7 +322,7 @@ export class SelfhelpService {
     public register(regValues: RegistrationValues): Promise<RegistrationResult> {
         let data = regValues;
         data['type'] = 'register';
-        return this.execServerRequest(this.API_LOGIN, data)
+        return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
                 const result = this.output_messages(res.content);
@@ -369,7 +366,7 @@ export class SelfhelpService {
 
     public resetPassword(resetValues: ResetPasswordValues): Promise<ResetPasswordResult> {
         let data = resetValues;
-        return this.execServerRequest(this.API_RESET, data)
+        return this.execServerRequest(this.globals.SH_API_RESET, data)
             .then((res: SelfHelpPageRequest) => {
                 return {
                     result: this.output_messages(res.content),
@@ -469,8 +466,8 @@ export class SelfhelpService {
     }
 
     public async getLocalSelfhelp() {
-        await Preferences.get({ key: this.local_selfhelp }).then(async (val) => {
-            let page_url = this.API_HOME;
+        await Preferences.get({ key: this.globals.SH_LOCAL_SELFHELP }).then(async (val) => {
+            let page_url = this.globals.SH_API_HOME;
             if (val.value) {
                 let currSelfhelp = <SelfHelp>JSON.parse(val.value);
                 currSelfhelp.current_modal_url = '';
@@ -485,14 +482,14 @@ export class SelfhelpService {
 
     private saveLocalSelfhelp() {
         Preferences.set({
-            key: this.local_selfhelp,
+            key: this.globals.SH_LOCAL_SELFHELP,
             value: JSON.stringify(this.selfhelp.value),
         });
     }
 
     private saveSelfhelpServer(server: string) {
         Preferences.set({
-            key: this.selfhelp_server,
+            key: this.globals.SH_SELFHELP_SERVER,
             value: server,
         });
     }
@@ -694,7 +691,7 @@ export class SelfhelpService {
         let currSelfhelp = this.selfhelp.value;
         delete currSelfhelp.credentials;
         this.setSelfhelp(currSelfhelp, true);
-        await this.getPage(this.API_LOGIN);
+        await this.getPage(this.globals.SH_API_LOGIN);
         this.getPage(currSelfhelp.navigation[0].url); // set first tab on logout
     }
 
@@ -816,8 +813,8 @@ export class SelfhelpService {
     }
 
     public resetLocalData() {
-        Preferences.remove({ key: this.selfhelp_server });
-        Preferences.remove({ key: this.local_selfhelp });
+        Preferences.remove({ key: this.globals.SH_SELFHELP_SERVER });
+        Preferences.remove({ key: this.globals.SH_LOCAL_SELFHELP });
         Preferences.remove({ key: 'skin_app ' });
     }
 

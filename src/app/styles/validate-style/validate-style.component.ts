@@ -4,6 +4,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { MustMatch } from 'src/app/_helpers/must-match.validator';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { InputStyle, SelectStyle, ValidateStyle, ValidateValues, ValidationResult } from './../../selfhelpInterfaces';
+import { GlobalsService } from 'src/app/services/globals.service';
 
 @Component({
     selector: 'app-validate-style',
@@ -16,7 +17,7 @@ export class ValidateStyleComponent extends BasicStyleComponent implements OnIni
     private extraFormFields: { [key: string]: any } = {};
     inputStyles: any[] = [];
 
-    constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
+    constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService, private globals: GlobalsService) {
         super();
     }
 
@@ -74,7 +75,7 @@ export class ValidateStyleComponent extends BasicStyleComponent implements OnIni
                     if (res.url) {
                         this.selfhelpService.openUrl(res.url as string);
                     } else {
-                        this.selfhelpService.openUrl(this.selfhelpService.API_LOGIN);
+                        this.selfhelpService.openUrl(this.globals.SH_API_LOGIN);
                     }
                 }
             })

@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ResetPasswordResult, ResetPasswordStyle, ResetPasswordValues } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
+import { GlobalsService } from 'src/app/services/globals.service';
 
 interface FormControls {
     user_name: FormControl;
@@ -20,7 +21,7 @@ export class ResetPasswordStyleComponent extends BasicStyleComponent implements 
     public form!: FormGroup;
     public reg_success = false;
 
-    constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
+    constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService, private globals: GlobalsService) {
         super();
     }
 
@@ -58,7 +59,7 @@ export class ResetPasswordStyleComponent extends BasicStyleComponent implements 
                             this.selfhelpService.closeModal('submit');
                         } else {
                             // load the questions
-                            this.selfhelpService.setPage(this.selfhelpService.API_RESET, res.selfhelp_res);
+                            this.selfhelpService.setPage(this.globals.SH_API_RESET, res.selfhelp_res);
                         }
                         if (res.url) {
                             this.selfhelpService.openUrl(res.url as string);
