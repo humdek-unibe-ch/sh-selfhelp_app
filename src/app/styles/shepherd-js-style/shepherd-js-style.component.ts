@@ -5,6 +5,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 declare var $: any;
 import { ShepherdService } from 'angular-shepherd';
 import { Preferences } from '@capacitor/preferences';
+import { GlobalsService } from 'src/app/services/globals.service';
 
 @Component({
     selector: 'app-shepherd-js-style',
@@ -14,7 +15,7 @@ import { Preferences } from '@capacitor/preferences';
 export class ShepherdJsStyleComponent extends BasicStyleComponent implements AfterViewInit {
     @Input() override style!: ShepherdJSStyle;
 
-    constructor(private selfhelp: SelfhelpService, private tour: ShepherdService) {
+    constructor(private selfhelp: SelfhelpService, private tour: ShepherdService, private globals: GlobalsService) {
         super();
     }
 
@@ -47,7 +48,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
      * @returns {Promise<ShepherdState | boolean>} A promise that resolves with the local Shepherd tour state if found, or false if not found.
      */
     private getLocalShepherdState() {
-        return Preferences.get({ key: this.style.options.content['tourName'] }).then((val) => {
+        return Preferences.get({ key: this.globals.SH_SHEPHERD_PREFIX_NAME + this.style.options.content['tourName'] }).then((val) => {
             if (val.value) {
                 return JSON.parse(val.value) as ShepherdState;
             } else {
@@ -66,6 +67,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
             step_index: 0,
             trigger_type: "started"
         };
+        // do not keep the state, on mobile we will always restart shepherd.
         let localState = await this.getLocalShepherdState();
         if (localState && localState !== null && typeof localState === 'object') {
             currentShepherdState = localState;
@@ -147,7 +149,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
      */
     saveShepherdState(currentShepherdState: ShepherdState, saveOnServe: boolean) {
         Preferences.set({
-            key: currentShepherdState.tourName,
+            key: this.globals.SH_SHEPHERD_PREFIX_NAME + currentShepherdState.tourName,
             value: JSON.stringify(currentShepherdState),
         });
         if (saveOnServe) {

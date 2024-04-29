@@ -1,3 +1,7 @@
+# 3.2.8 (Unpublished)
+### New Features
+ - add `globals` service for defining variables
+
 # 3.2.7
 ### Bugfix
  - #15 - add a check if the notifications are enabled and if they are then we generate the token.
