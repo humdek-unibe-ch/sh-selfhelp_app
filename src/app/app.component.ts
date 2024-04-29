@@ -9,6 +9,8 @@ import { register } from 'swiper/element/bundle';
 import { UtilsService } from './services/utils.service';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
+import { Preferences } from '@capacitor/preferences';
+import { GlobalsService } from './services/globals.service';
 register();
 
 @Component({
@@ -25,7 +27,8 @@ export class AppComponent {
         private loadingCtrl: LoadingController,
         private notificationsService: NotificationsService,
         public selfhelpSerivce: SelfhelpService,
-        public utils: UtilsService
+        public utils: UtilsService,
+        private globals: GlobalsService
     ) {
         if (window.localStorage.getItem('skin_app') && window.localStorage.getItem('skin_app') == 'md') {
             this.skinIOS = false;
@@ -42,6 +45,7 @@ export class AppComponent {
                 StatusBar.setStyle({ style: Style.Default });
                 await SplashScreen.hide();
                 this.notificationsService.initPushNotifications();
+                this.clearShepherdState();
             }
         });
     }
@@ -97,5 +101,24 @@ export class AppComponent {
 
     public resetPreview(): void {
         this.selfhelpSerivce.resetServerSelection();
+    }
+
+    /**Clears Shepherd state by removing preferences keys with a specific prefix.
+     * This method is intended for internal use within the AppComponent.
+     * @description
+     * @author Stefan Kodzhabashev
+     * @date 29/04/2024
+     * @private
+     * @memberof AppComponent
+     */
+    private clearShepherdState() {
+        Preferences.keys().then((val) => {
+            val.keys.forEach(key => {
+                if (key.startsWith(this.globals.SH_SHEPHERD_PREFIX_NAME)){
+                    // it is a shepherd state, clear it
+                    Preferences.remove({key:key});
+                }
+            });
+        });
     }
 }
