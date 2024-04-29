@@ -22,18 +22,13 @@ export class NavigationPage implements AfterViewInit {
             this.zone.run(() => {
                 if (selfHelp) {
                     this.selfHelp = selfHelp;
-                    if (this.init && this.selfHelp.selectedMenu && this.selected_menu_url != this.selfHelp.selectedMenu?.url) {
-                        this.selected_menu_url = this.selfHelp.selectedMenu?.url;
-                        this.selectMenu(this.selfHelp.selectedMenu);
-                    }
-                    if (!this.selfHelp.selectedMenu && selfHelp.navigation.length > 0 && !this.init) {
+                    if (!this.selfHelp.selectedMenu && selfHelp.navigation.length > 0) {
                         //set default tab if none is selected, used in the initialization
                         this.init = true;
                         this.setTab(this.selfHelp.navigation[0]);
                     } else if (this.selfHelp.selectedMenu && !this.init) {
                         this.init = true;
-                        let selMenu = this.selfHelp.selectedMenu;
-                        this.setTab(selMenu);
+                        this.selectMenu(this.selfHelp.selectedMenu);
                     }
                     let ext_css = document.getElementById(this.external_css);
                     if (ext_css) {

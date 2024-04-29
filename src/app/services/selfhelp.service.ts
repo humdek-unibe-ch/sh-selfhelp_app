@@ -36,7 +36,7 @@ export class SelfhelpService {
         navigation: [],
         urls: {},
         base_path: '',
-        current_url: '/',
+        current_url: this.globals.SH_API_HOME,
         current_modal_url: '',
         avatar: '',
         external_css: '',
@@ -607,6 +607,7 @@ export class SelfhelpService {
                 this.router.navigate([this.getUrl(nav)]);
                 currSelfhelp.selectedMenu = nav;
                 this.setSelfhelp(currSelfhelp, false);
+                this.utils.debugLog('setNav', nav);
                 return true;
             } else {
                 for (let j = 0; j < nav.children.length; j++) {
@@ -616,6 +617,7 @@ export class SelfhelpService {
                         currSelfhelp.selectedMenu = nav;
                         currSelfhelp.selectedSubMenu = subNav;
                         this.setSelfhelp(currSelfhelp, false);
+                        this.utils.debugLog('setNav', nav);
                         return true;
                     }
                 }
