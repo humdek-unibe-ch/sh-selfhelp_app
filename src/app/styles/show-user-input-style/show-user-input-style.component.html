@@ -8,7 +8,7 @@
         <tr *ngFor="let row of rows">
             <td *ngFor="let cell of getRowCells(row)">{{cell}}</td>
             <td *ngIf="style.can_delete" class="remove-user-input-field"><a data-toggle="modal" data-target=""
-                    class="text-secondary" href="" (click)="deleteAlert(row)"><i class="fas fa-trash"></i></a></td>
+                    class="text-secondary" href="" (click)="deleteAlert(row)"><ion-icon name="trash-outline"></ion-icon></a></td>
         </tr>
     </tbody>
 </table>
