@@ -1,4 +1,8 @@
-# 3.2.8 (Unpublished)
+# 3.2.9  (Unpublished)
+### Bugfix
+ - #19 - fix z-index for color input with `shepherdJS`
+
+# 3.2.8
 ### New Features
  - add `globals` service for defining variables
 
