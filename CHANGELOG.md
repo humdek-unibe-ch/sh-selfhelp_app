@@ -1,4 +1,4 @@
-# 3.2.9  (Unpublished)
+# 3.2.9
 ### Bugfix
  - #19 - fix z-index for color input with `shepherdJS`
  - #19 - keyboard disappearing when focusing input with `shepherdJS` - related to [bug](https://github.com/shepherd-pro/shepherd/issues/1143)
