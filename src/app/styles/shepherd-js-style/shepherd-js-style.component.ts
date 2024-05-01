@@ -108,6 +108,18 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                         }
                     }
                 });
+
+                for (let key in step.when) {
+                    if (key == 'show' || key == 'hide') {
+                        if (this.getFieldContent('use_javascript') == "1") {
+                            try {
+                                step.when[key] = eval(step.when[key]);
+                            } catch (error) {
+                                console.error('Error for when: '+key, step.when[key]);
+                            }
+                        }
+                    }
+                };
             });
             this.tour.defaultStepOptions = this.style.options.content;
             if (this.style.options.content['useModalOverlay']) {

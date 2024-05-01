@@ -1,9 +1,10 @@
 ::ng-deep {
     .shepherd-modal-overlay-container {
-        z-index: 2000;
+        z-index: 1999;
     }
 
     .shepherd-element {
         z-index: 2000;
     }
+
 }
