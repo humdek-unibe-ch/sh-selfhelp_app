@@ -115,7 +115,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                             try {
                                 step.when[key] = eval(step.when[key]);
                             } catch (error) {
-                                console.error('Error for when: '+key, step.when[key]);
+                                console.error('Error for when: ' + key, step.when[key]);
                             }
                         }
                     }
@@ -142,6 +142,11 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                     }
                     shepherdTour.saveShepherdState(currentShepherdState, true);
                 }
+                setTimeout(() => {
+                    // move it inside ion-app so thr elements have the same stacking context
+                    $('.shepherd-modal-overlay-container').appendTo('ion-app');
+                    $('.shepherd-element').appendTo('ion-app');
+                }, 1);
             });
 
             // Catch the complete event
