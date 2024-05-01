@@ -8,7 +8,7 @@
     <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
     <ion-datetime-button [datetime]="'date-'+getFieldContent('name')"></ion-datetime-button>
 
-    <ion-modal class="ion-modal" [keepContentsMounted]="true">
+    <ion-modal class="ion-modal-datepicker" [keepContentsMounted]="true">
         <ng-template>
             <ion-datetime presentation="date" [id]="'date-'+getFieldContent('name')"
                 [formControlName]="getFieldContent('name')"
@@ -22,7 +22,7 @@
     <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
     <ion-datetime-button [datetime]="'datetime-'+getFieldContent('name')"></ion-datetime-button>
 
-    <ion-modal [keepContentsMounted]="true">
+    <ion-modal class="ion-modal-datepicker" [keepContentsMounted]="true">
         <ng-template>
             <ion-datetime [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
                 (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>

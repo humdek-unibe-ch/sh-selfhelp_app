@@ -1,0 +1,18 @@
+::ng-deep {
+    .shepherd-modal-overlay-container {
+        z-index: 20999;
+    }
+
+    .shepherd-element {
+        z-index: 21000;
+    }
+
+    ion-popover {
+        z-index: 30011 !important;
+    }
+
+    .ion-modal-datepicker {
+        z-index: 30011 !important;
+    }
+
+}
