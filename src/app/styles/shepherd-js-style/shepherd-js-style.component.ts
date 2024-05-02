@@ -21,7 +21,9 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
     }
 
     ngAfterViewInit() {
-        this.loadShepherd();
+        setTimeout(() => {
+            this.loadShepherd();
+        }, 100);
     }
 
     /**
@@ -146,7 +148,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                     // move it inside ion-app so thr elements have the same stacking context
                     $('.shepherd-modal-overlay-container').appendTo('ion-app');
                     $('.shepherd-element').appendTo('ion-app');
-                }, 1);
+                }, 50);
             });
 
             // Catch the complete event
