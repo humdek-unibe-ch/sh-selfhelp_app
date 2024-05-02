@@ -1,3 +1,7 @@
+# 3.2.10
+### Bugfix
+ - fix `logout` and then `login` issue where after the login no content is visible
+
 # 3.2.9
 ### Bugfix
  - #19 - fix z-index for color input with `shepherdJS`

@@ -289,11 +289,14 @@ export class SelfhelpService {
         return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
+                console.log('login', res, currSelfhelp);
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
                     this.setSelfhelp(currSelfhelp, true);
-                    this.getPage(currSelfhelp.current_url);
-                    this.setNav(currSelfhelp.current_url);
+                    // if the current url is login, do not use it, use home. Otherwise it will logout
+                    let url = (currSelfhelp.current_url == this.globals.SH_API_LOGIN ? this.globals.SH_API_HOME : currSelfhelp.current_url);
+                    this.getPage(url);
+                    this.setNav(url);
                 }
                 if (!res.logged_in && alert_fail) {
                     this.presentToast(alert_fail, 'danger');
