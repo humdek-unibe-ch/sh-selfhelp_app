@@ -443,6 +443,7 @@ export class SelfhelpService {
 
     public getPage(keyword: string): Promise<SelfHelpPageRequest> {
         this.utils.debugLog('getPage', 'getPage');
+        console.log('get page', keyword)
         return new Promise((resolve, reject) => {
             this.execServerRequest(keyword, {})
                 .then(async (res: SelfHelpPageRequest) => {
@@ -703,7 +704,8 @@ export class SelfhelpService {
         delete currSelfhelp.credentials;
         this.setSelfhelp(currSelfhelp, true);
         await this.getPage(this.globals.SH_API_LOGIN);
-        this.getPage(currSelfhelp.navigation[0].url); // set first tab on logout
+        this.getPage(this.globals.SH_API_HOME); // set home on logout
+        this.setNav(this.globals.SH_API_HOME);
     }
 
     public async getDeviceID(): Promise<string> {
