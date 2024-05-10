@@ -484,6 +484,7 @@ export interface ShepherdState {
     step_index: number;
     tourName: string;
     trigger_type: "started" | "updated" | "finished";
+    record_id?: number;
 }
 
 export interface MessageBoardMessage {

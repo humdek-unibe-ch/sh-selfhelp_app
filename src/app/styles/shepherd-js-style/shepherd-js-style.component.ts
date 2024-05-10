@@ -79,6 +79,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
             // use the one form DB, if it exist
             // use only the trigger_type, if it was finished;
             currentShepherdState.trigger_type = this.style.state['trigger_type'];
+            currentShepherdState.record_id = this.style.state['record_id'];
         }
         if (this.style.show_once.content == "0" && currentShepherdState.trigger_type === 'finished') {
             // it was finished, but it can be done multiple times
@@ -89,7 +90,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                 trigger_type: "updated" // set it with status updated, because the entry is already in DB
             };
         }
-        if (this.style.show_once.content == "1" && currentShepherdState['trigger_type'] === 'finished') {
+        if (this.style.state && this.style.show_once.content == "1" && currentShepherdState['trigger_type'] === 'finished') {
             // already done, do not show
             return;
         }
@@ -179,6 +180,10 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
                     console.log(err);
                     return false;
                 });
+        }
+        if (currentShepherdState['trigger_type'] == 'finished' && this.selfhelp.selfhelp.value.logged_in) {
+            // tour is finished, the user is logged in, remove the state from local storage. That will be check in the DB
+            Preferences.remove({ key: this.globals.SH_SHEPHERD_PREFIX_NAME + currentShepherdState.tourName });
         }
     }
 

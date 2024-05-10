@@ -1,3 +1,7 @@
+# 3.2.11 (Unpublished)
+### Bugfix
+ - properly handle `shepherd` `view_once` functionality
+
 # 3.2.10
 ### Bugfix
  - fix `logout` and then `login` issue where after the login no content is visible
