@@ -2,6 +2,7 @@
 ### Bugfix
  - properly handle `shepherd` `view_once` functionality
  - properly show HTML entities in `sbAsterChart`
+ - use user language for `input` from type `date` and `datetime`
 
 # 3.2.10
 ### Bugfix

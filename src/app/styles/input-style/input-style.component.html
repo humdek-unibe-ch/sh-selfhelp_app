@@ -10,7 +10,7 @@
 
     <ion-modal class="ion-modal-datepicker" [keepContentsMounted]="true">
         <ng-template>
-            <ion-datetime presentation="date" [id]="'date-'+getFieldContent('name')"
+            <ion-datetime [locale]="this.selfhelpService.getUserLanguage().locale" presentation="date" [id]="'date-'+getFieldContent('name')"
                 [formControlName]="getFieldContent('name')"
                 (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
         </ng-template>
@@ -24,7 +24,7 @@
 
     <ion-modal class="ion-modal-datepicker" [keepContentsMounted]="true">
         <ng-template>
-            <ion-datetime [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
+            <ion-datetime [locale]="this.selfhelpService.getUserLanguage().locale" [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
                 (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>
         </ng-template>
     </ion-modal>

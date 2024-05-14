@@ -3,6 +3,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { InputStyle } from 'src/app/selfhelpInterfaces';
 import { FormGroup } from '@angular/forms';
 import { formatISO } from 'date-fns';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 @Component({
     selector: 'app-input-style',
@@ -14,7 +15,7 @@ export class InputStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: InputStyle;
     @Input() override parentForm!: FormGroup;
 
-    constructor() {
+    constructor(public selfhelpService: SelfhelpService) {
         super();
     }
 
