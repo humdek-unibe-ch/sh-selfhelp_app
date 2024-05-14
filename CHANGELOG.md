@@ -1,4 +1,4 @@
-# 3.2.11 (Unpublished)
+# 3.2.11
 ### Bugfix
  - properly handle `shepherd` `view_once` functionality
  - properly show HTML entities in `sbAsterChart`
