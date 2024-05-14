@@ -4,7 +4,7 @@
         <div class="d-flex align-items-center" *ngFor="let d of this.style.data.data">
             <div class="mr-3 ml-3 rounded-circle border legend-color-circle" [style]="'background-color:' +  d.color">
             </div>
-            <span class="trace-name">{{d.task}}</span>
+            <span class="trace-name" [innerHTML]="d.task"></span>
         </div>
     </div>
 </div>
