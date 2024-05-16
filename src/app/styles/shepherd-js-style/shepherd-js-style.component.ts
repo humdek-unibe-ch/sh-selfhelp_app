@@ -92,6 +92,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
         }
         if (this.style.state && this.style.show_once.content == "1" && currentShepherdState['trigger_type'] === 'finished') {
             // already done, do not show
+            this.tour.hide();
             return;
         }
         if (!this.tour.isActive) {

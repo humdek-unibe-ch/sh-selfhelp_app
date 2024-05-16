@@ -1,6 +1,10 @@
+# 3.2.12 (Unpublished)
+### Bugfix
+ - hide `shepherdJS` when it is not needed
+
 # 3.2.11
 ### Bugfix
- - properly handle `shepherd` `view_once` functionality
+ - properly handle `shepherdJS` `view_once` functionality
  - properly show HTML entities in `sbAsterChart`
  - use user language for `input` from type `date` and `datetime`
 
