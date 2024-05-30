@@ -159,6 +159,10 @@ export class SelfhelpService {
         return new Promise((resolve, reject) => {
             CapacitorHttp.post(options).then(response => {
                 try {
+                    if (typeof response.data === "object") {
+                        this.utils.debugLog('execServerRequest() ' + keyword, response.data);
+                        resolve(response.data);
+                    }
                     this.utils.debugLog('execServerRequest() ' + keyword, JSON.parse(response.data));
                     resolve(JSON.parse(response.data));
                 } catch (error) {
