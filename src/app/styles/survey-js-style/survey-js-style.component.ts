@@ -10,6 +10,7 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import packageJson from './../../../../package.json'; // Replace with the actual path to your package.json file
 import { GlobalsService } from 'src/app/services/globals.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { AlertController } from '@ionic/angular';
 
 
 @Component({
@@ -25,8 +26,9 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     pdfDocOptions: IDocOptions = {
         fontSize: 12
     };
+    surveyJSSavedSuccessfully: boolean = false;
 
-    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService, private utils: UtilsService) {
+    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService, private utils: UtilsService, private alertController: AlertController) {
         super();
     }
 
@@ -38,7 +40,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             if (Number(this.getFieldContent('auto_save_interval')) > 0) {
                 this.autoSaveTimers[this.style.survey_generated_id] = window.setInterval(() => {
                     survey.setValue('trigger_type', 'updated'); // change the trigger type to updated
-                    this.saveSurveyJS(survey);
+                    this.saveSurveyJS(survey, undefined);
                 }, Number(this.getFieldContent('auto_save_interval')) * 1000);
             }
             if (this.getFieldContent('restart_on_refresh') != '1') {
@@ -54,7 +56,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                         }
                     }
                 }
-                this.saveSurveyJS(survey);
+                this.saveSurveyJS(survey, undefined);
             }
             if (!survey.data['response_id']) {
                 var dateNow = Date.now();
@@ -78,9 +80,16 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     ],
                 };
                 survey.setValue('_meta', metaData);
-                this.saveSurveyJS(survey);
+                this.saveSurveyJS(survey, undefined);
             }
-            survey.onCurrentPageChanged.add((sender, options) => {
+            survey.onCurrentPageChanging.add((sender, options) => {
+                console.log('page');
+                options.allow = this.surveyJSSavedSuccessfully;
+                if (this.surveyJSSavedSuccessfully) {
+                    // it was saved move to next page and mark the new page as not saved yet
+                    this.surveyJSSavedSuccessfully = false;
+                    return;
+                }
                 var dateNow = Date.now();
                 var meta: SurveyJSMetaData = survey.getValue('_meta');
                 if (meta) {
@@ -93,9 +102,16 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     sender.setValue('_meta', meta);
                 }
                 sender.setValue('trigger_type', 'updated');
-                this.saveSurveyJS(sender);
+                this.surveyJSSavedSuccessfully = false;
+                this.saveSurveyJS(sender, survey.visiblePages.indexOf(options.newCurrentPage)).then((res) => {
+                    if (res) {
+                        this.surveyJSSavedSuccessfully = true;
+                        survey.currentPage = options.newCurrentPage;
+                    }
+                });;
             });
             survey.onComplete.add((sender, options) => {
+                options.showSaveInProgress();
                 if (Number(this.getFieldContent('auto_save_interval')) > 0) {
                     // clear the timer when the survey is finished
                     clearInterval(this.autoSaveTimers[this.style.survey_generated_id]);
@@ -112,7 +128,16 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 }
                 this.uploadFiles(sender)
                     .then(() => {
-                        this.saveSurveyJS(sender);
+                        this.saveSurveyJS(sender, undefined).then((res) => {
+                            if (res) {
+                                options.showSaveSuccess();
+                                if (survey.data['trigger_type'] == 'finished') {
+                                    this.endSurvey();
+                                }
+                            } else {
+                                options.showSaveError();
+                            }
+                        });
                     })
                     .catch((error: any) => {
                         // Handle any errors that occurred during uploads
@@ -217,34 +242,41 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     };
 
     /**
-     * Save a survey using SurveyJS data and trigger a server request.
-     *
-     * @param {Model} survey - The SurveyJS model representing the survey.
-     * @returns {boolean} Returns true if the survey was successfully saved; otherwise, false.
-     */
-    private saveSurveyJS(survey: Model) {
-        let data = { ...survey.data };
-        data.pageNo = survey.currentPageNo;
-        if (this.getFieldContent('restart_on_refresh') == '0' && data['survey_generated_id']) {
-            Preferences.set({
-                key: data['survey_generated_id'],
-                value: JSON.stringify(data),
-            });
+         * Save a survey using SurveyJS data and trigger a server request.
+         *
+         * @param {Model} survey - The SurveyJS model representing the survey.
+         * @param {Number | undefined} newPageNo - The new page that will be loaded after the save
+         * @returns {boolean} Returns true if the survey was successfully saved; otherwise, false.
+         */
 
-        }
-        data['_json'] = JSON.stringify(data);
-        this.utils.debugLog('saveSurveyJS', 'saveSurveyJS');
-        this.selfhelpService.execServerRequest(this.url, data).then((res) => {
-            if (data['trigger_type'] == 'finished') {
-                // on successful save on completed survey remove the local storage data
-                Preferences.remove({ key: data['survey_generated_id'] });
-                this.endSurvey();
+    /**
+     * @description Save a survey using SurveyJS data and trigger a server request.
+     * @author Stefan Kodzhabashev
+     * @date 30/05/2024
+     * @private
+     * @param {Model} survey - The SurveyJS model representing the survey.
+     * @param {(Number | undefined)} newPageNo - The new page that will be loaded after the save
+     * @return {*} Returns true if the survey was successfully saved; otherwise, false.
+     * @memberof SurveyJSStyleComponent
+     */
+    private saveSurveyJS(survey: Model, newPageNo: Number | undefined): Promise<Boolean> {
+        return new Promise((resolve, reject) => {
+            let data = { ...survey.data };
+            data.pageNo = newPageNo != undefined ? newPageNo : survey.currentPageNo;
+            if (!data['trigger_type'] || !data['response_id']) {
+                // not initialized yet
+                resolve(false);
             }
-        })
-            .catch((err) => {
-                console.log(err);
-                return false;
-            });
+            data['_json'] = JSON.stringify(data);
+            this.utils.debugLog('saveSurveyJS', 'saveSurveyJS');
+            return this.selfhelpService.execServerRequest(this.url, data).then((res) => {
+                resolve(true);
+            })
+                .catch((err) => {
+                    this.dataNotSaved();
+                    resolve(false);
+                });
+        });
     }
 
     private getLocalSurvey(): object | boolean {
@@ -364,6 +396,26 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     });
             }
         });
+    }
+
+    async dataNotSaved(){
+        const alert = await this.alertController.create({
+            cssClass: '',
+            header: 'Error',
+            message: 'Data not saved!',
+            backdropDismiss: false,
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    cssClass: 'text-danger',
+                    handler: () => {
+
+                    }
+                }
+            ]
+        });
+        await alert.present();
     }
 
 }
