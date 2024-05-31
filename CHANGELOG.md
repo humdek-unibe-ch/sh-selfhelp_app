@@ -1,4 +1,4 @@
-# 3.2.12 (Unpublished)
+# 3.2.12
 ### Bugfix
  - hide `shepherdJS` when it is not needed
  - #22 - `surveyJS` check if data is saved before going to the next page. If not saved show an error message.
