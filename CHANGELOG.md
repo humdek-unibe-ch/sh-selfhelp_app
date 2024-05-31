@@ -1,3 +1,7 @@
+# 3.2.13
+### Bugfix
+ - fix duplication entries for surveys
+
 # 3.2.12
 ### Bugfix
  - hide `shepherdJS` when it is not needed

@@ -279,6 +279,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     ],
                 };
                 survey.setValue('_meta', metaData);
+                this.style.last_response = survey.data; // set the last response otherwise it will generate another id
                 this.saveSurveyJS(survey, undefined);
             }
             survey.onCurrentPageChanging.add((sender, options) => {
