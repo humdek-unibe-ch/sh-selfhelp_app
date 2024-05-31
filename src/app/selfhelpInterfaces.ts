@@ -456,7 +456,8 @@ export interface SurveyJSStyle extends Style {
     survey_js_theme: StyleField,
     show_survey: boolean,
     survey_json: any, // survey_js json structure
-    survey_generated_id: string
+    survey_generated_id: string,
+    last_response: any, // the last user response if the survey is not yet finished and should be continued
 }
 
 export interface LabJSStyle extends Style {

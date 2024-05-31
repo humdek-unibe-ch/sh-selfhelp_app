@@ -2,6 +2,7 @@
 ### Bugfix
  - hide `shepherdJS` when it is not needed
  - #22 - `surveyJS` check if data is saved before going to the next page. If not saved show an error message.
+ - #22 - `surveyJS` do not keep local state of the data, always use the DB state when the survey is loaded
 
 # 3.2.11
 ### Bugfix

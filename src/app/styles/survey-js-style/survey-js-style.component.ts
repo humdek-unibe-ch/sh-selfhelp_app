@@ -3,7 +3,6 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SurveyJSMetaData, SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { Model, StylesManager } from "survey-core";
-import { Preferences } from '@capacitor/preferences';
 import "survey-core/survey.i18n";
 import { IDocOptions, SurveyPDF } from 'survey-pdf';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
@@ -45,7 +44,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             }
             if (this.getFieldContent('restart_on_refresh') != '1') {
                 // Restore survey results
-                const notCompletedSurvey = await this.getLocalSurvey();
+                const notCompletedSurvey = this.style.last_response;
                 if (notCompletedSurvey) {
                     var timeoutExpired = this.checkTimeout(this.getFieldContent('timeout'), notCompletedSurvey);
                     if (!timeoutExpired) {
@@ -279,16 +278,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         });
     }
 
-    private getLocalSurvey(): object | boolean {
-        return Preferences.get({ key: this.style.survey_generated_id }).then((val) => {
-            if (val.value) {
-                return JSON.parse(val.value);
-            } else {
-                return false;
-            }
-        });
-    }
-
     private endSurvey() {
         if (this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal('submit');
@@ -398,7 +387,13 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         });
     }
 
-    async dataNotSaved(){
+    /**
+     * @description Show an alert when the survey js is not saved
+     * @author Stefan Kodzhabashev
+     * @date 31/05/2024
+     * @memberof SurveyJSStyleComponent
+     */
+    async dataNotSaved() {
         const alert = await this.alertController.create({
             cssClass: '',
             header: 'Error',
