@@ -447,7 +447,6 @@ export class SelfhelpService {
 
     public getPage(keyword: string): Promise<SelfHelpPageRequest> {
         this.utils.debugLog('getPage', 'getPage');
-        console.log('get page', keyword)
         return new Promise((resolve, reject) => {
             this.execServerRequest(keyword, {})
                 .then(async (res: SelfHelpPageRequest) => {
