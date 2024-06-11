@@ -247,7 +247,8 @@ export interface ShowUserInputStyle extends Style {
     delete_content: StyleField,
     source: StyleField,
     label_date_time: StyleField,
-    can_delete: boolean
+    can_delete: boolean,
+    data_table: string
 }
 
 export interface ButtonStyle extends Style {

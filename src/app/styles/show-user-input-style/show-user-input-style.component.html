@@ -14,9 +14,9 @@
 </table>
 
 <div *ngIf="style.fields.length > 0 && getFieldContent('is_log') === '0'" [class]="getCss()">
-    <ion-item *ngFor="let field of style.fields">
-        <ion-label>{{field.field_label}}</ion-label>
-        <ion-text>{{field.value}}</ion-text>
+    <ion-item *ngFor="let field of getLastRecordField()">
+        <ion-label>{{field.label}}</ion-label>
+        <ion-text>{{(field.value)}}</ion-text>
     </ion-item>
 </div>
 

@@ -35,25 +35,28 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
 
     private prepareDataTable(): void {
         let tableRows: { [key: string]: any } = {};
-        this.header = [this.getFieldContent('label_date_time')];
+        this.header = [];
         this.rows = [];
         this.style.fields.forEach((field: any) => {
-            this.header.push(field['field_label']);
-            if (!tableRows[field['id_user_input_record']]) {
-                tableRows[field['id_user_input_record']] = {};
-                tableRows[field['id_user_input_record']]['id_user_input_record'] = field['id_user_input_record'];
-            }
-            tableRows[field['id_user_input_record']][field['id']] = field['value'];
+            Object.keys(field).forEach(key => {
+                this.header.push(key);
+                if (!tableRows[field['id_user_input_record']]) {
+                    tableRows[field['id_user_input_record']] = {};
+                    tableRows[field['id_user_input_record']]['id_user_input_record'] = field['id_user_input_record'];
+                }
+                tableRows[field['id_user_input_record']][field['id']] = field['value'];
+            });
         });
+        this.header = [...new Set(this.header)];
         if (this.style.can_delete) {
             this.header.push('');
         }
-        this.header = [...new Set(this.header)];
         for (const key in tableRows) {
             if (Object.prototype.hasOwnProperty.call(tableRows, key)) {
                 this.rows.push(tableRows[key]);
             }
         }
+        this.rows = this.style.fields;
     }
 
     public getRowCells(row: any): string[] {
@@ -72,7 +75,10 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
         this.dtOptions.searching = css.includes('dt-searching');
         this.dtOptions.paging = css.includes('dt-bPaginate');
         this.dtOptions.info = css.includes('dt-bInfo');
-        this.dtOptions.columnDefs = [];
+        this.dtOptions.columnDefs = [{
+            "targets": 0, // The first column
+            "visible": false // Hide it
+        }];
 
         //check for ordered columns **********************************************************************************
         // dt-order-0-asc dt-order-1-desc
@@ -120,16 +126,13 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     private deleteRow(row: any): void {
-        let user_input_remove_id = '';
-        for (const key in row) {
-            if (Object.prototype.hasOwnProperty.call(row, key)) {
-                if (key != 'id_user_input_record') {
-                    user_input_remove_id = user_input_remove_id == '' ? parseInt(key).toString() : (user_input_remove_id + ',' + parseInt(key));
-                }
-            }
-        }
         this.utils.debugLog('deleteShowUserINput', 'deleteShowUserInput');
-        this.selfhelp.execServerRequest(this.url, { "user_input_remove_id": user_input_remove_id })
+        this.selfhelp.execServerRequest(this.url,
+            {
+                "delete_record_id": row['record_id'],
+                "data_table": this.style.data_table
+            }
+        )
             .then((res: SelfHelpPageRequest) => {
                 if (res) {
                     this.selfhelp.setPage(this.url, res);
@@ -138,6 +141,23 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
             .catch((err) => {
                 console.log(err);
             });
+    }
+
+    getLastRecordField() {
+        if (this.style.fields.length > 0) {
+            let lastRecord = this.style.fields[this.style.fields.length - 1];
+            let lastRecordFields: any[] = [];
+            Object.keys(lastRecord).forEach(key => {
+                lastRecordFields.push(
+                    {
+                        label: key,
+                        value: lastRecord[key]
+                    }
+                )
+            });
+            return lastRecordFields;
+        }
+        return [];
     }
 
 }

@@ -1,3 +1,7 @@
+# 3.2.14 (Unpublished) Requires SelfHelp v7.0.0+
+### Bugfix
+ - adjust `showUserInput` to work with the adjustments of the user input data
+
 # 3.2.13
 ### Bugfix
  - fix duplication entries for surveys
