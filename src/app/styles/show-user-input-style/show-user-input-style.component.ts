@@ -129,8 +129,7 @@ export class ShowUserInputStyleComponent extends BasicStyleComponent implements 
         this.utils.debugLog('deleteShowUserINput', 'deleteShowUserInput');
         this.selfhelp.execServerRequest(this.url,
             {
-                "delete_record_id": row['record_id'],
-                "data_table": this.style.data_table
+                "delete_record_id": row['record_id']
             }
         )
             .then((res: SelfHelpPageRequest) => {
