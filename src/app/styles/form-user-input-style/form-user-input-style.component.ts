@@ -109,9 +109,9 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         if (this.getFieldContent('confirmation_title') != '') {
             // check for confirmation first
             this.selfhelpService.presentAlertConfirm({
-                msg: this.getFieldContent('label_message'),
+                msg: this.getFieldContent('confirmation_message'),
                 header: this.getFieldContent('confirmation_title'),
-                confirmLabel: this.getFieldContent('label_continue'),
+                confirmLabel: this.getFieldContent('confirmation_continue'),
                 cancelLabel: this.getFieldContent('label_cancel'),
                 callback: () => {
                     this.submitForm(formValues);

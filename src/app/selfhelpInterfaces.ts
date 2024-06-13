@@ -105,8 +105,8 @@ export interface FormUserInputStyle extends Style {
     redirect_at_end: StyleField,
     confirmation_title: StyleField,
     label_cancel: StyleField,
-    label_continue: StyleField,
-    label_message: StyleField,
+    confirmation_continue: StyleField,
+    confirmation_message: StyleField,
     url_cancel: StyleField,
 }
 
@@ -255,8 +255,8 @@ export interface ButtonStyle extends Style {
     type: StyleField,
     label: StyleField,
     label_cancel: StyleField,
-    label_continue: StyleField,
-    label_message: StyleField,
+    confirmation_continue: StyleField,
+    confirmation_message: StyleField,
     confirmation_title: StyleField,
 }
 
