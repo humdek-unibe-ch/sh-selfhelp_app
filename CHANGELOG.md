@@ -2,6 +2,7 @@
 ### Bugfix
  - adjust `showUserInput` to work with the adjustments of the user input data
  - rename field `label_continue` to `confirmation_continue` and `label_message` to `confirmation_message`
+ - add style `entryRecordDelete`
 
 # 3.2.13
 ### Bugfix

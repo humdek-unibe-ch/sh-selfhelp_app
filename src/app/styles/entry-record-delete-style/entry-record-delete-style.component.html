@@ -1,0 +1,6 @@
+<form [formGroup]="form" [class]="getCss()">
+    <ion-input class="d-none" formControlName="delete_record_id" type="hidden" name="delete_record_id"></ion-input>
+    <ion-button *ngIf="getFieldContent('label_delete')" [color]="getFieldContent('type')" size='small'
+        [disabled]="!form.valid" (click)="formSubmitClick()">
+        {{getFieldContent('label_delete')}}</ion-button>
+</form>

@@ -481,6 +481,16 @@ export interface ShepherdJSStyle extends Style {
     last_url: string;
 }
 
+export interface EntryRecordDeleteStyle extends Style {
+    label_delete: StyleField;
+    confirmation_title: StyleField;
+    confirmation_continue: StyleField;
+    confirmation_message: StyleField;
+    type: StyleField;
+    redirect_at_end: StyleField;
+    delete_record_id: number;
+}
+
 export interface ShepherdState {
     step_index: number;
     tourName: string;
