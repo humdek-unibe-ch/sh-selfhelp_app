@@ -1,4 +1,4 @@
-# 3.2.14 (Unpublished) Requires SelfHelp v7.0.0+
+# 3.2.14 (Unpublished) Requires SelfHelp v7.0.0+ for these changes
 ### Bugfix
  - adjust `showUserInput` to work with the adjustments of the user input data
  - rename field `label_continue` to `confirmation_continue` and `label_message` to `confirmation_message`
