@@ -148,7 +148,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     private uploadFiles(survey: Model) {
         return new Promise<void>((resolve, reject) => {
             const questionsToUpload = Object.keys(this.tempFileStorage);
-
             if (questionsToUpload.length === 0) {
                 resolve(); // No files to upload, resolve immediately
             } else {
@@ -170,7 +169,8 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
 
                     const uploadPromise = fetch(this.selfhelpService.API_ENDPOINT_NATIVE + this.url, {
                         method: "POST",
-                        body: formData
+                        body: formData,
+                        credentials: 'include'
                     })
                         .then((response) => {
                             return response.json()

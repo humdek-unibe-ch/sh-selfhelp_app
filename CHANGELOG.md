@@ -5,6 +5,7 @@
  - adjust `showUserInput` to work with the adjustments of the user input data
  - rename field `label_continue` to `confirmation_continue` and `label_message` to `confirmation_message` 
  - check if there is a selected `surveyJS` in the style before trying to save
+ - properly set credentials when uploading files vie surveyJS
 
 # 3.2.13
 ### Bugfix
