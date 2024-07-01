@@ -1,7 +1,7 @@
 # 3.2.14 (Unpublished) Requires SelfHelp v7.0.0+ for these changes
 ### New Features
  - add style `entryRecordDelete`
- - add `height` and `width` fields for style `image`
+ - use `height` and `width` fields for style `image`
 
 ### Bugfix
  - adjust `showUserInput` to work with the adjustments of the user input data
