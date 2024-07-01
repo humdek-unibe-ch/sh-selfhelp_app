@@ -1,3 +1,4 @@
-<ion-img ionImgViewer  *ngIf="getImgSource()"  [class]="(getFieldContent('is_fluid') == '1' ? 'img-fluid ' : '') + getCss()"
-    [src]="getImgSource()" [alt]="getFieldContent('alt')" [title]="getFieldContent('title')" (click)="openViewer()">
+<ion-img ionImgViewer  *ngIf="getImgSource()"  [class]="(getFieldContent('is_fluid') === '1' ? 'img-fluid ' : '') + getCss()"
+    [src]="getImgSource()" [alt]="getFieldContent('alt')" [title]="getFieldContent('title')" (click)="openViewer()"
+    [ngStyle]="getImgStyles()">
 </ion-img>

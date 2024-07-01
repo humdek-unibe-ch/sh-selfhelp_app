@@ -167,7 +167,9 @@ export interface ImageStyle extends Style {
     is_fluid: StyleField,
     title: StyleField,
     alt: StyleField,
-    source: StyleField
+    img_src: StyleField,
+    width: StyleField,
+    height: StyleField
 }
 
 export interface VideoStyle extends Style {

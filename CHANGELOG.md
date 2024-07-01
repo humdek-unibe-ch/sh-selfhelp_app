@@ -1,6 +1,8 @@
 # 3.2.14 (Unpublished) Requires SelfHelp v7.0.0+ for these changes
 ### New Features
  - add style `entryRecordDelete`
+ - add `height` and `width` fields for style `image`
+
 ### Bugfix
  - adjust `showUserInput` to work with the adjustments of the user input data
  - rename field `label_continue` to `confirmation_continue` and `label_message` to `confirmation_message` 

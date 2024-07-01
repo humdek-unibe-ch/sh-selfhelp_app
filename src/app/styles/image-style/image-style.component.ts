@@ -43,4 +43,13 @@ export class ImageStyleComponent extends BasicStyleComponent implements OnInit {
         // }
     }
 
+    getImgStyles() {
+        const width = this.getFieldContent('width');
+        const height = this.getFieldContent('height');
+        return {
+          'width': width,
+          'height': height,
+        };
+      }
+
 }
