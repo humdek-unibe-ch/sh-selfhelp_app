@@ -1,4 +1,4 @@
-# 3.2.14 (Unpublished) Requires SelfHelp v7.0.0+ for these changes
+# 3.2.14 Requires SelfHelp v7.0.0+ for these changes
 ### New Features
  - add style `entryRecordDelete`
  - use `height` and `width` fields for style `image`
