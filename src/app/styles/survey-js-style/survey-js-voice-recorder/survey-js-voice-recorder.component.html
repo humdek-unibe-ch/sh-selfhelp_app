@@ -8,7 +8,10 @@
         </button>
     </div>
 
-    <div *ngIf="recording">
+    <div *ngIf="recording" class="d-flex">
         <audio class="audio-size" [src]="recording" controls></audio>
+        <button (click)="deleteRecording()" class="icon-button">
+            <ion-icon name="trash" color="danger"></ion-icon>
+        </button>
     </div>
 </div>

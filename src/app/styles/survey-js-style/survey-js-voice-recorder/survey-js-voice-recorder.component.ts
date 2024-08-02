@@ -74,4 +74,15 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
             this.isRecording = false; // Ensure the UI updates even if there's an error
         }
     }
+
+    /**
+     * @description Delete recording and remove the audio from the question
+     * @author Stefan Kodzhabashev
+     * @date 02/08/2024
+     * @memberof SurveyJsVoiceRecorderComponent
+     */
+    deleteRecording() {
+        this.recording = null;
+        this.question.value = null;
+    }
 }
