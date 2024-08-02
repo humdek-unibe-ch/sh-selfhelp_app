@@ -40,12 +40,14 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
             this.mediaRecorder.onstop = async () => {
                 const blob = new Blob(this.chunks, { type: 'audio/wav' });
                 this.chunks = [];
-                console.log(blob);
-                const audioURL = await window.URL.createObjectURL(blob);
-                console.log(audioURL);
-                this.recording = audioURL; // Overwrite the previous recording
-                this.isRecording = false; // Ensure the UI updates immediately
-                this.question.value = this.recording;  // Set the question value to the recording URL
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => {
+                    const base64data = reader.result as string;
+                    this.recording = base64data; // Overwrite the previous recording
+                    this.question.value = this.recording;  // Set the question value to the recording Base64
+                    this.isRecording = false; // Ensure the UI updates immediately
+                };
             };
         } catch (err) {
             console.error('Error accessing microphone', err);
