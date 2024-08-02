@@ -13,3 +13,7 @@
   .audio-size {
       width: -webkit-fill-available;
   }
+
+  .icon-button:disabled ion-icon {
+    --ion-color-base: #d1d1d1 !important;
+}

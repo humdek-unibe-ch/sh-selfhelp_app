@@ -34,7 +34,6 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
             // erase previous data
             this.question.value = undefined;
             const permission = await VoiceRecorder.requestAudioRecordingPermission();
-            console.log('start', permission);
             if (permission && permission.value) { // Adjusting the type checking
                 this.isRecording = true;
                 this.question.recordingStartedAt = new Date();
@@ -57,7 +56,6 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
     async stopRecording() {
         try {
             const result = await VoiceRecorder.stopRecording();
-            console.log(result);
             if (result && result.value && result.value.recordDataBase64) {
                 const base64Sound = result.value.recordDataBase64;
                 this.recording = `data:audio/webm;base64,${base64Sound}`;
