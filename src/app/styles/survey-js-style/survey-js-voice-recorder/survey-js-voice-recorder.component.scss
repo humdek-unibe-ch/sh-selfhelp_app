@@ -1,12 +1,15 @@
-.voice-recorder {
-    text-align: center;
+  .icon-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin: 10px;
   }
 
-  button {
-    margin: 10px;
+  ion-icon {
+      font-size: 24px;
+      color: #000;
   }
 
-  audio {
-    display: block;
-    margin: 10px auto;
+  .audio-size {
+      width: -webkit-fill-available;
   }

@@ -443,6 +443,9 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             const componentFactory = componentFactoryResolver.resolveComponentFactory(SurveyJsVoiceRecorderComponent);
             const componentRef = componentFactory.create(injector);
 
+            // Pass the question object to the component
+            componentRef.instance.question = question;
+
             appRef.attachView(componentRef.hostView);
             container.appendChild(componentRef.location.nativeElement);
 

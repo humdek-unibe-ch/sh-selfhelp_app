@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { VoiceRecorder, VoiceRecorderPlugin, RecordingData, GenericResponse, CurrentRecordingStatus } from 'capacitor-voice-recorder';
+import { Component, Input, OnInit } from '@angular/core';
+import { VoiceRecorder } from 'capacitor-voice-recorder';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 @Component({
@@ -8,9 +8,10 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     styleUrls: ['./survey-js-voice-recorder.component.scss'],
 })
 export class SurveyJsVoiceRecorderComponent implements OnInit {
-    isRecording: boolean = false;
-    recordings: string[] = [];
-    mediaRecorder: MediaRecorder | null = null;
+    @Input() question: any;  // Add this line to accept the question object
+    isRecording = false;
+    recording: string | null = null;
+    mediaRecorder: any;
     chunks: any[] = [];
 
     constructor(private selfhelp: SelfhelpService) { }
@@ -20,6 +21,7 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
         VoiceRecorder.requestAudioRecordingPermission().then((res) => {
             console.log(res);
         });
+
         if (!this.selfhelp.getIsApp()) {
             this.requestAudioRecordingPermission();
         }
@@ -30,14 +32,20 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             console.log('Microphone permission granted');
             this.mediaRecorder = new MediaRecorder(stream);
-            this.mediaRecorder.ondataavailable = (event) => {
+
+            this.mediaRecorder.ondataavailable = (event: any) => {
                 this.chunks.push(event.data);
             };
-            this.mediaRecorder.onstop = () => {
+
+            this.mediaRecorder.onstop = async () => {
                 const blob = new Blob(this.chunks, { type: 'audio/wav' });
                 this.chunks = [];
-                const audioURL = window.URL.createObjectURL(blob);
-                this.recordings.push(audioURL);
+                console.log(blob);
+                const audioURL = await window.URL.createObjectURL(blob);
+                console.log(audioURL);
+                this.recording = audioURL; // Overwrite the previous recording
+                this.isRecording = false; // Ensure the UI updates immediately
+                this.question.value = this.recording;  // Set the question value to the recording URL
             };
         } catch (err) {
             console.error('Error accessing microphone', err);
@@ -45,18 +53,41 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
     }
 
     async startRecording() {
-        this.isRecording = true;
-        await VoiceRecorder.startRecording();
-    }
-
-    async stopRecording() {
-        const result = await VoiceRecorder.stopRecording();
-        this.isRecording = false;
-
-        if (result.value && result.value.recordDataBase64) {
-            const audioUrl = 'data:audio/aac;base64,' + result.value.recordDataBase64;
-            this.recordings.push(audioUrl);
+        try {
+            const permission = await VoiceRecorder.requestAudioRecordingPermission();
+            console.log(permission);
+            if (permission && permission.value) { // Adjusting the type checking
+                this.isRecording = true;
+                if (!this.selfhelp.getIsApp()) {
+                    this.mediaRecorder.start();
+                } else {
+                    await VoiceRecorder.startRecording();
+                }
+            }
+        } catch (error) {
+            console.error('Error starting recording', error);
         }
     }
 
+    async stopRecording() {
+        try {
+            if (!this.selfhelp.getIsApp()) {
+                this.mediaRecorder.stop();
+            } else {
+                const result = await VoiceRecorder.stopRecording();
+                console.log(result);
+                if (result && result.value && result.value.recordDataBase64) {
+                    console.log(result);
+                    const base64Sound = result.value.recordDataBase64;
+                    this.recording = `data:audio/aac;base64,${base64Sound}`;
+                }
+            }
+            this.isRecording = false; // Ensure the UI updates immediately
+            this.question.value = this.recording;  // Set the question value to the recording URL
+            console.log(this.recording);
+        } catch (error) {
+            console.error('Error stopping recording', error);
+            this.isRecording = false; // Ensure the UI updates even if there's an error
+        }
+    }
 }
