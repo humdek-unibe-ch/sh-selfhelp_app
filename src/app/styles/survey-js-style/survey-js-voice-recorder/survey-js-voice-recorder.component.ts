@@ -14,11 +14,18 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        VoiceRecorder.requestAudioRecordingPermission().then((res) => {
-            console.log(res);
-        });
+        VoiceRecorder.requestAudioRecordingPermission().then((res) => { });
     }
 
+    /**
+     * @brief Starts the recording process.
+     *
+     * This function requests audio recording permission, and if granted, starts recording audio.
+     * It also resets any previous recording data stored in the `question` object.
+     *
+     * @returns {Promise<void>} A promise that resolves when the recording starts.
+     * @throws {Error} Logs an error message if there is an issue starting the recording.
+     */
     async startRecording() {
         try {
             this.question.recordingStartedAt = undefined;
@@ -38,6 +45,15 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
         }
     }
 
+    /**
+     * @brief Stops the recording process.
+     *
+     * This function stops the audio recording and processes the recorded audio.
+     * It sets the recording data to the `question` object and updates the UI accordingly.
+     *
+     * @returns {Promise<void>} A promise that resolves when the recording stops.
+     * @throws {Error} Logs an error message if there is an issue stopping the recording.
+     */
     async stopRecording() {
         try {
             const result = await VoiceRecorder.stopRecording();

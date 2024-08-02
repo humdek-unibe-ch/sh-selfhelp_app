@@ -33,7 +33,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         private injector: Injector, private appRef: ApplicationRef, private componentFactoryResolver: ComponentFactoryResolver
     ) {
         super();
-        // this.loadMicrophone();
         this.addVoiceRecorderWidget(this.injector, this.appRef, this.componentFactoryResolver);
     }
 
@@ -423,10 +422,16 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         }
     }
 
-    private loadMicrophone() {
-
-    }
-
+    /**
+     * @brief Adds a custom voice recorder widget to the SurveyJS library.
+     *
+     * This function registers a custom widget named "microphone" in the SurveyJS library.
+     * It specifies the widget's properties and behavior, and integrates it with Angular's component system.
+     *
+     * @param {Injector} injector - The Angular injector used to create components dynamically.
+     * @param {ApplicationRef} appRef - The Angular application reference for attaching views.
+     * @param {ComponentFactoryResolver} componentFactoryResolver - The factory resolver for creating Angular components.
+     */
     addVoiceRecorderWidget(injector: Injector, appRef: ApplicationRef, componentFactoryResolver: ComponentFactoryResolver) {
         SurveyCore.CustomWidgetCollection.Instance.addCustomWidget({
           name: "microphone",
