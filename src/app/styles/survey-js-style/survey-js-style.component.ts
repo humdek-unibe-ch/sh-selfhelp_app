@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ApplicationRef, Component,Injector, ComponentFactoryResolver, Input, NgZone, OnInit, SimpleChanges } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SurveyJSMetaData, SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
@@ -10,6 +10,8 @@ import packageJson from './../../../../package.json'; // Replace with the actual
 import { GlobalsService } from 'src/app/services/globals.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AlertController } from '@ionic/angular';
+import * as SurveyCore from "survey-core";
+import { SurveyJsVoiceRecorderComponent } from './survey-js-voice-recorder/survey-js-voice-recorder.component';
 
 
 @Component({
@@ -27,8 +29,12 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     };
     surveyJSSavedSuccessfully: boolean = false;
 
-    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService, private utils: UtilsService, private alertController: AlertController) {
+    constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService, private utils: UtilsService, private alertController: AlertController,
+        private injector: Injector, private appRef: ApplicationRef, private componentFactoryResolver: ComponentFactoryResolver
+    ) {
         super();
+        // this.loadMicrophone();
+        this.addVoiceRecorderWidget(this.injector, this.appRef, this.componentFactoryResolver);
     }
 
     override async ngOnInit() {
@@ -234,6 +240,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
 
     private initSurveyJS() {
         if (this.style.show_survey) {
+            // this.loadMicrophone();
             StylesManager.applyTheme(this.getFieldContent('survey-js-theme'));
             let survey = new Model(this.style.survey_json);
             survey.locale = this.selfhelpService.getUserLanguage().locale;
@@ -415,5 +422,44 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             this.surveyModel = survey;
         }
     }
+
+    private loadMicrophone() {
+
+    }
+
+    addVoiceRecorderWidget(injector: Injector, appRef: ApplicationRef, componentFactoryResolver: ComponentFactoryResolver) {
+        SurveyCore.CustomWidgetCollection.Instance.addCustomWidget({
+          name: "microphone",
+          title: "Voice Recorder",
+          widgetIsLoaded: () => true,
+          isFit: (question:any) => question.getType() === 'microphone',
+          activatedByChanged: function () {
+            SurveyCore.JsonObject.metaData.addClass("microphone", [], undefined, "text");
+          },
+          htmlTemplate: "<div id='voiceRecorderContainer'></div>",
+          afterRender: (question:any, el:any) => {
+            const container = el.querySelector("#voiceRecorderContainer");
+
+            const componentFactory = componentFactoryResolver.resolveComponentFactory(SurveyJsVoiceRecorderComponent);
+            const componentRef = componentFactory.create(injector);
+
+            appRef.attachView(componentRef.hostView);
+            container.appendChild(componentRef.location.nativeElement);
+
+            const onValueChangedCallback = function () {
+              // Add your logic for handling value changes
+            };
+
+            const onReadOnlyChangedCallback = function() {
+
+            };
+
+            question.readOnlyChangedCallback = onReadOnlyChangedCallback;
+            question.valueChangedCallback = onValueChangedCallback;
+            onValueChangedCallback();
+            onReadOnlyChangedCallback();
+          }
+        }, "customtype");
+      }
 
 }

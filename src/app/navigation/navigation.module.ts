@@ -81,6 +81,7 @@ import { LabJSComponent } from '../styles/lab-js/lab-js.component';
 import { HtmlTagStyleComponent } from '../styles/html-tag-style/html-tag-style.component';
 import { ShepherdJsStyleComponent } from '../styles/shepherd-js-style/shepherd-js-style.component';
 import { EntryRecordDeleteStyleComponent } from '../styles/entry-record-delete-style/entry-record-delete-style.component';
+import { SurveyJsVoiceRecorderComponent } from '../styles/survey-js-style/survey-js-voice-recorder/survey-js-voice-recorder.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -194,7 +195,8 @@ const routes: Routes = [
         LabJSComponent,
         HtmlTagStyleComponent,
         ShepherdJsStyleComponent,
-        EntryRecordDeleteStyleComponent
+        EntryRecordDeleteStyleComponent,
+        SurveyJsVoiceRecorderComponent
     ]
 })
 export class NavigationPageModule {

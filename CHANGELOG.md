@@ -1,3 +1,7 @@
+# 3.3.0 (Not released)
+ - add survey-js voice record
+ - add [capacitor-voice-recorder](https://github.com/tchvu3/capacitor-voice-recorder)
+
 # 3.2.14 Requires SelfHelp v7.0.0+ for these changes
 ### New Features
  - add style `entryRecordDelete`

@@ -1,0 +1,13 @@
+<div class="voice-recorder">
+    <button (click)="startRecording()" [disabled]="isRecording">Start Recording</button>
+    <button (click)="stopRecording()" [disabled]="!isRecording">Stop Recording</button>
+
+    <div *ngIf="recordings.length > 0">
+      <h3>Recordings</h3>
+      <ul>
+        <li *ngFor="let recording of recordings">
+          <audio [src]="recording" controls></audio>
+        </li>
+      </ul>
+    </div>
+  </div>
