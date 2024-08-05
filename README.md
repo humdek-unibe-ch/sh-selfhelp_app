@@ -56,7 +56,7 @@ Sub pages are organized as sub-menus
   - `ionic cap sync android`
   - `ionic cap sync ios`
   - Android
-   - `appcenter codepush release -a TPF-UniBe/SelfHelp-Android -c android/app/src/main/assets/public/ -d Production -t 3.2.0 --description 'v3.2.12' --mandatory true`
+   - `appcenter codepush release -a TPF-UniBe/SelfHelp-Android -c android/app/src/main/assets/public/ -d Production -t 3.3.0 --description 'v3.3.12' --mandatory true`
    - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-Android Production`
   - iOS
    - create production: `appcenter codepush deployment add -a TPF-UniBe/SelfHelp-ios Production`
