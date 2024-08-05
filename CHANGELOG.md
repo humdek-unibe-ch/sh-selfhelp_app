@@ -1,4 +1,4 @@
-# 3.3.0 (Not released)
+# 3.3.0
  - add survey-js voice record
  - add [capacitor-voice-recorder](https://github.com/tchvu3/capacitor-voice-recorder)
  - add video capture request
