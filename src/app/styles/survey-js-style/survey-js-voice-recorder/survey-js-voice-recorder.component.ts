@@ -59,7 +59,7 @@ export class SurveyJsVoiceRecorderComponent implements OnInit {
             const result = await VoiceRecorder.stopRecording();
             if (result && result.value && result.value.recordDataBase64) {
                 const base64Sound = result.value.recordDataBase64;
-                this.recording = `data:audio/webm;base64,${base64Sound}`;
+                this.recording = `data:audio/aac;base64,${base64Sound}`;
             }
             this.isRecording = false; // Ensure the UI updates immediately
             let eD = new Date();

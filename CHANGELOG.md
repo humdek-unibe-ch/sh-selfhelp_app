@@ -1,3 +1,6 @@
+# 3.3.1
+ - save voice records in format: `audio/aac`
+
 # 3.3.0
  - add survey-js voice record
  - add [capacitor-voice-recorder](https://github.com/tchvu3/capacitor-voice-recorder)
