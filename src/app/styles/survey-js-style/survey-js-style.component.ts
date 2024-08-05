@@ -1,4 +1,4 @@
-import { ApplicationRef, Component,Injector, ComponentFactoryResolver, Input, NgZone, OnInit, SimpleChanges } from '@angular/core';
+import { ApplicationRef, Component, Injector, ComponentFactoryResolver, Input, NgZone, OnInit, SimpleChanges } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SurveyJSMetaData, SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
@@ -12,6 +12,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { AlertController } from '@ionic/angular';
 import * as SurveyCore from "survey-core";
 import { SurveyJsVoiceRecorderComponent } from './survey-js-voice-recorder/survey-js-voice-recorder.component';
+import { DefaultDark, DefaultLight } from "survey-core/themes";
 
 
 @Component({
@@ -242,6 +243,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             // this.loadMicrophone();
             StylesManager.applyTheme(this.getFieldContent('survey-js-theme'));
             let survey = new Model(this.style.survey_json);
+            survey.applyTheme(DefaultDark);
             survey.locale = this.selfhelpService.getUserLanguage().locale;
             if (Number(this.getFieldContent('auto_save_interval')) > 0) {
                 this.autoSaveTimers[this.style.survey_generated_id] = window.setInterval(() => {
@@ -434,40 +436,36 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
      */
     addVoiceRecorderWidget(injector: Injector, appRef: ApplicationRef, componentFactoryResolver: ComponentFactoryResolver) {
         SurveyCore.CustomWidgetCollection.Instance.addCustomWidget({
-          name: "microphone",
-          title: "Voice Recorder",
-          widgetIsLoaded: () => true,
-          isFit: (question:any) => question.getType() === 'microphone',
-          activatedByChanged: function () {
-            SurveyCore.JsonObject.metaData.addClass("microphone", [], undefined, "text");
-          },
-          htmlTemplate: "<div id='voiceRecorderContainer'></div>",
-          afterRender: (question:any, el:any) => {
-            const container = el.querySelector("#voiceRecorderContainer");
+            name: "microphone",
+            title: "Voice Recorder",
+            widgetIsLoaded: () => true,
+            isFit: (question: any) => question.getType() === 'microphone',
+            activatedByChanged: function () {
+                SurveyCore.JsonObject.metaData.addClass("microphone", [], undefined, "text");
+            },
+            htmlTemplate: "<div id='voiceRecorderContainer'></div>",
+            afterRender: (question: any, el: any) => {
+                const container = el.querySelector("#voiceRecorderContainer");
 
-            const componentFactory = componentFactoryResolver.resolveComponentFactory(SurveyJsVoiceRecorderComponent);
-            const componentRef = componentFactory.create(injector);
+                const componentFactory = componentFactoryResolver.resolveComponentFactory(SurveyJsVoiceRecorderComponent);
+                const componentRef = componentFactory.create(injector);
 
-            // Pass the question object to the component
-            componentRef.instance.question = question;
+                // Pass the question object to the component
+                componentRef.instance.question = question;
 
-            appRef.attachView(componentRef.hostView);
-            container.appendChild(componentRef.location.nativeElement);
+                appRef.attachView(componentRef.hostView);
+                container.appendChild(componentRef.location.nativeElement);
 
-            const onValueChangedCallback = function () {
-              // Add your logic for handling value changes
-            };
+                const updateComponentState = () => {
+                    console.log(question.isReadOnly);
+                    componentRef.instance.disabled = question.isReadOnly;
+                };
 
-            const onReadOnlyChangedCallback = function() {
-
-            };
-
-            question.readOnlyChangedCallback = onReadOnlyChangedCallback;
-            question.valueChangedCallback = onValueChangedCallback;
-            onValueChangedCallback();
-            onReadOnlyChangedCallback();
-          }
+                // Add observer for readOnly changes
+                question.readOnlyChangedCallback = updateComponentState;
+                updateComponentState();
+            }
         }, "customtype");
-      }
+    }
 
 }

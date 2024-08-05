@@ -1,7 +1,7 @@
 <div class="d-flex flex-column">
     <div class="d-flex">
-        <button (click)="startRecording()" class="icon-button" [disabled]="isRecording">
-            <ion-icon name="mic" color="primary"></ion-icon>
+        <button (click)="startRecording()" class="icon-button" [disabled]="isRecording || disabled">
+            <ion-icon name="mic"></ion-icon>
         </button>
         <button (click)="stopRecording()" class="icon-button" [disabled]="!isRecording">
             <ion-icon name="square" color="danger"></ion-icon>

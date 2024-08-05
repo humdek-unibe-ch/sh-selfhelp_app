@@ -1,19 +1,20 @@
-  .icon-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin: 10px;
-  }
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
 
-  ion-icon {
-      font-size: 24px;
-      color: #000;
-  }
+ion-icon {
+    font-size: 24px;
+    // color: var(--sjs-primary-forecolor, var(--primary-foreground, #fff));
+    // background-color: var(--sjs-primary-backcolor-dark, var(--primary-background, #fff));
+}
 
-  .audio-size {
-      width: -webkit-fill-available;
-  }
+.audio-size {
+    width: -webkit-fill-available;
+}
 
-  .icon-button:disabled ion-icon {
+.icon-button:disabled ion-icon {
     --ion-color-base: #d1d1d1 !important;
 }

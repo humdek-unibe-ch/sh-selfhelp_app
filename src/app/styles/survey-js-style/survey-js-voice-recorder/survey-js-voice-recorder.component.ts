@@ -8,6 +8,7 @@ import { VoiceRecorder } from 'capacitor-voice-recorder';
 })
 export class SurveyJsVoiceRecorderComponent implements OnInit {
     @Input() question: any;  // Add this line to accept the question object
+    @Input() disabled: boolean = false;
     isRecording = false;
     recording: string | null = null;
 
