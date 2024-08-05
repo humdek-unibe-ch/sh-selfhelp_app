@@ -7,8 +7,8 @@
 
 ion-icon {
     font-size: 24px;
-    // color: var(--sjs-primary-forecolor, var(--primary-foreground, #fff));
-    // background-color: var(--sjs-primary-backcolor-dark, var(--primary-background, #fff));
+    color: var(--sjs-primary-forecolor, var(--primary-foreground, #fff));
+    background-color: var(--sjs-primary-backcolor-dark, var(--primary-background, #fff));
 }
 
 .audio-size {
@@ -16,5 +16,9 @@ ion-icon {
 }
 
 .icon-button:disabled ion-icon {
-    --ion-color-base: #d1d1d1 !important;
+    opacity: 0.25;
+}
+
+.danger-icon {
+    background-color: transparent !important;
 }
