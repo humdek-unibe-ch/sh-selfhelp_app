@@ -941,4 +941,14 @@ export class SelfhelpService {
             }
         });
     }
+
+    /**
+     * Gets the current system theme preference.
+     *
+     * @returns { 'dark' | 'light' } - Returns 'dark' if the system prefers dark mode, otherwise 'light'.
+     */
+    public getSystemTheme(): 'dark' | 'light' {
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        return darkModeMediaQuery.matches ? 'dark' : 'light';
+    }
 }

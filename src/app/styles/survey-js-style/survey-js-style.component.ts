@@ -243,7 +243,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             // this.loadMicrophone();
             StylesManager.applyTheme(this.getFieldContent('survey-js-theme'));
             let survey = new Model(this.style.survey_json);
-            survey.applyTheme(DefaultLight);
+            survey.applyTheme(this.selfhelpService.getSystemTheme() === 'dark' ? DefaultDark : DefaultLight);
             survey.locale = this.selfhelpService.getUserLanguage().locale;
             if (Number(this.getFieldContent('auto_save_interval')) > 0) {
                 this.autoSaveTimers[this.style.survey_generated_id] = window.setInterval(() => {
@@ -457,7 +457,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 container.appendChild(componentRef.location.nativeElement);
 
                 const updateComponentState = () => {
-                    console.log(question.isReadOnly);
                     componentRef.instance.disabled = question.isReadOnly;
                 };
 
