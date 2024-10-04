@@ -4,13 +4,13 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { NotificationsService } from './services/notifications.service';
 import { SelfhelpService } from './services/selfhelp.service';
-import { InstallMode, codePush } from '@dwimcore/capacitor-codepush';
 import { register } from 'swiper/element/bundle';
 import { UtilsService } from './services/utils.service';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 import { GlobalsService } from './services/globals.service';
+import { codePush, InstallMode } from 'cap-codepush';
 register();
 
 @Component({

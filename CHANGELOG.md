@@ -1,3 +1,6 @@
+# 3.4.0
+ - update to Capacitor 6
+
 # 3.3.1
  - save voice records in format: `audio/aac`
 
