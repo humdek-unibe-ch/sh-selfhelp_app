@@ -1,3 +1,6 @@
+# 3.4.1
+ - properly open button url with `mailto`. Ex: `mailto:someone@example.com?subject=Your%20Subject&amp;body=Your%20message%20here`
+
 # 3.4.0
  - update to Capacitor 6
 

@@ -29,7 +29,12 @@ export class ButtonStyleComponent extends BasicStyleComponent implements OnInit 
                 }
             });
         } else {
-            this.selfhelp.openUrl(url);
+            console.log(url);
+            if (url.startsWith('mailto:')) {
+                window.location.href = url;
+            } else {
+                this.selfhelp.openUrl(url);
+            }
         }
     }
 
