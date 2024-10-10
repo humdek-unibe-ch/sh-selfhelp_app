@@ -40,7 +40,7 @@ export class AppComponent {
         this.platform.ready().then(async () => {
             this.presentLoadingWithOptions();
             if (await Capacitor.isNativePlatform()) {
-                this.checkForUpdate();
+                // this.checkForUpdate();
                 this.initDeepLinking();
                 StatusBar.setStyle({ style: Style.Default });
                 await SplashScreen.hide();
