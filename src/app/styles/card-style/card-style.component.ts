@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CardStyle } from 'src/app/selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-card-style',
@@ -10,6 +11,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 })
 export class CardStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: CardStyle;
+    @Input() override parentForm!: FormGroup;
     isCardExpanded!: boolean;
 
     constructor(private selfhelp: SelfhelpService) {

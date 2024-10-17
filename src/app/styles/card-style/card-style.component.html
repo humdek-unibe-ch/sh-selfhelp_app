@@ -10,7 +10,7 @@
         </ion-card-title>
     </ion-card-header>
     <ion-card-content class="mobile-body-header" [hidden]="!isCardExpanded">
-        <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent">
+        <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm">
         </app-basic-style>
     </ion-card-content>
 </ion-card>

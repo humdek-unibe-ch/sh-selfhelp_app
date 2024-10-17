@@ -1,3 +1,7 @@
+# 3.4.2 (Not released)
+### Bugfix
+ - #25 -properly load form inputs when the parent is: `alert`, `card`, `conditionalContainer`, `container` or `refContainer`
+
 # 3.4.1
  - properly open button url with `mailto`. Ex: `mailto:someone@example.com?subject=Your%20Subject&amp;body=Your%20message%20here`
 

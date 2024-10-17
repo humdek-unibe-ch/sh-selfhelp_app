@@ -3,6 +3,6 @@
         aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent">
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm">
     </app-basic-style>
 </div>

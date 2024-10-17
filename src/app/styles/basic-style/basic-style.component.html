@@ -1,19 +1,19 @@
 <ng-container *ngIf="this.style" [ngSwitch]="true">
     <app-accordion-list-style *ngSwitchCase="isStyle('accordionList')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-accordion-list-style>
-    <app-alert-style *ngSwitchCase="isStyle('alert')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-alert-style>
+    <app-alert-style *ngSwitchCase="isStyle('alert')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-alert-style>
     <app-audio-style *ngSwitchCase="isStyle('audio')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-audio-style>
     <app-button-style *ngSwitchCase="isStyle('button')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-button-style>
     <app-calendar-style *ngSwitchCase="isStyle('calendar')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-calendar-style>
     <app-calendars-style *ngSwitchCase="isStyle('calendars')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-calendars-style>
-    <app-card-style *ngSwitchCase="isStyle('card')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-card-style>
+    <app-card-style *ngSwitchCase="isStyle('card')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-card-style>
     <app-carousel-style *ngSwitchCase="isStyle('carousel')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-carousel-style>
     <app-checkbox-style *ngSwitchCase="isStyle('checkbox')" [style]="getStyle()" [parentForm]="parentForm"></app-checkbox-style>
-    <app-conditional-container-style *ngSwitchCase="isStyle('conditionalContainer')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-conditional-container-style>
-    <app-container-style *ngSwitchCase="isStyle('container')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-container-style>
+    <app-conditional-container-style *ngSwitchCase="isStyle('conditionalContainer')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-conditional-container-style>
+    <app-container-style *ngSwitchCase="isStyle('container')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-container-style>
     <app-div-style *ngSwitchCase="isStyle('div') || isStyle('conditionFailed')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-div-style>
     <app-div-style *ngSwitchCase="isStyle('navigationNested')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-div-style>
     <app-div-style *ngSwitchCase="isStyle('entryRecord')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-div-style>
-    <app-div-style *ngSwitchCase="isStyle('refContainer')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-div-style>
+    <app-div-style *ngSwitchCase="isStyle('refContainer')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-div-style>
     <app-entry-record-delete-style *ngSwitchCase="isStyle('entryRecordDelete')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-entry-record-delete-style>
     <app-entry-list *ngSwitchCase="isStyle('entryList') || isStyle('loop')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-entry-list>
     <app-figure-style *ngSwitchCase="isStyle('figure')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-figure-style>
