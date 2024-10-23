@@ -1,4 +1,4 @@
-# 3.4.2 (Not released)
+# 3.4.2
 ### Bugfix
  - #25 - properly load form inputs when the parent is: `alert`, `card`, `conditionalContainer`, `container` or `refContainer`
  - #28 - merge the survey data. The default value is kept if not set by the user.
