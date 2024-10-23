@@ -257,7 +257,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 if (notCompletedSurvey) {
                     var timeoutExpired = this.checkTimeout(this.getFieldContent('timeout'), notCompletedSurvey);
                     if (!timeoutExpired) {
-                        survey.data = notCompletedSurvey;
+                        survey.mergeData(notCompletedSurvey);
                         survey.setValue('trigger_type', 'updated');
                         if (survey.data.pageNo) {
                             survey.currentPageNo = survey.data.pageNo;
