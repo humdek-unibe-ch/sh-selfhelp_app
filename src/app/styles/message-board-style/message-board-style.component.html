@@ -11,7 +11,7 @@
                 <ion-icon *ngIf="message.avatar === ''" class="no-avatar" name="person-circle-outline" color="medium">
                 </ion-icon>
                 <h5 class="user_name">{{message.user}}</h5>
-                <small class="text-muted ms-auto" [title]="message.time">
+                <small class="text-body-secondary ms-auto" [title]="message.time">
                     {{message.time}}
                 </small>
             </div>
@@ -23,7 +23,7 @@
                     </span></h5>
                 <span class="messageBoard-message" [innerHTML]="getFieldContent('text_md')"> </span>
             </div>
-            <div class="pl-3">
+            <div class="ps-3">
                 <div *ngFor="let reply of message.reply_messages" class="card mb-1">
                     <div class="card-body py-2">
                         <div class="d-flex align-items-center flex-wrap">
@@ -39,7 +39,7 @@
                             <div class="me-2">
                                 {{reply.value}}
                             </div>
-                            <small class="text-muted ms-auto" [title]="reply.create_time">
+                            <small class="text-body-secondary ms-auto" [title]="reply.create_time">
                                 {{reply.time}}
                             </small>
                         </div>

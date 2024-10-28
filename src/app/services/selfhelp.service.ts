@@ -686,7 +686,7 @@ export class SelfhelpService {
                     },
                     backdropDismiss: true,
                     showBackdrop: true,
-                    cssClass: 'modal-fullscreen'
+                    cssClass: 'modal-fullscreen-sh'
                 });
                 return await modal.present();
             } else {
@@ -721,7 +721,7 @@ export class SelfhelpService {
             // swipeToClose: true,
             backdropDismiss: true,
             showBackdrop: true,
-            cssClass: 'modal-fullscreen'
+            cssClass: 'modal-fullscreen-sh'
         });
         return await modal.present();
     }
@@ -735,7 +735,7 @@ export class SelfhelpService {
         //     // swipeToClose: true,
         //     backdropDismiss: true,
         //     showBackdrop: true,
-        //     cssClass: 'modal-fullscreen'
+        //     cssClass: 'modal-fullscreen-sh'
         // });
         // return await modal.present();
     }
