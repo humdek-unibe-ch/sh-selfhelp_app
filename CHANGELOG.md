@@ -1,6 +1,7 @@
 # 3.5.0 Requires SelfHelp v7.1.0+ for these changes (Not released)
 ### New Features
  - update to `Bootstrap` 5.3
+ - #21 properly load they user theme and add an option in the profile for manually selecting `dark` or `light` mode
 
 # 3.4.2
 ### Bugfix

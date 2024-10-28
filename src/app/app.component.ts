@@ -47,6 +47,7 @@ export class AppComponent {
                 this.notificationsService.initPushNotifications();
                 this.clearShepherdState();
             }
+            this.selfhelpSerivce.setSystemTheme(this.selfhelpSerivce.getSystemTheme());
         });
     }
 

@@ -948,7 +948,27 @@ export class SelfhelpService {
      * @returns { 'dark' | 'light' } - Returns 'dark' if the system prefers dark mode, otherwise 'light'.
      */
     public getSystemTheme(): 'dark' | 'light' {
-        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        return darkModeMediaQuery.matches ? 'dark' : 'light';
+        // Initialize the dark/light palette based on the stored preference or system default
+        const storedTheme = localStorage.getItem('theme');
+        let theme: 'dark' | 'light' = 'light';
+        if (storedTheme === 'dark' || storedTheme === 'light') {
+            theme = storedTheme;
+        } else {
+            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            theme = darkModeMediaQuery ? 'dark' : 'light';
+        }
+        return theme;
+    }
+
+    /**
+     * Set the current system theme preference.
+     *
+     * @returns void
+     */
+    public setSystemTheme(theme: 'dark' | 'light') {
+        // Initialize the dark/light palette based on the stored preference or system default
+        localStorage.setItem('theme', theme);
+        document.documentElement.classList.toggle('ion-palette-dark', theme === 'dark');
+        document.documentElement.setAttribute('data-bs-theme', theme);
     }
 }
