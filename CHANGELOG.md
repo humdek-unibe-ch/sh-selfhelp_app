@@ -1,3 +1,7 @@
+# 3.5.0 Requires SelfHelp v7.1.0+ for these changes (Not released)
+### New Features
+ - update to `Bootstrap` 5.3
+
 # 3.4.2
 ### Bugfix
  - #25 - properly load form inputs when the parent is: `alert`, `card`, `conditionalContainer`, `container` or `refContainer`
