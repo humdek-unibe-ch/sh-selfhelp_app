@@ -4,7 +4,7 @@
             <div>
                 <ion-icon size="large" *ngIf="getFieldContent('is_collapsible') === '1'"
                     [name]="isCardExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-                <ion-icon size="large" class="ml-4" *ngIf="getFieldContent('url_edit') !== ''"
+                <ion-icon size="large" class="ms-3" *ngIf="getFieldContent('url_edit') !== ''"
                     name="create-outline" (click)="edit_link_clicked($event)"></ion-icon>
             </div>
         </ion-card-title>

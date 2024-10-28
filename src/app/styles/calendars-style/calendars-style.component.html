@@ -10,12 +10,12 @@
             <div *ngFor="let calendar of style.calendars"
                 class="calendar-row border-bottom mb-1 p-2 d-flex justify-content-between">
                 <div class="d-flex align-items-center">
-                    <div *ngIf="calendar['color']" class="mr-3 rounded-circle border calendar-color-circle"
+                    <div *ngIf="calendar['color']" class="me-3 rounded-circle border calendar-color-circle"
                         [style]="'background-color:' + calendar['color'] ">
                     </div>
                     <div class="calendar-name">{{calendar['calendar_name'] ? calendar['calendar_name'] : 'Please use input with name `calendar_name`'}}</div>
                 </div>
-                <button class="calendar-edit-btn btn-sm ml-3 btn-primary"
+                <button class="calendar-edit-btn btn-sm ms-3 btn-primary"
                     (click)="editCalendar(calendar)">{{getFieldContent('label_edit_calendar')}}</button>
             </div>
         </ion-card-content>
