@@ -11,6 +11,7 @@ import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 import { GlobalsService } from './services/globals.service';
 import { codePush, InstallMode } from 'cap-codepush';
+import { theme } from './selfhelpInterfaces';
 register();
 
 @Component({
@@ -48,6 +49,10 @@ export class AppComponent {
                 this.clearShepherdState();
             }
             this.selfhelpSerivce.setSystemTheme(this.selfhelpSerivce.getSystemTheme());
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (mediaQuery) => {
+                let theme: theme = mediaQuery.matches ? 'dark' : 'light';
+                this.selfhelpSerivce.setSystemTheme(theme);
+            });
         });
     }
 
@@ -115,9 +120,9 @@ export class AppComponent {
     private clearShepherdState() {
         Preferences.keys().then((val) => {
             val.keys.forEach(key => {
-                if (key.startsWith(this.globals.SH_SHEPHERD_PREFIX_NAME)){
+                if (key.startsWith(this.globals.SH_SHEPHERD_PREFIX_NAME)) {
                     // it is a shepherd state, clear it
-                    Preferences.remove({key:key});
+                    Preferences.remove({ key: key });
                 }
             });
         });

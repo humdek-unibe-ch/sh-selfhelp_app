@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor, CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle, theme } from './../selfhelpInterfaces';
 import { GetResult, Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { Device } from '@capacitor/device';
@@ -947,10 +947,10 @@ export class SelfhelpService {
      *
      * @returns { 'dark' | 'light' } - Returns 'dark' if the system prefers dark mode, otherwise 'light'.
      */
-    public getSystemTheme(): 'dark' | 'light' {
+    public getSystemTheme(): theme {
         // Initialize the dark/light palette based on the stored preference or system default
         const storedTheme = localStorage.getItem('theme');
-        let theme: 'dark' | 'light' = 'light';
+        let theme: theme = 'light';
         if (storedTheme === 'dark' || storedTheme === 'light') {
             theme = storedTheme;
         } else {
@@ -965,10 +965,10 @@ export class SelfhelpService {
      *
      * @returns void
      */
-    public setSystemTheme(theme: 'dark' | 'light') {
+    public setSystemTheme(theme: theme) {
         // Initialize the dark/light palette based on the stored preference or system default
         localStorage.setItem('theme', theme);
-        document.documentElement.classList.toggle('ion-palette-dark', theme === 'dark');
+        document.body.classList.toggle('dark', theme === 'dark');
         document.documentElement.setAttribute('data-bs-theme', theme);
     }
 }
