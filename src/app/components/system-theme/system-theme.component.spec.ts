@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DarkLightModeToggleComponent } from './dark-light-mode-toggle.component';
+import { SystemThemeComponent } from './system-theme.component';
 
-describe('DarkLightModeToggleComponent', () => {
-  let component: DarkLightModeToggleComponent;
-  let fixture: ComponentFixture<DarkLightModeToggleComponent>;
+describe('SystemThemeComponent', () => {
+  let component: SystemThemeComponent;
+  let fixture: ComponentFixture<SystemThemeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DarkLightModeToggleComponent ],
+      declarations: [ SystemThemeComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DarkLightModeToggleComponent);
+    fixture = TestBed.createComponent(SystemThemeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

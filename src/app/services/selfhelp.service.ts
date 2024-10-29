@@ -943,31 +943,53 @@ export class SelfhelpService {
     }
 
     /**
-     * Gets the current system theme preference.
-     *
-     * @returns { 'dark' | 'light' } - Returns 'dark' if the system prefers dark mode, otherwise 'light'.
+     * Retrieves the locally stored system theme preference from `localStorage`.
+     * @returns {theme} - The locally stored theme setting ('light', 'dark', or 'auto').
+     *                    Defaults to 'auto' if no valid preference is found.
      */
-    public getSystemTheme(): theme {
+    public getLocalSystemThemeSettings(): theme {
         // Initialize the dark/light palette based on the stored preference or system default
         const storedTheme = localStorage.getItem('theme');
         let theme: theme = 'light';
-        if (storedTheme === 'dark' || storedTheme === 'light') {
+        if (storedTheme === 'dark' || storedTheme === 'light' || storedTheme === 'auto') {
             theme = storedTheme;
         } else {
-            const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            theme = darkModeMediaQuery ? 'dark' : 'light';
+            return 'auto';
         }
         return theme;
     }
 
     /**
-     * Set the current system theme preference.
-     *
-     * @returns void
+     * Determines the current system theme preference, with fallback to user OS settings.
+     * @returns {theme} - Returns the stored theme preference ('dark' or 'light') if set,
+     *                    otherwise defaults to the user's OS preference.
+     */
+    public getSystemTheme(): theme {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark' || storedTheme === 'light') {
+            return storedTheme;
+        } else {
+            let prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            return prefersDark.matches ? 'dark' : 'light';
+        }
+    }
+
+    /**
+     * Saves the system theme preference to `localStorage`.
+     * @param {theme} theme - The theme preference ('light', 'dark', or 'auto') to store.
+     */
+    public saveSystemTheme(theme: theme) {
+        // Initialize the dark/light palette based on the stored preference or system default
+        localStorage.setItem('theme', theme);
+    }
+
+    /**
+     * Applies the specified theme to the document by toggling dark mode.
+     * Sets `data-bs-theme` attribute to control theme styling.
+     * @param {theme} theme - The theme to apply ('light' or 'dark').
      */
     public setSystemTheme(theme: theme) {
         // Initialize the dark/light palette based on the stored preference or system default
-        localStorage.setItem('theme', theme);
         document.body.classList.toggle('dark', theme === 'dark');
         document.documentElement.setAttribute('data-bs-theme', theme);
     }

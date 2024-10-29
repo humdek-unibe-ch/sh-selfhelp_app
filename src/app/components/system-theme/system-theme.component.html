@@ -1,0 +1,7 @@
+<ion-item>
+    <ion-select [label]="'Theme' | translate" interface="action-sheet" [(ngModel)]="systemTheme"
+        (ionChange)="setSystemTheme()">
+        <ion-select-option *ngFor="let theme of themes" [value]="theme.value">{{theme.text}}
+        </ion-select-option>
+    </ion-select>
+</ion-item>

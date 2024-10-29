@@ -49,9 +49,11 @@ export class AppComponent {
                 this.clearShepherdState();
             }
             this.selfhelpSerivce.setSystemTheme(this.selfhelpSerivce.getSystemTheme());
+            // listen for the OS dark mode change
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (mediaQuery) => {
-                let theme: theme = mediaQuery.matches ? 'dark' : 'light';
-                this.selfhelpSerivce.setSystemTheme(theme);
+                if(this.selfhelpSerivce.getLocalSystemThemeSettings() === 'auto'){
+                    this.selfhelpSerivce.setSystemTheme(mediaQuery.matches ? 'dark' : 'light');
+                }
             });
         });
     }

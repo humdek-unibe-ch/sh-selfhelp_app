@@ -5,7 +5,7 @@ export type SkinApp = 'ios' | 'md';
 export type ModalCloseType = 'submit' | 'cancel';
 export type OSShortcuts = 'general_settings' | 'screen_time';
 export type MobilePlatform = 'ios' | 'android';
-export type theme = 'dark' | 'light';
+export type theme = 'dark' | 'light' | 'auto';
 
 export interface TabMenuItem {
     keyword: string;
