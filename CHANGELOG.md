@@ -1,3 +1,7 @@
+# 3.4.3
+### New Features
+ - add `hide` function for shepherd
+
 # 3.4.2
 ### Bugfix
  - #25 - properly load form inputs when the parent is: `alert`, `card`, `conditionalContainer`, `container` or `refContainer`

@@ -38,6 +38,8 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
             return () => { return this.tour.back() };
         } else if (action.includes('complete')) {
             return () => { return this.tour.complete() };
+        } else if (action.includes('hide')) {
+            return () => { return this.tour.hide() };
         } else {
             return () => {
                 console.error(action);
