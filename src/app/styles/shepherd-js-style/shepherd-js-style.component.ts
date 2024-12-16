@@ -163,6 +163,9 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
         } else {
             this.tour.show(currentShepherdState.step_index);
         }
+        if (currentShepherdState['trigger_type'] == 'started') {
+            this.saveShepherdState(currentShepherdState, true);
+        }
     }
 
     /**
@@ -180,7 +183,7 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
             this.utils.debugLog('saveShepherd', 'saveShepherd');
             this.selfhelp.execServerRequest(this.url, currentShepherdState).then((res) => { })
                 .catch((err) => {
-                    console.log(err);
+                    console.error(err);
                     return false;
                 });
         }

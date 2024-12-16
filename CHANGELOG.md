@@ -2,6 +2,7 @@
 ### New Features
  - add `hide` function for shepherd
  - properly save data when `select` is `image_selector`
+ - properly save `shepherd` when initializing with `trigger_type` equal to `started`
 
 # 3.4.2
 ### Bugfix
