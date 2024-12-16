@@ -57,7 +57,6 @@ export class RecordMediaStyleComponent extends BasicStyleComponent implements On
         //     window.setTimeout(() => file.stopRecord(), 3000);
         // });
         this.file.createFile(this.file.externalRootDirectory, 'my_file.m4a', true).then(() => {
-            console.log(this.file.externalRootDirectory);
             let file = this.media.create(this.file.externalRootDirectory.replace(/^file:\/\//, '') + 'my_file.m4a');
             console.log('file');
             file.startRecord();

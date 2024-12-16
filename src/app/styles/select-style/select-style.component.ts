@@ -19,23 +19,24 @@ export class SelectStyleComponent extends BasicStyleComponent implements OnInit 
     }
 
     ngAfterViewInit(): void {
-        if (this.getFieldContent('image_selector') == '1') {
-            this.initImageSelector();
-        }
+        setTimeout(() => {
+            if (this.getFieldContent('image_selector') == '1') {
+                this.initImageSelector();
+            }
+        }, 0);
     }
 
     private initImageSelector(): void {
         let iconSelect = new IconSelect('image_selector-' + this.getFieldContent('id'));
-        let el = document.getElementById('image_selector-' + this.getFieldContent('id'));
+        let el = $('#image_selector-' + this.getFieldContent('id'));
         let fieldName = this.getFieldContent('name');
         let pForm = this.parentForm;
+
+
         if (el) {
-            el.addEventListener('change', (e) => {
-                const newValue: { [key: string]: any } = {};
-                newValue[fieldName] = (e.target as HTMLInputElement).value;
-                // Assuming 'pForm' is a reference to a form element or an object that can be used to set values
-                pForm.setValue(newValue);
-            });
+            $(el).on('changed', function (e) {
+                pForm.controls[fieldName].setValue(iconSelect.getSelectedValue());
+            })
         }
 
         var icons: any[] = [];

@@ -1,6 +1,7 @@
-# 3.4.3
+# 3.4.3 (Not released)
 ### New Features
  - add `hide` function for shepherd
+ - properly save data when `select` is `image_selector`
 
 # 3.4.2
 ### Bugfix

@@ -293,7 +293,6 @@ export class SelfhelpService {
         return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
-                console.log('login', res, currSelfhelp);
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
                     this.setSelfhelp(currSelfhelp, true);
@@ -743,7 +742,7 @@ export class SelfhelpService {
     public getAvatarImg(): string {
         let currSelfhelp = this.selfhelp.value;
         if (currSelfhelp.avatar && !this.isURL(currSelfhelp.avatar)) {
-            return this.getApiEndPointNative() + '/' + currSelfhelp.avatar;
+            return this.getApiEndPointNative() + '/assets/' + currSelfhelp.avatar;
         }
         return '';
     }

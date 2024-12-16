@@ -29,7 +29,6 @@ export class ButtonStyleComponent extends BasicStyleComponent implements OnInit 
                 }
             });
         } else {
-            console.log(url);
             if (url.startsWith('mailto:')) {
                 window.location.href = url;
             } else {

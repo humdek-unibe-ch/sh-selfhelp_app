@@ -18,14 +18,12 @@ export class EntryRecordDeleteStyleComponent extends BasicStyleComponent impleme
     }
 
     override ngOnInit() {
-        console.log(this.style);
         this.form = this.fb.group({
             delete_record_id: [this.style.delete_record_id, Validators.required],  // Adding delete_record_id form control
           });
     }
 
     public formSubmitClick(){
-        console.log(this.getFieldContent('confirmation_message') );
         const formValues = this.form.value;  // Get form values
         if (this.getFieldContent('confirmation_title') != '') {
             // check for confirmation first
