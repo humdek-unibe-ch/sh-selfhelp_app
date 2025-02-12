@@ -10,7 +10,6 @@ import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 import { GlobalsService } from './services/globals.service';
-import { codePush, InstallMode } from 'cap-codepush';
 register();
 
 @Component({
@@ -40,7 +39,6 @@ export class AppComponent {
         this.platform.ready().then(async () => {
             this.presentLoadingWithOptions();
             if (await Capacitor.isNativePlatform()) {
-                // this.checkForUpdate();
                 this.initDeepLinking();
                 StatusBar.setStyle({ style: Style.Default });
                 await SplashScreen.hide();
@@ -61,15 +59,6 @@ export class AppComponent {
             duration: this.selfhelpSerivce.loadingSpinnerDuration
         });
         await loading.present();
-    }
-
-    private checkForUpdate() {
-        if (!this.utils.getDebugMode()) {
-            // sync only if it is not in debug mode
-            if (this.selfhelpSerivce.getIsApp()) {
-                codePush.sync({ updateDialog: false, installMode: InstallMode.IMMEDIATE });
-            }
-        }
     }
 
     initDeepLinking() {

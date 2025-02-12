@@ -1,3 +1,7 @@
+# 3.4.4
+### New Features
+ - remove `capacitor-codepush` as it is not used anymore
+
 # 3.4.3
 ### New Features
  - add `hide` function for shepherd
