@@ -2,7 +2,7 @@ import { ApplicationRef, Component, Injector, ComponentFactoryResolver, Input, N
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SurveyJSMetaData, SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { Model, StylesManager } from "survey-core";
+import { Model, StylesManager, Serializer } from "survey-core";
 import "survey-core/survey.i18n";
 import { IDocOptions, SurveyPDF } from 'survey-pdf';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
@@ -241,6 +241,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     private initSurveyJS() {
         if (this.style.show_survey) {
             // this.loadMicrophone();
+            this.expandSurveyJsForSelfhelp();
             StylesManager.applyTheme(this.getFieldContent('survey-js-theme'));
             let survey = new Model(this.style.survey_json);
             survey.applyTheme(this.selfhelpService.getSystemTheme() === 'dark' ? DefaultDark : DefaultLight);
@@ -291,6 +292,26 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 this.saveSurveyJS(survey, undefined);
             }
             survey.onCurrentPageChanging.add((sender, options) => {
+
+                // Trigger only when going BACK
+            if (!options.isNextPage) {
+                const returningPage = options.newCurrentPage;
+                if (returningPage && returningPage.getPropertyValue("resetOnBack")) {
+                    returningPage.questions.forEach(q => {
+                        // Clear only if the value is not the default
+                        const defaultVal = q.defaultValue;
+
+                        if (defaultVal !== undefined) {
+                            // Set it back to default explicitly
+                            sender.setValue(q.name, defaultVal);
+                        } else {
+                            // No default: just clear it
+                            sender.clearValue(q.name);
+                        }
+                    });
+                }
+            }
+
                 options.allow = this.surveyJSSavedSuccessfully;
                 if (this.surveyJSSavedSuccessfully) {
                     // it was saved move to next page and mark the new page as not saved yet
@@ -465,6 +486,15 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 updateComponentState();
             }
         }, "customtype");
+    }
+
+    private expandSurveyJsForSelfhelp(): void {
+        Serializer.addProperty("page", {
+            name: "resetOnBack:boolean",
+            category: "SelfHelp",
+            default: false,
+            displayName: "Reset answers when returning to page"
+        });
     }
 
 }

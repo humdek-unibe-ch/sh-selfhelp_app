@@ -1,3 +1,7 @@
+# 3.4.5
+### New Features
+ - use `resetOnBack` property for SurveyJS Pages. When enabled, all answers on this page will be cleared when the user navigates back to it. This property was added in surveyJS plugin v1.4.0
+
 # 3.4.4
 ### New Features
  - remove `capacitor-codepush` as it is not used anymore
