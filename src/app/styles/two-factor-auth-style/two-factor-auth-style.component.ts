@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, Input, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { FormBuilder } from '@angular/forms';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
@@ -11,9 +11,11 @@ import { IonInput } from '@ionic/angular';
     templateUrl: './two-factor-auth-style.component.html',
     styleUrls: ['./two-factor-auth-style.component.scss'],
 })
-export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements OnInit {
+export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
     @Input() override style!: TwoFactorAuthStyle;
     code_remaining_time: string = '600'; // Default 10 minutes in seconds
+    private timerInterval: any;
+    private remainingSeconds: number = 600; // 10 minutes in seconds
     
     @ViewChildren('otpInput') otpInputs!: QueryList<IonInput>;
 
@@ -23,6 +25,86 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
 
     override ngOnInit() {
         // Initialize the component
+        this.startCountdownTimer();
+    }
+
+    ngOnDestroy() {
+        // Clear the timer when component is destroyed
+        this.clearTimer();
+    }
+
+    /**
+     * Starts the countdown timer for the 2FA code expiration
+     */
+    private startCountdownTimer(): void {
+        // Initialize the timer with the value from code_remaining_time
+        this.remainingSeconds = parseInt(this.code_remaining_time, 10);
+        
+        // Update the timer display immediately
+        this.updateTimerDisplay();
+        
+        // Set up the interval to update every second
+        this.timerInterval = setInterval(() => {
+            this.remainingSeconds--;
+            
+            if (this.remainingSeconds <= 0) {
+                // Timer expired
+                this.clearTimer();
+                // You might want to handle expiration (e.g., show message, disable inputs)
+                this.handleTimerExpiration();
+            } else {
+                // Update the timer display
+                this.updateTimerDisplay();
+            }
+        }, 1000);
+    }
+
+    /**
+     * Updates the timer display in the format MM:SS
+     */
+    private updateTimerDisplay(): void {
+        const minutes = Math.floor(this.remainingSeconds / 60);
+        const seconds = this.remainingSeconds % 60;
+        
+        // Format as MM:SS
+        const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // Update the timer element
+        const timerElement = document.getElementById('selfhelp-2fa-timer');
+        if (timerElement) {
+            timerElement.textContent = formattedTime;
+        }
+        
+        // Also update the data attribute for any external scripts
+        this.code_remaining_time = this.remainingSeconds.toString();
+    }
+
+    /**
+     * Clears the timer interval
+     */
+    private clearTimer(): void {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    }
+
+    /**
+     * Handles timer expiration
+     */
+    private handleTimerExpiration(): void {
+        // You can implement what happens when the timer expires
+        // For example, show an error message or disable the form
+        const form = document.getElementById('selfhelp-2fa-form') as HTMLFormElement;
+        if (form) {
+            // Disable all inputs
+            this.otpInputs.forEach(input => {
+                input.disabled = true;
+            });
+            
+            // You might want to show an expiration message
+            // This could be implemented by adding an alert to the UI
+        }
     }
 
     /**
