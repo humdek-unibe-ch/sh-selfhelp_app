@@ -1,3 +1,40 @@
-<p>
-  two-factor-auth-style works!
-</p>
+<ion-content class="ion-padding">
+    <div [class]="getCss()">
+        <ion-card class="two-factor-card">
+            <ion-card-content>
+                <h3 class="card-title text-center mb-4">{{getFieldContent('label')}}</h3>
+                <p class="text-center" [innerHTML]="getFieldContent('text_md')"></p>
+
+                <ion-item *ngIf="style.alert_fail && style.alert_fail.content" lines="none" color="danger"
+                    class="ion-margin-bottom alert-item">
+                    <ion-label class="ion-text-wrap" [innerHTML]="getFieldContent('alert_fail')"></ion-label>
+                </ion-item>
+
+                <form method="post" id="selfhelp-2fa-form">
+                    <input type="hidden" name="type" value="2fa_verify">
+
+                    <div class="otp-container">
+                        <ng-container *ngFor="let i of [1,2,3,4,5,6]; let idx = index">
+                            <ion-input #otpInput type="tel" name="digit_{{i}}" class="otp-input" maxlength="1" required
+                                [attr.inputmode]="'numeric'" (ionFocus)="onFocus($event)" (paste)="onPaste($event, idx)"
+                                (ionInput)="onInput($event, idx)">
+                            </ion-input>
+                        </ng-container>
+                    </div>
+
+                    <!-- Hidden submit button for form submission -->
+                    <button type="submit" class="d-none">Submit</button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <div class="timer-container">
+                        <ion-icon name="time-outline"></ion-icon>
+                        <span>{{getFieldContent('label_expiration_2fa')}}</span>
+                        <span id="selfhelp-2fa-timer" [attr.data-time-remaining]="code_remaining_time"
+                            class="timer-countdown">10:00</span>
+                    </div>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>

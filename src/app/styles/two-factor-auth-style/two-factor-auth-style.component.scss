@@ -1,0 +1,102 @@
+/* Card styling */
+.two-factor-card {
+    margin: 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* OTP Input container */
+.otp-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+/* OTP Input styling */
+.otp-input {
+    width: 50px;
+    height: 50px; /* Make height equal to width for square shape */
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --background: var(--ion-color-light);
+    --border-radius: 8px;
+    --border-color: #dee2e6;
+    /* Bootstrap border color */
+    --border-width: 1px;
+    --border-style: solid;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Alert styling */
+.alert-item {
+    --border-radius: 4px;
+    /* Bootstrap default */
+    --padding-start: 16px;
+    --padding-end: 16px;
+    margin-bottom: 1rem;
+    /* Bootstrap spacing */
+}
+
+/* Verify button */
+.verify-button {
+    --border-radius: 8px;
+    --box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+    font-weight: 600;
+    font-size: 16px;
+    height: 50px;
+    margin: 10px 0;
+}
+
+/* Timer container */
+.timer-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #6c757d;
+    /* Bootstrap text-muted */
+    font-size: 14px;
+    margin-top: 1rem;
+    /* Bootstrap spacing */
+
+    ion-icon {
+        font-size: 18px;
+    }
+
+    .timer-countdown {
+        font-weight: bold;
+        color: #007bff;
+        /* Bootstrap primary */
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .otp-input {
+        width: 40px;
+        height: 40px; /* Keep square shape in responsive mode */
+        font-size: 20px;
+    }
+
+    .otp-container {
+        gap: 8px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .two-factor-card {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .otp-input {
+        --background: rgba(255, 255, 255, 0.1);
+        --border-color: rgba(255, 255, 255, 0.1);
+    }
+}
