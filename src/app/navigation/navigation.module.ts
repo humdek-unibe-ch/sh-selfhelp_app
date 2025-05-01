@@ -82,6 +82,7 @@ import { HtmlTagStyleComponent } from '../styles/html-tag-style/html-tag-style.c
 import { ShepherdJsStyleComponent } from '../styles/shepherd-js-style/shepherd-js-style.component';
 import { EntryRecordDeleteStyleComponent } from '../styles/entry-record-delete-style/entry-record-delete-style.component';
 import { SurveyJsVoiceRecorderComponent } from '../styles/survey-js-style/survey-js-voice-recorder/survey-js-voice-recorder.component';
+import { TwoFactorAuthStyleComponent } from '../styles/two-factor-auth-style/two-factor-auth-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -196,7 +197,8 @@ const routes: Routes = [
         HtmlTagStyleComponent,
         ShepherdJsStyleComponent,
         EntryRecordDeleteStyleComponent,
-        SurveyJsVoiceRecorderComponent
+        SurveyJsVoiceRecorderComponent,
+        TwoFactorAuthStyleComponent
     ]
 })
 export class NavigationPageModule {

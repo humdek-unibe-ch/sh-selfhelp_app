@@ -41,7 +41,6 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
             .then((res: boolean | '2fa') => {
                 if (res) {
                     this.selfhelpService.closeModal('submit');
-                    console.log(res);
                     if(res == '2fa'){
                         this.selfhelpService.twoFactorAuth();
                     }

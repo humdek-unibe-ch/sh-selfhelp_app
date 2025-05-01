@@ -404,6 +404,13 @@ export interface ValidateStyle extends Style {
     css_gender: String
 }
 
+export interface TwoFactorAuthStyle extends Style {
+    label_expiration_2fa: StyleField,
+    alert_fail: StyleField,
+    label: StyleField,
+    text_md: StyleField
+}
+
 export interface MessageBoardStyle extends Style {
     comments: StyleField,
     form_name: StyleField,
