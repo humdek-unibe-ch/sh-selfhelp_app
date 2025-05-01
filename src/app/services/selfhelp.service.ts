@@ -286,13 +286,14 @@ export class SelfhelpService {
         }
     }
 
-    public login(loginValues: LoginValues, alert_fail: string): Promise<boolean> {
+    public login(loginValues: LoginValues, alert_fail: string): Promise<boolean | '2fa'> {
         let data = loginValues;
         data['type'] = 'login';
         this.utils.debugLog('login', 'login');
         return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;
+                currSelfhelp.two_factor_auth = res.two_factor_auth;
                 if (currSelfhelp.logged_in != res.logged_in) {
                     currSelfhelp.logged_in = res.logged_in;
                     this.setSelfhelp(currSelfhelp, true);
@@ -302,8 +303,11 @@ export class SelfhelpService {
                     this.setNav(url);
                 }
                 if (!res.logged_in && alert_fail) {
-                    this.presentToast(alert_fail, 'danger');
-                    return false;
+                    let res = currSelfhelp.two_factor_auth ? '2fa' : false;
+                    if (res === false) {
+                        this.presentToast(alert_fail, 'danger');
+                    }
+                    return currSelfhelp.two_factor_auth ? '2fa' : false;;
                 }
                 this.saveCredentials(loginValues);
                 return true;
@@ -949,5 +953,15 @@ export class SelfhelpService {
     public getSystemTheme(): 'dark' | 'light' {
         const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         return darkModeMediaQuery.matches ? 'dark' : 'light';
+    }
+
+    /**
+     * @description Open the two factor authentication page.
+     * @author Stefan Kodzhabashev
+     * @date 13/11/2023
+     * @memberof SelfhelpService
+     */
+    public twoFactorAuth() {
+        this.openUrl(this.globals.SH_API_TWO_FACTOR_AUTH);
     }
 }

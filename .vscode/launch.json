@@ -2,14 +2,13 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "type": "android-webview",
-        "request": "attach",
-        "name": "Attach to Android WebView",
-        "webRoot": "${workspaceFolder}/www",
+        "name": "Debug Ionic in Browser",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:8100",
+        "webRoot": "${workspaceFolder}/src",
         "sourceMaps": true,
-        "sourceMapPathOverrides": {
-          "webpack:/*": "${workspaceFolder}/*"
-        }
+        "breakOnLoad": true
       }
     ]
   }

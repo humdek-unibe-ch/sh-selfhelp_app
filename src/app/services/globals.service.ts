@@ -11,6 +11,6 @@ export class GlobalsService {
     public SH_API_LOGIN = '/login';
     public SH_API_RESET = '/reset';
     public SH_API_HOME = '/home';
-
+    public SH_API_TWO_FACTOR_AUTH = '/two-factor-authentication';
     constructor() { }
 }

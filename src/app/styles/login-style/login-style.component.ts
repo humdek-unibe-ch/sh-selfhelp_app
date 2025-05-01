@@ -38,9 +38,13 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
 
     public login(value: LoginValues): void {
         this.selfhelpService.login(value, this.getFieldContent('alert_fail'))
-            .then((res: boolean) => {
+            .then((res: boolean | '2fa') => {
                 if (res) {
                     this.selfhelpService.closeModal('submit');
+                    console.log(res);
+                    if(res == '2fa'){
+                        this.selfhelpService.twoFactorAuth();
+                    }
                 }
             })
             .catch((err) => {

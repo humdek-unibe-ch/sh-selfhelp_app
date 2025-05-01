@@ -568,7 +568,8 @@ export interface SelfHelpPageRequest {
     external_css: string,
     languages: Language[],
     user_language: Number,
-    redirect_url: string | Boolean
+    redirect_url: string | Boolean,
+    two_factor_auth: boolean,
 }
 
 export interface SecurityQuestion {
@@ -623,8 +624,8 @@ export interface SelfHelp {
     languages?: Language[],
     locale?: string,
     user_language: Number | null,
+    two_factor_auth?: boolean,
 }
-
 export interface AppConfig {
     capacitorConfig: CapacitorConfig,
     server: string,
