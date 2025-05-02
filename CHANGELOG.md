@@ -1,4 +1,4 @@
-# 3.4.6 Not released
+# 3.4.6
 ### New Features
  - add `two-factor` authentication
 

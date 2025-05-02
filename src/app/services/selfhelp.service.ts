@@ -765,8 +765,6 @@ export class SelfhelpService {
             'type': '2fa_verify'
         };
 
-        console.log('twoFactorAuthCode', alert_fail);
-
         // Split the code into individual digits and add to the data object
         if (twoFactorAuthCode && twoFactorAuthCode.length === 6) {
             for (let i = 0; i < 6; i++) {
