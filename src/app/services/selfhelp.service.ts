@@ -759,11 +759,13 @@ export class SelfhelpService {
      * @param twoFactorAuthCode - The 6-digit verification code (as a string)
      * @param alert_fail - Message to display if verification fails
      */
-    public twoFactorAuth(twoFactorAuthCode: string, alert_fail: string): void {
+    public twoFactorAuth(twoFactorAuthCode: string, alert_fail: string): Promise<boolean> {
         // Create the data object for the 2FA verification
         let data: any = {
             'type': '2fa_verify'
         };
+
+        console.log('twoFactorAuthCode', alert_fail);
 
         // Split the code into individual digits and add to the data object
         if (twoFactorAuthCode && twoFactorAuthCode.length === 6) {
@@ -772,24 +774,25 @@ export class SelfhelpService {
             }
         }
 
-        console.log('2fa_verify', data);
-
         this.utils.debugLog('2fa_verify', data);
 
         // Send the request to the 2FA verification endpoint
-        this.execServerRequest<TwoFactorAuthResult>(this.globals.SH_API_TWO_FACTOR_AUTH, data)
+        return this.execServerRequest<TwoFactorAuthResult>(this.globals.SH_API_TWO_FACTOR_AUTH, data)
             .then((res) => {
                 if (res.success) {
                     this.closeModal('cancel');
                     this.getPage(this.globals.SH_API_HOME);
+                    return true;
                 } else {
                     // Use the API's error message if available, otherwise use the default alert_fail message
-                    this.presentToast(res.message || alert_fail, 'danger');
+                    this.presentToast(alert_fail, 'danger');
+                    return false;
                 }
             })
             .catch((err: any) => {
                 console.log(err);
                 this.presentToast(alert_fail, 'danger');
+                return false;
             });
     }
 

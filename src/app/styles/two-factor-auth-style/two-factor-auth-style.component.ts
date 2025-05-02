@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, ViewChildren, QueryList, OnDestroy, AfterViewInit } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { FormBuilder } from '@angular/forms';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
@@ -11,7 +11,7 @@ import { IonInput } from '@ionic/angular';
     templateUrl: './two-factor-auth-style.component.html',
     styleUrls: ['./two-factor-auth-style.component.scss'],
 })
-export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
+export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() override style!: TwoFactorAuthStyle;
 
     // Default timer value in seconds (10 minutes)
@@ -22,6 +22,7 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
 
     private timerInterval: any;
     private remainingSeconds: number = this.DEFAULT_TIMER_SECONDS;
+    private formSubmissionInProgress: boolean = false;
 
     @ViewChildren('otpInput') otpInputs!: QueryList<IonInput>;
 
@@ -32,6 +33,15 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
     override ngOnInit() {
         // Initialize the component
         this.startCountdownTimer();
+    }
+
+    ngAfterViewInit() {
+        // Focus on the first input after view is initialized
+        setTimeout(() => {
+            if (this.otpInputs && this.otpInputs.first) {
+                this.otpInputs.first.setFocus();
+            }
+        }, 300);
     }
 
     ngOnDestroy() {
@@ -224,17 +234,31 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
     /**
      * Check if all inputs are filled and submit the form if they are
      */
-    private checkFormCompletion(): void {
+    private async checkFormCompletion(): Promise<void> {
+        // Prevent multiple executions
+        if (this.formSubmissionInProgress) {
+            return;
+        }
+
         const allFilled = this.otpInputs.toArray().every(input => {
             const value = input.value?.toString() || '';
             return value.length === 1;
         });
 
         if (allFilled) {
-            setTimeout(() => {
-                const code = this.otpInputs.toArray().map(input => input.value).join('');
-                this.selfhelpService.twoFactorAuth(code, this.getFieldContent('alert_fail'));
-            }, 300); // Small delay to allow UI to update
+            this.formSubmissionInProgress = true;
+            const code = this.otpInputs.toArray().map(input => input.value).join('');
+
+            let result = await this.selfhelpService.twoFactorAuth(code, this.getFieldContent('alert_fail'));
+            if(!result){
+                this.formSubmissionInProgress = false;
+                // reset all inputs
+                // focus on the first input
+                this.otpInputs.toArray()[0].setFocus();
+                this.otpInputs.toArray().forEach(input => {
+                    input.value = '';
+                });
+            }
         }
     }
 }
