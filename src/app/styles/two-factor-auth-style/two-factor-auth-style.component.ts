@@ -133,23 +133,32 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
 
     /**
      * Handle key press events for OTP input
-     * Moves focus to next input when a digit is entered
+     * Handles backspace functionality
      */
     onKeyUp(event: KeyboardEvent, currentIndex: number): void {
         const inputs = this.otpInputs.toArray();
+        const input = event.target as HTMLInputElement;
 
-        // If backspace, move to previous input
-        if (event.key === 'Backspace' && currentIndex > 0) {
-            inputs[currentIndex - 1].setFocus();
+        // Handle backspace key
+        if (event.key === 'Backspace') {
+            // Clear current input if it has a value
+            if (input.value) {
+                input.value = '';
+                return;
+            }
+
+            // If current input is empty and not the first input, move to previous input
+            if (currentIndex > 0) {
+                const prevInput = inputs[currentIndex - 1];
+                prevInput.setFocus();
+            }
             return;
         }
 
-        // If a number is entered, move to next input
-        if (/^[0-9]$/.test(event.key) && currentIndex < inputs.length - 1) {
-            inputs[currentIndex + 1].setFocus();
-        }
-
-        // If all inputs are filled, submit the form
+        // NOTE: We don't handle jumping to next input here to avoid double jumps
+        // The jumping is handled in the onInput method
+        
+        // Check if all inputs are filled for form submission
         this.checkFormCompletion();
     }
 
@@ -189,7 +198,7 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
 
     /**
      * Handle input events
-     * Ensures only numeric input is allowed
+     * Ensures only numeric input is allowed and handles jumping to next input
      */
     onInput(event: any, index: number): void {
         const input = event.target;
@@ -207,7 +216,7 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
         if (input.value && index < this.otpInputs.length - 1) {
             this.otpInputs.toArray()[index + 1].setFocus();
         }
-
+        
         // Auto-submit when all fields are filled
         this.checkFormCompletion();
     }

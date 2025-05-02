@@ -17,7 +17,7 @@
                         <ng-container *ngFor="let i of [1,2,3,4,5,6]; let idx = index">
                             <ion-input #otpInput type="tel" name="digit_{{i}}" class="otp-input" maxlength="1" required
                                 [attr.inputmode]="'numeric'" (ionFocus)="onFocus($event)" (paste)="onPaste($event, idx)"
-                                (ionInput)="onInput($event, idx)">
+                                (ionInput)="onInput($event, idx)" (keyup)="onKeyUp($event, idx)">
                             </ion-input>
                         </ng-container>
                     </div>
