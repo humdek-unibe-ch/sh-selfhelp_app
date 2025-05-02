@@ -120,7 +120,15 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
      * Selects all text in the input when focused
      */
     onFocus(event: any): void {
-        event.target.select();
+        // IonInput doesn't have a direct select() method on the event target
+        // Get the native input element and select its content
+        if (event && event.target && event.target.getInputElement) {
+            event.target.getInputElement().then((inputElement: HTMLInputElement) => {
+                if (inputElement) {
+                    inputElement.select();
+                }
+            });
+        }
     }
 
     /**

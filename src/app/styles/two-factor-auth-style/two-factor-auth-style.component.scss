@@ -22,13 +22,19 @@
     --padding-bottom: 0;
     --background: var(--ion-color-light);
     --border-radius: 8px;
-    --border-color: #dee2e6;
+    --border-color: var(--ion-color-primary);
+    --border-style: solid;
     /* Bootstrap border color */
     --border-width: 1px;
     --border-style: solid;
     font-size: 24px;
     font-weight: bold;
     text-align: center;
+}
+
+.otp-input label {
+    border: solid 1px red;
+    border-radius: 8px;
 }
 
 /* Alert styling */
