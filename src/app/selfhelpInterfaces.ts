@@ -658,3 +658,8 @@ export interface SurveyJSMetaDataPage {
     end_time?: Date;
     duration?: number;
 }
+
+export interface TwoFactorAuthResult {
+    message?: string,
+    success?: boolean
+}

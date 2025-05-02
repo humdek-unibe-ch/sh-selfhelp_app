@@ -157,7 +157,7 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
 
         // NOTE: We don't handle jumping to next input here to avoid double jumps
         // The jumping is handled in the onInput method
-        
+
         // Check if all inputs are filled for form submission
         this.checkFormCompletion();
     }
@@ -216,7 +216,7 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
         if (input.value && index < this.otpInputs.length - 1) {
             this.otpInputs.toArray()[index + 1].setFocus();
         }
-        
+
         // Auto-submit when all fields are filled
         this.checkFormCompletion();
     }
@@ -232,8 +232,8 @@ export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements 
 
         if (allFilled) {
             setTimeout(() => {
-                const form = document.getElementById('selfhelp-2fa-form') as HTMLFormElement;
-                if (form) form.submit();
+                const code = this.otpInputs.toArray().map(input => input.value).join('');
+                this.selfhelpService.twoFactorAuth(code, this.getFieldContent('alert_fail'));
             }, 300); // Small delay to allow UI to update
         }
     }

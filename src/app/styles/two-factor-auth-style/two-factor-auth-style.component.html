@@ -5,11 +5,6 @@
                 <h3 class="card-title text-center mb-4">{{getFieldContent('label')}}</h3>
                 <p class="text-center" [innerHTML]="getFieldContent('text_md')"></p>
 
-                <ion-item *ngIf="style.alert_fail && style.alert_fail.content" lines="none" color="danger"
-                    class="ion-margin-bottom alert-item">
-                    <ion-label class="ion-text-wrap" [innerHTML]="getFieldContent('alert_fail')"></ion-label>
-                </ion-item>
-
                 <form method="post" id="selfhelp-2fa-form">
                     <input type="hidden" name="type" value="2fa_verify">
 

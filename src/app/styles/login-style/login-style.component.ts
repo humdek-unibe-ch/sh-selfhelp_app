@@ -42,7 +42,7 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
                 if (res) {
                     this.selfhelpService.closeModal('submit');
                     if(res == '2fa'){
-                        this.selfhelpService.twoFactorAuth();
+                        this.selfhelpService.openTwoFactorAuth();
                     }
                 }
             })

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor, CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle, TwoFactorAuthResult } from './../selfhelpInterfaces';
 import { GetResult, Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { Device } from '@capacitor/device';
@@ -20,7 +20,6 @@ import { SavePassword } from 'capacitor-ios-autofill-save-password';
 import { App } from '@capacitor/app';
 import { GlobalsService } from './globals.service';
 const appVersion = packageJson.version;
-
 
 @Injectable({
     providedIn: 'root'
@@ -135,10 +134,10 @@ export class SelfhelpService {
      * @public
      * @param {string} keyword
      * @param {*} params
-     * @returns {Promise<SelfHelpPageRequest>}
+     * @returns {Promise<T>}
      * @memberof SelfhelpService
      */
-    public async execServerRequest(keyword: string, params: any): Promise<SelfHelpPageRequest> {
+    public async execServerRequest<T = SelfHelpPageRequest>(keyword: string, params: any): Promise<T> {
         if (!params['mobile']) {
             params['mobile'] = true;
         }
@@ -156,8 +155,8 @@ export class SelfhelpService {
                 credentials: "include",
             }
         };
-        return new Promise((resolve, reject) => {
-            CapacitorHttp.post(options).then(response => {
+        return new Promise<T>((resolve, reject) => {
+            CapacitorHttp.post(options).then((response: any) => {
                 try {
                     if (typeof response.data === "object") {
                         this.utils.debugLog('execServerRequest() ' + keyword, response.data);
@@ -170,7 +169,7 @@ export class SelfhelpService {
                     reject(error);
                 }
             })
-                .catch((err) => {
+                .catch((err: any) => {
                     console.log(err);
                     reject(err); // Here.
                 });
@@ -234,6 +233,10 @@ export class SelfhelpService {
             newSelfhelp.external_css = page.external_css;
             newSelfhelp.languages = page.languages;
             this.setSelfhelp(newSelfhelp, true);
+            // if the current url is login, do not use it, use home. Otherwise it will logout
+            let url = (currSelfhelp.current_url == this.globals.SH_API_LOGIN ? this.globals.SH_API_HOME : currSelfhelp.current_url);
+            this.getPage(url);
+            this.setNav(url);
         }
         if (this.selfhelp.value.is_headless != page.is_headless) {
             let newSelfhelp = this.selfhelp.value;
@@ -312,7 +315,7 @@ export class SelfhelpService {
                 this.saveCredentials(loginValues);
                 return true;
             })
-            .catch((err) => {
+            .catch((err: any) => {
                 console.log(err);
                 return false;
             });
@@ -349,7 +352,7 @@ export class SelfhelpService {
                     url: res.redirect_url
                 }
             })
-            .catch((err) => {
+            .catch((err: any) => {
                 console.log(err);
                 return {
                     result: false,
@@ -368,7 +371,7 @@ export class SelfhelpService {
                     url: res.redirect_url
                 }
             })
-            .catch((err) => {
+            .catch((err: any) => {
                 console.log(err);
                 return {
                     result: false,
@@ -388,7 +391,7 @@ export class SelfhelpService {
                     selfhelp_res: res
                 }
             })
-            .catch((err) => {
+            .catch((err: any) => {
                 console.log(err);
                 return {
                     result: false,
@@ -459,7 +462,7 @@ export class SelfhelpService {
                         resolve(res);
                     }
                 })
-                .catch((err) => {
+                .catch((err: any) => {
                     console.log(keyword, err);
                     reject(err);
                 });
@@ -522,7 +525,7 @@ export class SelfhelpService {
                 }
                 return true;
             })
-            .catch((err) => {
+            .catch((err: any) => {
                 console.log(err);
                 return false;
             });
@@ -751,7 +754,46 @@ export class SelfhelpService {
         return '';
     }
 
-    async selectServer() {
+    /**
+     * Submit 2FA verification code to the backend
+     * @param twoFactorAuthCode - The 6-digit verification code (as a string)
+     * @param alert_fail - Message to display if verification fails
+     */
+    public twoFactorAuth(twoFactorAuthCode: string, alert_fail: string): void {
+        // Create the data object for the 2FA verification
+        let data: any = {
+            'type': '2fa_verify'
+        };
+
+        // Split the code into individual digits and add to the data object
+        if (twoFactorAuthCode && twoFactorAuthCode.length === 6) {
+            for (let i = 0; i < 6; i++) {
+                data[`digit_${i + 1}`] = twoFactorAuthCode.charAt(i);
+            }
+        }
+
+        console.log('2fa_verify', data);
+
+        this.utils.debugLog('2fa_verify', data);
+
+        // Send the request to the 2FA verification endpoint
+        this.execServerRequest<TwoFactorAuthResult>(this.globals.SH_API_TWO_FACTOR_AUTH, data)
+            .then((res) => {
+                if (res.success) {
+                    this.closeModal('cancel');
+                    this.getPage(this.globals.SH_API_HOME);
+                } else {
+                    // Use the API's error message if available, otherwise use the default alert_fail message
+                    this.presentToast(res.message || alert_fail, 'danger');
+                }
+            })
+            .catch((err: any) => {
+                console.log(err);
+                this.presentToast(alert_fail, 'danger');
+            });
+    }
+
+    public async selectServer() {
         let serversList = await this.getServers(this.API_SERVER_SELECTION);
         let servers: ValueItem[] = serversList.content[0]['items']['content'];
         let inputs: any[] = [];
@@ -800,10 +842,10 @@ export class SelfhelpService {
             }
         };
         return new Promise((resolve, reject) => {
-            CapacitorHttp.post(options).then(response => {
+            CapacitorHttp.post(options).then((response: any) => {
                 resolve(JSON.parse(response.data));
             })
-                .catch((err) => {
+                .catch((err: any) => {
                     console.log(err);
                     reject(err); // Here.
                 });
@@ -822,6 +864,44 @@ export class SelfhelpService {
             }
         });
         return res;
+    }
+
+    /**
+     * @description Reset the server selection for the dev app
+     * @author Stefan Kodzhabashev
+     * @date 13/11/2023
+     * @memberof SelfhelpService
+     */
+    public resetServerSelection() {
+        this.presentAlertConfirm({
+            msg: 'Do you want to reset the selected SelfHelp instance?',
+            header: "Reset",
+            confirmLabel: "Reset",
+            callback: () => {
+                this.resetLocalData();
+                window.location.reload();
+            }
+        });
+    }
+
+    /**
+     * Gets the current system theme preference.
+     *
+     * @returns { 'dark' | 'light' } - Returns 'dark' if the system prefers dark mode, otherwise 'light'.
+     */
+    public getSystemTheme(): 'dark' | 'light' {
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        return darkModeMediaQuery.matches ? 'dark' : 'light';
+    }
+
+    /**
+     * @description Open the two factor authentication page.
+     * @author Stefan Kodzhabashev
+     * @date 13/11/2023
+     * @memberof SelfhelpService
+     */
+    public openTwoFactorAuth() {
+        this.openUrl(this.globals.SH_API_TWO_FACTOR_AUTH);
     }
 
     public loadLanguage() {
@@ -924,44 +1004,5 @@ export class SelfhelpService {
             // Serialize scalar item.
             add(prefix, obj);
         }
-    }
-
-
-    /**
-     * @description Reset the server selection for the dev app
-     * @author Stefan Kodzhabashev
-     * @date 13/11/2023
-     * @memberof SelfhelpService
-     */
-    public resetServerSelection() {
-        this.presentAlertConfirm({
-            msg: 'Do you want to reset the selected SelfHelp instance?',
-            header: "Reset",
-            confirmLabel: "Reset",
-            callback: () => {
-                this.resetLocalData();
-                window.location.reload();
-            }
-        });
-    }
-
-    /**
-     * Gets the current system theme preference.
-     *
-     * @returns { 'dark' | 'light' } - Returns 'dark' if the system prefers dark mode, otherwise 'light'.
-     */
-    public getSystemTheme(): 'dark' | 'light' {
-        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        return darkModeMediaQuery.matches ? 'dark' : 'light';
-    }
-
-    /**
-     * @description Open the two factor authentication page.
-     * @author Stefan Kodzhabashev
-     * @date 13/11/2023
-     * @memberof SelfhelpService
-     */
-    public twoFactorAuth() {
-        this.openUrl(this.globals.SH_API_TWO_FACTOR_AUTH);
     }
 }
