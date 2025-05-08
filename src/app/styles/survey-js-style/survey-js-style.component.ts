@@ -257,6 +257,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             let survey = new Model(this.style.survey_json);
             survey.applyTheme(this.selfhelpService.getSystemTheme() === 'dark' ? DefaultDark : DefaultLight);
             survey.locale = this.selfhelpService.getUserLanguage().locale;
+            this.applyHtml(survey);
             if (Number(this.getFieldContent('auto_save_interval')) > 0) {
                 this.autoSaveTimers[this.style.survey_generated_id] = window.setInterval(() => {
                     survey.setValue('trigger_type', 'updated'); // change the trigger type to updated
@@ -305,23 +306,23 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             survey.onCurrentPageChanging.add((sender, options) => {
 
                 // Trigger only when going BACK
-            if (!options.isNextPage) {
-                const returningPage = options.newCurrentPage;
-                if (returningPage && returningPage.getPropertyValue("resetOnBack")) {
-                    returningPage.questions.forEach(q => {
-                        // Clear only if the value is not the default
-                        const defaultVal = q.defaultValue;
+                if (!options.isNextPage) {
+                    const returningPage = options.newCurrentPage;
+                    if (returningPage && returningPage.getPropertyValue("resetOnBack")) {
+                        returningPage.questions.forEach(q => {
+                            // Clear only if the value is not the default
+                            const defaultVal = q.defaultValue;
 
-                        if (defaultVal !== undefined) {
-                            // Set it back to default explicitly
-                            sender.setValue(q.name, defaultVal);
-                        } else {
-                            // No default: just clear it
-                            sender.clearValue(q.name);
-                        }
-                    });
+                            if (defaultVal !== undefined) {
+                                // Set it back to default explicitly
+                                sender.setValue(q.name, defaultVal);
+                            } else {
+                                // No default: just clear it
+                                sender.clearValue(q.name);
+                            }
+                        });
+                    }
                 }
-            }
 
                 options.allow = this.surveyJSSavedSuccessfully;
                 if (this.surveyJSSavedSuccessfully) {
@@ -505,6 +506,17 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
             category: "SelfHelp",
             default: false,
             displayName: "Reset answers when returning to page"
+        });
+    }
+
+    // Function to render HTML content correctly
+    private applyHtml(survey: SurveyCore.SurveyModel) {
+        survey.onTextMarkdown.add(function (survey: any, options: any) {
+            // Convert the markdown text to html
+            if (options.text.indexOf('<') > -1) {
+                // If the text contains HTML tags, don't process it as markdown
+                options.html = options.text;
+            }
         });
     }
 
