@@ -83,6 +83,8 @@ import { ShepherdJsStyleComponent } from '../styles/shepherd-js-style/shepherd-j
 import { EntryRecordDeleteStyleComponent } from '../styles/entry-record-delete-style/entry-record-delete-style.component';
 import { SurveyJsVoiceRecorderComponent } from '../styles/survey-js-style/survey-js-voice-recorder/survey-js-voice-recorder.component';
 import { TwoFactorAuthStyleComponent } from '../styles/two-factor-auth-style/two-factor-auth-style.component';
+import { QuillModule } from 'ngx-quill';
+import { QuillComponent } from '../styles/survey-js-style/quill-component/quill.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -124,7 +126,18 @@ const routes: Routes = [
         FullCalendarModule,
         SurveyModule,
         PlotlyModule,
-        NgxColorsModule
+        NgxColorsModule,
+        QuillModule.forRoot({
+            suppressGlobalRegisterWarning: true,
+            modules: {
+                toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    ["bold", "italic", "underline", "link"],
+                    [{ list: "ordered" }, { list: "bullet" }],
+                    ["clean"],
+                ]
+            }
+        })
     ],
     exports: [
         RouterModule
@@ -198,7 +211,8 @@ const routes: Routes = [
         ShepherdJsStyleComponent,
         EntryRecordDeleteStyleComponent,
         SurveyJsVoiceRecorderComponent,
-        TwoFactorAuthStyleComponent
+        TwoFactorAuthStyleComponent,
+        QuillComponent
     ]
 })
 export class NavigationPageModule {

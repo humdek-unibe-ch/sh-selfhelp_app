@@ -1,3 +1,8 @@
+# 3.4.7
+### New Features
+ - add `ngx-quill` for rich text editing
+ - add support for `Rich Text Editor` questions in `SurveyJS`
+
 # 3.4.6
 ### New Features
  - add `two-factor` authentication

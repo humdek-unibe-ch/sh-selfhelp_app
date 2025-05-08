@@ -1,6 +1,6 @@
 {
     "name": "SelfHelp",
-    "version": "3.4.6",
+    "version": "3.4.7",
     "author": "Stefan Kodzhabashev",
     "homepage": "https://www.tpf.philhum.unibe.ch",
     "scripts": {
@@ -58,6 +58,7 @@
         "jquery": "^3.6.0",
         "lodash": "^4.17.21",
         "ngx-colors": "^3.5.2",
+        "ngx-quill": "^25.3.3",
         "plotly.js-dist-min": "^2.26.0",
         "rimraf": "^5.0.5",
         "rxjs": "~7.8.0",

@@ -13,6 +13,16 @@ import { AlertController } from '@ionic/angular';
 import * as SurveyCore from "survey-core";
 import { SurveyJsVoiceRecorderComponent } from './survey-js-voice-recorder/survey-js-voice-recorder.component';
 import { DefaultDark, DefaultLight } from "survey-core/themes";
+import { QuillComponent } from './quill-component/quill.component';
+
+function encodeHtml(params: any[]) {
+    const input = params[0];
+    return input
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+SurveyCore.FunctionFactory.Instance.register("encodeHtml", encodeHtml);
 
 
 @Component({
@@ -29,6 +39,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         fontSize: 12
     };
     surveyJSSavedSuccessfully: boolean = false;
+    static declaration = [QuillComponent];
 
     constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService, private utils: UtilsService, private alertController: AlertController,
         private injector: Injector, private appRef: ApplicationRef, private componentFactoryResolver: ComponentFactoryResolver
