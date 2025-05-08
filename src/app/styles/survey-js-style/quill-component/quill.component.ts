@@ -39,6 +39,14 @@ Serializer.addClass(
     templateUrl: "./quill.component.html"
 })
 export class QuillComponent extends QuestionAngular<QuestionQuillModel> {
+    quillModules = {
+        toolbar: [
+            ['bold', 'italic', 'underline'],        // toggled buttons
+            [{ list: 'ordered' }, { list: 'bullet' }, 'clean'],
+            [{ header: [1, 2, false] }]                      // remove formatting
+        ]
+    };
+
     public get content() {
         return this.model.value;
     }

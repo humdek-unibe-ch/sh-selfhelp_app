@@ -1,4 +1,5 @@
 <div class="quill-container w-100 mw-100">
-    <quill-editor class="quill-editor w-100 mw-100" [readOnly]="model.isReadOnly" [(ngModel)]="content" [styles]="{ height: model.height }">
+    <quill-editor class="quill-editor w-100 mw-100" [readOnly]="model.isReadOnly" [(ngModel)]="content"
+        [styles]="{ height: model.height }" [modules]="quillModules">
     </quill-editor>
 </div>
