@@ -131,12 +131,19 @@ const routes: Routes = [
             suppressGlobalRegisterWarning: true,
             modules: {
                 toolbar: [
+                    // Row 1
                     [{ header: [1, 2, 3, false] }],
-                    ["bold", "italic", "underline", "link"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    ["clean"],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    // Row 2
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    [{ indent: '-1' }, { indent: '+1' }],
+                    ['link'],
+                    ['clean']
                 ]
-            }
+            },
+            format: 'html',
+            sanitize: false
         })
     ],
     exports: [

@@ -1,0 +1,37 @@
+.quill-editor{
+    box-sizing: border-box;
+}
+
+.quill-container {
+    width: 100%;
+    max-width: 100%;
+}
+
+.quill-editor {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Style the toolbar to wrap buttons on smaller screens */
+:host ::ng-deep .ql-toolbar.ql-snow {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 4px;
+}
+
+:host ::ng-deep .ql-toolbar.ql-snow .ql-formats {
+    margin-right: 8px;
+    margin-bottom: 5px;
+}
+
+/* Ensure buttons have enough space */
+:host ::ng-deep .ql-toolbar button {
+    width: 28px;
+    height: 28px;
+}
+
+/* Make sure the editor content area has proper styling */
+:host ::ng-deep .ql-container.ql-snow {
+    border: 1px solid #ccc;
+    border-top: 0;
+}

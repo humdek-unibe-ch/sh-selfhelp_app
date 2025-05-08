@@ -35,6 +35,7 @@ Serializer.addClass(
 // Create a component that renders Quill
 @Component({
     selector: "quill",
+    styleUrls: ['./quil.component.css'],
     templateUrl: "./quill.component.html"
 })
 export class QuillComponent extends QuestionAngular<QuestionQuillModel> {
