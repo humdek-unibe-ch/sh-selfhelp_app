@@ -1,3 +1,7 @@
+# 3.4.8
+### Bugfix
+ - properly pull the exisitng servers  in dev mode
+
 # 3.4.7
 ### New Features
  - add `ngx-quill` for rich text editing

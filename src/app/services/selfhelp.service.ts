@@ -796,7 +796,7 @@ export class SelfhelpService {
 
     public async selectServer() {
         let serversList = await this.getServers(this.API_SERVER_SELECTION);
-        let servers: ValueItem[] = serversList.content[0]['items']['content'];
+        let servers: ValueItem[] = serversList.content[0]['items'];
         let inputs: any[] = [];
         servers.forEach(server => {
             inputs.push(
