@@ -6,6 +6,7 @@
 
 # Preview Instructions Build
 
-- run command: `ng build --base-href "/SelfHelpMobilePreview/v3_0_0/" --deploy-url "/SelfHelpMobilePreview/v3_0_0/"` for the version number you want.
+- run command: `ng build --base-href "/SelfHelpMobilePreview/v3_0_0/" --deploy-url "/SelfHelpMobilePreview/v3_0_0/"` for the version number you want. 
+  - hint: last time this was not working and i replaced it with `ng build --base-href "/SelfHelpMobilePreview/v3_0_0/" --deploy-url "/SelfHelpMobilePreview/v3_0_0/"` and later repalced all `./SelfHelpMobilePreview` with `/SelfHelpMobilePreview`. Somehting was changed in angualr generation
 - copy the files in folder `SelfHelpMobilePreview` and the `version_number`
 - change the `.htaccess` file `RewriteRule ^(.*) /SelfHelpMobilePreview/v3_0_0/index.html [NC,L]` to much the version
