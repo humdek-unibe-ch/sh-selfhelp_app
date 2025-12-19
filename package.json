@@ -1,6 +1,6 @@
 {
   "name": "SelfHelp",
-  "version": "3.4.7",
+  "version": "3.4.8",
   "author": "Stefan Kodzhabashev",
   "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
@@ -28,7 +28,7 @@
     "@capacitor/browser": "^7.0.0",
     "@capacitor/core": "^7.0.0",
     "@capacitor/haptics": "^7.0.0",
-    "@capacitor/ios": "^7.0.0",
+    "@capacitor/ios": "7.4.4",
     "@capacitor/keyboard": "^7.0.0",
     "@capacitor/preferences": "^7.0.0",
     "@capacitor/push-notifications": "^7.0.0",
