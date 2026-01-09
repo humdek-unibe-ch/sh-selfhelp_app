@@ -5,7 +5,9 @@
         /* Layout */
         --width-container: 900px;
         --width-min-container: 320px;
+        /* Use container query units when available for debug mode compatibility */
         --height-min-header-footer: 8vh;
+        --height-min-header-footer: 8cqh;
         --padding-internal: 24px;
         --border-radius-container: 5px;
         --border-radius-content: 4px;
@@ -70,8 +72,11 @@
         position: fixed;
         top: 0;
         left: 0;
+        /* Use viewport units with container query fallback for debug mode */
         width: 100vw;
+        width: 100cqw;
         height: 100vh;
+        height: 100cqh;
         padding: calc(2 * 24px);
         padding: calc(2 * var(--padding-internal));
         background: rgba(140, 140, 140, 0.25);
@@ -140,10 +145,13 @@
         /* Full screen minus margins */
         margin: 24px;
         margin: var(--padding-internal);
+        /* Use container query units for debug mode compatibility */
         min-height: calc(100vh - 2*24px);
-        min-height: calc(100vh - 2*var(--padding-internal));
+        min-height: calc(100cqh - 2*24px);
+        min-height: calc(100cqh - 2*var(--padding-internal));
         width: calc(100vw - 2*24px);
-        width: calc(100vw - 2*var(--padding-internal));
+        width: calc(100cqw - 2*24px);
+        width: calc(100cqw - 2*var(--padding-internal));
         /* Display content using flexboxes */
         display: -webkit-box;
         display: flex;
@@ -169,6 +177,7 @@
         margin: 0;
         width: 100%;
         min-height: 100vh;
+        min-height: 100cqh;
     }
 
     /* Remove frame on small screens */
@@ -180,6 +189,7 @@
             border-radius: 0;
             width: 100%;
             min-height: 100vh;
+            min-height: 100cqh;
         }
     }
 
@@ -194,7 +204,8 @@
         .selfHelp-lab-js-holder .container.fullscreen {
             /* IE11 miscalculates the height, so add some slack */
             min-height: calc(100vh - 3*24px);
-            min-height: calc(100vh - 3*var(--padding-internal));
+            min-height: calc(100cqh - 3*24px);
+            min-height: calc(100cqh - 3*var(--padding-internal));
         }
     }
 
@@ -670,7 +681,8 @@
     /* Width, for some reason, needs to be set explicitly */
     .selfHelp-lab-js-holder .container.fullscreen .popover {
         width: calc(100vw - 2*24px);
-        width: calc(100vw - 2*var(--padding-internal));
+        width: calc(100cqw - 2*24px);
+        width: calc(100cqw - 2*var(--padding-internal));
     }
 
     /* Repeated for frameless mode on small screens */
@@ -678,6 +690,7 @@
     (max-height: 600px) {
         .selfHelp-lab-js-holder .container.fullscreen .popover {
             width: 100vw;
+            width: 100cqw;
         }
     }
 

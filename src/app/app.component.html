@@ -1,16 +1,16 @@
 <ion-app *ngIf="this.selfhelpSerivce.getIsApp()">
     <ion-router-outlet></ion-router-outlet>
 </ion-app>
-<div *ngIf="!this.selfhelpSerivce.getIsApp()" class="w-100 h-100 d-flex justify-content-center align-items-center">
-    <div class="d-flex flex-column">
-        <div class="d-flex justify-content-center">
-            <ion-item lines="none" class="md device-width">
+<div *ngIf="!this.selfhelpSerivce.getIsApp()" class="debug-wrapper">
+    <div class="debug-container">
+        <div class="debug-controls">
+            <ion-item lines="none" class="md skin-toggle">
                 <ion-label class="text-right">Android</ion-label>
                 <ion-toggle mode="md" [checked]="skinIOS" (ionChange)="skinChanged($event)"></ion-toggle>
                 <ion-label>iOS</ion-label>
             </ion-item>
         </div>
-        <div [className]="'d-flex justify-content-center align-items-center docs-demo-device ' + getAppSkin()">
+        <div [className]="'docs-demo-device ' + getAppSkin()">
             <figure>
                 <ion-app class="selfhelp-app">
                     <ion-router-outlet></ion-router-outlet>

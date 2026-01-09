@@ -3,5 +3,7 @@
 }
 
 .swiper-height {
+    // Use viewport height by default, container query height when in debug frame
     height: calc(100vh - 200px);
+    height: calc(100cqh - 200px);
 }

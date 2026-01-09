@@ -1,5 +1,5 @@
 // ============================================================================
-// LLM Form Renderer Component - SCSS
+// LLM Form Renderer Component - Mobile-First Clean Design
 // ============================================================================
 
 .llm-form-renderer {
@@ -11,21 +11,21 @@
 // ============================================================================
 
 .form-title {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 
     h4 {
         margin: 0;
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         font-weight: 600;
         color: var(--ion-color-dark);
     }
 }
 
 .form-description {
-    margin: 0 0 16px;
-    font-size: 0.9rem;
+    margin: 0 0 12px;
+    font-size: 0.8rem;
     color: var(--ion-color-medium);
-    line-height: 1.5;
+    line-height: 1.45;
 }
 
 // ============================================================================
@@ -34,15 +34,16 @@
 
 .form-content-before,
 .form-content-after {
-    margin-bottom: 16px;
-    padding: 12px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
     background: var(--ion-color-step-50);
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
 }
 
 .form-content-after {
-    margin-top: 16px;
+    margin-top: 12px;
     margin-bottom: 0;
 }
 
@@ -53,7 +54,7 @@
 .form-fields {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
 .form-field {
@@ -72,8 +73,8 @@
 
 .field-label {
     display: block;
-    margin-bottom: 8px;
-    font-size: 0.95rem;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
     font-weight: 500;
     color: var(--ion-color-dark);
 
@@ -84,8 +85,8 @@
 }
 
 .field-help {
-    margin: -4px 0 8px;
-    font-size: 0.8rem;
+    margin: -2px 0 6px;
+    font-size: 0.75rem;
     color: var(--ion-color-medium);
 }
 
@@ -93,24 +94,24 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    margin: 6px 0 0;
-    font-size: 0.8rem;
+    margin: 4px 0 0;
+    font-size: 0.75rem;
     color: var(--ion-color-danger);
 
     ion-icon {
-        font-size: 14px;
+        font-size: 12px;
     }
 }
 
 // ============================================================================
-// RADIO & CHECKBOX GROUPS
+// RADIO & CHECKBOX GROUPS - Clean mobile style
 // ============================================================================
 
 .radio-group,
 .checkbox-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .radio-option,
@@ -118,19 +119,19 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 14px;
+    padding: 10px 12px;
     background: var(--ion-color-step-50);
-    border: 2px solid transparent;
-    border-radius: 8px;
+    border: 1.5px solid transparent;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 
-    &:hover {
+    &:active {
         background: var(--ion-color-step-100);
     }
 
     &.selected {
-        background: rgba(var(--ion-color-primary-rgb), 0.08);
+        background: rgba(var(--ion-color-primary-rgb), 0.06);
         border-color: var(--ion-color-primary);
     }
 
@@ -143,20 +144,21 @@
 
     .option-label {
         flex: 1;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         color: var(--ion-color-dark);
+        line-height: 1.35;
     }
 }
 
 // Custom radio button
 .radio-custom {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border: 2px solid var(--ion-color-step-400);
     border-radius: 50%;
     position: relative;
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 
     &::after {
         content: '';
@@ -164,11 +166,11 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) scale(0);
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         background: var(--ion-color-primary);
         border-radius: 50%;
-        transition: transform 0.2s ease;
+        transition: transform 0.15s ease;
     }
 }
 
@@ -182,25 +184,25 @@
 
 // Custom checkbox
 .checkbox-custom {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border: 2px solid var(--ion-color-step-400);
     border-radius: 4px;
     position: relative;
     flex-shrink: 0;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 
     &::after {
         content: '';
         position: absolute;
-        top: 2px;
-        left: 6px;
+        top: 1px;
+        left: 5px;
         width: 5px;
-        height: 10px;
+        height: 9px;
         border: solid white;
         border-width: 0 2px 2px 0;
         transform: rotate(45deg) scale(0);
-        transition: transform 0.2s ease;
+        transition: transform 0.15s ease;
     }
 }
 
@@ -214,31 +216,32 @@
 }
 
 // ============================================================================
-// TEXT INPUTS
+// TEXT INPUTS - Clean, borderless style
 // ============================================================================
 
 .form-input,
 .form-textarea,
 .form-select {
     width: 100%;
-    padding: 12px 14px;
-    font-size: 0.95rem;
+    padding: 10px 12px;
+    font-size: 0.9rem;
     color: var(--ion-color-dark);
-    background: white;
-    border: 2px solid var(--ion-color-step-200);
-    border-radius: 8px;
+    background: var(--ion-color-step-50);
+    border: 1.5px solid transparent;
+    border-radius: 10px;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.15s ease;
 
     &:focus {
+        background: white;
         border-color: var(--ion-color-primary);
-        box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.1);
+        box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.08);
     }
 
     &:disabled {
         background: var(--ion-color-step-100);
         cursor: not-allowed;
-        opacity: 0.7;
+        opacity: 0.6;
     }
 
     &::placeholder {
@@ -248,7 +251,7 @@
 
 .form-textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 70px;
 }
 
 // ============================================================================
@@ -260,16 +263,16 @@
 
     .form-select {
         appearance: none;
-        padding-right: 40px;
+        padding-right: 36px;
         cursor: pointer;
     }
 
     .select-icon {
         position: absolute;
-        right: 14px;
+        right: 12px;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 18px;
+        font-size: 16px;
         color: var(--ion-color-medium);
         pointer-events: none;
     }
@@ -283,59 +286,62 @@
     .scale-labels {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 8px;
-        font-size: 0.8rem;
+        margin-bottom: 6px;
+        font-size: 0.7rem;
         color: var(--ion-color-medium);
     }
 
     .form-range {
         width: 100%;
-        height: 8px;
+        height: 6px;
         background: var(--ion-color-step-200);
-        border-radius: 4px;
+        border-radius: 3px;
         outline: none;
         -webkit-appearance: none;
 
         &::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             background: var(--ion-color-primary);
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
         &::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             background: var(--ion-color-primary);
             border-radius: 50%;
             cursor: pointer;
             border: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
     }
 
     .scale-value {
         text-align: center;
-        margin-top: 8px;
-        font-size: 1.1rem;
+        margin-top: 6px;
+        font-size: 1rem;
         font-weight: 600;
         color: var(--ion-color-primary);
     }
 }
 
 // ============================================================================
-// FORM ACTIONS
+// FORM ACTIONS - Small buttons
 // ============================================================================
 
 .form-actions {
-    margin-top: 24px;
+    margin-top: 16px;
 
     ion-button {
-        --border-radius: 8px;
+        --border-radius: 10px;
+        --padding-top: 10px;
+        --padding-bottom: 10px;
         font-weight: 500;
+        font-size: 0.9rem;
         text-transform: none;
     }
 }

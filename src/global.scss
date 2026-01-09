@@ -265,3 +265,113 @@ ion-select::part(placeholder) {
     background-color: var(--info);
     color: var(--light);
 }
+
+// ============================================================================
+// CONTAINER QUERY SUPPORT FOR DEBUG MODE
+// ============================================================================
+// When running in debug mode (ionic serve), the app is rendered inside a 
+// fixed-size device frame. CSS viewport units (vw/vh) and media queries 
+// are based on the browser window, not the frame. This section provides
+// container query support so styles respond to the device frame size.
+// ============================================================================
+
+// Define container query units as CSS custom properties
+// These will be used by components that need responsive sizing
+.selfhelp-app {
+    // Container query units fallback to viewport units when not in a container
+    --app-width: 100vw;
+    --app-height: 100vh;
+    
+    // When inside a container query context, these will be overridden
+    @supports (container-type: size) {
+        --app-width: 100cqw;
+        --app-height: 100cqh;
+    }
+}
+
+// Container query based responsive breakpoints
+// Use these instead of viewport-based media queries for components
+// that need to respond to the device frame size in debug mode
+
+// Small device width (< 360px)
+@container device-frame (max-width: 360px) {
+    .container-responsive {
+        --responsive-padding: 8px;
+        --responsive-font-size: 14px;
+    }
+}
+
+// Medium device width (360px - 480px)
+@container device-frame (min-width: 360px) and (max-width: 480px) {
+    .container-responsive {
+        --responsive-padding: 12px;
+        --responsive-font-size: 16px;
+    }
+}
+
+// Large device width (> 480px)
+@container device-frame (min-width: 480px) {
+    .container-responsive {
+        --responsive-padding: 16px;
+        --responsive-font-size: 18px;
+    }
+}
+
+// Helper class to opt-in to container-responsive behavior
+.container-responsive {
+    --responsive-padding: 12px;
+    --responsive-font-size: 16px;
+}
+
+// ============================================================================
+// IONIC COMPONENT OVERRIDES FOR CONTAINER QUERIES
+// ============================================================================
+// These overrides help Ionic components respond to the device frame size
+// when running in debug mode. They use container queries to apply
+// mobile-appropriate styles regardless of browser window size.
+
+@container device-frame (max-width: 500px) {
+    // Force mobile-like styling for Ionic components inside the device frame    
+    
+    // Make buttons more compact
+    ion-button {
+        --padding-start: 12px;
+        --padding-end: 12px;
+        font-size: 14px;
+    }
+    
+    // Adjust card padding
+    ion-card {
+        margin: 8px;
+        
+        ion-card-header {
+            padding: 12px;
+        }
+        
+        ion-card-content {
+            padding: 12px;
+        }
+    }
+    
+    // Adjust list item padding
+    ion-item {
+        --padding-start: 12px;
+        --padding-end: 12px;
+        font-size: 14px;
+    }
+    
+    // Adjust toolbar for mobile-like appearance
+    ion-toolbar {
+        --padding-start: 8px;
+        --padding-end: 8px;
+    }
+    
+    // Adjust grid for mobile
+    ion-grid {
+        padding: 8px;
+    }
+    
+    ion-col {
+        padding: 4px;
+    }
+}
