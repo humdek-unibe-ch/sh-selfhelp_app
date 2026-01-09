@@ -1,0 +1,329 @@
+// ============================================================================
+// LLM Structured Response Component - SCSS
+// ============================================================================
+
+.structured-response {
+    width: 100%;
+}
+
+// ============================================================================
+// MILESTONE BANNER
+// ============================================================================
+
+.milestone-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(var(--ion-color-success-rgb), 0.15), rgba(var(--ion-color-success-rgb), 0.05));
+    border: 1px solid rgba(var(--ion-color-success-rgb), 0.3);
+    border-radius: 8px;
+    margin-bottom: 16px;
+
+    .milestone-icon {
+        font-size: 24px;
+    }
+
+    .milestone-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        strong {
+            color: var(--ion-color-success);
+            font-size: 0.9rem;
+        }
+
+        span {
+            font-size: 0.85rem;
+            color: var(--ion-color-dark);
+        }
+    }
+}
+
+// ============================================================================
+// TEXT BLOCKS
+// ============================================================================
+
+.structured-heading {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    color: var(--ion-color-dark);
+
+    &:first-child {
+        margin-top: 0;
+    }
+
+    ::ng-deep .markdown-content {
+        p {
+            margin: 0;
+        }
+    }
+}
+
+.structured-paragraph {
+    margin-bottom: 12px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.structured-list {
+    margin-bottom: 12px;
+
+    ::ng-deep {
+        ul, ol {
+            margin: 0;
+            padding-left: 1.5em;
+        }
+    }
+}
+
+.structured-quote {
+    margin: 12px 0;
+    padding: 12px 16px;
+    border-left: 4px solid var(--ion-color-primary);
+    background: var(--ion-color-step-50);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--ion-color-step-700);
+
+    ::ng-deep .markdown-content {
+        p {
+            margin: 0;
+        }
+    }
+}
+
+// ============================================================================
+// ALERT BLOCKS
+// ============================================================================
+
+.structured-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+
+    ion-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .alert-content {
+        flex: 1;
+
+        ::ng-deep .markdown-content {
+            p {
+                margin: 0;
+            }
+        }
+    }
+
+    &.alert-info {
+        background: rgba(var(--ion-color-primary-rgb), 0.1);
+        border: 1px solid rgba(var(--ion-color-primary-rgb), 0.2);
+
+        ion-icon {
+            color: var(--ion-color-primary);
+        }
+    }
+
+    &.alert-warning {
+        background: rgba(var(--ion-color-warning-rgb), 0.1);
+        border: 1px solid rgba(var(--ion-color-warning-rgb), 0.3);
+
+        ion-icon {
+            color: var(--ion-color-warning);
+        }
+    }
+
+    &.alert-success {
+        background: rgba(var(--ion-color-success-rgb), 0.1);
+        border: 1px solid rgba(var(--ion-color-success-rgb), 0.2);
+
+        ion-icon {
+            color: var(--ion-color-success);
+        }
+    }
+
+    &.alert-secondary {
+        background: rgba(var(--ion-color-medium-rgb), 0.1);
+        border: 1px solid rgba(var(--ion-color-medium-rgb), 0.2);
+
+        ion-icon {
+            color: var(--ion-color-medium);
+        }
+    }
+}
+
+// ============================================================================
+// MEDIA
+// ============================================================================
+
+.structured-media {
+    margin: 16px 0;
+}
+
+.media-figure {
+    margin: 0 0 16px;
+}
+
+.media-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+.media-video-wrapper,
+.media-audio-wrapper {
+    margin-bottom: 16px;
+}
+
+.media-video {
+    width: 100%;
+    max-height: 400px;
+    border-radius: 8px;
+}
+
+.media-audio {
+    width: 100%;
+}
+
+.media-caption {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+}
+
+// ============================================================================
+// FORMS
+// ============================================================================
+
+.structured-forms {
+    margin-top: 16px;
+}
+
+.structured-form-wrapper {
+    margin-bottom: 16px;
+
+    .form-optional-notice {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.85rem;
+        color: var(--ion-color-medium);
+        margin-bottom: 12px;
+
+        ion-icon {
+            font-size: 16px;
+        }
+    }
+}
+
+.structured-form-historical {
+    border: 1px solid var(--ion-color-step-200);
+    border-radius: 8px;
+    overflow: hidden;
+
+    .form-historical-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: var(--ion-color-step-100);
+        font-weight: 500;
+        font-size: 0.9rem;
+
+        ion-icon {
+            font-size: 18px;
+            color: var(--ion-color-medium);
+        }
+    }
+
+    .form-historical-body {
+        padding: 14px;
+
+        .form-description {
+            margin: 0 0 12px;
+            color: var(--ion-color-medium);
+        }
+
+        .form-historical-notice {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--ion-color-medium);
+
+            ion-icon {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+// ============================================================================
+// NEXT STEP / SUGGESTIONS
+// ============================================================================
+
+.structured-next-step {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ion-color-step-200);
+
+    .next-step-prompt {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 12px;
+        font-size: 0.9rem;
+        color: var(--ion-color-medium);
+
+        ion-icon {
+            font-size: 16px;
+        }
+    }
+
+    .suggestion-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .suggestion-btn {
+            --border-radius: 20px;
+            --padding-start: 16px;
+            --padding-end: 16px;
+            font-size: 0.85rem;
+            text-transform: none;
+            font-weight: 500;
+        }
+    }
+}
+
+// ============================================================================
+// PROGRESS UPDATE
+// ============================================================================
+
+.progress-update {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--ion-color-step-150);
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+
+    ion-icon {
+        font-size: 16px;
+    }
+}

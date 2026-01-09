@@ -1079,6 +1079,57 @@
 }
 
 // ============================================================================
+// HISTORICAL FORM (Legacy)
+// ============================================================================
+
+.historical-form {
+    border: 1px solid var(--ion-color-step-200);
+    border-radius: var(--llm-radius-medium);
+    overflow: hidden;
+    margin-top: 8px;
+
+    .historical-form-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        background: var(--ion-color-step-100);
+        font-weight: 500;
+        font-size: 0.9rem;
+
+        ion-icon {
+            font-size: 18px;
+            color: var(--ion-color-medium);
+        }
+    }
+
+    .historical-form-body {
+        padding: 14px;
+
+        p {
+            margin: 0 0 12px;
+            color: var(--ion-color-medium);
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .historical-form-notice {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--ion-color-medium);
+
+            ion-icon {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+// ============================================================================
 // RESPONSIVE
 // ============================================================================
 

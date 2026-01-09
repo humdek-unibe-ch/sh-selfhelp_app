@@ -1,0 +1,341 @@
+// ============================================================================
+// LLM Form Renderer Component - SCSS
+// ============================================================================
+
+.llm-form-renderer {
+    width: 100%;
+}
+
+// ============================================================================
+// FORM HEADER
+// ============================================================================
+
+.form-title {
+    margin-bottom: 12px;
+
+    h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+    }
+}
+
+.form-description {
+    margin: 0 0 16px;
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+    line-height: 1.5;
+}
+
+// ============================================================================
+// FORM CONTENT SECTIONS
+// ============================================================================
+
+.form-content-before,
+.form-content-after {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--ion-color-step-50);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.form-content-after {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+// ============================================================================
+// FORM FIELDS
+// ============================================================================
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-field {
+    &.has-error {
+        .field-label {
+            color: var(--ion-color-danger);
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            border-color: var(--ion-color-danger);
+        }
+    }
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ion-color-dark);
+
+    .required-indicator {
+        color: var(--ion-color-danger);
+        margin-left: 2px;
+    }
+}
+
+.field-help {
+    margin: -4px 0 8px;
+    font-size: 0.8rem;
+    color: var(--ion-color-medium);
+}
+
+.field-error {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 6px 0 0;
+    font-size: 0.8rem;
+    color: var(--ion-color-danger);
+
+    ion-icon {
+        font-size: 14px;
+    }
+}
+
+// ============================================================================
+// RADIO & CHECKBOX GROUPS
+// ============================================================================
+
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-option,
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--ion-color-step-50);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: var(--ion-color-step-100);
+    }
+
+    &.selected {
+        background: rgba(var(--ion-color-primary-rgb), 0.08);
+        border-color: var(--ion-color-primary);
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .option-label {
+        flex: 1;
+        font-size: 0.9rem;
+        color: var(--ion-color-dark);
+    }
+}
+
+// Custom radio button
+.radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--ion-color-step-400);
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 10px;
+        height: 10px;
+        background: var(--ion-color-primary);
+        border-radius: 50%;
+        transition: transform 0.2s ease;
+    }
+}
+
+.radio-option.selected .radio-custom {
+    border-color: var(--ion-color-primary);
+
+    &::after {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+// Custom checkbox
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--ion-color-step-400);
+    border-radius: 4px;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 6px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg) scale(0);
+        transition: transform 0.2s ease;
+    }
+}
+
+.checkbox-option.selected .checkbox-custom {
+    background: var(--ion-color-primary);
+    border-color: var(--ion-color-primary);
+
+    &::after {
+        transform: rotate(45deg) scale(1);
+    }
+}
+
+// ============================================================================
+// TEXT INPUTS
+// ============================================================================
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    color: var(--ion-color-dark);
+    background: white;
+    border: 2px solid var(--ion-color-step-200);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+        border-color: var(--ion-color-primary);
+        box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.1);
+    }
+
+    &:disabled {
+        background: var(--ion-color-step-100);
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    &::placeholder {
+        color: var(--ion-color-step-400);
+    }
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+// ============================================================================
+// SELECT DROPDOWN
+// ============================================================================
+
+.select-wrapper {
+    position: relative;
+
+    .form-select {
+        appearance: none;
+        padding-right: 40px;
+        cursor: pointer;
+    }
+
+    .select-icon {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: var(--ion-color-medium);
+        pointer-events: none;
+    }
+}
+
+// ============================================================================
+// SCALE INPUT
+// ============================================================================
+
+.scale-input {
+    .scale-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
+    }
+
+    .form-range {
+        width: 100%;
+        height: 8px;
+        background: var(--ion-color-step-200);
+        border-radius: 4px;
+        outline: none;
+        -webkit-appearance: none;
+
+        &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--ion-color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        &::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: var(--ion-color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    .scale-value {
+        text-align: center;
+        margin-top: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--ion-color-primary);
+    }
+}
+
+// ============================================================================
+// FORM ACTIONS
+// ============================================================================
+
+.form-actions {
+    margin-top: 24px;
+
+    ion-button {
+        --border-radius: 8px;
+        font-weight: 500;
+        text-transform: none;
+    }
+}

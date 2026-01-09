@@ -11,7 +11,9 @@ import {
     LlmProgressData,
     LlmFileConfig,
     LlmFormDefinition,
-    LlmStructuredResponse
+    LlmStructuredResponse,
+    parseLlmStructuredResponse,
+    parseLlmFormDefinition
 } from 'src/app/selfhelpInterfaces';
 import { LlmChatService, DEFAULT_FILE_CONFIG } from 'src/app/services/llm-chat.service';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
@@ -1175,6 +1177,59 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
      */
     get characterCount(): number {
         return this.currentMessage.length;
+    }
+
+    // ============================================================================
+    // STRUCTURED RESPONSE & FORM HANDLING
+    // ============================================================================
+
+    // Cache for parsed structured responses
+    private structuredResponseCache = new Map<string, LlmStructuredResponse | null>();
+    private formDefinitionCache = new Map<string, LlmFormDefinition | null>();
+
+    /**
+     * Get structured response from message content
+     * Uses caching to avoid re-parsing on every change detection
+     */
+    getStructuredResponse(message: LlmMessage): LlmStructuredResponse | null {
+        if (message.role === 'user') return null;
+
+        const cacheKey = message.id + '_' + message.content.length;
+        if (this.structuredResponseCache.has(cacheKey)) {
+            return this.structuredResponseCache.get(cacheKey) || null;
+        }
+
+        const result = parseLlmStructuredResponse(message.content);
+        this.structuredResponseCache.set(cacheKey, result);
+        return result;
+    }
+
+    /**
+     * Get form definition from message content (legacy format)
+     * Uses caching to avoid re-parsing
+     */
+    getFormDefinition(message: LlmMessage): LlmFormDefinition | null {
+        if (message.role === 'user') return null;
+
+        const cacheKey = message.id + '_form_' + message.content.length;
+        if (this.formDefinitionCache.has(cacheKey)) {
+            return this.formDefinitionCache.get(cacheKey) || null;
+        }
+
+        const result = parseLlmFormDefinition(message.content);
+        this.formDefinitionCache.set(cacheKey, result);
+        return result;
+    }
+
+    /**
+     * Handle suggestion button click
+     */
+    handleSuggestionClick(suggestion: string): void {
+        if (!suggestion || this.isProcessing) return;
+
+        // Set the suggestion as the current message and send it
+        this.currentMessage = suggestion;
+        this.sendMessage();
     }
 
 }

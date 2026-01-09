@@ -155,14 +155,53 @@
                             </div>
                             
 <!-- Message Bubble -->
-                                            <div class="message-bubble">
-                                                <div class="message-content">
-                                                    <app-markdown-renderer 
-                                                        *ngIf="!isUserMessage(message)"
-                                                        [content]="message.content">
-                                                    </app-markdown-renderer>
-                                                    <span *ngIf="isUserMessage(message)">{{ message.content }}</span>
-                                                </div>
+                            <div class="message-bubble">
+                                <div class="message-content">
+                                    <!-- User messages: plain text -->
+                                    <span *ngIf="isUserMessage(message)">{{ message.content }}</span>
+                                    
+                                    <!-- Assistant messages: check for structured response -->
+                                    <ng-container *ngIf="!isUserMessage(message)">
+                                        <!-- Structured Response -->
+                                        <app-llm-structured-response
+                                            *ngIf="getStructuredResponse(message)"
+                                            [response]="getStructuredResponse(message)!"
+                                            [isLastMessage]="isLast"
+                                            [isFormSubmitting]="isFormSubmitting"
+                                            (formSubmit)="handleFormSubmit($event.values, $event.readableText)"
+                                            (suggestionClick)="handleSuggestionClick($event)">
+                                        </app-llm-structured-response>
+                                        
+                                        <!-- Active Form (legacy form definition) -->
+                                        <app-llm-form-renderer
+                                            *ngIf="!getStructuredResponse(message) && getFormDefinition(message) && isLast"
+                                            [formDefinition]="getFormDefinition(message)!"
+                                            [isSubmitting]="isFormSubmitting"
+                                            (formSubmit)="handleFormSubmit($event.values, $event.readableText)">
+                                        </app-llm-form-renderer>
+                                        
+                                        <!-- Historical Form (legacy form, not last message) -->
+                                        <div *ngIf="!getStructuredResponse(message) && getFormDefinition(message) && !isLast" class="historical-form">
+                                            <div class="historical-form-header">
+                                                <ion-icon name="document-text-outline"></ion-icon>
+                                                {{ getFormDefinition(message)?.title || 'Form' }}
+                                            </div>
+                                            <div class="historical-form-body">
+                                                <p *ngIf="getFormDefinition(message)?.description">{{ getFormDefinition(message)?.description }}</p>
+                                                <p class="historical-form-notice">
+                                                    <ion-icon name="time-outline"></ion-icon>
+                                                    Form was presented here
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Plain Markdown (fallback for non-structured responses) -->
+                                        <app-markdown-renderer 
+                                            *ngIf="!getStructuredResponse(message) && !getFormDefinition(message)"
+                                            [content]="message.content">
+                                        </app-markdown-renderer>
+                                    </ng-container>
+                                </div>
                                 
                                 <!-- Attachment Indicator -->
                                 <div *ngIf="getAttachmentCount(message) > 0" class="attachment-indicator">

@@ -88,6 +88,8 @@ import { QuillComponent } from '../styles/survey-js-style/quill-component/quill.
 import { LlmChatStyleComponent } from '../styles/llm-chat-style/llm-chat-style.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { MarkdownRendererComponent } from '../components/markdown-renderer/markdown-renderer.component';
+import { LlmStructuredResponseComponent } from '../components/llm-structured-response/llm-structured-response.component';
+import { LlmFormRendererComponent } from '../components/llm-form-renderer/llm-form-renderer.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -225,7 +227,9 @@ const routes: Routes = [
         TwoFactorAuthStyleComponent,
         QuillComponent,
         LlmChatStyleComponent,
-        MarkdownRendererComponent
+        MarkdownRendererComponent,
+        LlmStructuredResponseComponent,
+        LlmFormRendererComponent
     ]
 })
 export class NavigationPageModule {

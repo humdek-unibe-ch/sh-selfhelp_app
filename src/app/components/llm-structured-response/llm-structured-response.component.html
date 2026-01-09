@@ -1,0 +1,149 @@
+<div class="structured-response">
+    <!-- Milestone celebration banner -->
+    <div *ngIf="milestone" class="milestone-banner">
+        <span class="milestone-icon">🎉</span>
+        <div class="milestone-text">
+            <strong>Milestone Reached!</strong>
+            <span>You've completed {{ milestone }} of the module!</span>
+        </div>
+    </div>
+
+    <!-- Text blocks -->
+    <ng-container *ngFor="let block of textBlocks; let i = index; trackBy: trackByIndex">
+        <!-- Heading -->
+        <ng-container *ngIf="block.type === 'heading'">
+            <h2 *ngIf="!block.level || block.level === 2" class="structured-heading">
+                <app-markdown-renderer [content]="block.content"></app-markdown-renderer>
+            </h2>
+            <h3 *ngIf="block.level === 3" class="structured-heading">
+                <app-markdown-renderer [content]="block.content"></app-markdown-renderer>
+            </h3>
+            <h4 *ngIf="block.level === 4" class="structured-heading">
+                <app-markdown-renderer [content]="block.content"></app-markdown-renderer>
+            </h4>
+        </ng-container>
+
+        <!-- List -->
+        <div *ngIf="block.type === 'list'" class="structured-list">
+            <app-markdown-renderer [content]="block.content"></app-markdown-renderer>
+        </div>
+
+        <!-- Quote -->
+        <blockquote *ngIf="block.type === 'quote'" class="structured-quote">
+            <app-markdown-renderer [content]="block.content"></app-markdown-renderer>
+        </blockquote>
+
+        <!-- Alert types (info, warning, success, tip) -->
+        <div *ngIf="isAlertType(block.type)" 
+             class="structured-alert" 
+             [ngClass]="getAlertClass(block.type)">
+            <ion-icon [name]="getAlertIcon(block.type)"></ion-icon>
+            <div class="alert-content">
+                <app-markdown-renderer [content]="block.content"></app-markdown-renderer>
+            </div>
+        </div>
+
+        <!-- Paragraph (default) -->
+        <div *ngIf="block.type === 'paragraph' || (!isAlertType(block.type) && block.type !== 'heading' && block.type !== 'list' && block.type !== 'quote')" 
+             class="structured-paragraph">
+            <app-markdown-renderer [content]="block.content"></app-markdown-renderer>
+        </div>
+    </ng-container>
+
+    <!-- Media items -->
+    <div *ngIf="mediaItems.length > 0" class="structured-media">
+        <ng-container *ngFor="let media of mediaItems; let i = index; trackBy: trackByIndex">
+            <!-- Image -->
+            <figure *ngIf="media.type === 'image'" class="media-figure">
+                <img [src]="media.src" 
+                     [alt]="media.alt || ''" 
+                     class="media-image"
+                     loading="lazy">
+                <figcaption *ngIf="media.caption" class="media-caption">
+                    {{ media.caption }}
+                </figcaption>
+            </figure>
+
+            <!-- Video -->
+            <div *ngIf="media.type === 'video'" class="media-video-wrapper">
+                <video controls class="media-video" playsinline>
+                    <source [src]="media.src">
+                    Your browser does not support video playback.
+                </video>
+                <p *ngIf="media.caption" class="media-caption">
+                    {{ media.caption }}
+                </p>
+            </div>
+
+            <!-- Audio -->
+            <div *ngIf="media.type === 'audio'" class="media-audio-wrapper">
+                <audio controls class="media-audio">
+                    <source [src]="media.src">
+                    Your browser does not support audio playback.
+                </audio>
+                <p *ngIf="media.caption" class="media-caption">
+                    {{ media.caption }}
+                </p>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- Forms - only interactive on last message -->
+    <div *ngIf="forms.length > 0" class="structured-forms">
+        <ng-container *ngFor="let form of forms; trackBy: trackByFormId">
+            <div class="structured-form-wrapper">
+                <p *ngIf="form.optional" class="form-optional-notice">
+                    <ion-icon name="information-circle-outline"></ion-icon>
+                    This form is optional. You can also type your response freely.
+                </p>
+                
+                <app-llm-form-renderer 
+                    *ngIf="isLastMessage"
+                    [formDefinition]="toFormDefinition(form)"
+                    [isSubmitting]="isFormSubmitting"
+                    (formSubmit)="onFormSubmit($event)">
+                </app-llm-form-renderer>
+
+                <!-- Historical form (read-only) -->
+                <div *ngIf="!isLastMessage" class="structured-form-historical">
+                    <div class="form-historical-header">
+                        <ion-icon name="document-text-outline"></ion-icon>
+                        {{ form.title || 'Form' }}
+                    </div>
+                    <div class="form-historical-body">
+                        <p *ngIf="form.description" class="form-description">{{ form.description }}</p>
+                        <p class="form-historical-notice">
+                            <ion-icon name="time-outline"></ion-icon>
+                            Form was presented here
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- Next step suggestions -->
+    <div *ngIf="nextStep && isLastMessage" class="structured-next-step">
+        <p *ngIf="nextStep.prompt" class="next-step-prompt">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+            {{ nextStep.prompt }}
+        </p>
+
+        <div *ngIf="nextStep.suggestions && nextStep.suggestions.length > 0" class="suggestion-buttons">
+            <ion-button 
+                *ngFor="let suggestion of nextStep.suggestions; trackBy: trackByIndex"
+                fill="outline"
+                size="small"
+                class="suggestion-btn"
+                (click)="onSuggestionClick(suggestion)">
+                {{ suggestion }}
+            </ion-button>
+        </div>
+    </div>
+
+    <!-- Progress update indicator -->
+    <div *ngIf="newlyCovered.length > 0" class="progress-update">
+        <ion-icon name="checkmark-circle" color="success"></ion-icon>
+        <span>Topics covered: {{ newlyCovered.join(', ') }}</span>
+    </div>
+</div>
