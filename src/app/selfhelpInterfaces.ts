@@ -747,6 +747,9 @@ export interface LlmChatStyle extends Style {
     // Runtime data
     user_id: string;
     section_id: number;
+    conversations: LlmConversation[];
+    messages: LlmMessage[];
+    current_conversation: LlmConversation;
 }
 
 /**

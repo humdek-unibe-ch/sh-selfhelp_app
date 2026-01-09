@@ -146,6 +146,9 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     private async initializeChat(): Promise<void> {
         this.isLoading = true;
         try {
+            this.currentConversation = this.style.current_conversation;
+            this.messages = this.style.messages;
+            this.scrollToBottom(true);
             if (this.isConversationsListEnabled()) {
                 await this.loadConversations();
             } else {
@@ -192,6 +195,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     private async loadOrCreateConversation(): Promise<void> {
         try {
             const conversations = await this.llmChatService.getConversations(this.getSectionId());
+
 
             // Check for auto-start
             if (this.isAutoStartEnabled() && conversations.length === 0) {
