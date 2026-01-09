@@ -2,15 +2,15 @@
  * LLM Form Renderer Component
  * ============================
  * 
- * Renders dynamic forms from LLM structured responses.
+ * Renders dynamic forms from LLM structured responses using Ionic components.
  * Supports:
- * - Radio buttons (single select)
- * - Checkboxes (multi-select)
- * - Select dropdowns
- * - Text inputs
- * - Textarea
- * - Number inputs
- * - Scale inputs
+ * - Radio buttons (ion-radio-group)
+ * - Checkboxes (ion-checkbox)
+ * - Select dropdowns (ion-select)
+ * - Text inputs (ion-input)
+ * - Textarea (ion-textarea)
+ * - Number inputs (ion-input type=number)
+ * - Scale inputs (ion-range)
  * 
  * @module components/LlmFormRenderer
  */
@@ -27,6 +27,7 @@ export class LlmFormRendererComponent implements OnChanges {
     @Input() formDefinition!: LlmFormDefinition;
     @Input() isSubmitting = false;
     @Input() disabled = false;
+    @Input() isSubmitted = false;
 
     @Output() formSubmit = new EventEmitter<{ values: Record<string, string | string[]>; readableText: string }>();
 
@@ -64,7 +65,56 @@ export class LlmFormRendererComponent implements OnChanges {
     }
 
     /**
-     * Handle text/number input change
+     * Handle Ionic radio change
+     */
+    onIonRadioChange(field: LlmFormField, event: any): void {
+        this.formValues[field.id] = event.detail.value;
+        this.clearError(field.id);
+    }
+
+    /**
+     * Handle Ionic checkbox change
+     */
+    onIonCheckboxChange(field: LlmFormField, value: string, event: any): void {
+        const checked = event.detail.checked;
+        const currentValues = (this.formValues[field.id] as string[]) || [];
+
+        if (checked) {
+            if (!currentValues.includes(value)) {
+                this.formValues[field.id] = [...currentValues, value];
+            }
+        } else {
+            this.formValues[field.id] = currentValues.filter(v => v !== value);
+        }
+        this.clearError(field.id);
+    }
+
+    /**
+     * Handle Ionic select change
+     */
+    onIonSelectChange(field: LlmFormField, event: any): void {
+        this.formValues[field.id] = event.detail.value;
+        this.clearError(field.id);
+    }
+
+    /**
+     * Handle Ionic input/textarea change
+     */
+    onIonInputChange(field: LlmFormField, event: any): void {
+        this.formValues[field.id] = event.detail.value || '';
+        this.clearError(field.id);
+    }
+
+    /**
+     * Handle Ionic range change
+     */
+    onIonRangeChange(field: LlmFormField, event: any): void {
+        this.formValues[field.id] = String(event.detail.value);
+        this.clearError(field.id);
+    }
+
+    /**
+     * Legacy handlers for backwards compatibility
      */
     onInputChange(field: LlmFormField, event: Event): void {
         const target = event.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
@@ -72,28 +122,20 @@ export class LlmFormRendererComponent implements OnChanges {
         this.clearError(field.id);
     }
 
-    /**
-     * Handle radio button change
-     */
     onRadioChange(field: LlmFormField, value: string): void {
         this.formValues[field.id] = value;
         this.clearError(field.id);
     }
 
-    /**
-     * Handle checkbox change
-     */
     onCheckboxChange(field: LlmFormField, value: string, event: Event): void {
         const target = event.target as HTMLInputElement;
         const currentValues = (this.formValues[field.id] as string[]) || [];
 
         if (target.checked) {
-            // Add value
             if (!currentValues.includes(value)) {
                 this.formValues[field.id] = [...currentValues, value];
             }
         } else {
-            // Remove value
             this.formValues[field.id] = currentValues.filter(v => v !== value);
         }
         this.clearError(field.id);
@@ -137,13 +179,11 @@ export class LlmFormRendererComponent implements OnChanges {
                 const value = this.formValues[field.id];
 
                 if (field.type === 'checkbox') {
-                    // Checkbox requires at least one selection
                     if (!Array.isArray(value) || value.length === 0) {
                         this.formErrors[field.id] = 'Please select at least one option';
                         isValid = false;
                     }
                 } else {
-                    // Other fields require non-empty value
                     if (!value || (typeof value === 'string' && !value.trim())) {
                         this.formErrors[field.id] = 'This field is required';
                         isValid = false;
@@ -210,7 +250,7 @@ export class LlmFormRendererComponent implements OnChanges {
      * Handle form submission
      */
     onSubmit(): void {
-        if (this.isSubmitting || this.disabled) return;
+        if (this.isSubmitting || this.disabled || this.isSubmitted) return;
 
         if (!this.validateForm()) {
             return;

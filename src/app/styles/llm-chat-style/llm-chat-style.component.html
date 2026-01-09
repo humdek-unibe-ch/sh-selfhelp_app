@@ -14,7 +14,7 @@
     <div *ngIf="isFloatingPanelOpen" class="floating-chat-panel" [class]="'position-' + getFloatingButtonPosition()">
         <div class="floating-panel-header">
             <h4>{{ getLabel('floating_chat_title', 'AI Assistant') }}</h4>
-            <ion-button fill="clear" (click)="closeFloatingPanel()">
+            <ion-button fill="clear" size="small" (click)="closeFloatingPanel()">
                 <ion-icon name="close"></ion-icon>
             </ion-button>
         </div>
@@ -34,7 +34,7 @@
         <ion-item *ngIf="error" color="danger" class="error-alert" lines="none">
             <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap">{{ error }}</ion-label>
-            <ion-button slot="end" fill="clear" (click)="clearError()">
+            <ion-button slot="end" fill="clear" size="small" (click)="clearError()">
                 <ion-icon name="close-outline"></ion-icon>
             </ion-button>
         </ion-item>
@@ -68,6 +68,7 @@
                             <ion-button 
                                 slot="end" 
                                 fill="clear" 
+                                size="small"
                                 color="danger"
                                 (click)="deleteConversation(conversation, $event)"
                                 [title]="getLabel('delete_button_title', 'Delete conversation')">
@@ -149,13 +150,17 @@
                             [class.user-message]="isUserMessage(message)"
                             [class.assistant-message]="!isUserMessage(message)">
                             
-                            <!-- Message Avatar -->
-                            <div class="message-avatar">
-                                <ion-icon [name]="isUserMessage(message) ? 'person' : 'hardware-chip'"></ion-icon>
-                            </div>
-                            
-<!-- Message Bubble -->
+                            <!-- Message Bubble with icon on top -->
                             <div class="message-bubble">
+                                <!-- Message Header with Icon -->
+                                <div class="message-header" *ngIf="!isUserMessage(message)">
+                                    <div class="message-avatar-inline">
+                                        <ion-icon name="chatbubble-ellipses"></ion-icon>
+                                    </div>
+                                    <span class="message-sender">AI Assistant</span>
+                                    <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
+                                </div>
+                                
                                 <div class="message-content">
                                     <!-- User messages: plain text -->
                                     <span *ngIf="isUserMessage(message)">{{ message.content }}</span>
@@ -210,10 +215,14 @@
                                     <span *ngIf="getAttachmentCount(message) > 1">{{ getLabel('multiple_files_attached_text', '{count} files attached').replace('{count}', getAttachmentCount(message).toString()) }}</span>
                                 </div>
                                 
-                                <!-- Message Meta -->
-                                <div class="message-meta">
+                                <!-- Message Meta for user messages -->
+                                <div class="message-meta" *ngIf="isUserMessage(message)">
                                     <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
-                                    <span *ngIf="message.tokens_used" class="message-tokens">
+                                </div>
+                                
+                                <!-- Token count for assistant messages -->
+                                <div class="message-meta" *ngIf="!isUserMessage(message) && message.tokens_used">
+                                    <span class="message-tokens">
                                         <ion-icon name="flash-outline"></ion-icon>
                                         {{ message.tokens_used }}{{ getLabel('tokens_used_suffix', ' tokens') }}
                                     </span>
@@ -224,16 +233,15 @@
 
                     <!-- Processing Indicator -->
                     <div *ngIf="isProcessing" class="message-wrapper assistant-message processing-indicator">
-                        <div class="message-avatar">
-                            <ion-icon name="hardware-chip"></ion-icon>
-                        </div>
                         <div class="message-bubble">
-                            <div class="typing-animation">
-                                <span></span>
-                                <span></span>
-                                <span></span>
+                            <div class="processing-content">
+                                <div class="typing-animation">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <p class="thinking-text">{{ getLabel('ai_thinking_text', 'AI is thinking...') }}</p>
                             </div>
-                            <p class="thinking-text">{{ getLabel('ai_thinking_text', 'AI is thinking...') }}</p>
                         </div>
                     </div>
 
@@ -241,6 +249,7 @@
                     <div *ngIf="isFormModeEnabled() && !isProcessing && messages.length > 0" class="continue-button-wrapper">
                         <ion-button 
                             expand="block" 
+                            size="small"
                             (click)="handleContinue()"
                             [disabled]="isProcessing || isFormSubmitting">
                             <ion-icon name="arrow-forward" slot="start"></ion-icon>
@@ -257,7 +266,7 @@
                                 <p>Your previous form submission could not be processed.</p>
                             </ion-label>
                         </ion-item>
-                        <ion-button expand="block" color="warning" (click)="retryFormSubmission()" [disabled]="isFormSubmitting">
+                        <ion-button expand="block" size="small" color="warning" (click)="retryFormSubmission()" [disabled]="isFormSubmitting">
                             <ion-icon name="refresh" slot="start"></ion-icon>
                             Retry Form Submission
                         </ion-button>
@@ -287,7 +296,7 @@
                         <ion-item *ngIf="fileError" color="danger" class="file-error-alert" lines="none">
                             <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
                             <ion-label class="ion-text-wrap">{{ fileError }}</ion-label>
-                            <ion-button slot="end" fill="clear" (click)="clearFileError()">
+                            <ion-button slot="end" fill="clear" size="small" (click)="clearFileError()">
                                 <ion-icon name="close-outline"></ion-icon>
                             </ion-button>
                         </ion-item>

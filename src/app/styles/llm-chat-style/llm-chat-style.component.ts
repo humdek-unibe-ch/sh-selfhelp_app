@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { AlertController, ModalController, ActionSheetController, Platform } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
@@ -23,7 +23,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     templateUrl: './llm-chat-style.component.html',
     styleUrls: ['./llm-chat-style.component.scss'],
 })
-export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
+export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Input() override style!: LlmChatStyle;
     @ViewChild('messagesContainer') messagesContainer!: ElementRef;
     @ViewChild('messageTextarea') messageTextarea!: ElementRef;
@@ -65,6 +65,8 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     // Smart scroll
     private isNearBottom = true;
     private readonly SCROLL_THRESHOLD = 100;
+    private shouldScrollToBottom = false;
+    private lastMessageCount = 0;
 
     // Character limit
     readonly MAX_MESSAGE_LENGTH = 4000;
@@ -127,6 +129,19 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
 
     override ngOnInit() {
         this.initializeChat();
+    }
+
+    ngAfterViewChecked() {
+        // Auto-scroll when new messages are added
+        if (this.messages.length !== this.lastMessageCount) {
+            this.lastMessageCount = this.messages.length;
+            this.shouldScrollToBottom = true;
+        }
+        
+        if (this.shouldScrollToBottom) {
+            this.shouldScrollToBottom = false;
+            this.scrollToBottomImmediate();
+        }
     }
 
     ngOnDestroy() {
@@ -936,19 +951,28 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         // Only scroll if user was already at bottom (or force is true)
         if (!force && !this.isNearBottom) return;
 
-        setTimeout(() => {
-            if (this.messagesContainer?.nativeElement) {
-                this.messagesContainer.nativeElement.scrollTo({
-                    top: this.messagesContainer.nativeElement.scrollHeight,
-                    behavior: 'smooth'
-                });
-                this.isNearBottom = true;
-            }
-            // Also scroll ion-content if available
-            if (this.ionContent) {
-                this.ionContent.scrollToBottom(300);
-            }
-        }, 100);
+        this.shouldScrollToBottom = true;
+        
+        // Multiple attempts to ensure scroll happens after content renders
+        setTimeout(() => this.scrollToBottomImmediate(), 50);
+        setTimeout(() => this.scrollToBottomImmediate(), 150);
+        setTimeout(() => this.scrollToBottomImmediate(), 300);
+        setTimeout(() => this.scrollToBottomImmediate(), 500);
+    }
+
+    /**
+     * Immediate scroll to bottom without delay
+     */
+    private scrollToBottomImmediate(): void {
+        if (this.messagesContainer?.nativeElement) {
+            const container = this.messagesContainer.nativeElement;
+            container.scrollTop = container.scrollHeight;
+            this.isNearBottom = true;
+        }
+        // Also scroll ion-content if available
+        if (this.ionContent) {
+            this.ionContent.scrollToBottom(0);
+        }
     }
 
     // ============================================================================
