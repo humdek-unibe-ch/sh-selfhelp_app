@@ -1,6 +1,27 @@
 # 3.4.9 (Not release - in development)
 ### New Features
 - add `llmChat` style component for AI chat functionality
+  - Conversation management (create, select, delete)
+  - Message sending with real-time AI responses
+  - File attachments with image preview (camera, gallery, file picker)
+  - Drag & drop file uploads (web)
+  - Smart scroll behavior (auto-scroll only when at bottom)
+  - Progress tracking indicator with topic coverage
+  - Form mode support for structured AI interactions
+  - Floating chat button mode with configurable position
+  - Danger detection and conversation blocking
+  - Character count with limit indicator
+  - Clear button for input
+  - Auto-start conversation support
+  - Responsive design for mobile and tablet
+- add `@capacitor/camera` plugin for photo capture and gallery selection
+- add `ngx-markdown` with PrismJS for markdown rendering in LLM chat responses
+  - Syntax highlighting for code blocks
+  - Copy-to-clipboard functionality
+  - Video and image media support
+  - GitHub Flavored Markdown (GFM) support
+- add `MarkdownRendererComponent` for consistent markdown rendering across the app
+- update `config.yaml` with iOS photo library permissions (`NSPhotoLibraryUsageDescription`, `NSPhotoLibraryAddUsageDescription`)
 
 # 3.4.8
 ### Bugfix

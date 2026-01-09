@@ -52,7 +52,9 @@
                 "inject": true
               },
               "node_modules/datatables.net-dt/css/jquery.dataTables.min.css",
-              "node_modules/shepherd.js/dist/css/shepherd.css"
+              "node_modules/shepherd.js/dist/css/shepherd.css",
+              "node_modules/prismjs/themes/prism-tomorrow.css",
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
             ],
             "scripts": [
               "src/assets/js/iconselect.js",
@@ -62,7 +64,16 @@
               "node_modules/datatables.net/js/jquery.dataTables.min.js",
               "src/assets/js/d3.v3.min.js",
               "src/assets/js/d3.tip.v0.6.3.js",
-              "src/assets/js/lab.js"
+              "src/assets/js/lab.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-css.min.js",
+              "node_modules/prismjs/components/prism-javascript.min.js",
+              "node_modules/prismjs/components/prism-typescript.min.js",
+              "node_modules/prismjs/components/prism-python.min.js",
+              "node_modules/prismjs/components/prism-json.min.js",
+              "node_modules/prismjs/components/prism-bash.min.js",
+              "node_modules/prismjs/components/prism-markdown.min.js",
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js"
             ]
           },
           "configurations": {

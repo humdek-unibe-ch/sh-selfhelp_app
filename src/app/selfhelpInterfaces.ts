@@ -812,3 +812,170 @@ export interface LlmDeleteConversationResponse {
     success?: boolean;
     error?: string;
 }
+
+/**
+ * LLM Chat Selected File (for file uploads)
+ */
+export interface LlmSelectedFile {
+    id: string;
+    file: File;
+    hash: string;
+    previewUrl?: string;
+}
+
+/**
+ * LLM Chat File Config
+ */
+export interface LlmFileConfig {
+    maxFileSize: number;
+    maxFilesPerMessage: number;
+    allowedImageExtensions: string[];
+    allowedDocumentExtensions: string[];
+    allowedCodeExtensions: string[];
+    allowedExtensions: string[];
+    visionModels: string[];
+}
+
+/**
+ * LLM Chat Progress Data
+ */
+export interface LlmProgressData {
+    percentage: number;
+    topics_total: number;
+    topics_covered: number;
+    topic_coverage: Record<string, LlmTopicCoverage>;
+    is_complete: boolean;
+}
+
+export interface LlmTopicCoverage {
+    id: string;
+    title: string;
+    coverage: number;
+    weight: number;
+    is_covered: boolean;
+}
+
+/**
+ * LLM Chat Form Field
+ */
+export interface LlmFormField {
+    id: string;
+    type: 'radio' | 'checkbox' | 'select' | 'text' | 'textarea' | 'number' | 'hidden';
+    label: string;
+    required?: boolean;
+    options?: LlmFormFieldOption[];
+    helpText?: string;
+    placeholder?: string;
+    maxLength?: number;
+    rows?: number;
+    min?: number;
+    max?: number;
+    step?: number;
+    value?: string;
+}
+
+export interface LlmFormFieldOption {
+    value: string;
+    label: string;
+}
+
+/**
+ * LLM Chat Form Definition
+ */
+export interface LlmFormDefinition {
+    type: 'form';
+    title?: string;
+    description?: string;
+    fields: LlmFormField[];
+    submitLabel?: string;
+    contentBefore?: string;
+    contentAfter?: string;
+}
+
+/**
+ * LLM Chat Structured Response
+ */
+export interface LlmStructuredResponse {
+    content: {
+        text_blocks: LlmTextBlock[];
+        forms?: LlmStructuredForm[];
+        media?: LlmMediaItem[];
+        next_step?: LlmNextStep;
+    };
+    meta: {
+        response_type: string;
+        progress?: LlmStructuredProgress;
+        emotion?: string;
+    };
+}
+
+export interface LlmTextBlock {
+    type: 'paragraph' | 'heading' | 'list' | 'quote' | 'info' | 'warning' | 'success' | 'tip';
+    content: string;
+    level?: number;
+}
+
+export interface LlmStructuredForm {
+    id: string;
+    title?: string;
+    description?: string;
+    optional?: boolean;
+    fields: LlmFormField[];
+    submit_label?: string;
+}
+
+export interface LlmMediaItem {
+    type: 'image' | 'video' | 'audio';
+    src: string;
+    alt?: string;
+    caption?: string;
+}
+
+export interface LlmNextStep {
+    prompt?: string;
+    suggestions?: string[];
+    can_skip?: boolean;
+}
+
+export interface LlmStructuredProgress {
+    percentage: number;
+    covered_topics?: string[];
+    newly_covered?: string[];
+    remaining_topics?: number;
+    milestone?: string | null;
+}
+
+/**
+ * Extended Send Message Response with progress and structured data
+ */
+export interface LlmSendMessageResponseExtended extends LlmSendMessageResponse {
+    progress?: LlmProgressData;
+    structured?: LlmStructuredResponse;
+    safety?: {
+        is_safe: boolean;
+        danger_level: null | 'warning' | 'critical' | 'emergency';
+        detected_concerns: string[];
+        requires_intervention: boolean;
+        safety_message?: string | null;
+    };
+    detected_keywords?: string[];
+}
+
+/**
+ * LLM Form Submission Response
+ */
+export interface LlmFormSubmissionResponse {
+    conversation_id?: string;
+    is_new_conversation?: boolean;
+    user_message?: LlmMessage;
+    progress?: LlmProgressData;
+    error?: string;
+}
+
+/**
+ * LLM Progress Response
+ */
+export interface LlmGetProgressResponse {
+    progress?: LlmProgressData;
+    error?: string;
+}

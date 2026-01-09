@@ -86,6 +86,8 @@ import { TwoFactorAuthStyleComponent } from '../styles/two-factor-auth-style/two
 import { QuillModule } from 'ngx-quill';
 import { QuillComponent } from '../styles/survey-js-style/quill-component/quill.component';
 import { LlmChatStyleComponent } from '../styles/llm-chat-style/llm-chat-style.component';
+import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownRendererComponent } from '../components/markdown-renderer/markdown-renderer.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -145,7 +147,8 @@ const routes: Routes = [
             },
             format: 'html',
             sanitize: false
-        })
+        }),
+        MarkdownModule.forRoot()
     ],
     exports: [
         RouterModule
@@ -221,7 +224,8 @@ const routes: Routes = [
         SurveyJsVoiceRecorderComponent,
         TwoFactorAuthStyleComponent,
         QuillComponent,
-        LlmChatStyleComponent
+        LlmChatStyleComponent,
+        MarkdownRendererComponent
     ]
 })
 export class NavigationPageModule {

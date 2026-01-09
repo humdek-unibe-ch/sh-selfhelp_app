@@ -1,0 +1,69 @@
+platforms:
+  android:
+    packageName: unibe.tpf.selfhelp
+    appName: SelfHelp
+    versionName: 3.4.9
+    incrementVersionCode: false
+    versionCode: 30
+    copy:
+      - src: ./../../configs/google-services.json
+        dest: app/google-services.json
+    manifest:
+      - file: AndroidManifest.xml
+        delete: //intent-filter
+      - file: AndroidManifest.xml
+        target: manifest/application/activity
+        inject: |
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+      - file: AndroidManifest.xml
+        target: manifest
+        merge: |
+          <manifest>
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+            <uses-permission android:name="android.permission.CAMERA" />
+          </manifest>
+      - file: AndroidManifest.xml
+        target: manifest/application
+        attrs:
+          android:requestLegacyExternalStorage: true
+
+  ios:    
+    targets:
+      App:
+        version: 3.4.9
+        displayName: SelfHelp
+        productName: SelfHelp
+        incrementBuild: false
+        versionCode: 30    
+        bundleId: unibe.tpf.selfhelp
+        entitlements:
+          - aps-environment: development
+        plist:
+          - replace: true
+            file: GoogleService-Info.plist
+            entries:              
+              - API_KEY: AIzaSyBAU5gP2bzuqVDgihOmu6AwVdwFAEsTtL0
+              - GCM_SENDER_ID: "500227861670"
+              - PLIST_VERSION: "1"
+              - BUNDLE_ID: unibe.tpf.selfhelp
+              - PROJECT_ID: tpf-selfhelp
+              - STORAGE_BUCKET: tpf-selfhelp.appspot.com
+              - IS_ADS_ENABLED: false
+              - IS_ANALYTICS_ENABLED: false
+              - IS_APPINVITE_ENABLED: true
+              - IS_GCM_ENABLED: true
+              - IS_SIGNIN_ENABLED: true
+              - GOOGLE_APP_ID: 1:500227861670:ios:c61b1a0278cf2768141867
+
+          - replace: false
+            file: App/Info.plist
+            entries:
+              - NSCameraUsageDescription: "We need access to your camera to allow you to take and upload pictures directly for our study. This provides a quicker and more convenient way to submit your photos, compared to taking a picture outside the app and uploading it separately."
+              - NSMicrophoneUsageDescription: "We need access to your microphone to allow you to record voice messages for our study. This provides a quicker and more convenient way to submit your descriptive responses."
+              - NSPhotoLibraryUsageDescription: "We need access to your photo library to allow you to select and upload images for the AI chat feature. This enables you to share images with the AI assistant for analysis."
+              - NSPhotoLibraryAddUsageDescription: "We need permission to save photos to your library when you capture images within the app."

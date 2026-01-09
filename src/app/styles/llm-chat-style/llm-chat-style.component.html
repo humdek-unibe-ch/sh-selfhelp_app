@@ -1,142 +1,366 @@
-<div [class]="'llm-chat-container ' + getCss()">
-    <!-- Error Alert -->
-    <ion-item *ngIf="error" color="danger" class="error-alert" lines="none">
-        <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
-        <ion-label class="ion-text-wrap">{{ error }}</ion-label>
-        <ion-button slot="end" fill="clear" (click)="clearError()">
-            <ion-icon name="close-outline"></ion-icon>
-        </ion-button>
-    </ion-item>
+<!-- Floating Button Mode -->
+<ng-container *ngIf="isFloatingButtonEnabled()">
+    <!-- Floating Button -->
+    <button 
+        *ngIf="!isFloatingPanelOpen"
+        class="floating-chat-button"
+        [class]="'position-' + getFloatingButtonPosition()"
+        (click)="toggleFloatingPanel()">
+        <ion-icon [name]="getFloatingButtonIcon()"></ion-icon>
+        <span *ngIf="getLabel('floating_button_label', '')">{{ getLabel('floating_button_label', 'Chat') }}</span>
+    </button>
 
-    <!-- Main Chat Layout -->
-    <div class="chat-layout" [class.with-sidebar]="isConversationsListEnabled()">
-        
-        <!-- Conversations Sidebar -->
-        <div *ngIf="isConversationsListEnabled()" class="conversations-sidebar">
-            <div class="sidebar-header">
-                <h3>{{ getLabel('conversations_heading', 'Conversations') }}</h3>
-                <ion-button size="small" fill="outline" (click)="createConversation()">
-                    <ion-icon name="add-outline" slot="start"></ion-icon>
-                    {{ getLabel('new_chat_button_label', 'New') }}
-                </ion-button>
-            </div>
-            
-            <div class="conversations-list" *ngIf="!isLoading">
-                <ion-list *ngIf="conversations.length > 0">
-                    <ion-item 
-                        *ngFor="let conversation of conversations; trackBy: trackByConversationId"
-                        [class.selected]="currentConversation?.id === conversation.id"
-                        (click)="selectConversation(conversation)"
-                        button>
-                        <ion-icon name="chatbubbles-outline" slot="start"></ion-icon>
-                        <ion-label>
-                            <h3>{{ conversation.title }}</h3>
-                            <p>{{ conversation.updated_at | date:'short' }}</p>
-                        </ion-label>
-                        <ion-button 
-                            slot="end" 
-                            fill="clear" 
-                            color="danger"
-                            (click)="deleteConversation(conversation, $event)"
-                            [title]="getLabel('delete_button_title', 'Delete conversation')">
-                            <ion-icon name="trash-outline"></ion-icon>
-                        </ion-button>
-                    </ion-item>
-                </ion-list>
-                
-                <div *ngIf="conversations.length === 0" class="empty-conversations">
-                    <ion-icon name="chatbubbles-outline"></ion-icon>
-                    <p>{{ getLabel('no_conversations_message', 'No conversations yet') }}</p>
-                </div>
-            </div>
+    <!-- Floating Panel -->
+    <div *ngIf="isFloatingPanelOpen" class="floating-chat-panel" [class]="'position-' + getFloatingButtonPosition()">
+        <div class="floating-panel-header">
+            <h4>{{ getLabel('floating_chat_title', 'AI Assistant') }}</h4>
+            <ion-button fill="clear" (click)="closeFloatingPanel()">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
         </div>
+        <ng-container *ngTemplateOutlet="chatContent"></ng-container>
+    </div>
+</ng-container>
 
-        <!-- Chat Panel -->
-        <div class="chat-panel">
-            <!-- Chat Header -->
-            <div class="chat-header">
-                <div class="header-info">
-                    <ion-icon name="chatbubble-ellipses-outline" class="chat-icon"></ion-icon>
-                    <h4>{{ getChatTitle() }}</h4>
+<!-- Regular Mode -->
+<ng-container *ngIf="!isFloatingButtonEnabled()">
+    <ng-container *ngTemplateOutlet="chatContent"></ng-container>
+</ng-container>
+
+<!-- Chat Content Template -->
+<ng-template #chatContent>
+    <div [class]="'llm-chat-container ' + getCss()" [class.floating-mode]="isFloatingButtonEnabled() && isFloatingPanelOpen">
+        <!-- Error Alert -->
+        <ion-item *ngIf="error" color="danger" class="error-alert" lines="none">
+            <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">{{ error }}</ion-label>
+            <ion-button slot="end" fill="clear" (click)="clearError()">
+                <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+        </ion-item>
+
+        <!-- Main Chat Layout -->
+        <div class="chat-layout" [class.with-sidebar]="isConversationsListEnabled()">
+            
+            <!-- Conversations Sidebar -->
+            <div *ngIf="isConversationsListEnabled()" class="conversations-sidebar">
+                <div class="sidebar-header">
+                    <h3>{{ getLabel('conversations_heading', 'Conversations') }}</h3>
+                    <ion-button size="small" fill="outline" (click)="createConversation()">
+                        <ion-icon name="add-outline" slot="start"></ion-icon>
+                        {{ getLabel('new_chat_button_label', 'New') }}
+                    </ion-button>
                 </div>
-                <ion-badge color="medium" class="model-badge">
-                    <ion-icon name="hardware-chip-outline"></ion-icon>
-                    {{ getConfiguredModel() }}
-                </ion-badge>
+                
+                <div class="conversations-list" *ngIf="!isLoading">
+                    <ion-list *ngIf="conversations.length > 0">
+                        <ion-item 
+                            *ngFor="let conversation of conversations; trackBy: trackByConversationId"
+                            [class.selected]="currentConversation?.id === conversation.id"
+                            [class.blocked]="conversation.blocked"
+                            (click)="selectConversation(conversation)"
+                            button>
+                            <ion-icon [name]="conversation.blocked ? 'ban-outline' : 'chatbubbles-outline'" slot="start"></ion-icon>
+                            <ion-label>
+                                <h3>{{ conversation.title }}</h3>
+                                <p>{{ formatDate(conversation.updated_at) }}</p>
+                            </ion-label>
+                            <ion-button 
+                                slot="end" 
+                                fill="clear" 
+                                color="danger"
+                                (click)="deleteConversation(conversation, $event)"
+                                [title]="getLabel('delete_button_title', 'Delete conversation')">
+                                <ion-icon name="trash-outline"></ion-icon>
+                            </ion-button>
+                        </ion-item>
+                    </ion-list>
+                    
+                    <div *ngIf="conversations.length === 0" class="empty-conversations">
+                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                        <p>{{ getLabel('no_conversations_message', 'No conversations yet') }}</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Messages Container -->
-            <div #messagesContainer class="messages-container">
-                <!-- Loading State -->
-                <div *ngIf="isLoading" class="loading-state">
-                    <ion-spinner name="crescent"></ion-spinner>
-                    <p>{{ getLabel('loading_messages_text', 'Loading messages...') }}</p>
+            <!-- Chat Panel -->
+            <div class="chat-panel">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="header-info">
+                        <div class="chat-icon-wrapper">
+                            <ion-icon name="chatbubble-ellipses"></ion-icon>
+                        </div>
+                        <h4>{{ getChatTitle() }}</h4>
+                    </div>
+                    <ion-badge color="medium" class="model-badge">
+                        <ion-icon name="hardware-chip-outline"></ion-icon>
+                        {{ getConfiguredModel() }}
+                    </ion-badge>
                 </div>
 
-                <!-- Empty State -->
-                <div *ngIf="!isLoading && messages.length === 0" class="empty-state">
-                    <ion-icon name="chatbubbles-outline"></ion-icon>
-                    <h4>{{ getLabel('empty_state_title', 'Start a conversation') }}</h4>
-                    <p>{{ getLabel('empty_state_description', 'Send a message to start chatting with the AI assistant.') }}</p>
+                <!-- Progress Indicator -->
+                <div *ngIf="isProgressTrackingEnabled() && progress" class="progress-indicator" [class.updating]="isProgressUpdating">
+                    <div class="progress-header">
+                        <span class="progress-label">
+                            <ion-icon name="analytics-outline"></ion-icon>
+                            {{ getLabel('progress_bar_label', 'Progress') }}
+                        </span>
+                        <span class="progress-percentage" [style.color]="getProgressColor(progress.percentage)">
+                            {{ progress.percentage | number:'1.0-0' }}%
+                        </span>
+                    </div>
+                    <ion-progress-bar [value]="progress.percentage / 100" [color]="getProgressColor(progress.percentage)"></ion-progress-bar>
+                    <div class="progress-summary">
+                        <small>{{ progress.topics_covered }} of {{ progress.topics_total }} topics covered</small>
+                    </div>
+                    <div *ngIf="progress.is_complete" class="progress-complete">
+                        <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                        <span>{{ getLabel('progress_complete_message', 'Great job! You have covered all topics.') }}</span>
+                    </div>
                 </div>
 
-                <!-- Messages List -->
-                <div *ngIf="!isLoading && messages.length > 0" class="messages-list">
-                    <div 
-                        *ngFor="let message of messages; trackBy: trackByMessageId"
-                        class="message-wrapper"
-                        [class.user-message]="isUserMessage(message)"
-                        [class.assistant-message]="!isUserMessage(message)">
-                        
-                        <div class="message-bubble">
-                            <div class="message-content" [innerHTML]="message.formatted_content || message.content"></div>
-                            <div class="message-meta">
-                                <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
-                                <span *ngIf="message.tokens_used" class="message-tokens">
-                                    {{ message.tokens_used }}{{ getLabel('tokens_used_suffix', ' tokens') }}
-                                </span>
+                <!-- Messages Container -->
+                <div #messagesContainer class="messages-container" (scroll)="onScroll()">
+                    <!-- Loading State -->
+                    <div *ngIf="isLoading" class="loading-state">
+                        <ion-spinner name="crescent"></ion-spinner>
+                        <p>{{ getLabel('loading_messages_text', 'Loading messages...') }}</p>
+                    </div>
+
+                    <!-- Auto-starting State -->
+                    <div *ngIf="isAutoStarting" class="loading-state">
+                        <ion-spinner name="crescent"></ion-spinner>
+                        <p>{{ getLabel('loading_text', 'Starting conversation...') }}</p>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div *ngIf="!isLoading && !isAutoStarting && messages.length === 0" class="empty-state">
+                        <ion-icon name="chatbubbles-outline"></ion-icon>
+                        <h4>{{ getLabel('empty_state_title', 'Start a conversation') }}</h4>
+                        <p>{{ getLabel('empty_state_description', 'Send a message to start chatting with the AI assistant.') }}</p>
+                    </div>
+
+                    <!-- Messages List -->
+                    <div *ngIf="!isLoading && !isAutoStarting && messages.length > 0" class="messages-list">
+                        <div 
+                            *ngFor="let message of messages; trackBy: trackByMessageId; let isLast = last"
+                            class="message-wrapper"
+                            [class.user-message]="isUserMessage(message)"
+                            [class.assistant-message]="!isUserMessage(message)">
+                            
+                            <!-- Message Avatar -->
+                            <div class="message-avatar">
+                                <ion-icon [name]="isUserMessage(message) ? 'person' : 'hardware-chip'"></ion-icon>
+                            </div>
+                            
+<!-- Message Bubble -->
+                                            <div class="message-bubble">
+                                                <div class="message-content">
+                                                    <app-markdown-renderer 
+                                                        *ngIf="!isUserMessage(message)"
+                                                        [content]="message.content">
+                                                    </app-markdown-renderer>
+                                                    <span *ngIf="isUserMessage(message)">{{ message.content }}</span>
+                                                </div>
+                                
+                                <!-- Attachment Indicator -->
+                                <div *ngIf="getAttachmentCount(message) > 0" class="attachment-indicator">
+                                    <ion-icon name="attach"></ion-icon>
+                                    <span *ngIf="getAttachmentCount(message) === 1">{{ getLabel('single_file_attached_text', '1 file attached') }}</span>
+                                    <span *ngIf="getAttachmentCount(message) > 1">{{ getLabel('multiple_files_attached_text', '{count} files attached').replace('{count}', getAttachmentCount(message).toString()) }}</span>
+                                </div>
+                                
+                                <!-- Message Meta -->
+                                <div class="message-meta">
+                                    <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
+                                    <span *ngIf="message.tokens_used" class="message-tokens">
+                                        <ion-icon name="flash-outline"></ion-icon>
+                                        {{ message.tokens_used }}{{ getLabel('tokens_used_suffix', ' tokens') }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Processing Indicator -->
-                <div *ngIf="isProcessing" class="processing-indicator">
-                    <div class="typing-animation">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <!-- Processing Indicator -->
+                    <div *ngIf="isProcessing" class="message-wrapper assistant-message processing-indicator">
+                        <div class="message-avatar">
+                            <ion-icon name="hardware-chip"></ion-icon>
+                        </div>
+                        <div class="message-bubble">
+                            <div class="typing-animation">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <p class="thinking-text">{{ getLabel('ai_thinking_text', 'AI is thinking...') }}</p>
+                        </div>
                     </div>
-                    <p>{{ getLabel('ai_thinking_text', 'AI is thinking...') }}</p>
-                </div>
-            </div>
 
-            <!-- Message Input -->
-            <div class="message-input-container">
-                <div *ngIf="isConversationBlocked()" class="blocked-notice">
-                    <ion-icon name="ban-outline"></ion-icon>
-                    <span>{{ getLabel('danger_blocked_message', 'This conversation has been blocked.') }}</span>
+                    <!-- Continue Button (Form Mode) -->
+                    <div *ngIf="isFormModeEnabled() && !isProcessing && messages.length > 0" class="continue-button-wrapper">
+                        <ion-button 
+                            expand="block" 
+                            (click)="handleContinue()"
+                            [disabled]="isProcessing || isFormSubmitting">
+                            <ion-icon name="arrow-forward" slot="start"></ion-icon>
+                            {{ getLabel('continue_button_label', 'Continue') }}
+                        </ion-button>
+                    </div>
+
+                    <!-- Retry Form Button -->
+                    <div *ngIf="lastFailedFormSubmission" class="retry-form-wrapper">
+                        <ion-item color="warning" lines="none">
+                            <ion-icon name="warning" slot="start"></ion-icon>
+                            <ion-label class="ion-text-wrap">
+                                <strong>Form submission failed</strong>
+                                <p>Your previous form submission could not be processed.</p>
+                            </ion-label>
+                        </ion-item>
+                        <ion-button expand="block" color="warning" (click)="retryFormSubmission()" [disabled]="isFormSubmitting">
+                            <ion-icon name="refresh" slot="start"></ion-icon>
+                            Retry Form Submission
+                        </ion-button>
+                    </div>
                 </div>
-                
-                <div *ngIf="!isConversationBlocked()" class="input-wrapper">
-                    <ion-textarea
-                        [(ngModel)]="currentMessage"
-                        [placeholder]="getLabel('message_placeholder', 'Type your message...')"
-                        [disabled]="isProcessing || isLoading"
-                        (keydown)="onKeyPress($event)"
-                        rows="2"
-                        auto-grow="true"
-                        class="message-textarea">
-                    </ion-textarea>
-                    <ion-button 
-                        [disabled]="isProcessing || isLoading || !currentMessage.trim()"
-                        (click)="sendMessage()"
-                        class="send-button"
-                        [title]="getLabel('send_message_title', 'Send message')">
-                        <ion-icon name="send" slot="icon-only"></ion-icon>
-                    </ion-button>
+
+                <!-- Message Input -->
+                <div class="message-input-container">
+                    <!-- Blocked Notice -->
+                    <div *ngIf="isConversationBlocked()" class="blocked-notice">
+                        <ion-icon name="ban-outline"></ion-icon>
+                        <span [innerHTML]="getLabel('danger_blocked_message', 'This conversation has been blocked.')"></span>
+                    </div>
+
+                    <!-- Form Mode Notice -->
+                    <div *ngIf="isFormModeEnabled() && !isConversationBlocked()" class="form-mode-notice">
+                        <ion-icon name="list-outline"></ion-icon>
+                        <div>
+                            <strong>{{ getLabel('form_mode_active_title', 'Form Mode Active') }}</strong>
+                            <p>{{ getLabel('form_mode_active_description', 'Please use the form above to respond.') }}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Regular Input -->
+                    <ng-container *ngIf="!isConversationBlocked() && !isFormModeEnabled()">
+                        <!-- File Error -->
+                        <ion-item *ngIf="fileError" color="danger" class="file-error-alert" lines="none">
+                            <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+                            <ion-label class="ion-text-wrap">{{ fileError }}</ion-label>
+                            <ion-button slot="end" fill="clear" (click)="clearFileError()">
+                                <ion-icon name="close-outline"></ion-icon>
+                            </ion-button>
+                        </ion-item>
+
+                        <!-- File Attachments Preview -->
+                        <div *ngIf="selectedFiles.length > 0" class="attachments-preview">
+                            <div 
+                                *ngFor="let file of selectedFiles; trackBy: trackByFileId"
+                                class="attachment-item">
+                                <div class="attachment-preview">
+                                    <img *ngIf="file.previewUrl" [src]="file.previewUrl" alt="Preview">
+                                    <ion-icon *ngIf="!file.previewUrl" name="document-outline"></ion-icon>
+                                </div>
+                                <div class="attachment-info">
+                                    <span class="attachment-name">{{ llmChatService.truncateFileName(file.file.name) }}</span>
+                                    <span class="attachment-size">{{ llmChatService.formatFileSize(file.file.size) }}</span>
+                                </div>
+                                <ion-button 
+                                    fill="clear" 
+                                    size="small" 
+                                    color="danger"
+                                    (click)="removeFile(file.id)"
+                                    [title]="getLabel('remove_file_title', 'Remove file')">
+                                    <ion-icon name="close-circle"></ion-icon>
+                                </ion-button>
+                            </div>
+                        </div>
+
+                        <!-- Input Wrapper -->
+                        <div 
+                            class="input-wrapper"
+                            [class.dragging]="isDragging"
+                            (dragover)="onDragOver($event)"
+                            (dragleave)="onDragLeave($event)"
+                            (drop)="onDrop($event)">
+                            
+                            <!-- Hidden File Input -->
+                            <input 
+                                type="file" 
+                                id="llm-chat-file-input"
+                                class="hidden-file-input"
+                                multiple
+                                [accept]="acceptFileTypes"
+                                (change)="onFileSelected($event)">
+
+                            <!-- Textarea -->
+                            <ion-textarea
+                                #messageTextarea
+                                [(ngModel)]="currentMessage"
+                                [placeholder]="getLabel('message_placeholder', 'Type your message...')"
+                                [disabled]="isTextareaDisabled"
+                                (keydown)="onKeyPress($event)"
+                                [maxlength]="MAX_MESSAGE_LENGTH"
+                                rows="2"
+                                auto-grow="true"
+                                class="message-textarea">
+                            </ion-textarea>
+
+                            <!-- Action Buttons -->
+                            <div class="input-actions">
+                                <!-- Left side - Attachment button -->
+                                <div class="left-actions">
+                                    <ion-button
+                                        *ngIf="isVisionAttachEnabled"
+                                        fill="clear" 
+                                        size="small"
+                                        (click)="openFilePicker()"
+                                        [disabled]="isVisionAttachDisabled"
+                                        [title]="attachFilesTitle">
+                                        <ion-icon name="attach"></ion-icon>
+                                    </ion-button>
+                                    <ion-button 
+                                        *ngIf="isFileUploadsEnabled() && !isVisionModel()"
+                                        fill="clear" 
+                                        size="small"
+                                        disabled
+                                        [title]="noVisionSupportTitle">
+                                        <ion-icon name="attach" color="medium"></ion-icon>
+                                    </ion-button>
+                                </div>
+
+                                <!-- Center - Character count -->
+                                <div class="character-count" [class.near-limit]="isNearCharacterLimit">
+                                    {{ characterCount }}/{{ MAX_MESSAGE_LENGTH }}
+                                </div>
+
+                                <!-- Right side - Clear and Send buttons -->
+                                <div class="right-actions">
+                                    <ion-button 
+                                        fill="clear" 
+                                        size="small"
+                                        (click)="clearInput()"
+                                        [disabled]="isVisionAttachDisabled"
+                                        [title]="clearButtonTitle">
+                                        <ion-icon name="close"></ion-icon>
+                                    </ion-button>
+                                    <ion-button 
+                                        fill="solid" 
+                                        size="small"
+                                        color="primary"
+                                        [disabled]="isSendButtonDisabled"
+                                        (click)="sendMessage()"
+                                        [title]="sendButtonTitle">
+                                        <ion-icon *ngIf="!isProcessing" name="send"></ion-icon>
+                                        <ion-spinner *ngIf="isProcessing" name="crescent"></ion-spinner>
+                                    </ion-button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</ng-template>
