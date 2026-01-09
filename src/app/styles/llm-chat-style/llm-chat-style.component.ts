@@ -11,10 +11,12 @@ import {
     LlmProgressData,
     LlmFileConfig,
     LlmFormDefinition,
-    LlmStructuredResponse,
+    LlmStructuredResponse
+} from 'src/app/selfhelpInterfaces';
+import {
     parseLlmStructuredResponse,
     parseLlmFormDefinition
-} from 'src/app/selfhelpInterfaces';
+} from 'src/app/utils/llm-response-utils';
 import { LlmChatService, DEFAULT_FILE_CONFIG } from 'src/app/services/llm-chat.service';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
@@ -432,17 +434,19 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 throw new Error(result.error);
             }
 
-            // Handle blocked/danger detection
-            if (result.blocked && result.type === 'danger_detected') {
+            // Handle blocked/danger detection (both danger_detected and conversation_blocked types)
+            if (result.blocked && (result.type === 'danger_detected' || result.type === 'conversation_blocked')) {
                 // Update conversation as blocked
                 if (this.currentConversation) {
                     this.currentConversation = {
                         ...this.currentConversation,
                         blocked: true,
-                        blocked_reason: 'Safety concerns detected'
+                        blocked_reason: result.type === 'conversation_blocked' 
+                            ? 'Conversation blocked' 
+                            : 'Safety concerns detected'
                     };
                 }
-                // Show safety message
+                // Show safety message (plain text, not JSON)
                 if (result.message) {
                     const safetyMessage: LlmMessage = {
                         id: 'safety-' + Date.now(),
