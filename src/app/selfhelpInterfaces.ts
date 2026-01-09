@@ -663,3 +663,152 @@ export interface TwoFactorAuthResult {
     message?: string,
     success?: boolean
 }
+
+// ============================================================================
+// LLM CHAT TYPES
+// ============================================================================
+
+export interface LlmChatStyle extends Style {
+    // Configuration fields
+    llm_max_tokens: StyleField;
+    llm_temperature: StyleField;
+    conversation_limit: StyleField;
+    message_limit: StyleField;
+    llm_model: StyleField;
+    enable_conversations_list: StyleField;
+    enable_file_uploads: StyleField;
+    enable_full_page_reload: StyleField;
+    enable_form_mode: StyleField;
+    enable_data_saving: StyleField;
+    data_table_name: StyleField;
+    enable_media_rendering: StyleField;
+    allowed_media_domains: StyleField;
+    enable_floating_button: StyleField;
+    floating_button_position: StyleField;
+    floating_button_icon: StyleField;
+    floating_button_label: StyleField;
+    floating_chat_title: StyleField;
+    enable_progress_tracking: StyleField;
+    progress_bar_label: StyleField;
+    progress_complete_message: StyleField;
+    progress_show_topics: StyleField;
+    enable_danger_detection: StyleField;
+    danger_keywords: StyleField;
+    danger_notification_emails: StyleField;
+    danger_blocked_message: StyleField;
+    auto_start_conversation: StyleField;
+    auto_start_message: StyleField;
+    strict_conversation_mode: StyleField;
+    conversation_context: StyleField;
+    // UI Labels
+    submit_button_label: StyleField;
+    new_chat_button_label: StyleField;
+    delete_chat_button_label: StyleField;
+    chat_description: StyleField;
+    conversations_heading: StyleField;
+    no_conversations_message: StyleField;
+    select_conversation_heading: StyleField;
+    select_conversation_description: StyleField;
+    model_label_prefix: StyleField;
+    no_messages_message: StyleField;
+    tokens_used_suffix: StyleField;
+    loading_text: StyleField;
+    ai_thinking_text: StyleField;
+    upload_image_label: StyleField;
+    upload_help_text: StyleField;
+    message_placeholder: StyleField;
+    clear_button_label: StyleField;
+    new_conversation_title_label: StyleField;
+    conversation_title_label: StyleField;
+    conversation_name: StyleField;
+    cancel_button_label: StyleField;
+    create_button_label: StyleField;
+    delete_confirmation_title: StyleField;
+    delete_confirmation_message: StyleField;
+    confirm_delete_button_label: StyleField;
+    cancel_delete_button_label: StyleField;
+    empty_message_error: StyleField;
+    default_chat_title: StyleField;
+    delete_button_title: StyleField;
+    conversation_title_placeholder: StyleField;
+    single_file_attached_text: StyleField;
+    multiple_files_attached_text: StyleField;
+    empty_state_title: StyleField;
+    empty_state_description: StyleField;
+    loading_messages_text: StyleField;
+    attach_files_title: StyleField;
+    no_vision_support_title: StyleField;
+    no_vision_support_text: StyleField;
+    send_message_title: StyleField;
+    remove_file_title: StyleField;
+    form_mode_active_title: StyleField;
+    form_mode_active_description: StyleField;
+    continue_button_label: StyleField;
+    // Runtime data
+    user_id: string;
+    section_id: number;
+}
+
+/**
+ * LLM Chat Conversation
+ */
+export interface LlmConversation {
+    id: string;
+    user_id?: number;
+    title: string;
+    model: string;
+    temperature?: number;
+    max_tokens?: number;
+    created_at: string;
+    updated_at: string;
+    blocked?: boolean | number;
+    blocked_reason?: string;
+}
+
+/**
+ * LLM Chat Message
+ */
+export interface LlmMessage {
+    id: string;
+    conversation_id?: string;
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+    formatted_content?: string;
+    timestamp: string;
+    tokens_used?: number;
+    attachments?: string;
+    model?: string;
+}
+
+/**
+ * LLM Chat API Response types
+ */
+export interface LlmGetConversationsResponse {
+    conversations?: LlmConversation[];
+    error?: string;
+}
+
+export interface LlmGetConversationResponse {
+    conversation?: LlmConversation;
+    messages?: LlmMessage[];
+    error?: string;
+}
+
+export interface LlmSendMessageResponse {
+    conversation_id?: string;
+    message?: string;
+    is_new_conversation?: boolean;
+    error?: string;
+    blocked?: boolean;
+    type?: 'danger_detected' | 'conversation_blocked';
+}
+
+export interface LlmNewConversationResponse {
+    conversation_id?: string;
+    error?: string;
+}
+
+export interface LlmDeleteConversationResponse {
+    success?: boolean;
+    error?: string;
+}

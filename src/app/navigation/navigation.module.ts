@@ -85,6 +85,7 @@ import { SurveyJsVoiceRecorderComponent } from '../styles/survey-js-style/survey
 import { TwoFactorAuthStyleComponent } from '../styles/two-factor-auth-style/two-factor-auth-style.component';
 import { QuillModule } from 'ngx-quill';
 import { QuillComponent } from '../styles/survey-js-style/quill-component/quill.component';
+import { LlmChatStyleComponent } from '../styles/llm-chat-style/llm-chat-style.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -219,7 +220,8 @@ const routes: Routes = [
         EntryRecordDeleteStyleComponent,
         SurveyJsVoiceRecorderComponent,
         TwoFactorAuthStyleComponent,
-        QuillComponent
+        QuillComponent,
+        LlmChatStyleComponent
     ]
 })
 export class NavigationPageModule {

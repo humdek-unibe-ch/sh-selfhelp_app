@@ -1,3 +1,16 @@
+# 3.4.9 (Not release - in development)
+### New Features
+- add `llmChat` style component for AI chat functionality
+- implement LLM Chat service for API communication
+- add comprehensive TypeScript interfaces for LLM chat data structures
+- support for conversation management (create, select, delete)
+- support for message sending and real-time responses
+- responsive chat UI with Ionic components
+- conversation sidebar for multi-conversation mode
+- form mode support for structured AI interactions
+- progress tracking integration
+- danger detection and conversation blocking
+
 # 3.4.8
 ### Bugfix
  - properly pull the exisitng servers  in dev mode

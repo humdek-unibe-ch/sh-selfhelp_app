@@ -1,0 +1,71 @@
+---
+name: code
+description: This is a new rule
+---
+
+# Overview
+
+1. Architecture & Structure
+Use Angular modules (not standalone components) for better tree-shaking and lazy loading
+Feature-based directory structure with clear separation of concerns
+Single responsibility principle - each component/service has one clear purpose
+Lazy loading for navigation modules and feature routes
+2. Component Design Patterns
+Component inheritance - extend BasicStyleComponent for style-based components
+Input properties - use @Input() override for proper inheritance
+Dynamic component rendering - use ngSwitch with *ngSwitchCase for style-based rendering
+Template-driven conditional rendering - prefer *ngIf and *ngFor over complex logic in templates
+3. State Management
+BehaviorSubject pattern for reactive state management in services
+Observable subscriptions with proper cleanup in ngOnDestroy
+Immutable state updates - create new objects instead of mutating existing ones
+Single source of truth for application state
+4. Service Patterns
+Singleton services with providedIn: 'root'
+Promise-based API calls with proper error handling
+Method naming conventions: getX(), setX(), isX(), prepareX()
+Dependency injection for all external dependencies
+5. Form Handling
+Reactive Forms with FormBuilder and FormGroup
+Form validation using Angular validators and custom validators
+Type-safe form controls with proper typing
+Form submission patterns with confirmation dialogs
+6. API Communication
+CapacitorHttp for native HTTP requests with proper headers
+URL-encoded data for form submissions
+Error handling with try-catch and proper user feedback
+Device-specific parameters (device_id, mobile flags)
+7. Data Persistence
+Capacitor Preferences for local storage
+JSON serialization for complex objects
+Version-aware storage with migration patterns
+8. TypeScript Standards
+Strict TypeScript configuration with all strict flags enabled
+Interface definitions for all data structures (600+ lines of interfaces)
+Type assertions with proper casting (<Type>object)
+Optional properties and union types for flexible APIs
+Index signatures for dynamic property access
+9. Naming Conventions
+PascalCase for component classes and interfaces
+camelCase for methods, properties, and variables
+kebab-case for file names and selectors
+Prefix conventions: SH_ for constants, getFieldContent() for data access
+10. Error Handling & User Experience
+Toast notifications for user feedback
+Alert confirmations for destructive actions
+Loading states with spinners and duration management
+Graceful degradation for missing data
+11. Internationalization
+ngx-translate integration throughout the application
+Language-based content with proper locale handling
+Translation keys in JSON files
+12. Performance Patterns
+Change detection optimization with NgZone.run()
+Lazy initialization of heavy components
+Memory management with proper subscription cleanup
+Bundle size optimization with tree-shaking
+13. Code Organization
+Helper functions in dedicated files (_helpers/)
+Constants defined in services
+Utility methods in dedicated services
+Platform-specific logic abstracted into services
