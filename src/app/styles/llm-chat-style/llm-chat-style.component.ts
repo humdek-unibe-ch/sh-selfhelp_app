@@ -474,6 +474,9 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 this.currentConversation = conversationResult.conversation;
                 this.messages = conversationResult.messages;
 
+                // Trigger change detection to ensure UI updates immediately
+                this.cdr.detectChanges();
+
                 // If this was a new conversation, reload the list
                 if (result.is_new_conversation && this.isConversationsListEnabled()) {
                     await this.loadConversations();
@@ -804,6 +807,9 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 this.currentConversation = conversationResult.conversation;
                 this.messages = conversationResult.messages;
 
+                // Trigger change detection to ensure UI updates immediately
+                this.cdr.detectChanges();
+
                 if (this.isConversationsListEnabled()) {
                     await this.loadConversations();
                 }
@@ -857,6 +863,9 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
             );
             this.currentConversation = conversationResult.conversation;
             this.messages = conversationResult.messages;
+
+            // Trigger change detection to ensure UI updates immediately
+            this.cdr.detectChanges();
 
             this.scrollToBottom(true);
         } catch (err) {
