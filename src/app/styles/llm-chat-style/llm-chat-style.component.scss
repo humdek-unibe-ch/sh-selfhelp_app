@@ -66,160 +66,401 @@
 }
 
 // ============================================================================
-// ION MENU STYLES
+// ION MENU STYLES - PROFESSIONAL CONVERSATION LIST
 // ============================================================================
 
+// Using Ionic CSS Variables for consistent theming
+// Primary: --ion-color-primary
+// Danger: --ion-color-danger  
+// Warning: --ion-color-warning
+// Medium: --ion-color-medium
+// Light: --ion-color-light
+// Dark: --ion-color-dark
+
 ion-menu {
-    --width: 300px;
+    --width: 320px;
+    --max-width: 85vw;
 
-    ion-header {
-        ion-toolbar {
-            --background: var(--llm-bg-primary);
-            --color: var(--ion-color-dark);
+    // Menu Header
+    .conversation-menu-header {
+        .conversation-toolbar {
+            --background: var(--ion-color-primary);
+            --min-height: 56px;
+            --padding-start: 16px;
+            --padding-end: 8px;
 
-            ion-title {
-                font-size: 1.1rem;
+            .conversation-title {
+                font-size: 1.125rem;
                 font-weight: 600;
+                color: var(--ion-color-primary-contrast);
+                letter-spacing: -0.01em;
             }
 
-            ion-buttons {
-                ion-button {
-                    --color: var(--ion-color-dark);
+            .close-btn {
+                --color: var(--ion-color-primary-contrast);
+                --padding-start: 8px;
+                --padding-end: 8px;
+
+                ion-icon {
+                    font-size: 22px;
                 }
             }
         }
     }
 
-    ion-content {
-        --background: var(--llm-bg-primary);
+    // Menu Content
+    .conversation-menu-content {
+        --background: var(--ion-color-light);
+    }
 
-        .menu-content {
-            padding: 16px;
+    .conversation-menu-inner {
+        padding: 16px;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 
-            .new-conversation-btn {
-                margin-bottom: 16px;
-                --border-radius: var(--llm-radius-medium);
+    // New Conversation Button - Premium Style
+    .new-conversation-btn-pro {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 14px 20px;
+        background: var(--ion-color-primary);
+        border: none;
+        border-radius: 10px;
+        color: var(--ion-color-primary-contrast);
+        font-size: 0.9375rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(var(--ion-color-primary-rgb), 0.3);
+        margin-bottom: 20px;
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px -2px rgba(var(--ion-color-primary-rgb), 0.4);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+
+            ion-icon {
+                font-size: 16px;
+            }
+        }
+
+        .btn-text {
+            letter-spacing: -0.01em;
+        }
+    }
+
+    // Conversations List Container
+    .conversations-list-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    // Loading State
+    .conversations-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 20px;
+        text-align: center;
+
+        .loading-spinner {
+            margin-bottom: 16px;
+
+            ion-spinner {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        .loading-text {
+            color: var(--ion-color-medium);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+    }
+
+    // Conversations List
+    .conversations-list-pro {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    // Individual Conversation Item
+    .conversation-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        background: var(--ion-background-color, #ffffff);
+        border: 1px solid var(--ion-color-step-200, #e2e8f0);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        position: relative;
+
+        &:hover {
+            background: var(--ion-color-step-50, #f8fafc);
+            border-color: var(--ion-color-step-300, #cbd5e1);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+            .conversation-delete-btn {
+                opacity: 1;
+            }
+        }
+
+        // Active/Selected State
+        &.active {
+            background: rgba(var(--ion-color-primary-rgb), 0.08);
+            border-color: var(--ion-color-primary);
+            box-shadow: 0 0 0 3px rgba(var(--ion-color-primary-rgb), 0.1);
+
+            .conversation-icon-wrapper {
+                background: var(--ion-color-primary);
 
                 ion-icon {
-                    font-size: 16px;
+                    color: var(--ion-color-primary-contrast);
                 }
             }
 
-            .conversations-list {
-                ion-list {
-                    background: transparent;
-                    border: none;
-                    padding: 0;
+            .conversation-name {
+                color: var(--ion-color-primary);
+                font-weight: 600;
+            }
 
-                    ion-item {
-                        --background: transparent;
-                        --border-color: transparent;
-                        --min-height: 56px;
-                        --padding-start: 16px;
-                        --padding-end: 12px;
-                        --inner-padding-end: 0;
-                        --border-radius: var(--llm-radius-medium);
-                        margin: 4px 0;
-                        font-size: 0.9rem;
+            .conversation-delete-btn {
+                opacity: 1;
+            }
+        }
 
-                        &:active {
-                            --background: rgba(0, 0, 0, 0.04);
-                        }
+        // Blocked State - Distinct Visual Treatment
+        &.blocked {
+            background: rgba(var(--ion-color-danger-rgb), 0.05);
+            border-color: rgba(var(--ion-color-danger-rgb), 0.3);
+            cursor: not-allowed;
 
-                        &.selected {
-                            --background: rgba(var(--ion-color-primary-rgb), 0.12);
+            &:hover {
+                background: rgba(var(--ion-color-danger-rgb), 0.05);
+                border-color: rgba(var(--ion-color-danger-rgb), 0.3);
+                box-shadow: none;
+            }
 
-                            h3 {
-                                color: var(--ion-color-primary);
-                                font-weight: 600;
-                            }
-                        }
+            .conversation-icon-wrapper {
+                background: rgba(var(--ion-color-warning-rgb), 0.15);
 
-                        &.blocked {
-                            opacity: 0.5;
-                        }
-
-                        ion-icon[slot="start"] {
-                            font-size: 20px;
-                            margin-right: 12px;
-                            color: var(--llm-text-secondary);
-                        }
-
-                        ion-label {
-                            margin: 0;
-
-                            h3 {
-                                font-size: 1rem;
-                                font-weight: 500;
-                                margin: 0;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                line-height: 1.3;
-                            }
-
-                            p {
-                                font-size: 0.8rem;
-                                color: var(--llm-text-secondary);
-                                margin: 4px 0 0;
-                                line-height: 1.2;
-                            }
-                        }
-
-                        ion-button[slot="end"] {
-                            --padding-start: 8px;
-                            --padding-end: 8px;
-                            height: 32px;
-                            margin: 0;
-
-                            ion-icon {
-                                font-size: 18px;
-                            }
-                        }
-                    }
+                &.blocked-icon ion-icon {
+                    color: var(--ion-color-warning);
                 }
             }
 
-            .empty-conversations {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 48px 16px;
-                text-align: center;
-
-                ion-icon {
-                    font-size: 48px;
-                    color: var(--ion-color-step-300);
-                    margin-bottom: 16px;
-                }
-
-                p {
-                    color: var(--llm-text-secondary);
-                    margin: 0;
-                    font-size: 0.9rem;
-                    line-height: 1.4;
-                }
+            .conversation-name {
+                color: var(--ion-color-medium);
             }
 
-            .menu-loading {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 48px 16px;
-                text-align: center;
-
-                ion-spinner {
-                    margin-bottom: 16px;
-                }
-
-                p {
-                    color: var(--llm-text-secondary);
-                    margin: 0;
-                    font-size: 0.9rem;
-                }
+            .conversation-meta {
+                color: var(--ion-color-medium-shade);
             }
+        }
+    }
+
+    // Conversation Icon Wrapper
+    .conversation-icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        background: rgba(var(--ion-color-primary-rgb), 0.1);
+        border-radius: 6px;
+        transition: all 0.15s ease;
+
+        ion-icon {
+            font-size: 18px;
+            color: var(--ion-color-primary);
+        }
+    }
+
+    // Conversation Details
+    .conversation-details {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .conversation-header-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .conversation-name {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--ion-color-dark);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.3;
+        flex: 1;
+        min-width: 0;
+    }
+
+    // Blocked Badge
+    .blocked-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        background: rgba(var(--ion-color-warning-rgb), 0.15);
+        color: var(--ion-color-warning-shade);
+        font-size: 0.6875rem;
+        font-weight: 600;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        ion-icon {
+            font-size: 10px;
+        }
+    }
+
+    // Conversation Meta
+    .conversation-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .conversation-date {
+        font-size: 0.8125rem;
+        color: var(--ion-color-medium);
+    }
+
+    .blocked-reason {
+        font-size: 0.75rem;
+        color: var(--ion-color-warning);
+        font-style: italic;
+
+        &::before {
+            content: '•';
+            margin-right: 6px;
+            color: var(--ion-color-medium);
+        }
+    }
+
+    // Delete Button
+    .conversation-delete-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        background: transparent;
+        border: none;
+        border-radius: 6px;
+        color: var(--ion-color-medium);
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.15s ease;
+
+        &:hover {
+            background: rgba(var(--ion-color-danger-rgb), 0.1);
+            color: var(--ion-color-danger);
+        }
+
+        ion-icon {
+            font-size: 18px;
+        }
+    }
+
+    // Empty State
+    .empty-conversations-pro {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
+        text-align: center;
+        background: var(--ion-background-color, #ffffff);
+        border: 1px dashed var(--ion-color-step-200, #e2e8f0);
+        border-radius: 14px;
+        margin-top: 8px;
+
+        .empty-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            background: rgba(var(--ion-color-primary-rgb), 0.1);
+            border-radius: 50%;
+            margin-bottom: 16px;
+
+            ion-icon {
+                font-size: 28px;
+                color: var(--ion-color-primary);
+            }
+        }
+
+        .empty-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--ion-color-dark);
+            margin: 0 0 8px;
+        }
+
+        .empty-description {
+            font-size: 0.875rem;
+            color: var(--ion-color-medium);
+            margin: 0;
+            line-height: 1.5;
+            max-width: 220px;
+        }
+    }
+}
+
+// Menu Overlay - Ensure menu covers everything and is closable
+::ng-deep {
+    ion-menu {
+        // Ensure the menu has highest z-index
+        z-index: 9999 !important;
+    }
+
+    // The backdrop that covers the content
+    ion-menu-controller,
+    .menu-content-open {
+        ion-backdrop {
+            z-index: 9998 !important;
+            opacity: 0.5 !important;
+            background: rgba(0, 0, 0, 0.5) !important;
         }
     }
 }
@@ -982,56 +1223,93 @@ ion-menu {
 .floating-chat-panel {
     position: fixed;
     z-index: 1001;
-    width: calc(100% - 16px);
-    max-width: 360px;
-    height: calc(100% - 100px);
-    max-height: 480px;
+    // Full screen on mobile - best practices
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
     background: var(--llm-bg-secondary);
-    border-radius: var(--llm-radius-large);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    box-shadow: none;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: floatingPanelIn 0.25s ease-out;
+    animation: floatingPanelIn 0.2s ease-out;
 
-    &.position-bottom-right { bottom: 60px; right: 8px; }
-    &.position-bottom-left { bottom: 60px; left: 8px; }
-    &.position-top-right { top: 60px; right: 8px; }
-    &.position-top-left { top: 60px; left: 8px; }
-    &.position-bottom-center { bottom: 60px; left: 50%; transform: translateX(-50%); }
-    &.position-top-center { top: 60px; left: 50%; transform: translateX(-50%); }
+    // Position classes are ignored for full-screen mobile mode
+    &.position-bottom-right,
+    &.position-bottom-left,
+    &.position-top-right,
+    &.position-top-left,
+    &.position-bottom-center,
+    &.position-top-center {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: none;
+    }
 
     .floating-panel-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 12px;
+        padding: 12px 16px;
         background: var(--ion-color-primary);
-        color: white;
+        color: var(--ion-color-primary-contrast);
+        min-height: 56px;
+        // Safe area for notch/status bar
+        padding-top: calc(12px + env(safe-area-inset-top, 0px));
 
         h4 {
             margin: 0;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
             font-weight: 600;
+            flex: 1;
         }
 
         ion-button {
-            --color: white;
-            --padding-start: 4px;
-            --padding-end: 4px;
-            height: 26px;
+            --color: var(--ion-color-primary-contrast);
+            --padding-start: 8px;
+            --padding-end: 8px;
+            height: 36px;
+            margin: 0;
+
+            ion-icon {
+                font-size: 24px;
+            }
         }
     }
 
     .llm-chat-container {
         flex: 1;
         overflow: hidden;
+        // Safe area for bottom navigation
+        padding-bottom: env(safe-area-inset-bottom, 0px);
 
         .chat-panel {
             border-radius: 0;
             box-shadow: none;
+            height: 100%;
+        }
+
+        .chat-header {
+            // Hide the regular header in floating mode since we have the panel header
+            display: none;
         }
     }
+}
+
+// Floating menu button in header
+.floating-menu-btn {
+    --color: var(--ion-color-primary-contrast);
+    --padding-start: 8px;
+    --padding-end: 8px;
+    margin-right: 8px;
 }
 
 @keyframes floatingPanelIn {

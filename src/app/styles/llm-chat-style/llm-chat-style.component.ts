@@ -216,10 +216,15 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 return;
             }
 
-            // Select first conversation if exists
+            // Select first non-blocked conversation if exists and no current selection
             if (convs.length > 0 && !this.currentConversation) {
-                await this.selectConversation(convs[0]);
+                const firstNonBlocked = convs.find(c => !c.blocked);
+                if (firstNonBlocked) {
+                    await this.selectConversation(firstNonBlocked);
+                }
             }
+
+            this.cdr.detectChanges();
         } catch (err) {
             this.handleError(err);
         }
@@ -283,9 +288,26 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     // ============================================================================
 
     /**
+     * Handle conversation click - prevents selecting blocked conversations
+     */
+    handleConversationClick(conversation: LlmConversation): void {
+        // Don't allow selecting blocked conversations
+        if (conversation.blocked) {
+            return;
+        }
+        this.selectConversation(conversation);
+        this.closeSidebar();
+    }
+
+    /**
      * Select a conversation and load its messages
      */
     async selectConversation(conversation: LlmConversation): Promise<void> {
+        // Don't select blocked conversations
+        if (conversation.blocked) {
+            return;
+        }
+
         this.isLoading = true;
         try {
             const result = await this.llmChatService.getConversation(
@@ -301,6 +323,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
             }
 
             this.scrollToBottom(true);
+            this.cdr.detectChanges();
         } catch (err) {
             this.handleError(err);
         } finally {
@@ -328,28 +351,64 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 },
                 {
                     text: this.getLabel('create_button_label', 'Create'),
-                    handler: async (data) => {
+                    handler: (data) => {
                         const title = data.title || this.generateDefaultTitle();
-                        try {
-                            const conversationId = await this.llmChatService.createConversation(
-                                title,
-                                this.getConfiguredModel(),
-                                this.getSectionId()
-                            );
-                            await this.loadConversations();
-                            // Select the new conversation
-                            const newConversation = this.conversations.find(c => c.id === conversationId);
-                            if (newConversation) {
-                                await this.selectConversation(newConversation);
-                            }
-                        } catch (err) {
-                            this.handleError(err);
-                        }
+                        // Execute async operation after alert dismisses
+                        // Return false to handle dismissal manually
+                        this.createNewConversation(title);
+                        return true;
                     }
                 }
             ]
         });
         await alert.present();
+    }
+
+    /**
+     * Create a new conversation and select it
+     */
+    private async createNewConversation(title: string): Promise<void> {
+        this.isLoading = true;
+        this.cdr.detectChanges();
+
+        try {
+            const conversationId = await this.llmChatService.createConversation(
+                title,
+                this.getConfiguredModel(),
+                this.getSectionId()
+            );
+
+            // Set the new conversation as current immediately with empty messages
+            // This gives instant feedback to the user
+            this.currentConversation = {
+                id: conversationId,
+                title: title,
+                model: this.getConfiguredModel(),
+                blocked: false,
+                updated_at: new Date().toISOString(),
+                created_at: new Date().toISOString()
+            };
+            this.messages = [];
+            this.progress = null;
+
+            // Reload conversations list in background
+            const convs = await this.llmChatService.getConversations(this.getSectionId());
+            this.conversations = convs;
+
+            // Update current conversation with full data from server
+            const newConversation = this.conversations.find(c => c.id === conversationId);
+            if (newConversation) {
+                this.currentConversation = newConversation;
+            }
+
+            this.scrollToBottom(true);
+            this.cdr.detectChanges();
+        } catch (err) {
+            this.handleError(err);
+        } finally {
+            this.isLoading = false;
+            this.cdr.detectChanges();
+        }
     }
 
     /**
@@ -369,26 +428,45 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                     text: this.getLabel('confirm_delete_button_label', 'Delete'),
                     cssClass: 'danger',
                     handler: async () => {
-                        try {
-                            await this.llmChatService.deleteConversation(
-                                conversation.id,
-                                this.getSectionId()
-                            );
-                            // Clear current if deleted
-                            if (this.currentConversation?.id === conversation.id) {
-                                this.currentConversation = null;
-                                this.messages = [];
-                                this.progress = null;
-                            }
-                            await this.loadConversations();
-                        } catch (err) {
-                            this.handleError(err);
-                        }
+                        await this.performDeleteConversation(conversation);
                     }
                 }
             ]
         });
         await alert.present();
+    }
+
+    /**
+     * Perform the actual deletion and state update without full reload
+     */
+    private async performDeleteConversation(conversation: LlmConversation): Promise<void> {
+        try {
+            await this.llmChatService.deleteConversation(
+                conversation.id,
+                this.getSectionId()
+            );
+
+            // Remove from local state immediately (no full reload)
+            this.conversations = this.conversations.filter(c => c.id !== conversation.id);
+
+            // If we deleted the current conversation, select another one
+            if (this.currentConversation?.id === conversation.id) {
+                this.currentConversation = null;
+                this.messages = [];
+                this.progress = null;
+
+                // Auto-select the first non-blocked conversation if available
+                const nextConversation = this.conversations.find(c => !c.blocked);
+                if (nextConversation) {
+                    await this.selectConversation(nextConversation);
+                }
+            }
+
+            // Trigger change detection to update UI
+            this.cdr.detectChanges();
+        } catch (err) {
+            this.handleError(err);
+        }
     }
 
     /**

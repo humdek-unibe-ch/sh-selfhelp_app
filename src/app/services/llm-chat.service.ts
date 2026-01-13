@@ -49,43 +49,20 @@ export class LlmChatService {
      * @returns Promise resolving to array of conversations
      */
     async getConversations(sectionId: number): Promise<LlmConversation[]> {
-        // Build query parameters including mobile parameters like execServerRequest does
-        const queryParams = new URLSearchParams({
+        const params = {
             action: 'get_conversations',
-            section_id: sectionId.toString(),
-            mobile: 'true',
-            id_languages: (this.selfhelpService.selfhelp.value.user_language ? this.selfhelpService.selfhelp.value.user_language : this.selfhelpService.getUserLanguage().id).toString(),
-            device_id: await this.selfhelpService.getDeviceID(),
-            mobile_web: 'true'
-        });
+            section_id: sectionId.toString()
+        };
+        const response = await this.selfhelpService.execServerGetRequest<LlmGetConversationsResponse>(
+            this.buildUrl(sectionId),
+            params
+        );
 
-        // Build URL with query parameters
-        const baseUrl = this.buildUrl(sectionId);
-        const fullUrl = `${baseUrl}?${queryParams.toString()}`;
-
-        // Use CapacitorHttp.get instead of execServerRequest
-        const response = await CapacitorHttp.get({
-            url: fullUrl,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            webFetchExtra: {
-                credentials: "include",
-            }
-        });
-
-        let parsedResponse: LlmGetConversationsResponse;
-        if (typeof response.data === 'string') {
-            parsedResponse = JSON.parse(response.data);
-        } else {
-            parsedResponse = response.data;
+        if (response.error) {
+            throw new Error(response.error);
         }
 
-        if (parsedResponse.error) {
-            throw new Error(parsedResponse.error);
-        }
-
-        return parsedResponse.conversations || [];
+        return response.conversations || [];
     }
 
     /**
@@ -103,7 +80,7 @@ export class LlmChatService {
             conversation_id: conversationId,
             section_id: sectionId.toString()
         };
-        const response = await this.selfhelpService.execServerRequest<LlmGetConversationResponse>(
+        const response = await this.selfhelpService.execServerGetRequest<LlmGetConversationResponse>(
             this.buildUrl(sectionId),
             params
         );
@@ -286,7 +263,7 @@ export class LlmChatService {
             section_id: sectionId.toString()
         };
 
-        return this.selfhelpService.execServerRequest<LlmGetProgressResponse>(
+        return this.selfhelpService.execServerGetRequest<LlmGetProgressResponse>(
             this.buildUrl(sectionId),
             params
         );
@@ -307,7 +284,7 @@ export class LlmChatService {
             section_id: sectionId.toString()
         };
 
-        return this.selfhelpService.execServerRequest<{
+        return this.selfhelpService.execServerGetRequest<{
             auto_started: boolean;
             conversation?: LlmConversation;
             messages?: LlmMessage[];
@@ -327,7 +304,7 @@ export class LlmChatService {
         };
 
         try {
-            await this.selfhelpService.execServerRequest<{ success: boolean }>(
+            await this.selfhelpService.execServerGetRequest<{ success: boolean }>(
                 this.buildUrl(sectionId),
                 params
             );
@@ -341,28 +318,36 @@ export class LlmChatService {
     }
 
     /**
-     * Build the URL for the LLM chat endpoint
-     * Uses the current page URL since the LLM chat component
-     * handles requests through its own controller
+     * Build the URL path for the LLM chat endpoint
+     * Returns just the page path (keyword) for use with execServerRequest
+     * which will prepend API_ENDPOINT_NATIVE
      * @param sectionId The section ID
-     * @returns The URL string
+     * @returns The URL path string (e.g., "/angst")
      */
     private buildUrl(sectionId: number): string {
-        // The LLM chat API is accessed through the page URL where the component is placed
-        // We construct the full URL: server + current_url
+        // Get the current page URL from selfhelp service
         const currentUrl = this.selfhelpService.selfhelp.value.current_url;
-        const serverUrl = this.selfhelpService.API_ENDPOINT_NATIVE;
 
-        // Remove trailing slash from server URL and leading slash from current URL
-        const cleanServerUrl = serverUrl.replace(/\/$/, '');
-        let cleanCurrentUrl = currentUrl.replace(/^\//, '');
-
-        // If current URL contains '/selfhelp/', extract just the page part
-        if (cleanCurrentUrl.includes('/selfhelp/')) {
-            cleanCurrentUrl = cleanCurrentUrl.split('/selfhelp/')[1];
+        // If it's a full URL, extract just the path
+        if (currentUrl.startsWith('http://') || currentUrl.startsWith('https://')) {
+            try {
+                const url = new URL(currentUrl);
+                return url.pathname;
+            } catch {
+                // If URL parsing fails, try to extract path manually
+                const match = currentUrl.match(/https?:\/\/[^\/]+(\/.*)/);
+                if (match) {
+                    return match[1];
+                }
+            }
         }
 
-        return `${cleanServerUrl}/${cleanCurrentUrl}`;
+        // Ensure the URL starts with /
+        if (!currentUrl.startsWith('/')) {
+            return '/' + currentUrl;
+        }
+
+        return currentUrl;
     }
 
     /**

@@ -128,7 +128,7 @@ export class SelfhelpService {
     }
 
     /**
-     * @description Execute server request
+     * @description Execute server request (POST)
      * @author Stefan Kodzhabashev
      * @date 2020-12-29
      * @public
@@ -172,6 +172,59 @@ export class SelfhelpService {
                 .catch((err: any) => {
                     console.log(err);
                     reject(err); // Here.
+                });
+        });
+    }
+
+    /**
+     * @description Execute server GET request
+     * @public
+     * @param {string} keyword - URL path/keyword
+     * @param {*} params - Request parameters (will be converted to query string)
+     * @returns {Promise<T>}
+     * @memberof SelfhelpService
+     */
+    public async execServerGetRequest<T = SelfHelpPageRequest>(keyword: string, params: any): Promise<T> {
+        if (!params['mobile']) {
+            params['mobile'] = true;
+        }
+        params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.getUserLanguage().id;
+        params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
+        params['mobile_web'] = true;
+        if (this.notificationsService.getToken() !== '') {
+            params['device_token'] = this.notificationsService.getToken();
+        }
+
+        // Build query string from params
+        const queryString = new URLSearchParams(
+            Object.entries(params).map(([key, value]) => [key, String(value)])
+        ).toString();
+
+        const options: HttpOptions = {
+            url: this.API_ENDPOINT_NATIVE + keyword + '?' + queryString,
+            headers: { 'Content-Type': 'application/json' },
+            webFetchExtra: {
+                credentials: "include",
+            }
+        };
+
+        return new Promise<T>((resolve, reject) => {
+            CapacitorHttp.get(options).then((response: any) => {
+                try {
+                    if (typeof response.data === "object") {
+                        this.utils.debugLog('execServerGetRequest() ' + keyword, response.data);
+                        resolve(response.data);
+                    }
+                    this.utils.debugLog('execServerGetRequest() ' + keyword, JSON.parse(response.data));
+                    resolve(JSON.parse(response.data));
+                } catch (error) {
+                    this.utils.debugLog('error', response.data);
+                    reject(error);
+                }
+            })
+                .catch((err: any) => {
+                    console.log(err);
+                    reject(err);
                 });
         });
     }
