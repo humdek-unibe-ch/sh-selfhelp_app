@@ -36,54 +36,38 @@
                     <p *ngIf="field.helpText" class="field-description">{{ field.helpText }}</p>
 
                     <!-- Radio Buttons using ion-radio-group -->
-                    <ion-radio-group 
-                        *ngIf="field.type === 'radio'" 
-                        [value]="formValues[field.id]"
-                        (ionChange)="onIonRadioChange(field, $event)"
-                        [disabled]="isSubmitting || disabled || isSubmitted">
-                        <ion-item 
-                            *ngFor="let option of field.options; trackBy: trackByOptionValue" 
-                            lines="none"
-                            class="radio-item"
-                            [class.selected]="isRadioSelected(field, option.value)">
-                            <ion-radio 
-                                slot="start" 
-                                [value]="option.value"
-                                mode="md">
-                            </ion-radio>
-                            <ion-label class="ion-text-wrap">{{ option.label }}</ion-label>
-                        </ion-item>
-                    </ion-radio-group>
+                    <ion-list *ngIf="field.type === 'radio'">
+                        <ion-radio-group *ngIf="field.type === 'radio'" [value]="formValues[field.id]"
+                            (ionChange)="onIonRadioChange(field, $event)"
+                            [disabled]="isSubmitting || disabled || isSubmitted">
+                            <ion-item *ngFor="let option of field.options; trackBy: trackByOptionValue" lines="none"
+                                class="radio-item" [class.selected]="isRadioSelected(field, option.value)">
+                                <ion-radio class="wrapped" [value]="option.value">
+                                    {{ option.label }}
+                                </ion-radio>
+                            </ion-item>
+                        </ion-radio-group>
+                    </ion-list>
 
                     <!-- Checkboxes using ion-checkbox -->
                     <div *ngIf="field.type === 'checkbox'" class="checkbox-group">
-                        <ion-item 
-                            *ngFor="let option of field.options; trackBy: trackByOptionValue" 
-                            lines="none"
-                            class="checkbox-item"
-                            [class.selected]="isCheckboxChecked(field, option.value)">
-                            <ion-checkbox 
-                                slot="start"
-                                [checked]="isCheckboxChecked(field, option.value)"
+                        <ion-item *ngFor="let option of field.options; trackBy: trackByOptionValue" lines="none"
+                            class="checkbox-item" [class.selected]="isCheckboxChecked(field, option.value)">
+                            <ion-checkbox [checked]="isCheckboxChecked(field, option.value)"
                                 (ionChange)="onIonCheckboxChange(field, option.value, $event)"
-                                [disabled]="isSubmitting || disabled || isSubmitted"
-                                mode="md">
+                                [disabled]="isSubmitting || disabled || isSubmitted" class="wrapped">
+                                {{ option.label }}
                             </ion-checkbox>
-                            <ion-label class="ion-text-wrap">{{ option.label }}</ion-label>
                         </ion-item>
                     </div>
 
                     <!-- Select Dropdown using ion-select -->
                     <ion-item *ngIf="field.type === 'select'" lines="none" class="select-item">
-                        <ion-select 
-                            [value]="formValues[field.id]"
+                        <ion-select [value]="formValues[field.id]"
                             [placeholder]="field.placeholder || 'Select an option...'"
                             (ionChange)="onIonSelectChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted"
-                            interface="action-sheet"
-                            mode="md">
-                            <ion-select-option 
-                                *ngFor="let option of field.options; trackBy: trackByOptionValue" 
+                            [disabled]="isSubmitting || disabled || isSubmitted" interface="action-sheet">
+                            <ion-select-option *ngFor="let option of field.options; trackBy: trackByOptionValue"
                                 [value]="option.value">
                                 {{ option.label }}
                             </ion-select-option>
@@ -92,43 +76,25 @@
 
                     <!-- Text Input using ion-input -->
                     <ion-item *ngIf="field.type === 'text'" lines="none" class="input-item">
-                        <ion-input
-                            type="text"
-                            [placeholder]="field.placeholder || ''"
-                            [value]="formValues[field.id]"
-                            [maxlength]="field.maxLength"
-                            (ionInput)="onIonInputChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted"
-                            mode="md">
+                        <ion-input type="text" [placeholder]="field.placeholder || ''" [value]="formValues[field.id]"
+                            [maxlength]="field.maxLength" (ionInput)="onIonInputChange(field, $event)"
+                            [disabled]="isSubmitting || disabled || isSubmitted">
                         </ion-input>
                     </ion-item>
 
                     <!-- Textarea using ion-textarea -->
-                    <ion-item *ngIf="field.type === 'textarea'" lines="none" class="textarea-item">
-                        <ion-textarea
-                            [placeholder]="field.placeholder || ''"
-                            [value]="formValues[field.id]"
-                            [rows]="field.rows || 3"
-                            [maxlength]="field.maxLength"
-                            (ionInput)="onIonInputChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted"
-                            auto-grow="true"
-                            mode="md">
-                        </ion-textarea>
-                    </ion-item>
+                    <ion-textarea *ngIf="field.type === 'textarea'" [placeholder]="field.placeholder || ''"
+                        [value]="formValues[field.id]" [rows]="field.rows || 3" [maxlength]="field.maxLength"
+                        (ionInput)="onIonInputChange(field, $event)" fill="outline" mode="md"
+                        [disabled]="isSubmitting || disabled || isSubmitted" auto-grow="true">
+                    </ion-textarea>
 
                     <!-- Number Input using ion-input -->
                     <ion-item *ngIf="field.type === 'number'" lines="none" class="input-item">
-                        <ion-input
-                            type="number"
-                            [placeholder]="field.placeholder || ''"
-                            [value]="formValues[field.id]"
-                            [min]="field.min"
-                            [max]="field.max"
-                            [step]="field.step || 1"
+                        <ion-input type="number" [placeholder]="field.placeholder || ''" [value]="formValues[field.id]"
+                            [min]="field.min" [max]="field.max" [step]="field.step || 1"
                             (ionInput)="onIonInputChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted"
-                            mode="md">
+                            [disabled]="isSubmitting || disabled || isSubmitted">
                         </ion-input>
                     </ion-item>
 
@@ -139,15 +105,10 @@
                             <span class="scale-value">{{ formValues[field.id] || field.min || 1 }}</span>
                             <span>{{ field.max || 10 }}</span>
                         </div>
-                        <ion-range 
-                            [min]="field.min || 1"
-                            [max]="field.max || 10"
-                            [step]="field.step || 1"
+                        <ion-range [min]="field.min || 1" [max]="field.max || 10" [step]="field.step || 1"
                             [value]="formValues[field.id] || field.min || 1"
                             (ionChange)="onIonRangeChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted"
-                            mode="md"
-                            color="primary">
+                            [disabled]="isSubmitting || disabled || isSubmitted" color="primary">
                         </ion-range>
                     </div>
 
@@ -161,11 +122,7 @@
 
             <!-- Hidden fields -->
             <ng-container *ngFor="let field of formDefinition.fields">
-                <input 
-                    *ngIf="field.type === 'hidden'"
-                    type="hidden"
-                    [name]="field.id"
-                    [value]="field.value || ''">
+                <input *ngIf="field.type === 'hidden'" type="hidden" [name]="field.id" [value]="field.value || ''">
             </ng-container>
         </div>
 
@@ -176,11 +133,7 @@
 
         <!-- Form Footer with Submit Button -->
         <div class="form-footer" *ngIf="!isSubmitted">
-            <ion-button 
-                expand="block"
-                size="small"
-                [disabled]="isSubmitting || disabled"
-                (click)="onSubmit()">
+            <ion-button expand="block" size="small" [disabled]="isSubmitting || disabled" (click)="onSubmit()">
                 <ion-spinner *ngIf="isSubmitting" name="crescent" slot="start"></ion-spinner>
                 <span *ngIf="!isSubmitting">{{ submitLabel }}</span>
                 <span *ngIf="isSubmitting">Submitting...</span>

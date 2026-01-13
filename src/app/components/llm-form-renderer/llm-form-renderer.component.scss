@@ -296,6 +296,7 @@ ion-radio-group,
 // ============================================================================
 
 .submitted {
+
     .radio-item,
     .checkbox-item,
     .select-item,
@@ -304,4 +305,12 @@ ion-radio-group,
         opacity: 0.85;
         pointer-events: none;
     }
+}
+
+ion-radio.wrapped::part(label) {
+    white-space: normal;
+}
+
+ion-checkbox.wrapped::part(label) {
+    white-space: normal;
 }
