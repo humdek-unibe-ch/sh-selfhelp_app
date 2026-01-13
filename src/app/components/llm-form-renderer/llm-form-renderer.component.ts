@@ -34,10 +34,16 @@ export class LlmFormRendererComponent implements OnChanges {
     // Form state
     formValues: Record<string, string | string[]> = {};
     formErrors: Record<string, string> = {};
+    private initializedFormId: string | null = null;
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['formDefinition'] && this.formDefinition) {
-            this.initializeForm();
+            // Only initialize once per form to preserve user input
+            const currentFormId = this.formDefinition.title || 'default';
+            if (this.initializedFormId !== currentFormId) {
+                this.initializedFormId = currentFormId;
+                this.initializeForm();
+            }
         }
     }
 
@@ -245,6 +251,7 @@ export class LlmFormRendererComponent implements OnChanges {
 
         return parts.join('\n');
     }
+
 
     /**
      * Handle form submission

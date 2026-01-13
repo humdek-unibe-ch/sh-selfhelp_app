@@ -4,7 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy, isPlatform } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormsModule, FormBuilder } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -45,6 +45,7 @@ export function getAppSkin(): SkinApp {
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        FormsModule,
         IonicModule.forRoot({
             mode: getAppSkin(),
             innerHTMLTemplatesEnabled: true

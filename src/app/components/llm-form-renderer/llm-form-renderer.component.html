@@ -37,7 +37,7 @@
 
                     <!-- Radio Buttons using ion-radio-group -->
                     <ion-list *ngIf="field.type === 'radio'">
-                        <ion-radio-group *ngIf="field.type === 'radio'" [value]="formValues[field.id]"
+                        <ion-radio-group *ngIf="field.type === 'radio'" [(ngModel)]="formValues[field.id]"
                             (ionChange)="onIonRadioChange(field, $event)"
                             [disabled]="isSubmitting || disabled || isSubmitted">
                             <ion-item *ngFor="let option of field.options; trackBy: trackByOptionValue" lines="none"
