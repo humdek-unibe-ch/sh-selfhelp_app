@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CapacitorHttp } from '@capacitor/core';
 import { SelfhelpService } from './selfhelp.service';
 import {
     LlmConversation,
@@ -48,18 +49,43 @@ export class LlmChatService {
      * @returns Promise resolving to array of conversations
      */
     async getConversations(sectionId: number): Promise<LlmConversation[]> {
-        const params = {
+        // Build query parameters including mobile parameters like execServerRequest does
+        const queryParams = new URLSearchParams({
             action: 'get_conversations',
-            section_id: sectionId.toString()
-        };
-        const response = await this.selfhelpService.execServerRequest<LlmGetConversationsResponse>(
-            this.buildUrl(sectionId),
-            params
-        );
-        if (response.error) {
-            throw new Error(response.error);
+            section_id: sectionId.toString(),
+            mobile: 'true',
+            id_languages: (this.selfhelpService.selfhelp.value.user_language ? this.selfhelpService.selfhelp.value.user_language : this.selfhelpService.getUserLanguage().id).toString(),
+            device_id: await this.selfhelpService.getDeviceID(),
+            mobile_web: 'true'
+        });
+
+        // Build URL with query parameters
+        const baseUrl = this.buildUrl(sectionId);
+        const fullUrl = `${baseUrl}?${queryParams.toString()}`;
+
+        // Use CapacitorHttp.get instead of execServerRequest
+        const response = await CapacitorHttp.get({
+            url: fullUrl,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            webFetchExtra: {
+                credentials: "include",
+            }
+        });
+
+        let parsedResponse: LlmGetConversationsResponse;
+        if (typeof response.data === 'string') {
+            parsedResponse = JSON.parse(response.data);
+        } else {
+            parsedResponse = response.data;
         }
-        return response.conversations || [];
+
+        if (parsedResponse.error) {
+            throw new Error(parsedResponse.error);
+        }
+
+        return parsedResponse.conversations || [];
     }
 
     /**
@@ -323,8 +349,20 @@ export class LlmChatService {
      */
     private buildUrl(sectionId: number): string {
         // The LLM chat API is accessed through the page URL where the component is placed
-        // We use the selfhelp base path with the current URL
-        return this.selfhelpService.selfhelp.value.current_url;
+        // We construct the full URL: server + current_url
+        const currentUrl = this.selfhelpService.selfhelp.value.current_url;
+        const serverUrl = this.selfhelpService.API_ENDPOINT_NATIVE;
+
+        // Remove trailing slash from server URL and leading slash from current URL
+        const cleanServerUrl = serverUrl.replace(/\/$/, '');
+        let cleanCurrentUrl = currentUrl.replace(/^\//, '');
+
+        // If current URL contains '/selfhelp/', extract just the page part
+        if (cleanCurrentUrl.includes('/selfhelp/')) {
+            cleanCurrentUrl = cleanCurrentUrl.split('/selfhelp/')[1];
+        }
+
+        return `${cleanServerUrl}/${cleanCurrentUrl}`;
     }
 
     /**

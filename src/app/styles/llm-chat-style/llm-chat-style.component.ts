@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-import { AlertController, ModalController, ActionSheetController, Platform } from '@ionic/angular';
+import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { AlertController, ModalController, ActionSheetController, Platform, MenuController } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
@@ -25,7 +25,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     templateUrl: './llm-chat-style.component.html',
     styleUrls: ['./llm-chat-style.component.scss'],
 })
-export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
     @Input() override style!: LlmChatStyle;
     @ViewChild('messagesContainer') messagesContainer!: ElementRef;
     @ViewChild('messageTextarea') messageTextarea!: ElementRef;
@@ -124,6 +124,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         private modalController: ModalController,
         private actionSheetController: ActionSheetController,
         private platform: Platform,
+        private menuController: MenuController,
         private cdr: ChangeDetectorRef
     ) {
         super();
@@ -133,13 +134,29 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         this.initializeChat();
     }
 
+    ngAfterViewInit() {
+        // Set up menu event listeners
+        if (this.isConversationsListEnabled()) {
+            this.menuController.get('conversations-menu')?.then(menu => {
+                if (menu) {
+                    // Load conversations when menu is about to open
+                    menu.addEventListener('ionWillOpen', async () => {
+                        if (this.conversations.length === 0) {
+                            await this.loadConversations();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     ngAfterViewChecked() {
         // Auto-scroll when new messages are added
         if (this.messages.length !== this.lastMessageCount) {
             this.lastMessageCount = this.messages.length;
             this.shouldScrollToBottom = true;
         }
-        
+
         if (this.shouldScrollToBottom) {
             this.shouldScrollToBottom = false;
             this.scrollToBottomImmediate();
@@ -998,6 +1015,35 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
      */
     closeFloatingPanel(): void {
         this.isFloatingPanelOpen = false;
+    }
+
+    /**
+     * Toggle conversations menu
+     */
+    async toggleSidebar(): Promise<void> {
+        // Load conversations if not already loaded
+        if (this.conversations.length === 0 && this.isConversationsListEnabled()) {
+            await this.loadConversations();
+        }
+        await this.menuController.toggle('conversations-menu');
+    }
+
+    /**
+     * Close conversations menu
+     */
+    async closeSidebar(): Promise<void> {
+        await this.menuController.close('conversations-menu');
+    }
+
+    /**
+     * Open conversations menu
+     */
+    async openSidebar(): Promise<void> {
+        // Load conversations if not already loaded
+        if (this.conversations.length === 0 && this.isConversationsListEnabled()) {
+            await this.loadConversations();
+        }
+        await this.menuController.open('conversations-menu');
     }
 
     // ============================================================================

@@ -757,6 +757,7 @@ export interface LlmChatStyle extends Style {
  */
 export interface LlmConversation {
     id: string;
+    id_sections?: string;
     user_id?: number;
     title: string;
     model: string;
@@ -765,7 +766,8 @@ export interface LlmConversation {
     created_at: string;
     updated_at: string;
     blocked?: boolean | number;
-    blocked_reason?: string;
+    blocked_reason?: string | null;
+    blocked_at?: string | null;
 }
 
 /**
