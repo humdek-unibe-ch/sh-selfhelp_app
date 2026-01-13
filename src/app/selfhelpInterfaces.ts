@@ -967,11 +967,12 @@ export interface LlmSendMessageResponseExtended extends LlmSendMessageResponse {
 /**
  * LLM Form Submission Response
  */
-export interface LlmFormSubmissionResponse {
+export interface LlmFormSubmissionResponse extends LlmSendMessageResponseExtended {
     conversation_id?: string;
+    message?: string;
     is_new_conversation?: boolean;
-    user_message?: LlmMessage;
     progress?: LlmProgressData;
+    structured?: LlmStructuredResponse;
     error?: string;
 }
 

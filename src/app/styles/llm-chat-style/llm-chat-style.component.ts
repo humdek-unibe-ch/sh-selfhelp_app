@@ -793,19 +793,77 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 throw new Error(result.error);
             }
 
-            // Update progress if included
-            if (result.progress && this.isProgressTrackingEnabled()) {
-                this.progress = result.progress;
+            // Update progress if included (check both result.progress and result.structured?.meta?.progress)
+            if (this.isProgressTrackingEnabled()) {
+                if (result.progress) {
+                    this.progress = result.progress;
+                } else if (result.structured?.meta?.progress) {
+                    // Convert LlmStructuredProgress to LlmProgressData if needed
+                    const structuredProgress = result.structured.meta.progress;
+                    this.progress = {
+                        percentage: structuredProgress.percentage,
+                        topics_total: (structuredProgress.covered_topics?.length || 0) + (structuredProgress.remaining_topics || 0),
+                        topics_covered: structuredProgress.covered_topics?.length || 0,
+                        topic_coverage: {},
+                        is_complete: (structuredProgress.remaining_topics || 0) === 0
+                    };
+                }
             }
 
-            // Refresh messages
+            // Handle blocked/danger detection
+            if (result.blocked && (result.type === 'danger_detected' || result.type === 'conversation_blocked')) {
+                if (this.currentConversation) {
+                    this.currentConversation = {
+                        ...this.currentConversation,
+                        blocked: true,
+                        blocked_reason: result.type === 'conversation_blocked'
+                            ? 'Conversation blocked'
+                            : 'Safety concerns detected'
+                    };
+                }
+                if (result.message) {
+                    const safetyMessage: LlmMessage = {
+                        id: 'safety-' + Date.now(),
+                        role: 'assistant',
+                        content: result.message,
+                        timestamp: new Date().toISOString()
+                    };
+                    this.messages.push(safetyMessage);
+                }
+                this.scrollToBottom(true);
+                return;
+            }
+
+            // Process form submission response directly (no need for getConversation call)
             if (result.conversation_id) {
-                const conversationResult = await this.llmChatService.getConversation(
-                    result.conversation_id,
-                    this.getSectionId()
-                );
-                this.currentConversation = conversationResult.conversation;
-                this.messages = conversationResult.messages;
+                // Update conversation ID if it's a new conversation
+                if (result.is_new_conversation && this.currentConversation) {
+                    this.currentConversation.id = result.conversation_id;
+                }
+
+                // Add assistant message if present
+                if (result.message) {
+                    try {
+                        // Try to parse the structured message
+                        const structuredData = JSON.parse(result.message);
+                        const assistantMessage: LlmMessage = {
+                            id: 'assistant_' + Date.now(),
+                            role: 'assistant',
+                            content: result.message, // Store the full JSON for processing
+                            timestamp: new Date().toISOString()
+                        };
+                        this.messages.push(assistantMessage);
+                    } catch (parseError) {
+                        // If parsing fails, add as plain text message
+                        const assistantMessage: LlmMessage = {
+                            id: 'assistant_' + Date.now(),
+                            role: 'assistant',
+                            content: result.message,
+                            timestamp: new Date().toISOString()
+                        };
+                        this.messages.push(assistantMessage);
+                    }
+                }
 
                 // Trigger change detection to ensure UI updates immediately
                 this.cdr.detectChanges();
