@@ -166,7 +166,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         this.isLoading = true;
         try {
             this.currentConversation = this.style.current_conversation;
-            this.messages = this.style.messages;
+            this.messages = this.style.messages || [];
             this.scrollToBottom(true);
             if (this.isConversationsListEnabled()) {
                 await this.loadConversations();
