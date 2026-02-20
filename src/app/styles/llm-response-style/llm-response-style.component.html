@@ -1,0 +1,19 @@
+<div [class]="getCss()">
+    <!-- Read-only mode: render content as HTML/markdown -->
+    <div *ngIf="!isEditable" class="llm-response-content" [innerHTML]="content"></div>
+
+    <!-- Edit mode: textarea for editing -->
+    <div *ngIf="isEditable" class="llm-response-edit">
+        <ion-textarea
+            [(ngModel)]="editValue"
+            [attr.name]="fieldName"
+            rows="4"
+            autoGrow="true"
+            class="llm-response-textarea"
+            (ionInput)="onValueChange($event.detail.value || '')">
+        </ion-textarea>
+    </div>
+
+    <!-- Children -->
+    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-basic-style>
+</div>

@@ -29,6 +29,7 @@
     <app-lab-js *ngSwitchCase="isStyle('labJS')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-lab-js>
     <app-link-style *ngSwitchCase="isStyle('link')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-link-style>
     <app-llm-chat-style *ngSwitchCase="isStyle('llmChat')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-llm-chat-style>
+    <app-llm-response-style *ngSwitchCase="isStyle('llmResponse')" [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-llm-response-style>
     <app-login-style *ngSwitchCase="isStyle('login')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-login-style>
     <app-markdown-style *ngSwitchCase="isStyle('markdown')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-markdown-style>
     <app-markdown-inline-style *ngSwitchCase="isStyle('markdownInline')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-markdown-inline-style>
@@ -54,10 +55,12 @@
     <app-survey-js-style *ngSwitchCase="isStyle('surveyJS')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-survey-js-style>
     <app-tabs-style *ngSwitchCase="isStyle('tabs')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-tabs-style>
     <app-textarea-style *ngSwitchCase="isStyle('textarea')" [style]="getStyle()" [parentForm]="parentForm"></app-textarea-style>
+    <app-therapist-dashboard-style *ngSwitchCase="isStyle('therapistDashboard')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-therapist-dashboard-style>
+    <app-therapy-chat-style *ngSwitchCase="isStyle('therapyChat')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-therapy-chat-style>
     <app-two-factor-auth-style *ngSwitchCase="isStyle('twoFactorAuth')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-two-factor-auth-style>
     <app-qualtrics-survey-style *ngSwitchCase="isStyle('qualtricsSurvey')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-qualtrics-survey-style>
     <app-validate-style *ngSwitchCase="isStyle('validate')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-validate-style>
-    <app-video-style *ngSwitchCase="isStyle('video')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-video-style>    
+    <app-video-style *ngSwitchCase="isStyle('video')" [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-video-style>
     <ng-container *ngSwitchCase="getStyle() === null"></ng-container>
     <div *ngSwitchDefault><span *ngIf="getStyle().style_name"><code>{{getStyle().style_name}}Style</code> is not implemented</span></div>
 </ng-container>

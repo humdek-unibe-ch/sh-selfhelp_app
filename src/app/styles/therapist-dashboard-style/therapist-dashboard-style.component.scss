@@ -1,0 +1,64 @@
+.therapist-dashboard {
+    padding: 4px 0;
+}
+
+.stats-row {
+    .stat-card {
+        background: var(--ion-color-light);
+        border-radius: 8px;
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+        }
+    }
+}
+
+.conversation-messages {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding: 8px 0;
+}
+
+.message-wrapper {
+    .message-bubble {
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        background-color: var(--ion-color-light);
+        word-break: break-word;
+
+        &.patient-bubble {
+            background-color: #e3f2fd;
+            border-left: 3px solid var(--ion-color-primary);
+        }
+
+        &.therapist-bubble {
+            background-color: #e8f5e9;
+            border-left: 3px solid #4caf50;
+        }
+    }
+}
+
+.therapist-reply {
+    border-top: 1px solid var(--ion-color-light-shade);
+    padding-top: 8px;
+
+    .reply-input {
+        --padding-start: 12px;
+        --padding-end: 12px;
+        border: 1px solid var(--ion-color-light-shade);
+        border-radius: 20px;
+        min-height: 40px;
+        max-height: 120px;
+    }
+}
+
+.alert-unread {
+    --background: #fff3e0;
+}

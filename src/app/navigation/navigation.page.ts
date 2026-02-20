@@ -3,6 +3,7 @@ import { IonTabs } from '@ionic/angular';
 import { SelfHelp } from '../selfhelpInterfaces';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
+import { EventListenerService } from '../services/event-listener.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class NavigationPage implements AfterViewInit {
     private selected_menu_url = '';
     @ViewChild('navigation') tabRef?: IonTabs;
 
-    constructor(public selfHelpService: SelfhelpService, private zone: NgZone) {
+    constructor(public selfHelpService: SelfhelpService, private zone: NgZone, private eventListenerService: EventListenerService) {
         this.selfHelpService.observeSelfhelp().subscribe((selfHelp: SelfHelp) => {
             this.zone.run(() => {
                 if (selfHelp) {

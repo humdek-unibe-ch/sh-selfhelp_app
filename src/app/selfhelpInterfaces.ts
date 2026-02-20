@@ -411,6 +411,31 @@ export interface TwoFactorAuthStyle extends Style {
     text_md: StyleField
 }
 
+export interface LlmResponseStyle extends Style {
+    content: string,
+    editable: boolean,
+    name: string,
+    text_md: StyleField,
+}
+
+export interface TherapyChatStyle extends Style {
+    conversation: any,
+    messages: any[],
+    user_id: number,
+    section_id: number,
+    is_subject: boolean,
+    tagging_enabled: boolean,
+    labels: any[],
+}
+
+export interface TherapistDashboardStyle extends Style {
+    user_id: number,
+    section_id: number,
+    conversations: any[],
+    stats: any,
+    alerts: any[],
+}
+
 export interface MessageBoardStyle extends Style {
     comments: StyleField,
     form_name: StyleField,
@@ -577,6 +602,8 @@ export interface SelfHelpPageRequest {
     user_language: Number,
     redirect_url: string | Boolean,
     two_factor_auth: boolean,
+    enable_event_listener?: boolean,
+    event_listener_interval?: number,
 }
 
 export interface SecurityQuestion {
@@ -632,6 +659,8 @@ export interface SelfHelp {
     locale?: string,
     user_language: Number | null,
     two_factor_auth?: boolean,
+    enable_event_listener?: boolean,
+    event_listener_interval?: number,
 }
 export interface AppConfig {
     capacitorConfig: CapacitorConfig,

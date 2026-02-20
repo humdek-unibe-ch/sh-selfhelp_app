@@ -1,0 +1,30 @@
+.llm-response-content {
+    line-height: 1.6;
+    word-break: break-word;
+
+    :host ::ng-deep {
+        p { margin-bottom: 0.5rem; }
+        h1, h2, h3, h4, h5, h6 { margin-top: 1rem; margin-bottom: 0.5rem; }
+        ul, ol { padding-left: 1.5rem; }
+        code {
+            background-color: var(--ion-color-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: var(--ion-color-light);
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    }
+}
+
+.llm-response-textarea {
+    border: 1px solid var(--ion-color-light-shade);
+    border-radius: 8px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    min-height: 100px;
+}

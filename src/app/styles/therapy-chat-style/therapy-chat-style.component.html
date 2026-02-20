@@ -1,0 +1,58 @@
+<div [class]="getCss()" class="therapy-chat-container">
+    <!-- Messages area -->
+    <div class="messages-area">
+        <!-- Empty state -->
+        <div *ngIf="messages.length === 0 && !isLoading" class="empty-state text-center p-4">
+            <ion-icon name="chatbubble-ellipses-outline" class="empty-state-icon"></ion-icon>
+            <h6>Start your conversation</h6>
+            <p class="text-muted">Send a message to begin.</p>
+        </div>
+
+        <!-- Messages -->
+        <div *ngFor="let msg of messages" class="message-wrapper mb-2"
+             [class.user-message]="msg.role === 'user'"
+             [class.assistant-message]="msg.role === 'assistant'"
+             [class.therapist-message]="msg.role === 'therapist'">
+            <div class="message-bubble"
+                 [class.bg-primary]="msg.role === 'user'"
+                 [class.text-white]="msg.role === 'user'"
+                 [class.therapist-bubble]="msg.role === 'therapist'">
+                <div *ngIf="msg.formatted_content" [innerHTML]="msg.formatted_content"></div>
+                <div *ngIf="!msg.formatted_content">{{ msg.content }}</div>
+                <!-- Labels -->
+                <div *ngIf="msg.labels && msg.labels.length > 0" class="message-labels mt-1">
+                    <span *ngFor="let label of msg.labels" class="badge badge-secondary mr-1">{{ label.name || label }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading indicator -->
+        <div *ngIf="isLoading" class="message-wrapper assistant-message mb-2">
+            <div class="message-bubble">
+                <ion-spinner name="dots" class="loading-spinner"></ion-spinner>
+                <span class="ml-2">Thinking...</span>
+            </div>
+        </div>
+
+        <div #messagesEnd></div>
+    </div>
+
+    <!-- Message input -->
+    <div class="message-input-area d-flex align-items-end mt-2">
+        <ion-textarea
+            [(ngModel)]="messageText"
+            placeholder="Type a message..."
+            rows="1"
+            autoGrow="true"
+            class="message-input flex-grow-1"
+            (keydown)="onKeyDown($event)">
+        </ion-textarea>
+        <ion-button
+            [disabled]="!messageText.trim() || isLoading"
+            (click)="sendMessage()"
+            size="small"
+            class="send-button ml-2">
+            <ion-icon name="send" slot="icon-only"></ion-icon>
+        </ion-button>
+    </div>
+</div>

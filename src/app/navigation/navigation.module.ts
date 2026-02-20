@@ -86,6 +86,9 @@ import { TwoFactorAuthStyleComponent } from '../styles/two-factor-auth-style/two
 import { QuillModule } from 'ngx-quill';
 import { QuillComponent } from '../styles/survey-js-style/quill-component/quill.component';
 import { LlmChatStyleComponent } from '../styles/llm-chat-style/llm-chat-style.component';
+import { LlmResponseStyleComponent } from '../styles/llm-response-style/llm-response-style.component';
+import { TherapyChatStyleComponent } from '../styles/therapy-chat-style/therapy-chat-style.component';
+import { TherapistDashboardStyleComponent } from '../styles/therapist-dashboard-style/therapist-dashboard-style.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { MarkdownRendererComponent } from '../components/markdown-renderer/markdown-renderer.component';
 import { LlmStructuredResponseComponent } from '../components/llm-structured-response/llm-structured-response.component';
@@ -227,6 +230,9 @@ const routes: Routes = [
         TwoFactorAuthStyleComponent,
         QuillComponent,
         LlmChatStyleComponent,
+        LlmResponseStyleComponent,
+        TherapyChatStyleComponent,
+        TherapistDashboardStyleComponent,
         MarkdownRendererComponent,
         LlmStructuredResponseComponent,
         LlmFormRendererComponent

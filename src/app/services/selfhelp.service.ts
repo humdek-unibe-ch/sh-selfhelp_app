@@ -320,6 +320,16 @@ export class SelfhelpService {
             newSelfhelp.user_language = page.user_language;
             this.setSelfhelp(newSelfhelp, true);
         }
+        // Update event listener config from page response
+        let eventListenerChanged = false;
+        if (currSelfhelp.enable_event_listener !== (page.enable_event_listener || false)) {
+            currSelfhelp.enable_event_listener = page.enable_event_listener || false;
+            eventListenerChanged = true;
+        }
+        if (currSelfhelp.event_listener_interval !== (page.event_listener_interval || 5)) {
+            currSelfhelp.event_listener_interval = page.event_listener_interval || 5;
+            eventListenerChanged = true;
+        }
         if (!page.logged_in && url != this.globals.SH_API_LOGIN && !url.includes('/validate') && !url.includes(this.globals.SH_API_RESET) && this.autoLoginAttempts == 0) {
             this.autoLoginAttempts++; // try to autologin only once
             await this.autoLogin();

@@ -1,27 +1,29 @@
-# 3.4.9 (Not release - in development)
+# 3.4.9
 ### New Features
-- add `llmChat` style component for AI chat functionality
-  - Conversation management (create, select, delete)
-  - Message sending with real-time AI responses
-  - File attachments with image preview (camera, gallery, file picker)
-  - Drag & drop file uploads (web)
-  - Smart scroll behavior (auto-scroll only when at bottom)
-  - Progress tracking indicator with topic coverage
-  - Form mode support for structured AI interactions
-  - Floating chat button mode with configurable position
-  - Danger detection and conversation blocking
-  - Character count with limit indicator
-  - Clear button for input
-  - Auto-start conversation support
-  - Responsive design for mobile and tablet
-- add `@capacitor/camera` plugin for photo capture and gallery selection
-- add `ngx-markdown` with PrismJS for markdown rendering in LLM chat responses
-  - Syntax highlighting for code blocks
-  - Copy-to-clipboard functionality
-  - Video and image media support
-  - GitHub Flavored Markdown (GFM) support
-- add `MarkdownRendererComponent` for consistent markdown rendering across the app
-- update `config.yaml` with iOS photo library permissions (`NSPhotoLibraryUsageDescription`, `NSPhotoLibraryAddUsageDescription`)
+ - add style `llmChat` - LLM chat interface with conversations list, message bubbles, and message input (requires LLM plugin)
+   - Conversation management (create, select, delete)
+   - Message sending with real-time AI responses
+   - File attachments with image preview (camera, gallery, file picker)
+   - Drag & drop file uploads (web)
+   - Smart scroll behavior (auto-scroll only when at bottom)
+   - Progress tracking indicator with topic coverage
+   - Form mode support for structured AI interactions
+   - Floating chat button mode with configurable position
+   - Danger detection and conversation blocking
+   - Character count with limit indicator
+   - Clear button for input
+   - Auto-start conversation support
+   - Responsive design for mobile and tablet
+ - add style `llmResponse` - LLM response display with read-only markdown rendering and optional edit mode (requires LLM plugin)
+ - add style `therapyChat` - therapy chat interface for subjects/patients with label support (requires LLM Therapy Chat plugin)
+ - add style `therapistDashboard` - therapist monitoring dashboard with conversations list, stats overview, alerts panel, and patient message view (requires LLM Therapy Chat plugin)
+ - add `EventListenerService` for refresh events polling - automatically polls for background task completion events and refreshes the page when events are received (supports CMS v7.8.0 refresh events system)
+ - include plugin CSS in `external_css` - plugin stylesheets (e.g. `llm-chat.css`, `therapy-chat.css`) are now delivered to the mobile app alongside core CSS
+ - add `enable_event_listener` and `event_listener_interval` fields to mobile page response for event-driven page refresh
+ - add `@capacitor/camera` plugin for photo capture and gallery selection
+ - add `ngx-markdown` with PrismJS for markdown rendering in LLM chat responses (syntax highlighting, copy-to-clipboard, GFM support)
+ - add `MarkdownRendererComponent` for consistent markdown rendering across the app
+ - update `config.yaml` with iOS photo library permissions (`NSPhotoLibraryUsageDescription`, `NSPhotoLibraryAddUsageDescription`)
 
 # 3.4.8
 ### Bugfix

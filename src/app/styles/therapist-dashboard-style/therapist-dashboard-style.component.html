@@ -1,0 +1,120 @@
+<div [class]="getCss()" class="therapist-dashboard">
+    <!-- Stats overview -->
+    <div class="stats-row d-flex mb-3">
+        <div class="stat-card flex-fill text-center p-2 mr-2">
+            <div class="stat-value">{{ totalConversations }}</div>
+            <div class="stat-label text-muted">Total</div>
+        </div>
+        <div class="stat-card flex-fill text-center p-2 mr-2">
+            <div class="stat-value">{{ activeConversations }}</div>
+            <div class="stat-label text-muted">Active</div>
+        </div>
+        <div class="stat-card flex-fill text-center p-2">
+            <div class="stat-value" [class.text-danger]="unreadAlerts > 0">{{ unreadAlerts }}</div>
+            <div class="stat-label text-muted">Alerts</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <ion-segment [(ngModel)]="activeTab" class="mb-3">
+        <ion-segment-button value="conversations">
+            <ion-label>Conversations</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="alerts">
+            <ion-label>Alerts
+                <ion-badge *ngIf="unreadAlerts > 0" color="danger" class="ml-1">{{ unreadAlerts }}</ion-badge>
+            </ion-label>
+        </ion-segment-button>
+    </ion-segment>
+
+    <!-- Conversation detail view -->
+    <div *ngIf="selectedConversation">
+        <div class="d-flex align-items-center mb-2">
+            <ion-button fill="clear" size="small" (click)="backToList()">
+                <ion-icon name="arrow-back" slot="start"></ion-icon>
+                Back
+            </ion-button>
+            <strong class="ml-2">{{ selectedConversation.subject_name || selectedConversation.user_name || 'Patient' }}</strong>
+            <ion-badge *ngIf="selectedConversation.risk_level" [color]="getRiskBadgeColor(selectedConversation.risk_level)" class="ml-2">
+                {{ selectedConversation.risk_level }}
+            </ion-badge>
+        </div>
+
+        <div class="conversation-messages">
+            <div *ngIf="isLoading" class="text-center p-3">
+                <ion-spinner name="crescent"></ion-spinner>
+            </div>
+            <div *ngFor="let msg of selectedMessages" class="message-wrapper mb-2"
+                 [class.user-message]="msg.role === 'user'"
+                 [class.assistant-message]="msg.role === 'assistant'"
+                 [class.therapist-message]="msg.role === 'therapist'">
+                <div class="message-role text-muted mb-1" style="font-size: 0.75rem;">
+                    {{ msg.role === 'user' ? 'Patient' : msg.role === 'therapist' ? 'Therapist' : 'AI' }}
+                </div>
+                <div class="message-bubble"
+                     [class.patient-bubble]="msg.role === 'user'"
+                     [class.therapist-bubble]="msg.role === 'therapist'">
+                    <div *ngIf="msg.formatted_content" [innerHTML]="msg.formatted_content"></div>
+                    <div *ngIf="!msg.formatted_content">{{ msg.content }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Therapist reply -->
+        <div class="therapist-reply d-flex align-items-end mt-2">
+            <ion-textarea
+                [(ngModel)]="messageText"
+                placeholder="Reply to patient..."
+                rows="1"
+                autoGrow="true"
+                class="reply-input flex-grow-1">
+            </ion-textarea>
+            <ion-button [disabled]="!messageText.trim() || isSending" (click)="sendTherapistMessage()" size="small" class="ml-2">
+                <ion-icon name="send" slot="icon-only"></ion-icon>
+            </ion-button>
+        </div>
+    </div>
+
+    <!-- Conversations list -->
+    <div *ngIf="!selectedConversation && activeTab === 'conversations'">
+        <div *ngIf="conversations.length === 0" class="text-center text-muted p-4">
+            No conversations assigned.
+        </div>
+        <ion-list *ngIf="conversations.length > 0" lines="full">
+            <ion-item *ngFor="let conv of conversations" (click)="selectConversation(conv)" button detail>
+                <ion-avatar slot="start">
+                    <ion-icon name="person-circle-outline" style="font-size: 2rem;"></ion-icon>
+                </ion-avatar>
+                <ion-label>
+                    <h3>{{ conv.subject_name || conv.user_name || 'Patient #' + conv.id }}</h3>
+                    <p *ngIf="conv.title">{{ conv.title }}</p>
+                    <p *ngIf="conv.last_message_at" class="text-muted">{{ conv.last_message_at }}</p>
+                </ion-label>
+                <ion-badge *ngIf="conv.unread_count && conv.unread_count > 0" slot="end" color="primary">
+                    {{ conv.unread_count }}
+                </ion-badge>
+                <ion-badge *ngIf="conv.risk_level" slot="end" [color]="getRiskBadgeColor(conv.risk_level)" class="ml-1">
+                    {{ conv.risk_level }}
+                </ion-badge>
+            </ion-item>
+        </ion-list>
+    </div>
+
+    <!-- Alerts list -->
+    <div *ngIf="!selectedConversation && activeTab === 'alerts'">
+        <div *ngIf="alerts.length === 0" class="text-center text-muted p-4">
+            No alerts.
+        </div>
+        <ion-list *ngIf="alerts.length > 0" lines="full">
+            <ion-item *ngFor="let alert of alerts" [class.alert-unread]="!alert.is_read" (click)="markAlertRead(alert)">
+                <ion-icon [name]="alert.is_read ? 'notifications-outline' : 'notifications'" slot="start"
+                          [color]="alert.is_read ? 'medium' : 'danger'"></ion-icon>
+                <ion-label>
+                    <h3>{{ alert.type }}</h3>
+                    <p>{{ alert.message }}</p>
+                    <p class="text-muted" style="font-size: 0.8rem;">{{ alert.created_at }}</p>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+    </div>
+</div>
