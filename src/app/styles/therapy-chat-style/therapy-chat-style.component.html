@@ -27,8 +27,9 @@
                  [class.ai-bubble]="msg.sender_type === 'ai'"
                  [class.system-bubble]="msg.sender_type === 'system'">
                 <div *ngIf="getSenderLabel(msg)" class="sender-label">{{ getSenderLabel(msg) }}</div>
-                <div *ngIf="msg.formatted_content" [innerHTML]="msg.formatted_content"></div>
-                <div *ngIf="!msg.formatted_content">{{ msg.content }}</div>
+                <app-markdown-renderer *ngIf="msg.formatted_content || msg.content"
+                    [content]="msg.formatted_content || msg.content">
+                </app-markdown-renderer>
                 <div *ngIf="msg.labels && msg.labels.length > 0" class="message-labels mt-1">
                     <span *ngFor="let label of msg.labels" class="badge badge-secondary mr-1">{{ label.name || label }}</span>
                 </div>
