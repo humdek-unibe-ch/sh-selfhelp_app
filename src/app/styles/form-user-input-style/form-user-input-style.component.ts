@@ -136,7 +136,9 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
             }
         } finally {
             this.isSubmitting = false;
-            this.selfhelpService.formSubmitting.next(false);
+            if (!this.selfhelpService.selfhelp.getValue().enable_event_listener) {
+                this.selfhelpService.formSubmitting.next(false);
+            }
         }
     }
 
@@ -155,7 +157,9 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
             }
         } finally {
             this.isSubmitting = false;
-            this.selfhelpService.formSubmitting.next(false);
+            if (!this.selfhelpService.selfhelp.getValue().enable_event_listener) {
+                this.selfhelpService.formSubmitting.next(false);
+            }
         }
     }
 

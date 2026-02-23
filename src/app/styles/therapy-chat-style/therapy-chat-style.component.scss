@@ -1,7 +1,14 @@
+:host {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+}
+
 .therapy-chat-container {
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow: hidden;
 }
 
 .initial-loading {
@@ -27,8 +34,7 @@
 .messages-area {
     flex: 1;
     overflow-y: auto;
-    min-height: 200px;
-    max-height: 60vh;
+    min-height: 0;
     padding: 8px 0;
 }
 

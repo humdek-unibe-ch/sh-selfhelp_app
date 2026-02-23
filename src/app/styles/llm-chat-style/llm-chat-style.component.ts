@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked, AfterViewInit } from '@angular/core';
-import { AlertController, ModalController, ActionSheetController, Platform, MenuController } from '@ionic/angular';
+import { AlertController, ModalController, ActionSheetController, Platform } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
@@ -64,6 +64,9 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     // Floating mode
     isFloatingPanelOpen = false;
 
+    // Custom sidebar drawer
+    isSidebarOpen = false;
+
     // Smart scroll
     private isNearBottom = true;
     private readonly SCROLL_THRESHOLD = 100;
@@ -124,7 +127,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         private modalController: ModalController,
         private actionSheetController: ActionSheetController,
         private platform: Platform,
-        private menuController: MenuController,
         private cdr: ChangeDetectorRef
     ) {
         super();
@@ -135,19 +137,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     }
 
     ngAfterViewInit() {
-        // Set up menu event listeners
-        if (this.isConversationsListEnabled()) {
-            this.menuController.get('conversations-menu')?.then(menu => {
-                if (menu) {
-                    // Load conversations when menu is about to open
-                    menu.addEventListener('ionWillOpen', async () => {
-                        if (this.conversations.length === 0) {
-                            await this.loadConversations();
-                        }
-                    });
-                }
-            });
-        }
+        // Reserved for future view-init hooks
     }
 
     ngAfterViewChecked() {
@@ -1095,33 +1085,22 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         this.isFloatingPanelOpen = false;
     }
 
-    /**
-     * Toggle conversations menu
-     */
     async toggleSidebar(): Promise<void> {
-        // Load conversations if not already loaded
-        if (this.conversations.length === 0 && this.isConversationsListEnabled()) {
+        if (!this.isSidebarOpen && this.conversations.length === 0 && this.isConversationsListEnabled()) {
             await this.loadConversations();
         }
-        await this.menuController.toggle('conversations-menu');
+        this.isSidebarOpen = !this.isSidebarOpen;
     }
 
-    /**
-     * Close conversations menu
-     */
-    async closeSidebar(): Promise<void> {
-        await this.menuController.close('conversations-menu');
+    closeSidebar(): void {
+        this.isSidebarOpen = false;
     }
 
-    /**
-     * Open conversations menu
-     */
     async openSidebar(): Promise<void> {
-        // Load conversations if not already loaded
         if (this.conversations.length === 0 && this.isConversationsListEnabled()) {
             await this.loadConversations();
         }
-        await this.menuController.open('conversations-menu');
+        this.isSidebarOpen = true;
     }
 
     // ============================================================================

@@ -76,6 +76,7 @@ export class EventListenerService implements OnDestroy {
             if (events.length > 0 || refreshSections.length > 0) {
                 this.utils.debugLog('EventListener', `${events.length} events received, refreshing`);
                 await this.selfhelpService.getPage(this.currentUrl);
+                this.selfhelpService.formSubmitting.next(false);
             }
         } catch (e) {
             this.utils.debugLog('EventListener', 'Poll error: ' + e);

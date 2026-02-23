@@ -13,10 +13,4 @@
             (click)="submitFormAndSendEmail(form.value)">{{getFieldContent('submit_and_send_label')}}
         </ion-button>
     </div>
-    <div *ngIf="isSubmitting" class="form-loading-overlay">
-        <div class="form-loading-content">
-            <ion-spinner name="crescent" color="primary"></ion-spinner>
-            <p>Processing your request...</p>
-        </div>
-    </div>
 </form>

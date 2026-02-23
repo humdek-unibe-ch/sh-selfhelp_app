@@ -83,10 +83,10 @@
                 <ion-label>
                     <h3>{{ conv.subject_name || conv.user_name || 'Patient #' + conv.id }}</h3>
                     <p *ngIf="conv.title">{{ conv.title }}</p>
-                    <p *ngIf="conv.last_message_at" class="text-muted">{{ conv.last_message_at }}</p>
+                    <p *ngIf="conv.last_message_at || conv.updated_at" class="text-muted">{{ conv.last_message_at || conv.updated_at }}</p>
                 </ion-label>
-                <ion-badge *ngIf="conv.unread_count && conv.unread_count > 0" slot="end" color="primary">
-                    {{ conv.unread_count }}
+                <ion-badge *ngIf="getConvUnread(conv) > 0" slot="end" color="primary">
+                    {{ getConvUnread(conv) }}
                 </ion-badge>
                 <ion-badge *ngIf="conv.risk_level" slot="end" [color]="getRiskBadgeColor(conv.risk_level)" class="ml-1">
                     {{ conv.risk_level }}

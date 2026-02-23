@@ -1,91 +1,3 @@
-<!-- Ion Menu for Conversations - Professional Design -->
-<ion-menu *ngIf="isConversationsListEnabled()" side="start" menuId="conversations-menu" contentId="main-content" type="overlay" [swipeGesture]="false">
-    <ion-header class="conversation-menu-header">
-        <ion-toolbar class="conversation-toolbar">
-            <ion-title class="conversation-title">{{ getLabel('conversations_heading', 'Conversations') }}</ion-title>
-            <ion-buttons slot="end">
-                <ion-button fill="clear" (click)="closeSidebar()" class="close-btn">
-                    <ion-icon name="close"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-        </ion-toolbar>
-    </ion-header>
-    <ion-content class="conversation-menu-content">
-        <div class="conversation-menu-inner">
-            <!-- New Conversation Button - Premium Style -->
-            <button 
-                class="new-conversation-btn-pro"
-                (click)="createConversation(); closeSidebar()">
-                <span class="btn-icon">
-                    <ion-icon name="add"></ion-icon>
-                </span>
-                <span class="btn-text">{{ getLabel('new_chat_button_label', 'New Conversation') }}</span>
-            </button>
-
-            <!-- Conversations List Container -->
-            <div class="conversations-list-container">
-                <!-- Loading State -->
-                <div *ngIf="isLoading" class="conversations-loading">
-                    <div class="loading-spinner">
-                        <ion-spinner name="crescent" color="primary"></ion-spinner>
-                    </div>
-                    <p class="loading-text">{{ getLabel('loading_text', 'Loading...') }}</p>
-                </div>
-
-                <!-- Conversations List -->
-                <div class="conversations-list-pro" *ngIf="!isLoading && conversations.length > 0">
-                    <div 
-                        *ngFor="let conversation of conversations; trackBy: trackByConversationId"
-                        class="conversation-item"
-                        [class.active]="currentConversation?.id === conversation.id"
-                        [class.blocked]="conversation.blocked"
-                        (click)="handleConversationClick(conversation)">
-                        
-                        <!-- Conversation Icon -->
-                        <div class="conversation-icon-wrapper" [class.blocked-icon]="conversation.blocked">
-                            <ion-icon [name]="conversation.blocked ? 'lock-closed' : 'chatbubble-ellipses'"></ion-icon>
-                        </div>
-                        
-                        <!-- Conversation Details -->
-                        <div class="conversation-details">
-                            <div class="conversation-header-row">
-                                <h4 class="conversation-name">{{ conversation.title }}</h4>
-                                <span *ngIf="conversation.blocked" class="blocked-badge">
-                                    <ion-icon name="alert-circle"></ion-icon>
-                                    Blocked
-                                </span>
-                            </div>
-                            <div class="conversation-meta">
-                                <span class="conversation-date">{{ formatDate(conversation.updated_at) }}</span>
-                                <span *ngIf="conversation.blocked && conversation.blocked_reason" class="blocked-reason">
-                                    {{ conversation.blocked_reason }}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <!-- Delete Button -->
-                        <button 
-                            class="conversation-delete-btn"
-                            (click)="deleteConversation(conversation, $event)"
-                            [title]="getLabel('delete_button_title', 'Delete conversation')">
-                            <ion-icon name="trash-outline"></ion-icon>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Empty State -->
-                <div *ngIf="!isLoading && conversations.length === 0" class="empty-conversations-pro">
-                    <div class="empty-icon">
-                        <ion-icon name="chatbubbles-outline"></ion-icon>
-                    </div>
-                    <h4 class="empty-title">{{ getLabel('no_conversations_title', 'No conversations yet') }}</h4>
-                    <p class="empty-description">{{ getLabel('no_conversations_message', 'Start a new conversation to begin chatting with the AI assistant.') }}</p>
-                </div>
-            </div>
-        </div>
-    </ion-content>
-</ion-menu>
-
 <!-- Floating Button Mode -->
 <ng-container *ngIf="isFloatingButtonEnabled()">
     <!-- Floating Button -->
@@ -101,13 +13,9 @@
     <!-- Floating Panel - Full Screen Modal -->
     <div *ngIf="isFloatingPanelOpen" class="floating-chat-panel">
         <div class="floating-panel-header">
-            <!-- Menu Button for Conversations (if enabled) -->
-            <ion-menu-button
-                *ngIf="isConversationsListEnabled()"
-                menu="conversations-menu"
-                autoHide="false"
-                class="floating-menu-btn">
-            </ion-menu-button>
+            <button *ngIf="isConversationsListEnabled()" class="sidebar-toggle-btn" (click)="toggleSidebar()">
+                <ion-icon name="menu"></ion-icon>
+            </button>
             <h4>{{ getChatTitle() }}</h4>
             <ion-button fill="clear" size="small" (click)="closeFloatingPanel()">
                 <ion-icon name="close"></ion-icon>
@@ -124,7 +32,63 @@
 
 <!-- Chat Content Template -->
 <ng-template #chatContent>
-    <div id="main-content" [class]="'llm-chat-container ' + getCss()" [class.floating-mode]="isFloatingButtonEnabled() && isFloatingPanelOpen">
+    <div [class]="'llm-chat-container ' + getCss()" [class.floating-mode]="isFloatingButtonEnabled() && isFloatingPanelOpen">
+
+        <!-- Custom Sidebar Drawer -->
+        <div *ngIf="isConversationsListEnabled()" class="sidebar-backdrop" [class.open]="isSidebarOpen" (click)="closeSidebar()"></div>
+        <div *ngIf="isConversationsListEnabled()" class="sidebar-drawer" [class.open]="isSidebarOpen">
+            <div class="sidebar-header">
+                <h4>{{ getLabel('conversations_heading', 'Conversations') }}</h4>
+                <button class="sidebar-close-btn" (click)="closeSidebar()">
+                    <ion-icon name="close"></ion-icon>
+                </button>
+            </div>
+            <div class="sidebar-body">
+                <button class="new-conversation-btn-pro" (click)="createConversation(); closeSidebar()">
+                    <span class="btn-icon"><ion-icon name="add"></ion-icon></span>
+                    <span class="btn-text">{{ getLabel('new_chat_button_label', 'New Conversation') }}</span>
+                </button>
+                <div class="conversations-list-container">
+                    <div *ngIf="isLoading" class="conversations-loading">
+                        <ion-spinner name="crescent" color="primary"></ion-spinner>
+                        <p class="loading-text">{{ getLabel('loading_text', 'Loading...') }}</p>
+                    </div>
+                    <div class="conversations-list-pro" *ngIf="!isLoading && conversations.length > 0">
+                        <div
+                            *ngFor="let conversation of conversations; trackBy: trackByConversationId"
+                            class="conversation-item"
+                            [class.active]="currentConversation?.id === conversation.id"
+                            [class.blocked]="conversation.blocked"
+                            (click)="handleConversationClick(conversation)">
+                            <div class="conversation-icon-wrapper" [class.blocked-icon]="conversation.blocked">
+                                <ion-icon [name]="conversation.blocked ? 'lock-closed' : 'chatbubble-ellipses'"></ion-icon>
+                            </div>
+                            <div class="conversation-details">
+                                <div class="conversation-header-row">
+                                    <h4 class="conversation-name">{{ conversation.title }}</h4>
+                                    <span *ngIf="conversation.blocked" class="blocked-badge">
+                                        <ion-icon name="alert-circle"></ion-icon> Blocked
+                                    </span>
+                                </div>
+                                <div class="conversation-meta">
+                                    <span class="conversation-date">{{ formatDate(conversation.updated_at) }}</span>
+                                    <span *ngIf="conversation.blocked && conversation.blocked_reason" class="blocked-reason">{{ conversation.blocked_reason }}</span>
+                                </div>
+                            </div>
+                            <button class="conversation-delete-btn" (click)="deleteConversation(conversation, $event)" [title]="getLabel('delete_button_title', 'Delete conversation')">
+                                <ion-icon name="trash-outline"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div *ngIf="!isLoading && conversations.length === 0" class="empty-conversations-pro">
+                        <div class="empty-icon"><ion-icon name="chatbubbles-outline"></ion-icon></div>
+                        <h4 class="empty-title">{{ getLabel('no_conversations_title', 'No conversations yet') }}</h4>
+                        <p class="empty-description">{{ getLabel('no_conversations_message', 'Start a new conversation to begin chatting with the AI assistant.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Error Alert -->
         <ion-item *ngIf="error" color="danger" class="error-alert" lines="none">
             <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
@@ -140,13 +104,9 @@
             <div class="chat-panel">
                 <!-- Chat Header -->
                 <div class="chat-header">
-                    <!-- Menu Button for Sidebar -->
-                    <ion-menu-button
-                        *ngIf="isConversationsListEnabled()"
-                        menu="conversations-menu"
-                        autoHide="false"
-                        class="menu-button">
-                    </ion-menu-button>
+                    <button *ngIf="isConversationsListEnabled()" class="sidebar-toggle-btn" (click)="toggleSidebar()">
+                        <ion-icon name="menu"></ion-icon>
+                    </button>
 
                     <div class="header-info">
                         <div class="chat-icon-wrapper">

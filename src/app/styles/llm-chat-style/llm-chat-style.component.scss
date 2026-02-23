@@ -16,6 +16,10 @@
     --llm-bg-user-bubble: #007aff;
     --llm-bg-assistant-bubble: #ffffff;
     --llm-border-color: rgba(0, 0, 0, 0.08);
+
+    display: block;
+    height: 100%;
+    overflow: hidden;
 }
 
 // ============================================================================
@@ -29,6 +33,7 @@
     flex-direction: column;
     background: var(--llm-bg-secondary);
     overflow: hidden;
+    position: relative;
 
     &.floating-mode {
         height: 100%;
@@ -77,51 +82,107 @@
 // Light: --ion-color-light
 // Dark: --ion-color-dark
 
-ion-menu {
-    --width: 320px;
-    --max-width: 85vw;
+// ============================================================================
+// CUSTOM SIDEBAR DRAWER
+// ============================================================================
 
-    // Menu Header
-    .conversation-menu-header {
-        .conversation-toolbar {
-            --background: var(--ion-color-primary);
-            --min-height: 56px;
-            --padding-start: 16px;
-            --padding-end: 8px;
+.sidebar-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
 
-            .conversation-title {
-                font-size: 1.125rem;
-                font-weight: 600;
-                color: var(--ion-color-primary-contrast);
-                letter-spacing: -0.01em;
-            }
+    &.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
 
-            .close-btn {
-                --color: var(--ion-color-primary-contrast);
-                --padding-start: 8px;
-                --padding-end: 8px;
+.sidebar-drawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 85%;
+    max-width: 320px;
+    background: var(--ion-color-light, #f4f5f8);
+    z-index: 1001;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.12);
 
-                ion-icon {
-                    font-size: 22px;
-                }
-            }
+    &.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        background: var(--ion-color-primary);
+        color: var(--ion-color-primary-contrast);
+        min-height: 56px;
+        padding-top: calc(16px + env(safe-area-inset-top, 0px));
+
+        h4 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
         }
     }
 
-    // Menu Content
-    .conversation-menu-content {
-        --background: var(--ion-color-light);
-    }
-
-    .conversation-menu-inner {
-        padding: 16px;
-        min-height: 100%;
+    .sidebar-close-btn {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: none;
+        color: var(--ion-color-primary-contrast);
+        cursor: pointer;
+
+        ion-icon { font-size: 22px; }
     }
 
-    // New Conversation Button - Premium Style
-    .new-conversation-btn-pro {
+    .sidebar-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+    }
+}
+
+.sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 6px;
+    color: inherit;
+    margin-right: 8px;
+
+    ion-icon { font-size: 22px; }
+
+    &:active {
+        background: rgba(0, 0, 0, 0.08);
+    }
+}
+
+// Sidebar inner styles (shared between old ion-menu and new drawer)
+.new-conversation-btn-pro {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -445,24 +506,6 @@ ion-menu {
             max-width: 220px;
         }
     }
-}
-
-// Menu Overlay - must be above the floating panel (z-index: 99999)
-::ng-deep {
-    ion-menu {
-        z-index: 100000 !important;
-    }
-
-    // The backdrop that covers the content
-    ion-menu-controller,
-    .menu-content-open {
-        ion-backdrop {
-            z-index: 9998 !important;
-            opacity: 0.5 !important;
-            background: rgba(0, 0, 0, 0.5) !important;
-        }
-    }
-}
 
 // ============================================================================
 // CHAT PANEL
@@ -492,17 +535,8 @@ ion-menu {
     flex-shrink: 0;
     position: relative;
 
-    ion-menu-button {
-        --color: var(--ion-color-dark);
-        margin-right: 8px;
-        flex-shrink: 0;
-
-        &.menu-button {
-            --padding-start: 8px;
-            --padding-end: 8px;
-            --padding-top: 6px;
-            --padding-bottom: 6px;
-        }
+    .sidebar-toggle-btn {
+        color: var(--ion-color-dark);
     }
 
     .header-info {
@@ -632,6 +666,7 @@ ion-menu {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     min-height: 0;
+    max-height: 100%;
 }
 
 // ============================================================================
@@ -1311,12 +1346,9 @@ ion-menu {
     }
 }
 
-// Floating menu button in header
-.floating-menu-btn {
-    --color: var(--ion-color-primary-contrast);
-    --padding-start: 8px;
-    --padding-end: 8px;
-    margin-right: 8px;
+// Floating panel header sidebar toggle
+.floating-panel-header .sidebar-toggle-btn {
+    color: var(--ion-color-primary-contrast);
 }
 
 @keyframes floatingPanelIn {

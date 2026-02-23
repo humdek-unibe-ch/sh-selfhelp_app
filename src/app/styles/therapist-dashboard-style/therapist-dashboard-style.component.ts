@@ -5,11 +5,15 @@ import { SelfhelpService } from '../../services/selfhelp.service';
 
 interface DashboardConversation {
     id: number;
+    id_users?: string;
     subject_name?: string;
     user_name?: string;
     title?: string;
     last_message_at?: string;
+    updated_at?: string;
     unread_count?: number;
+    unread_alerts?: number;
+    message_count?: number;
     status?: string;
     risk_level?: string;
 }
@@ -41,6 +45,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     activeTab: 'conversations' | 'alerts' = 'conversations';
     messageText: string = '';
     isSending: boolean = false;
+    unreadBySubject: { [key: string]: number } = {};
 
     constructor(private selfhelpService: SelfhelpService) {
         super();
@@ -57,6 +62,28 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         if (this.style.stats) {
             this.stats = this.style.stats;
         }
+        this.loadUnreadCounts();
+    }
+
+    async loadUnreadCounts() {
+        if (!this.sectionId) return;
+        try {
+            const res: any = await this.selfhelpService.execServerRequest(this.url, {
+                action: 'get_unread_counts',
+                section_id: this.sectionId
+            });
+            const counts = res?.unread_counts || res?.data?.unread_counts;
+            if (counts?.bySubject) {
+                this.unreadBySubject = counts.bySubject;
+            }
+        } catch (e) {
+            // Silent fail - badge just won't show
+        }
+    }
+
+    getConvUnread(conv: DashboardConversation): number {
+        const bySubject = this.unreadBySubject[conv.id_users || ''] || 0;
+        return bySubject || conv.unread_alerts || conv.unread_count || 0;
     }
 
     get totalConversations(): number {
