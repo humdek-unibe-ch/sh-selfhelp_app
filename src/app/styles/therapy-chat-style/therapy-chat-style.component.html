@@ -1,6 +1,12 @@
 <div [class]="getCss()" class="therapy-chat-container">
+    <!-- Initial loading -->
+    <div *ngIf="isInitialLoading" class="initial-loading">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p>Loading conversation...</p>
+    </div>
+
     <!-- Messages area -->
-    <div class="messages-area">
+    <div *ngIf="!isInitialLoading" class="messages-area">
         <!-- Empty state -->
         <div *ngIf="messages.length === 0 && !isLoading" class="empty-state text-center p-4">
             <ion-icon name="chatbubble-ellipses-outline" class="empty-state-icon"></ion-icon>
@@ -10,49 +16,46 @@
 
         <!-- Messages -->
         <div *ngFor="let msg of messages" class="message-wrapper mb-2"
-             [class.user-message]="msg.role === 'user'"
-             [class.assistant-message]="msg.role === 'assistant'"
-             [class.therapist-message]="msg.role === 'therapist'">
+             [class.user-message]="msg.role === 'user' || msg.sender_type === 'subject'"
+             [class.assistant-message]="msg.role === 'assistant' || msg.sender_type === 'ai'"
+             [class.therapist-message]="msg.role === 'therapist' || msg.sender_type === 'therapist'"
+             [class.system-message]="msg.role === 'system' || msg.sender_type === 'system'">
             <div class="message-bubble"
-                 [class.bg-primary]="msg.role === 'user'"
-                 [class.text-white]="msg.role === 'user'"
-                 [class.therapist-bubble]="msg.role === 'therapist'">
+                 [class.bg-primary]="msg.role === 'user' || msg.sender_type === 'subject'"
+                 [class.text-white]="msg.role === 'user' || msg.sender_type === 'subject'"
+                 [class.therapist-bubble]="msg.role === 'therapist' || msg.sender_type === 'therapist'"
+                 [class.ai-bubble]="msg.sender_type === 'ai'"
+                 [class.system-bubble]="msg.sender_type === 'system'">
+                <div *ngIf="getSenderLabel(msg)" class="sender-label">{{ getSenderLabel(msg) }}</div>
                 <div *ngIf="msg.formatted_content" [innerHTML]="msg.formatted_content"></div>
                 <div *ngIf="!msg.formatted_content">{{ msg.content }}</div>
-                <!-- Labels -->
                 <div *ngIf="msg.labels && msg.labels.length > 0" class="message-labels mt-1">
                     <span *ngFor="let label of msg.labels" class="badge badge-secondary mr-1">{{ label.name || label }}</span>
                 </div>
+                <div *ngIf="msg.created_at" class="message-time">{{ msg.created_at }}</div>
             </div>
         </div>
 
         <!-- Loading indicator -->
         <div *ngIf="isLoading" class="message-wrapper assistant-message mb-2">
-            <div class="message-bubble">
-                <ion-spinner name="dots" class="loading-spinner"></ion-spinner>
-                <span class="ml-2">Thinking...</span>
+            <div class="message-bubble ai-thinking">
+                <div class="thinking-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="thinking-text">AI is thinking...</span>
             </div>
         </div>
 
         <div #messagesEnd></div>
     </div>
 
-    <!-- Message input -->
-    <div class="message-input-area d-flex align-items-end mt-2">
-        <ion-textarea
-            [(ngModel)]="messageText"
-            placeholder="Type a message..."
-            rows="1"
-            autoGrow="true"
-            class="message-input flex-grow-1"
-            (keydown)="onKeyDown($event)">
-        </ion-textarea>
-        <ion-button
-            [disabled]="!messageText.trim() || isLoading"
-            (click)="sendMessage()"
-            size="small"
-            class="send-button ml-2">
-            <ion-icon name="send" slot="icon-only"></ion-icon>
-        </ion-button>
-    </div>
+    <!-- Chat input (shared component) -->
+    <app-chat-input
+        *ngIf="!isInitialLoading"
+        placeholder="Type a message..."
+        [disabled]="isLoading"
+        [maxLength]="0"
+        [showCharCount]="false"
+        (messageSend)="onMessageSend($event)">
+    </app-chat-input>
 </div>

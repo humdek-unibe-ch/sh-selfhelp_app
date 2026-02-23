@@ -416,6 +416,16 @@ export interface LlmResponseStyle extends Style {
     editable: boolean,
     name: string,
     text_md: StyleField,
+    section_id: any,
+}
+
+export interface TherapyChatConfig {
+    icon: string;
+    label: string;
+    position: string;
+    ai_enabled: boolean;
+    ai_label: string;
+    therapist_label: string;
 }
 
 export interface TherapyChatStyle extends Style {
@@ -426,6 +436,8 @@ export interface TherapyChatStyle extends Style {
     is_subject: boolean,
     tagging_enabled: boolean,
     labels: any[],
+    polling_interval: number,
+    chat_config: TherapyChatConfig,
 }
 
 export interface TherapistDashboardStyle extends Style {
@@ -588,6 +600,19 @@ export interface ResetPasswordValues {
 
 export type Styles = (CardStyle | ContainerStyle | MarkdownStyle | ConditionalContainerStyle | FormUserInputStyle | ProfileStyle)[];
 
+export interface TherapyChatMobileInfo {
+    available: boolean;
+    section_id: number | null;
+    url: string;
+    unread_count: number;
+    icon: string;
+    mobile_icon: string;
+    label: string;
+    role: string;
+    enable_floating: boolean;
+    position: string;
+}
+
 export interface SelfHelpPageRequest {
     navigation: SelfHelpNavigation[],
     content: Styles,
@@ -604,6 +629,7 @@ export interface SelfHelpPageRequest {
     two_factor_auth: boolean,
     enable_event_listener?: boolean,
     event_listener_interval?: number,
+    therapy_chat?: TherapyChatMobileInfo | null,
 }
 
 export interface SecurityQuestion {
@@ -642,6 +668,18 @@ export interface Url {
     [key: string]: CachedPage
 }
 
+export interface TherapyChatState {
+    available: boolean;
+    url: string;
+    sectionId: number | null;
+    unreadCount: number;
+    config: TherapyChatConfig | null;
+    mobileIcon?: string;
+    role?: string;
+    enableFloating?: boolean;
+    position?: string;
+}
+
 export interface SelfHelp {
     navigation: SelfHelpNavigation[],
     selectedMenu?: SelfHelpNavigation,
@@ -661,6 +699,8 @@ export interface SelfHelp {
     two_factor_auth?: boolean,
     enable_event_listener?: boolean,
     event_listener_interval?: number,
+    therapyChatState?: TherapyChatState,
+    therapyChatPageInfo?: TherapyChatMobileInfo,
 }
 export interface AppConfig {
     capacitorConfig: CapacitorConfig,

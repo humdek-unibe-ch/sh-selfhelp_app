@@ -447,11 +447,10 @@ ion-menu {
     }
 }
 
-// Menu Overlay - Ensure menu covers everything and is closable
+// Menu Overlay - must be above the floating panel (z-index: 99999)
 ::ng-deep {
     ion-menu {
-        // Ensure the menu has highest z-index
-        z-index: 9999 !important;
+        z-index: 100000 !important;
     }
 
     // The backdrop that covers the content
@@ -1222,8 +1221,7 @@ ion-menu {
 
 .floating-chat-panel {
     position: fixed;
-    z-index: 1001;
-    // Full screen on mobile - best practices
+    z-index: 99999;
     top: 0;
     left: 0;
     right: 0;
@@ -1288,8 +1286,14 @@ ion-menu {
     .llm-chat-container {
         flex: 1;
         overflow: hidden;
-        // Safe area for bottom navigation
+        display: flex;
+        flex-direction: column;
         padding-bottom: env(safe-area-inset-bottom, 0px);
+
+        .chat-layout {
+            flex: 1;
+            min-height: 0;
+        }
 
         .chat-panel {
             border-radius: 0;
@@ -1298,8 +1302,11 @@ ion-menu {
         }
 
         .chat-header {
-            // Hide the regular header in floating mode since we have the panel header
             display: none;
+        }
+
+        .message-input-container {
+            flex-shrink: 0;
         }
     }
 }

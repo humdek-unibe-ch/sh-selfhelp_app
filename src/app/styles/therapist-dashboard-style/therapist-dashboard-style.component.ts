@@ -92,11 +92,17 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         }
     }
 
-    async sendTherapistMessage() {
-        if (!this.messageText.trim() || this.isSending || !this.selectedConversation) return;
+    async onTherapistMessageSend(text: string) {
+        await this.sendTherapistMessage(text);
+    }
 
-        const text = this.messageText.trim();
-        this.messageText = '';
+    async sendTherapistMessage(text?: string) {
+        if (!text && (!this.messageText.trim() || this.isSending || !this.selectedConversation)) return;
+        if (!text) {
+            text = this.messageText.trim();
+            this.messageText = '';
+        }
+        if (!this.selectedConversation) return;
         this.isSending = true;
 
         try {

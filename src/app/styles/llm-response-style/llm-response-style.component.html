@@ -1,6 +1,19 @@
 <div [class]="getCss()">
+    <!-- Loading state while form is submitting -->
+    <div *ngIf="showLoading" class="llm-response-loading">
+        <div class="llm-loading-indicator">
+            <ion-spinner name="crescent" color="primary"></ion-spinner>
+            <div class="llm-loading-text">
+                <span class="llm-thinking-dots">
+                    <span></span><span></span><span></span>
+                </span>
+                Generating response...
+            </div>
+        </div>
+    </div>
+
     <!-- Read-only mode: render content as HTML/markdown -->
-    <div *ngIf="!isEditable" class="llm-response-content" [innerHTML]="content"></div>
+    <div *ngIf="!isEditable && !showLoading" class="llm-response-content" [innerHTML]="content"></div>
 
     <!-- Edit mode: textarea for editing -->
     <div *ngIf="isEditable" class="llm-response-edit">

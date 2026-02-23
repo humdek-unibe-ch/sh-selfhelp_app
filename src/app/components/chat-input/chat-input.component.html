@@ -1,0 +1,27 @@
+<div class="chat-input-wrapper">
+    <div class="input-row">
+        <ion-textarea
+            [(ngModel)]="messageText"
+            [placeholder]="placeholder"
+            [rows]="rows"
+            autoGrow="true"
+            [disabled]="disabled"
+            [maxlength]="maxLength > 0 ? maxLength : null"
+            (keydown)="onKeyDown($event)"
+            class="chat-textarea">
+        </ion-textarea>
+        <ion-button
+            [disabled]="!canSend"
+            (click)="send()"
+            size="small"
+            fill="solid"
+            color="primary"
+            shape="round"
+            class="send-btn">
+            <ion-icon name="send" slot="icon-only"></ion-icon>
+        </ion-button>
+    </div>
+    <div *ngIf="showCharCount && maxLength > 0" class="char-count" [class.near-limit]="isNearLimit">
+        {{ characterCount }}/{{ maxLength }}
+    </div>
+</div>

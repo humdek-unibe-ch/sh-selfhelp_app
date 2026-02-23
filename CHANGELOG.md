@@ -1,6 +1,21 @@
 # 3.4.9
 ### New Features
  - add style `llmChat` - LLM chat interface with conversations list, message bubbles, and message input (requires LLM plugin)
+### Enhancements
+ - **form loading state** - form submission now shows a loading spinner and "Processing..." label on the submit button, plus a loading overlay below the form, giving the user clear feedback while the server (e.g. LLM) processes the request
+ - **LLM response loading state** - `llmResponse` style now shows a loading indicator with animated dots and spinner while the form is being submitted, using `formSubmitting` BehaviorSubject in `SelfhelpService` for cross-component communication; `section_id` is now available for per-section loading tracking
+ - **therapy chat from page response** - therapy chat availability is now determined from the `therapy_chat` field in the mobile page response (injected by `TherapyChatHooks::addTherapyChatToMobileResponse` hook), providing availability, icon, label, URL, unread count, mobile icon, role, `enable_floating`, and `position` on every page load
+ - **floating vs tab logic** - when `enable_floating` is true, therapy chat shows as an Ionic FAB button only (no tab); when false, it shows as the first tab in the bottom bar only (no FAB). Position is configurable via `position` field (`bottom-right`, `bottom-left`, etc.)
+ - **shared chat input component** - new `ChatInputComponent` (`app-chat-input`) extracts the chat textarea + send button into a reusable component used by `TherapyChatStyleComponent` and `TherapistDashboardStyleComponent`, reducing code duplication
+ - **therapy chat polling fix** - all therapy chat requests (`get_conversation`, `check_updates`, `get_messages`) now use POST via `execServerRequest` instead of GET via `execServerGetRequest`, ensuring the server correctly identifies them as mobile requests and routes through `mobile_call()` → controller
+ - **therapist dashboard UI** - replaced double back buttons with a single `ion-chip` back button; added enter-to-send for reply input; improved conversation header layout
+ - **llmChat floating panel fixes** - floating panel z-index raised to 99999 to ensure it covers the tab bar; conversation menu z-index raised to 100000 to overlay the floating panel; inner container uses proper flex layout to prevent text input cutoff
+ - **mobile icon mapping** - FA icons from backend config (e.g. `fa-comments`) are automatically mapped to Ionic-compatible icons (e.g. `chatbubbles`) on the server side and sent as `mobile_icon` field
+ - **therapy chat polling** - `therapyChat` style polls the server via `check_updates` endpoint for new messages (default 3s interval)
+ - **TherapyChatNotificationService** - uses `therapy_chat` field from mobile page response as primary source, with fallback to content scanning; polls via POST for unread counts
+ - add `TherapyChatState`, `TherapyChatConfig`, `TherapyChatMobileInfo` interfaces with `enableFloating` and `position` fields
+ - add `therapy_chat` field to `SelfHelpPageRequest` interface
+ - add `formSubmitting` BehaviorSubject to `SelfhelpService` for global form submission state tracking
    - Conversation management (create, select, delete)
    - Message sending with real-time AI responses
    - File attachments with image preview (camera, gallery, file picker)

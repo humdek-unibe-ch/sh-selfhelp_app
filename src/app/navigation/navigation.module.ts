@@ -93,6 +93,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { MarkdownRendererComponent } from '../components/markdown-renderer/markdown-renderer.component';
 import { LlmStructuredResponseComponent } from '../components/llm-structured-response/llm-structured-response.component';
 import { LlmFormRendererComponent } from '../components/llm-form-renderer/llm-form-renderer.component';
+import { ChatInputComponent } from '../components/chat-input/chat-input.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -235,7 +236,8 @@ const routes: Routes = [
         TherapistDashboardStyleComponent,
         MarkdownRendererComponent,
         LlmStructuredResponseComponent,
-        LlmFormRendererComponent
+        LlmFormRendererComponent,
+        ChatInputComponent
     ]
 })
 export class NavigationPageModule {

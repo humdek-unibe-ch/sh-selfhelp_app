@@ -28,3 +28,63 @@
     --padding-end: 12px;
     min-height: 100px;
 }
+
+.llm-response-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    min-height: 80px;
+}
+
+.llm-loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: var(--ion-color-light);
+    border-radius: 12px;
+    width: 100%;
+
+    ion-spinner {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.llm-loading-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+}
+
+.llm-thinking-dots {
+    display: inline-flex;
+    gap: 3px;
+
+    span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(--ion-color-primary);
+        animation: thinkingDot 1.4s infinite ease-in-out both;
+
+        &:nth-child(1) { animation-delay: -0.32s; }
+        &:nth-child(2) { animation-delay: -0.16s; }
+        &:nth-child(3) { animation-delay: 0s; }
+    }
+}
+
+@keyframes thinkingDot {
+    0%, 80%, 100% {
+        transform: scale(0.4);
+        opacity: 0.4;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

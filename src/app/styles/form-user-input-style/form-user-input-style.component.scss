@@ -1,0 +1,34 @@
+.submit-spinner {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+}
+
+.form-loading-overlay {
+    position: relative;
+    margin-top: 16px;
+    padding: 24px 16px;
+    text-align: center;
+    background: var(--ion-color-light, #f4f5f8);
+    border-radius: 12px;
+    border: 1px solid var(--ion-color-light-shade, #d7d8da);
+
+    .form-loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+
+        ion-spinner {
+            width: 36px;
+            height: 36px;
+        }
+
+        p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--ion-color-medium, #92949c);
+            font-weight: 500;
+        }
+    }
+}

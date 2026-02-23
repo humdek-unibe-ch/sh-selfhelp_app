@@ -14,6 +14,7 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     public form!: FormGroup;
     private formFields: { [key: string]: any } = {};
     inputStyles: any[] = [];
+    isSubmitting: boolean = false;
 
     constructor(protected formBuilder: FormBuilder, protected selfhelpService: SelfhelpService) {
         super();
@@ -123,24 +124,38 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
     }
 
     public async submitForm(value: { [key: string]: any; }) {
-        const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));
-        if (res && this.getFieldContent('close_modal_at_end') == '1') {
-            this.selfhelpService.closeModal('submit');
-        }
-        if (this.getFieldContent('redirect_at_end') != '') {
-            this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+        this.isSubmitting = true;
+        this.selfhelpService.formSubmitting.next(true);
+        try {
+            const res = await this.selfhelpService.submitForm(this.url, this.prepareParams(value));
+            if (res && this.getFieldContent('close_modal_at_end') == '1') {
+                this.selfhelpService.closeModal('submit');
+            }
+            if (this.getFieldContent('redirect_at_end') != '') {
+                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            }
+        } finally {
+            this.isSubmitting = false;
+            this.selfhelpService.formSubmitting.next(false);
         }
     }
 
     public async submitFormAndSendEmail(value: { [key: string]: any; }) {
-        let params = this.prepareParams(value);
-        params['btnSubmitAndSend'] = 'send_email';
-        const res = await this.selfhelpService.submitForm(this.url, params);
-        if (res && this.getFieldContent('close_modal_at_end') == '1') {
-            this.selfhelpService.closeModal('submit');
-        }
-        if (this.getFieldContent('redirect_at_end') != '') {
-            this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+        this.isSubmitting = true;
+        this.selfhelpService.formSubmitting.next(true);
+        try {
+            let params = this.prepareParams(value);
+            params['btnSubmitAndSend'] = 'send_email';
+            const res = await this.selfhelpService.submitForm(this.url, params);
+            if (res && this.getFieldContent('close_modal_at_end') == '1') {
+                this.selfhelpService.closeModal('submit');
+            }
+            if (this.getFieldContent('redirect_at_end') != '') {
+                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            }
+        } finally {
+            this.isSubmitting = false;
+            this.selfhelpService.formSubmitting.next(false);
         }
     }
 

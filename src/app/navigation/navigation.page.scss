@@ -1,1 +1,39 @@
+.therapy-chat-tab {
+    position: relative;
 
+    ion-badge.tab-badge {
+        position: absolute;
+        top: 4px;
+        right: 12px;
+        font-size: 0.65rem;
+        min-width: 18px;
+        height: 18px;
+        line-height: 18px;
+        border-radius: 9px;
+        padding: 0 4px;
+        z-index: 10;
+    }
+}
+
+.therapy-chat-fab {
+    position: relative;
+    z-index: 999;
+
+    ion-fab-button {
+        --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    ion-badge.fab-badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        font-size: 0.65rem;
+        min-width: 20px;
+        height: 20px;
+        line-height: 20px;
+        border-radius: 10px;
+        padding: 0 5px;
+        z-index: 11;
+        pointer-events: none;
+    }
+}

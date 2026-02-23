@@ -1,12 +1,36 @@
 <ng-container *ngIf="this.init">
     <ion-tabs #navigation>
         <ion-tab-bar slot="bottom">
+            <!-- Therapy chat tab: only when floating is NOT enabled -->
+            <ion-tab-button *ngIf="therapyChatState.available && !therapyChatState.enableFloating"
+                (click)="navigateToTherapyChat()"
+                class="therapy-chat-tab">
+                <ion-icon [name]="getTherapyChatIcon()"></ion-icon>
+                <ion-label>{{ getTherapyChatLabel() }}</ion-label>
+                <ion-badge *ngIf="therapyChatState.unreadCount > 0" color="danger" class="tab-badge">
+                    {{ therapyChatState.unreadCount }}
+                </ion-badge>
+            </ion-tab-button>
+            <!-- Regular navigation tabs -->
             <ion-tab-button *ngFor="let nav of  this.selfHelp ? selfHelp.navigation : []" [tab]="getTabName(nav)" (click)="setTab(nav)">
                 <ion-icon *ngIf="getIcon(nav) !== ''" [name]="getIcon(nav)"></ion-icon>
                 <ion-label>{{nav.title}}</ion-label>
             </ion-tab-button>
         </ion-tab-bar>
     </ion-tabs>
+
+    <!-- Therapy Chat FAB: only when floating IS enabled -->
+    <ion-fab *ngIf="therapyChatState.available && therapyChatState.enableFloating"
+        [vertical]="getFabVertical()" [horizontal]="getFabHorizontal()" slot="fixed"
+        class="therapy-chat-fab">
+        <ion-fab-button (click)="navigateToTherapyChat()" color="primary" size="small">
+            <ion-icon [name]="getTherapyChatIcon()"></ion-icon>
+        </ion-fab-button>
+        <ion-badge *ngIf="therapyChatState.unreadCount > 0" color="danger" class="fab-badge">
+            {{ therapyChatState.unreadCount }}
+        </ion-badge>
+    </ion-fab>
+
     <ion-content *ngIf="selfHelp && selfHelp.navigation && selfHelp.navigation.length === 0">
         <div class="h-100 w-100 d-flex justify-content-center align-items-center">
             <div class=''>
@@ -15,5 +39,3 @@
         </div>
     </ion-content>
 </ng-container>
-<!-- <app-menu></app-menu> -->
-

@@ -1,9 +1,11 @@
-import { AfterViewInit, Component, NgZone, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnDestroy, ViewChild } from '@angular/core';
 import { IonTabs } from '@ionic/angular';
-import { SelfHelp } from '../selfhelpInterfaces';
+import { SelfHelp, TherapyChatState } from '../selfhelpInterfaces';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 import { EventListenerService } from '../services/event-listener.service';
+import { TherapyChatNotificationService } from '../services/therapy-chat-notification.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -11,20 +13,33 @@ import { EventListenerService } from '../services/event-listener.service';
     templateUrl: 'navigation.page.html',
     styleUrls: ['navigation.page.scss']
 })
-export class NavigationPage implements AfterViewInit {
+export class NavigationPage implements AfterViewInit, OnDestroy {
     public selfHelp?: SelfHelp;
     public init = false;
     private external_css = 'external_css';
     private selected_menu_url = '';
     @ViewChild('navigation') tabRef?: IonTabs;
 
-    constructor(public selfHelpService: SelfhelpService, private zone: NgZone, private eventListenerService: EventListenerService) {
+    public therapyChatState: TherapyChatState = {
+        available: false,
+        url: '',
+        sectionId: null,
+        unreadCount: 0,
+        config: null
+    };
+    private therapyChatSub?: Subscription;
+
+    constructor(
+        public selfHelpService: SelfhelpService,
+        private zone: NgZone,
+        private eventListenerService: EventListenerService,
+        private therapyChatNotification: TherapyChatNotificationService
+    ) {
         this.selfHelpService.observeSelfhelp().subscribe((selfHelp: SelfHelp) => {
             this.zone.run(() => {
                 if (selfHelp) {
                     this.selfHelp = selfHelp;
                     if (!this.selfHelp.selectedMenu && selfHelp.navigation.length > 0) {
-                        //set default tab if none is selected, used in the initialization
                         this.init = true;
                         this.setTab(this.selfHelp.navigation[0]);
                     } else if (this.selfHelp.selectedMenu && !this.init) {
@@ -36,7 +51,6 @@ export class NavigationPage implements AfterViewInit {
                         ext_css.innerHTML = '';
                         ext_css.appendChild(document.createTextNode(selfHelp.external_css));
                     } else {
-                        // if the external css is not added yet, create it and add it
                         const head = document.getElementsByTagName('head')[0];
                         const style = document.createElement('style');
                         style.id = this.external_css;
@@ -47,6 +61,12 @@ export class NavigationPage implements AfterViewInit {
                 }
             });
         });
+
+        this.therapyChatSub = this.therapyChatNotification.observeTherapyChatState().subscribe(state => {
+            this.zone.run(() => {
+                this.therapyChatState = state;
+            });
+        });
     }
 
     ngOnInit(): void { }
@@ -54,6 +74,12 @@ export class NavigationPage implements AfterViewInit {
     ngAfterViewInit() {
         if (this.selfHelpService.selfhelp.value.selectedMenu) {
             this.selectMenu(this.selfHelpService.selfhelp.value.selectedMenu);
+        }
+    }
+
+    ngOnDestroy() {
+        if (this.therapyChatSub) {
+            this.therapyChatSub.unsubscribe();
         }
     }
 
@@ -78,6 +104,51 @@ export class NavigationPage implements AfterViewInit {
 
     public getIcon(nav: SelfHelpNavigation): string {
         return this.selfHelpService.getIcon(nav.icon);
+    }
+
+    public getTherapyChatIcon(): string {
+        // Prefer mobile_icon from backend (already mapped to Ionic)
+        if (this.therapyChatState.mobileIcon) {
+            return this.therapyChatState.mobileIcon;
+        }
+        if (this.therapyChatState.config?.icon) {
+            const icon = this.therapyChatState.config.icon;
+            const mapped = this.selfHelpService.getIcon(icon);
+            if (mapped) return mapped;
+            const faToIonic: Record<string, string> = {
+                'fa-comments': 'chatbubbles',
+                'fa-comment': 'chatbubble',
+                'fa-comment-dots': 'chatbubble-ellipses',
+                'fa-comment-medical': 'medkit',
+                'fa-envelope': 'mail',
+                'fa-bell': 'notifications',
+                'fa-user-md': 'person',
+                'fa-heart': 'heart',
+                'fa-shield': 'shield',
+            };
+            return faToIonic[icon] || 'chatbubbles';
+        }
+        return 'chatbubbles';
+    }
+
+    public getTherapyChatLabel(): string {
+        return this.therapyChatState.config?.label || 'Chat';
+    }
+
+    public getFabVertical(): string {
+        const pos = this.therapyChatState.position || 'bottom-right';
+        return pos.startsWith('top') ? 'top' : 'bottom';
+    }
+
+    public getFabHorizontal(): string {
+        const pos = this.therapyChatState.position || 'bottom-right';
+        return pos.endsWith('left') ? 'start' : 'end';
+    }
+
+    public navigateToTherapyChat() {
+        if (this.therapyChatState.url) {
+            this.selfHelpService.openUrl(this.therapyChatState.url);
+        }
     }
 
 }

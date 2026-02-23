@@ -28,14 +28,14 @@
     </ion-segment>
 
     <!-- Conversation detail view -->
-    <div *ngIf="selectedConversation">
-        <div class="d-flex align-items-center mb-2">
-            <ion-button fill="clear" size="small" (click)="backToList()">
-                <ion-icon name="arrow-back" slot="start"></ion-icon>
-                Back
-            </ion-button>
-            <strong class="ml-2">{{ selectedConversation.subject_name || selectedConversation.user_name || 'Patient' }}</strong>
-            <ion-badge *ngIf="selectedConversation.risk_level" [color]="getRiskBadgeColor(selectedConversation.risk_level)" class="ml-2">
+    <div *ngIf="selectedConversation" class="conversation-detail">
+        <div class="conversation-header">
+            <ion-chip (click)="backToList()" color="medium" outline="true">
+                <ion-icon name="arrow-back"></ion-icon>
+                <ion-label>Back</ion-label>
+            </ion-chip>
+            <span class="patient-name">{{ selectedConversation.subject_name || selectedConversation.user_name || 'Patient' }}</span>
+            <ion-badge *ngIf="selectedConversation.risk_level" [color]="getRiskBadgeColor(selectedConversation.risk_level)">
                 {{ selectedConversation.risk_level }}
             </ion-badge>
         </div>
@@ -45,34 +45,29 @@
                 <ion-spinner name="crescent"></ion-spinner>
             </div>
             <div *ngFor="let msg of selectedMessages" class="message-wrapper mb-2"
-                 [class.user-message]="msg.role === 'user'"
-                 [class.assistant-message]="msg.role === 'assistant'"
-                 [class.therapist-message]="msg.role === 'therapist'">
+                 [class.user-message]="msg.role === 'user' || msg.sender_type === 'subject'"
+                 [class.assistant-message]="msg.role === 'assistant' || msg.sender_type === 'ai'"
+                 [class.therapist-message]="msg.role === 'therapist' || msg.sender_type === 'therapist'">
                 <div class="message-role text-muted mb-1" style="font-size: 0.75rem;">
-                    {{ msg.role === 'user' ? 'Patient' : msg.role === 'therapist' ? 'Therapist' : 'AI' }}
+                    {{ msg.role === 'user' || msg.sender_type === 'subject' ? 'Patient' : msg.role === 'therapist' || msg.sender_type === 'therapist' ? 'Therapist' : 'AI' }}
                 </div>
                 <div class="message-bubble"
-                     [class.patient-bubble]="msg.role === 'user'"
-                     [class.therapist-bubble]="msg.role === 'therapist'">
+                     [class.patient-bubble]="msg.role === 'user' || msg.sender_type === 'subject'"
+                     [class.therapist-bubble]="msg.role === 'therapist' || msg.sender_type === 'therapist'">
                     <div *ngIf="msg.formatted_content" [innerHTML]="msg.formatted_content"></div>
                     <div *ngIf="!msg.formatted_content">{{ msg.content }}</div>
                 </div>
             </div>
         </div>
 
-        <!-- Therapist reply -->
-        <div class="therapist-reply d-flex align-items-end mt-2">
-            <ion-textarea
-                [(ngModel)]="messageText"
-                placeholder="Reply to patient..."
-                rows="1"
-                autoGrow="true"
-                class="reply-input flex-grow-1">
-            </ion-textarea>
-            <ion-button [disabled]="!messageText.trim() || isSending" (click)="sendTherapistMessage()" size="small" class="ml-2">
-                <ion-icon name="send" slot="icon-only"></ion-icon>
-            </ion-button>
-        </div>
+        <!-- Therapist reply input (shared component) -->
+        <app-chat-input
+            placeholder="Reply to patient..."
+            [disabled]="isSending"
+            [maxLength]="0"
+            [showCharCount]="false"
+            (messageSend)="onTherapistMessageSend($event)">
+        </app-chat-input>
     </div>
 
     <!-- Conversations list -->

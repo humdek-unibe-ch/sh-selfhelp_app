@@ -52,6 +52,7 @@ export class SelfhelpService {
     public navigation_module_loaded: Boolean = false;
     public mobilePlatform!: MobilePlatform;
     public loadingSpinnerDuration = 1000;
+    public formSubmitting = new BehaviorSubject<boolean>(false);
 
     constructor(
         private platform: Platform,
@@ -330,6 +331,15 @@ export class SelfhelpService {
             currSelfhelp.event_listener_interval = page.event_listener_interval || 5;
             eventListenerChanged = true;
         }
+        // Process therapy_chat info from page response
+        if (page.therapy_chat) {
+            currSelfhelp.therapyChatPageInfo = page.therapy_chat;
+        } else if (page.logged_in && currSelfhelp.therapyChatPageInfo?.available) {
+            // keep existing if still logged in
+        } else {
+            currSelfhelp.therapyChatPageInfo = undefined;
+        }
+
         if (!page.logged_in && url != this.globals.SH_API_LOGIN && !url.includes('/validate') && !url.includes(this.globals.SH_API_RESET) && this.autoLoginAttempts == 0) {
             this.autoLoginAttempts++; // try to autologin only once
             await this.autoLogin();
