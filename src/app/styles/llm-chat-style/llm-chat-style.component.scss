@@ -1319,6 +1319,7 @@
     }
 
     .llm-chat-container {
+        min-height: auto;
         flex: 1;
         overflow: hidden;
         display: flex;

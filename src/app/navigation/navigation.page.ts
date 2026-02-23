@@ -145,9 +145,22 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
         return pos.endsWith('left') ? 'start' : 'end';
     }
 
-    public navigateToTherapyChat() {
-        if (this.therapyChatState.url) {
-            this.selfHelpService.openUrl(this.therapyChatState.url);
+    public async navigateToTherapyChat() {
+        if (!this.therapyChatState.url) return;
+        const url = this.therapyChatState.url;
+        await this.selfHelpService.getPage(url);
+        const syntheticNav: SelfHelpNavigation = {
+            id_navigation_section: null,
+            title: this.getTherapyChatLabel(),
+            keyword: url.replace(/^\//, ''),
+            url: url,
+            icon: this.getTherapyChatIcon(),
+            is_active: true,
+            children: []
+        };
+        if (this.selfHelp) {
+            this.selfHelp.selectedMenu = syntheticNav;
+            this.selfHelpService.setSelectedMenu(syntheticNav);
         }
     }
 

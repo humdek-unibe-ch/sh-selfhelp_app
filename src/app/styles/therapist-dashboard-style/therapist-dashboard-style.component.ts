@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { TherapistDashboardStyle } from '../../selfhelpInterfaces';
 import { SelfhelpService } from '../../services/selfhelp.service';
+import { AlertController } from '@ionic/angular';
 
 interface DashboardConversation {
     id: number;
@@ -35,6 +35,7 @@ interface ConversationNote {
     note_type: string;
     created_at: string;
     updated_at?: string;
+    author_name?: string;
 }
 
 interface ChatMessage {
@@ -53,14 +54,13 @@ interface ChatMessage {
     styleUrls: ['./therapist-dashboard-style.component.scss'],
 })
 export class TherapistDashboardStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
-    @Input() override style!: TherapistDashboardStyle;
-
     conversations: DashboardConversation[] = [];
     alerts: DashboardAlert[] = [];
     stats: any = {};
     sectionId: number | null = null;
     activeTab: 'conversations' | 'alerts' = 'conversations';
     isLoading = false;
+    errorMessage = '';
 
     selectedConversation: DashboardConversation | null = null;
     selectedMessages: ChatMessage[] = [];
@@ -83,20 +83,27 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
 
     private pollTimer: any = null;
 
-    constructor(private selfhelpService: SelfhelpService) {
+    constructor(
+        private selfhelpService: SelfhelpService,
+        private alertController: AlertController
+    ) {
         super();
     }
 
     override ngOnInit() {
-        this.sectionId = this.style.section_id || null;
-        if (this.style.conversations) {
-            this.conversations = this.style.conversations;
+        const s: any = this.style;
+        this.sectionId = s?.section_id || null;
+        if (s?.conversations) {
+            this.conversations = s.conversations;
         }
-        if (this.style.alerts) {
-            this.alerts = this.style.alerts;
+        if (s?.alerts) {
+            this.alerts = s.alerts;
         }
-        if (this.style.stats) {
-            this.stats = this.style.stats;
+        if (s?.stats) {
+            this.stats = s.stats;
+        }
+        if (this.conversations.length === 0) {
+            this.loadConversations();
         }
         this.loadUnreadCounts();
         this.startPolling();
@@ -133,10 +140,27 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     private async apiCall(action: string, extra: any = {}): Promise<any> {
         const params: any = { action, section_id: this.sectionId, ...extra };
         const res: any = await this.selfhelpService.execServerRequest(this.url, params);
-        if (res?.content) {
-            return res.content.find ? undefined : res;
+        if (res?.content?.find) {
+            return undefined;
         }
         return res;
+    }
+
+    async loadConversations() {
+        this.isLoading = true;
+        try {
+            const res: any = await this.apiCall('get_conversations');
+            if (res?.conversations) {
+                this.conversations = res.conversations;
+            }
+            if (res?.stats) {
+                this.stats = res.stats;
+            }
+        } catch (e) {
+            console.error('Failed to load conversations', e);
+        } finally {
+            this.isLoading = false;
+        }
     }
 
     async loadUnreadCounts() {
@@ -173,19 +197,22 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
 
     getSenderLabel(msg: ChatMessage): string {
         if (msg.sender_type === 'subject' || msg.role === 'user') return 'Patient';
-        if (msg.sender_type === 'therapist' || msg.role === 'therapist') return 'Therapist';
+        if (msg.sender_type === 'therapist' || msg.role === 'therapist') return 'You';
+        if (msg.sender_type === 'system') return 'System';
         return 'AI';
     }
 
     getSenderClass(msg: ChatMessage): string {
         if (msg.sender_type === 'subject' || msg.role === 'user') return 'patient';
         if (msg.sender_type === 'therapist' || msg.role === 'therapist') return 'therapist';
+        if (msg.sender_type === 'system') return 'system';
         return 'ai';
     }
 
     getRiskColor(risk?: string): string {
         switch (risk) {
-            case 'critical': case 'emergency': case 'high': return 'danger';
+            case 'critical': case 'emergency': return 'danger';
+            case 'high': return 'danger';
             case 'medium': case 'elevated': return 'warning';
             case 'low': return 'success';
             default: return 'medium';
@@ -201,12 +228,11 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         }
     }
 
-    // === CONVERSATION SELECTION ===
-
     async selectConversation(conv: DashboardConversation) {
         this.selectedConversation = conv;
         this.conversationTab = 'chat';
         this.activeDraft = null;
+        this.errorMessage = '';
         this.isLoadingMessages = true;
         try {
             const res: any = await this.apiCall('get_conversation', { conversation_id: conv.id });
@@ -239,7 +265,12 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             });
             const newMsgs = res?.messages || [];
             if (newMsgs.length > 0) {
-                this.selectedMessages = [...this.selectedMessages, ...newMsgs];
+                const existingIds = new Set(this.selectedMessages.filter(m => m.id).map(m => m.id));
+                for (const msg of newMsgs) {
+                    if (!msg.id || !existingIds.has(msg.id)) {
+                        this.selectedMessages.push(msg);
+                    }
+                }
             }
         } catch (e) { }
     }
@@ -250,13 +281,13 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         this.selectedNotes = [];
         this.activeDraft = null;
         this.conversationTab = 'chat';
+        this.errorMessage = '';
     }
-
-    // === MESSAGING ===
 
     async onMessageSend(text: string) {
         if (!text.trim() || !this.selectedConversation || this.isSending) return;
         this.isSending = true;
+        this.errorMessage = '';
         try {
             const res: any = await this.apiCall('send_message', {
                 message: text,
@@ -269,15 +300,15 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
                     content: text,
                     created_at: new Date().toISOString()
                 });
+            } else if (res?.error) {
+                this.errorMessage = res.error;
             }
         } catch (e) {
-            console.error('Failed to send message', e);
+            this.errorMessage = 'Failed to send message';
         } finally {
             this.isSending = false;
         }
     }
-
-    // === ALERTS ===
 
     async loadAlerts() {
         try {
@@ -294,18 +325,14 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         try {
             await this.apiCall('mark_alert_read', { alert_id: alert.id });
             alert.is_read = true;
-        } catch (e) {
-            console.error('Failed to mark alert read', e);
-        }
+        } catch (e) { }
     }
 
     async markAllAlertsRead() {
         try {
             await this.apiCall('mark_all_read');
             this.alerts.forEach(a => a.is_read = true);
-        } catch (e) {
-            console.error('Failed to mark all read', e);
-        }
+        } catch (e) { }
     }
 
     onAlertClick(alert: DashboardAlert) {
@@ -319,8 +346,6 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         }
     }
 
-    // === NOTES ===
-
     async addNote() {
         if (!this.noteText.trim() || !this.selectedConversation || this.isAddingNote) return;
         this.isAddingNote = true;
@@ -330,7 +355,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
                 content: this.noteText.trim()
             });
             if (res?.note_id) {
-                this.selectedNotes.push({
+                this.selectedNotes.unshift({
                     id: res.note_id,
                     content: this.noteText.trim(),
                     note_type: 'manual',
@@ -370,6 +395,24 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     }
 
     async deleteNote(note: ConversationNote) {
+        const alert = await this.alertController.create({
+            header: 'Delete Note',
+            message: 'Are you sure you want to delete this note? This action cannot be undone.',
+            buttons: [
+                { text: 'Cancel', role: 'cancel' },
+                {
+                    text: 'Delete',
+                    role: 'destructive',
+                    handler: () => {
+                        this.confirmDeleteNote(note);
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
+
+    private async confirmDeleteNote(note: ConversationNote) {
         try {
             await this.apiCall('delete_note', { note_id: note.id });
             this.selectedNotes = this.selectedNotes.filter(n => n.id !== note.id);
@@ -378,17 +421,16 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         }
     }
 
-    // === AI FEATURES ===
-
     async generateSummary() {
         if (!this.selectedConversation || this.isGeneratingSummary) return;
         this.isGeneratingSummary = true;
+        this.errorMessage = '';
         try {
             const res: any = await this.apiCall('generate_summary', {
                 conversation_id: this.selectedConversation.id
             });
             if (res?.summary) {
-                this.selectedNotes.push({
+                this.selectedNotes.unshift({
                     id: res.summary_conversation_id || Date.now(),
                     content: res.summary,
                     note_type: 'ai_summary',
@@ -397,10 +439,10 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
                 this.conversationTab = 'notes';
             }
             if (res?.error) {
-                console.error('Summary generation failed:', res.error);
+                this.errorMessage = 'Summary: ' + res.error;
             }
         } catch (e) {
-            console.error('Failed to generate summary', e);
+            this.errorMessage = 'Failed to generate summary';
         } finally {
             this.isGeneratingSummary = false;
         }
@@ -409,22 +451,23 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     async createAIDraft() {
         if (!this.selectedConversation || this.isCreatingDraft) return;
         this.isCreatingDraft = true;
+        this.errorMessage = '';
         try {
             const res: any = await this.apiCall('create_draft', {
                 conversation_id: this.selectedConversation.id
             });
-            if (res?.success !== false && res?.draft) {
+            if (res?.draft) {
                 this.activeDraft = res.draft;
-                this.draftEditText = res.draft.ai_content || '';
+                this.draftEditText = res.draft.ai_content || res.draft.edited_content || '';
             } else if (res?.ai_content) {
                 this.activeDraft = { id: res.id || 0, ai_content: res.ai_content, edited_content: '' };
                 this.draftEditText = res.ai_content;
             }
             if (res?.error) {
-                console.error('Draft creation failed:', res.error);
+                this.errorMessage = 'Draft: ' + res.error;
             }
         } catch (e) {
-            console.error('Failed to create draft', e);
+            this.errorMessage = 'Failed to create draft';
         } finally {
             this.isCreatingDraft = false;
         }
@@ -449,7 +492,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
                 this.draftEditText = '';
             }
         } catch (e) {
-            console.error('Failed to send draft', e);
+            this.errorMessage = 'Failed to send draft';
         } finally {
             this.isSending = false;
         }
@@ -464,8 +507,6 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         this.draftEditText = '';
     }
 
-    // === CONVERSATION SETTINGS ===
-
     async toggleAI() {
         if (!this.selectedConversation) return;
         const newVal = !this.selectedConversation.ai_enabled;
@@ -477,9 +518,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             if (res?.success !== false) {
                 this.selectedConversation.ai_enabled = newVal;
             }
-        } catch (e) {
-            console.error('Failed to toggle AI', e);
-        }
+        } catch (e) { }
     }
 
     async setRisk(level: string) {
@@ -492,9 +531,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             if (res?.success !== false) {
                 this.selectedConversation.risk_level = level;
             }
-        } catch (e) {
-            console.error('Failed to set risk', e);
-        }
+        } catch (e) { }
     }
 
     async setStatus(status: string) {
@@ -507,14 +544,24 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             if (res?.success !== false) {
                 this.selectedConversation.status = status;
             }
-        } catch (e) {
-            console.error('Failed to set status', e);
-        }
+        } catch (e) { }
     }
 
     onTabChange() {
         if (this.activeTab === 'alerts' && this.alerts.length === 0) {
             this.loadAlerts();
         }
+    }
+
+    getMessageContent(msg: ChatMessage): string {
+        return msg.formatted_content || msg.content || '';
+    }
+
+    formatTime(dateStr?: string): string {
+        if (!dateStr) return '';
+        try {
+            const d = new Date(dateStr);
+            return d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        } catch { return dateStr; }
     }
 }

@@ -7,7 +7,7 @@
 .input-row {
     display: flex;
     align-items: flex-end;
-    gap: 8px;
+    gap: 4px;
 
     .chat-textarea {
         flex: 1;
@@ -31,6 +31,26 @@
         height: 36px;
         margin-bottom: 2px;
     }
+
+    .mic-btn {
+        --padding-start: 4px;
+        --padding-end: 4px;
+        min-width: 32px;
+        height: 36px;
+        margin-bottom: 2px;
+
+        &.recording {
+            animation: pulse-recording 1.2s infinite;
+        }
+    }
+
+    .clear-btn {
+        --padding-start: 2px;
+        --padding-end: 2px;
+        min-width: 28px;
+        height: 36px;
+        margin-bottom: 2px;
+    }
 }
 
 .char-count {
@@ -43,4 +63,9 @@
     &.near-limit {
         color: var(--ion-color-danger);
     }
+}
+
+@keyframes pulse-recording {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
