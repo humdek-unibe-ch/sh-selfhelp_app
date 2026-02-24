@@ -4,7 +4,8 @@
             <!-- Therapy chat tab: only when floating is NOT enabled -->
             <ion-tab-button *ngIf="therapyChatState.available && !therapyChatState.enableFloating"
                 (click)="navigateToTherapyChat()"
-                class="therapy-chat-tab">
+                class="therapy-chat-tab"
+                [class.tab-selected]="isTherapyChatActive">
                 <ion-icon [name]="getTherapyChatIcon()"></ion-icon>
                 <ion-label>{{ getTherapyChatLabel() }}</ion-label>
                 <ion-badge *ngIf="therapyChatState.unreadCount > 0" color="danger" class="tab-badge">

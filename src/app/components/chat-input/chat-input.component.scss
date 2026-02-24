@@ -4,68 +4,70 @@
     background: var(--ion-background-color, #fff);
 }
 
-.input-row {
+.chat-textarea {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    border: 1px solid var(--ion-color-light-shade, #d7d8da);
+    border-radius: 12px;
+    min-height: 60px;
+    max-height: 140px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    --background: var(--ion-color-light, #f4f5f8);
+}
+
+.actions-row {
     display: flex;
-    align-items: flex-end;
-    gap: 4px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    padding: 0 2px;
+}
 
-    .chat-textarea {
-        flex: 1;
-        --padding-start: 12px;
-        --padding-end: 12px;
-        --padding-top: 8px;
-        --padding-bottom: 8px;
-        border: 1px solid var(--ion-color-light-shade, #d7d8da);
-        border-radius: 20px;
-        min-height: 40px;
-        max-height: 120px;
-        font-size: 0.9rem;
-        line-height: 1.4;
-    }
+.left-actions,
+.right-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
 
-    .send-btn {
-        --border-radius: 50%;
-        --padding-start: 8px;
-        --padding-end: 8px;
-        min-width: 36px;
-        height: 36px;
-        margin-bottom: 2px;
-    }
-
-    .mic-btn {
-        --padding-start: 4px;
-        --padding-end: 4px;
-        min-width: 32px;
-        height: 36px;
-        margin-bottom: 2px;
-
-        &.recording {
-            animation: pulse-recording 1.2s infinite;
-        }
-    }
-
-    .clear-btn {
-        --padding-start: 2px;
-        --padding-end: 2px;
-        min-width: 28px;
-        height: 36px;
-        margin-bottom: 2px;
-    }
+.center-info {
+    flex: 1;
+    text-align: center;
 }
 
 .char-count {
-    text-align: right;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     color: var(--ion-color-medium);
-    margin-top: 2px;
-    padding-right: 4px;
 
     &.near-limit {
         color: var(--ion-color-danger);
+        font-weight: 600;
     }
+}
+
+.action-btn {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    height: 32px;
+    min-width: 32px;
+
+    &.recording {
+        animation: pulse-recording 1.2s infinite;
+    }
+}
+
+.send-btn {
+    --border-radius: 50%;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    min-width: 36px;
+    height: 36px;
 }
 
 @keyframes pulse-recording {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.4; }
 }

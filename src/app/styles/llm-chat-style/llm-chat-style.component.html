@@ -377,7 +377,7 @@
 
                             <!-- Action Buttons -->
                             <div class="input-actions">
-                                <!-- Left side - Attachment button -->
+                                <!-- Left side - Attachment + Mic -->
                                 <div class="left-actions">
                                     <ion-button
                                         *ngIf="isVisionAttachEnabled"
@@ -395,6 +395,16 @@
                                         disabled
                                         [title]="noVisionSupportTitle">
                                         <ion-icon name="attach" color="medium"></ion-icon>
+                                    </ion-button>
+                                    <ion-button
+                                        *ngIf="speechAvailable"
+                                        fill="clear"
+                                        size="small"
+                                        [color]="isRecording ? 'danger' : 'medium'"
+                                        (click)="toggleRecording()"
+                                        [class.recording-btn]="isRecording"
+                                        title="Speech to text">
+                                        <ion-icon [name]="isRecording ? 'radio-button-on' : 'mic'"></ion-icon>
                                     </ion-button>
                                 </div>
 

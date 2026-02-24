@@ -14,6 +14,18 @@ interface TherapyMessage {
     labels?: any[];
 }
 
+interface TagReason {
+    key: string;
+    label: string;
+    urgency?: string;
+}
+
+interface TherapistInfo {
+    id: number;
+    display: string;
+    name: string;
+}
+
 @Component({
     selector: 'app-therapy-chat-style',
     templateUrl: './therapy-chat-style.component.html',
@@ -33,6 +45,11 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
     taggingEnabled: boolean = false;
     labels: any[] = [];
     unreadCount: number = 0;
+
+    tagReasons: TagReason[] = [];
+    therapists: TherapistInfo[] = [];
+    helpText: string = '';
+    showTaggingPanel: boolean = false;
 
     private pollingTimer: any = null;
     private pollingInterval: number = 3000;
@@ -61,12 +78,84 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
             this.loadConversation();
         }
 
+        if (this.isSubject) {
+            this.loadConfig();
+        }
+
         this.startPolling();
     }
 
     ngOnDestroy() {
         this.isDestroyed = true;
         this.stopPolling();
+    }
+
+    async loadConfig() {
+        try {
+            const res: any = await this.selfhelpService.execServerRequest(this.url, {
+                action: 'get_config',
+                section_id: this.sectionId
+            });
+            if (res && res.config) {
+                this.taggingEnabled = res.config.taggingEnabled === true || res.config.tagging_enabled === true || this.taggingEnabled;
+                if (res.config.tagReasons) {
+                    this.tagReasons = res.config.tagReasons;
+                }
+                if (res.config.labels && res.config.labels.chat_help_text) {
+                    this.helpText = res.config.labels.chat_help_text;
+                }
+            }
+        } catch (e) {
+            // Config loading is non-fatal
+        }
+
+        if (this.taggingEnabled) {
+            this.loadTherapists();
+        }
+    }
+
+    async loadTherapists() {
+        try {
+            const res: any = await this.selfhelpService.execServerRequest(this.url, {
+                action: 'get_therapists',
+                section_id: this.sectionId
+            });
+            if (res && res.therapists) {
+                this.therapists = res.therapists;
+            }
+        } catch (e) {
+            // Non-fatal
+        }
+    }
+
+    toggleTaggingPanel() {
+        this.showTaggingPanel = !this.showTaggingPanel;
+    }
+
+    insertMention(therapist: TherapistInfo) {
+        const mention = '@' + (therapist.display || therapist.name);
+        this.appendToInput(mention);
+    }
+
+    insertMentionAll() {
+        this.appendToInput('@therapist');
+    }
+
+    insertTopic(reason: TagReason) {
+        this.appendToInput('#' + reason.key);
+    }
+
+    private appendToInput(text: string) {
+        // This will be picked up by ChatInputComponent through a ViewChild or by modifying input
+        // For now we emit via a shared approach - set a pending text
+        this.pendingInsert = text;
+    }
+
+    pendingInsert: string = '';
+
+    onMessageFromInput(text: string) {
+        this.sendMessage(text);
+        this.showTaggingPanel = false;
     }
 
     async loadConversation() {
@@ -140,7 +229,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         if (msg.label) return msg.label;
         switch (msg.sender_type || msg.role) {
             case 'ai':
-            case 'assistant': return 'AI Assistant';
+            case 'assistant': return 'AI';
             case 'therapist': return 'Therapist';
             case 'subject':
             case 'user': return '';
@@ -205,7 +294,6 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
                 });
             }
 
-            // Mark as read
             this.selfhelpService.execServerRequest(this.url, {
                 action: 'mark_messages_read',
                 section_id: this.sectionId,

@@ -1,25 +1,37 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, NgZone } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, OnChanges, SimpleChanges, NgZone } from '@angular/core';
 
 @Component({
     selector: 'app-chat-input',
     templateUrl: './chat-input.component.html',
     styleUrls: ['./chat-input.component.scss'],
 })
-export class ChatInputComponent implements OnDestroy {
+export class ChatInputComponent implements OnDestroy, OnChanges {
     @Input() placeholder: string = 'Type your message...';
     @Input() disabled: boolean = false;
     @Input() maxLength: number = 4000;
     @Input() showCharCount: boolean = true;
-    @Input() rows: number = 1;
+    @Input() rows: number = 2;
     @Input() speechToTextEnabled: boolean = true;
+    @Input() appendText: string = '';
 
     @Output() messageSend = new EventEmitter<string>();
+    @Output() appendTextConsumed = new EventEmitter<void>();
 
     messageText: string = '';
     isRecording: boolean = false;
     private recognition: any = null;
+    private textBeforeRecording: string = '';
 
     constructor(private zone: NgZone) {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['appendText'] && changes['appendText'].currentValue) {
+            const text = changes['appendText'].currentValue;
+            const separator = this.messageText && !this.messageText.match(/\s$/) ? ' ' : '';
+            this.messageText += separator + text + ' ';
+            this.appendTextConsumed.emit();
+        }
+    }
 
     ngOnDestroy() {
         this.stopRecording();
@@ -50,12 +62,14 @@ export class ChatInputComponent implements OnDestroy {
 
     send() {
         if (!this.canSend) return;
+        this.stopRecording();
         this.messageSend.emit(this.messageText.trim());
         this.messageText = '';
     }
 
     clear() {
         this.messageText = '';
+        this.stopRecording();
     }
 
     toggleRecording() {
@@ -70,31 +84,22 @@ export class ChatInputComponent implements OnDestroy {
         const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
         if (!SpeechRecognition) return;
 
+        this.textBeforeRecording = this.messageText;
+
         this.recognition = new SpeechRecognition();
-        this.recognition.continuous = true;
+        this.recognition.continuous = false;
         this.recognition.interimResults = true;
         this.recognition.lang = navigator.language || 'en-US';
 
-        let finalTranscript = '';
-
         this.recognition.onresult = (event: any) => {
-            let interim = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                const transcript = event.results[i][0].transcript;
-                if (event.results[i].isFinal) {
-                    finalTranscript += transcript + ' ';
-                } else {
-                    interim += transcript;
-                }
+            let transcript = '';
+            for (let i = 0; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
             }
             this.zone.run(() => {
-                const base = this.messageText.replace(/\s*\[.*?\]\s*$/, '').replace(/\s+$/, '');
-                const prefix = base ? base + ' ' : '';
-                if (interim) {
-                    this.messageText = prefix + finalTranscript + interim;
-                } else {
-                    this.messageText = prefix + finalTranscript;
-                }
+                const base = this.textBeforeRecording;
+                const separator = base && !base.match(/\s$/) ? ' ' : '';
+                this.messageText = base + separator + transcript;
             });
         };
 
@@ -103,18 +108,27 @@ export class ChatInputComponent implements OnDestroy {
         };
 
         this.recognition.onend = () => {
-            this.zone.run(() => { this.isRecording = false; });
+            this.zone.run(() => {
+                if (this.isRecording) {
+                    this.textBeforeRecording = this.messageText;
+                    try { this.recognition.start(); } catch (e) { this.isRecording = false; }
+                }
+            });
         };
 
-        this.recognition.start();
-        this.isRecording = true;
+        try {
+            this.recognition.start();
+            this.isRecording = true;
+        } catch (e) {
+            this.isRecording = false;
+        }
     }
 
     private stopRecording() {
+        this.isRecording = false;
         if (this.recognition) {
-            this.recognition.stop();
+            try { this.recognition.stop(); } catch (e) {}
             this.recognition = null;
         }
-        this.isRecording = false;
     }
 }

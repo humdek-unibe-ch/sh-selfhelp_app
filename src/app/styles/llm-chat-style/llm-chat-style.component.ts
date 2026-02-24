@@ -76,6 +76,11 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     // Character limit
     readonly MAX_MESSAGE_LENGTH = 4000;
 
+    // Speech-to-text
+    isRecording = false;
+    private sttRecognition: any = null;
+    private textBeforeRecording = '';
+
     // ============================================================================
     // GETTERS FOR TEMPLATE BINDINGS
     // ============================================================================
@@ -120,6 +125,10 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         return this.isProcessing || this.isLoading || this.isAutoStarting || !this.currentMessage.trim();
     }
 
+    get speechAvailable(): boolean {
+        return ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+    }
+
     constructor(
         public llmChatService: LlmChatService,
         private selfhelpService: SelfhelpService,
@@ -154,7 +163,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     }
 
     ngOnDestroy() {
-        // Cleanup file preview URLs
+        this.stopSttRecording();
         this.selectedFiles.forEach(file => {
             if (file.previewUrl) {
                 URL.revokeObjectURL(file.previewUrl);
@@ -595,6 +604,65 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         this.currentMessage = '';
         this.clearSelectedFiles();
         this.fileError = null;
+        this.stopSttRecording();
+    }
+
+    // ============================================================================
+    // SPEECH-TO-TEXT
+    // ============================================================================
+
+    toggleRecording(): void {
+        if (this.isRecording) {
+            this.stopSttRecording();
+        } else {
+            this.startSttRecording();
+        }
+    }
+
+    private startSttRecording(): void {
+        const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+        if (!SpeechRecognition) return;
+
+        this.textBeforeRecording = this.currentMessage;
+        this.sttRecognition = new SpeechRecognition();
+        this.sttRecognition.continuous = false;
+        this.sttRecognition.interimResults = true;
+        this.sttRecognition.lang = navigator.language || 'en-US';
+
+        this.sttRecognition.onresult = (event: any) => {
+            let transcript = '';
+            for (let i = 0; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            const base = this.textBeforeRecording;
+            const separator = base && !base.match(/\s$/) ? ' ' : '';
+            this.currentMessage = base + separator + transcript;
+            this.cdr.detectChanges();
+        };
+
+        this.sttRecognition.onerror = () => { this.isRecording = false; this.cdr.detectChanges(); };
+
+        this.sttRecognition.onend = () => {
+            if (this.isRecording) {
+                this.textBeforeRecording = this.currentMessage;
+                try { this.sttRecognition.start(); } catch (e) { this.isRecording = false; this.cdr.detectChanges(); }
+            }
+        };
+
+        try {
+            this.sttRecognition.start();
+            this.isRecording = true;
+        } catch (e) {
+            this.isRecording = false;
+        }
+    }
+
+    private stopSttRecording(): void {
+        this.isRecording = false;
+        if (this.sttRecognition) {
+            try { this.sttRecognition.stop(); } catch (e) {}
+            this.sttRecognition = null;
+        }
     }
 
     // ============================================================================

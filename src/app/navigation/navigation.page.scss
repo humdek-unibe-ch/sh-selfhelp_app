@@ -1,6 +1,12 @@
 .therapy-chat-tab {
     position: relative;
 
+    &.tab-selected {
+        color: var(--ion-color-primary) !important;
+        ion-icon { color: var(--ion-color-primary); }
+        ion-label { color: var(--ion-color-primary); font-weight: 600; }
+    }
+
     ion-badge.tab-badge {
         position: absolute;
         top: 4px;

@@ -7,6 +7,12 @@
 
     <!-- Messages area -->
     <div *ngIf="!isInitialLoading" class="messages-area">
+        <!-- Help text -->
+        <div *ngIf="helpText && taggingEnabled" class="help-banner">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <span>{{ helpText }}</span>
+        </div>
+
         <!-- Empty state -->
         <div *ngIf="messages.length === 0 && !isLoading" class="empty-state text-center p-4">
             <ion-icon name="chatbubble-ellipses-outline" class="empty-state-icon"></ion-icon>
@@ -50,13 +56,49 @@
         <div #messagesEnd></div>
     </div>
 
-    <!-- Chat input (shared component) -->
-    <app-chat-input
-        *ngIf="!isInitialLoading"
-        placeholder="Type a message..."
-        [disabled]="isLoading"
-        [maxLength]="0"
-        [showCharCount]="false"
-        (messageSend)="onMessageSend($event)">
-    </app-chat-input>
+    <!-- Tagging panel -->
+    <div *ngIf="taggingEnabled && showTaggingPanel && !isInitialLoading" class="tagging-panel">
+        <div class="tagging-section" *ngIf="therapists.length > 0">
+            <div class="tagging-section-label">Tag therapist</div>
+            <div class="tagging-chips">
+                <ion-chip color="primary" (click)="insertMentionAll()" class="tag-chip">
+                    <ion-icon name="people-outline"></ion-icon>
+                    <ion-label>&#64;therapist</ion-label>
+                </ion-chip>
+                <ion-chip *ngFor="let t of therapists" color="secondary" (click)="insertMention(t)" class="tag-chip">
+                    <ion-icon name="person-outline"></ion-icon>
+                    <ion-label>&#64;{{ t.display || t.name }}</ion-label>
+                </ion-chip>
+            </div>
+        </div>
+        <div class="tagging-section" *ngIf="tagReasons.length > 0">
+            <div class="tagging-section-label">Topics</div>
+            <div class="tagging-chips">
+                <ion-chip *ngFor="let r of tagReasons" color="tertiary" (click)="insertTopic(r)" class="tag-chip">
+                    <ion-label>#{{ r.label || r.key }}</ion-label>
+                </ion-chip>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tagging toggle + Chat input -->
+    <div *ngIf="!isInitialLoading" class="input-section">
+        <ion-button *ngIf="taggingEnabled && (therapists.length > 0 || tagReasons.length > 0)"
+            fill="clear" size="small" color="medium"
+            (click)="toggleTaggingPanel()"
+            class="tagging-toggle-btn">
+            <ion-icon [name]="showTaggingPanel ? 'chevron-down' : 'pricetag-outline'" slot="start"></ion-icon>
+            {{ showTaggingPanel ? 'Hide tags' : 'Tag' }}
+        </ion-button>
+        <app-chat-input
+            [placeholder]="'Type your message here...'"
+            [disabled]="isLoading"
+            [maxLength]="4000"
+            [showCharCount]="true"
+            [speechToTextEnabled]="true"
+            [appendText]="pendingInsert"
+            (appendTextConsumed)="pendingInsert = ''"
+            (messageSend)="onMessageSend($event)">
+        </app-chat-input>
+    </div>
 </div>

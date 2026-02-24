@@ -31,6 +31,24 @@
     }
 }
 
+.help-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--ion-color-primary-tint, #e3f0ff);
+    border-radius: 8px;
+    margin: 4px 8px 8px;
+    font-size: 0.82rem;
+    color: var(--ion-color-primary-shade, #3171e0);
+
+    ion-icon {
+        flex-shrink: 0;
+        margin-top: 1px;
+        font-size: 1rem;
+    }
+}
+
 .messages-area {
     flex: 1;
     overflow-y: auto;
@@ -48,6 +66,7 @@
 
 .message-wrapper {
     display: flex;
+    padding: 0 8px;
 
     &.user-message {
         justify-content: flex-end;
@@ -156,23 +175,51 @@
     font-style: italic;
 }
 
-.message-input-area {
-    border-top: 1px solid var(--ion-color-light-shade);
-    padding-top: 8px;
+// Tagging panel
+.tagging-panel {
+    border-top: 1px solid var(--ion-color-light-shade, #d7d8da);
+    padding: 6px 10px;
+    background: var(--ion-color-light, #f4f5f8);
+    max-height: 140px;
+    overflow-y: auto;
+}
 
-    .message-input {
-        --padding-start: 12px;
-        --padding-end: 12px;
-        border: 1px solid var(--ion-color-light-shade);
-        border-radius: 20px;
-        min-height: 40px;
-        max-height: 120px;
-    }
+.tagging-section {
+    margin-bottom: 4px;
+}
 
-    .send-button {
-        --border-radius: 50%;
-        --padding-start: 8px;
-        --padding-end: 8px;
-        min-height: 40px;
-    }
+.tagging-section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ion-color-medium-shade);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.tagging-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.tag-chip {
+    height: 28px;
+    font-size: 0.78rem;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.input-section {
+    flex-shrink: 0;
+}
+
+.tagging-toggle-btn {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    height: 28px;
+    font-size: 0.78rem;
+    margin: 4px 8px 0;
 }

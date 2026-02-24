@@ -173,7 +173,7 @@
                     [ngClass]="'msg-' + getSenderClass(msg)">
                     <div class="msg-sender">{{ getSenderLabel(msg) }}</div>
                     <div class="msg-bubble" [ngClass]="'bubble-' + getSenderClass(msg)">
-                        <div class="msg-text" [innerHTML]="getMessageContent(msg)"></div>
+                        <app-markdown-renderer [content]="getMessageContent(msg)"></app-markdown-renderer>
                     </div>
                     <div *ngIf="msg.created_at" class="msg-time">{{ formatTime(msg.created_at) }}</div>
                 </div>
@@ -210,8 +210,8 @@
             <app-chat-input *ngIf="!activeDraft"
                 placeholder="Reply to patient..."
                 [disabled]="isSending"
-                [maxLength]="0"
-                [showCharCount]="false"
+                [maxLength]="4000"
+                [showCharCount]="true"
                 [speechToTextEnabled]="true"
                 (messageSend)="onMessageSend($event)">
             </app-chat-input>

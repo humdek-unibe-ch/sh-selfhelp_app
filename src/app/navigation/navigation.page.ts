@@ -28,6 +28,7 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
         config: null
     };
     private therapyChatSub?: Subscription;
+    public isTherapyChatActive = false;
 
     constructor(
         public selfHelpService: SelfhelpService,
@@ -88,6 +89,7 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
     }
 
     async setTab(nav: SelfHelpNavigation) {
+        this.isTherapyChatActive = false;
         const res = await this.selfHelpService.getPage(this.selfHelpService.getUrl(nav));
         this.selectMenu(nav);
     }
@@ -147,6 +149,7 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
 
     public async navigateToTherapyChat() {
         if (!this.therapyChatState.url) return;
+        this.isTherapyChatActive = true;
         const url = this.therapyChatState.url;
         await this.selfHelpService.getPage(url);
         const syntheticNav: SelfHelpNavigation = {
