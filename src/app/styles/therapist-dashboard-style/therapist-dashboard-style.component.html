@@ -347,14 +347,14 @@
                 <div class="setting-card-body">
                     <div class="ai-mode-toggle">
                         <div class="ai-mode-option"
-                            [class.active]="selectedConversation.ai_enabled !== false"
+                            [class.active]="isAIEnabled()"
                             (click)="setAIMode(true)">
                             <ion-icon name="sparkles"></ion-icon>
                             <div class="mode-label">AI Assisted</div>
                             <div class="mode-desc">AI responds with therapist oversight</div>
                         </div>
                         <div class="ai-mode-option"
-                            [class.active]="selectedConversation.ai_enabled === false"
+                            [class.active]="!isAIEnabled()"
                             (click)="setAIMode(false)">
                             <ion-icon name="person"></ion-icon>
                             <div class="mode-label">Therapist Only</div>

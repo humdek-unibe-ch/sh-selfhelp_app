@@ -87,6 +87,10 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
 
     private pollTimer: any = null;
 
+    private static toBool(val: any): boolean {
+        return !(val === false || val === 0 || val === '0' || val === 'false' || val === null);
+    }
+
     constructor(
         private selfhelpService: SelfhelpService,
         private alertController: AlertController
@@ -156,6 +160,9 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             const res: any = await this.apiCall('get_conversations');
             if (res?.conversations) {
                 this.conversations = res.conversations;
+                for (const c of this.conversations) {
+                    c.ai_enabled = TherapistDashboardStyleComponent.toBool(c.ai_enabled);
+                }
             }
             if (res?.stats) {
                 this.stats = res.stats;
@@ -264,6 +271,8 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             }
             if (res?.conversation) {
                 Object.assign(this.selectedConversation!, res.conversation);
+                this.selectedConversation!.ai_enabled =
+                    TherapistDashboardStyleComponent.toBool(this.selectedConversation!.ai_enabled);
             }
             await this.apiCall('mark_messages_read', { conversation_id: conv.id });
         } catch (e) {
@@ -595,9 +604,14 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         }
     }
 
+    isAIEnabled(): boolean {
+        if (!this.selectedConversation) return true;
+        return TherapistDashboardStyleComponent.toBool(this.selectedConversation.ai_enabled);
+    }
+
     async setAIMode(enabled: boolean) {
         if (!this.selectedConversation) return;
-        if (this.selectedConversation.ai_enabled === enabled) return;
+        if (this.isAIEnabled() === enabled) return;
         try {
             const res: any = await this.apiCall('toggle_ai', {
                 conversation_id: this.selectedConversation.id,
