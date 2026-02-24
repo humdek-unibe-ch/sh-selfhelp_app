@@ -196,11 +196,27 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         }
     }
 
+    getEffectiveSenderType(msg: TherapyMessage): string {
+        if (msg.sender_type) return msg.sender_type;
+        if (msg.label) {
+            const lbl = msg.label.toLowerCase();
+            if (lbl.includes('therapist')) return 'therapist';
+            if (lbl.includes('ai') || lbl.includes('assistant')) return 'ai';
+            if (lbl.includes('system')) return 'system';
+        }
+        return msg.role || 'user';
+    }
+
+    isOwnMessage(msg: TherapyMessage): boolean {
+        const type = this.getEffectiveSenderType(msg);
+        return type === 'subject' || type === 'user';
+    }
+
     getSenderLabel(msg: TherapyMessage): string {
         if (msg.label) return msg.label;
-        switch (msg.sender_type || msg.role) {
+        switch (this.getEffectiveSenderType(msg)) {
             case 'ai':
-            case 'assistant': return 'AI';
+            case 'assistant': return 'AI Assistant';
             case 'therapist': return 'Therapist';
             case 'subject':
             case 'user': return '';

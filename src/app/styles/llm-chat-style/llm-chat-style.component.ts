@@ -1259,10 +1259,22 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     /**
      * Get floating button icon
      */
+    private static readonly FA_TO_IONIC: Record<string, string> = {
+        'comments': 'chatbubbles',
+        'comment': 'chatbubble',
+        'comment-dots': 'chatbubble-ellipses',
+        'robot': 'hardware-chip',
+        'brain': 'bulb',
+        'message': 'mail',
+        'envelope': 'mail',
+        'question-circle': 'help-circle',
+        'info-circle': 'information-circle',
+    };
+
     getFloatingButtonIcon(): string {
-        const icon = this.getFieldContent('floating_button_icon') || 'fa-comments';
-        // Convert Font Awesome to Ionic icon if needed
-        return icon.replace('fa-', '').replace('-outline', '');
+        const raw = this.getFieldContent('floating_button_icon') || 'fa-comments';
+        const stripped = raw.replace(/^fa[srldb]?\s+fa-/, '').replace(/^fa-/, '');
+        return LlmChatStyleComponent.FA_TO_IONIC[stripped] || stripped;
     }
 
     /**

@@ -26,10 +26,10 @@
     letter-spacing: 0.4px;
 
     &[data-type="patient"] { color: var(--ion-color-primary); }
-    &[data-type="therapist"] { color: #2e7d32; }
+    &[data-type="therapist"] { color: #2e7d32; font-weight: 700; font-size: 0.72rem; }
     &[data-type="ai"] { color: #7b1fa2; }
     &[data-type="system"] { color: #757575; }
-    &[data-type="own"] { color: #2e7d32; }
+    &[data-type="own"] { color: var(--ion-color-primary); }
 }
 
 .chat-msg-bubble {
@@ -68,8 +68,16 @@
     }
 
     &[data-type="therapist"] {
-        background: #e8f5e9;
+        background: #43a047;
+        color: #fff;
         border-bottom-left-radius: 4px;
+        border-left: 4px solid #2e7d32;
+
+        ::ng-deep {
+            code { background: rgba(255,255,255,0.2); color: #fff; }
+            blockquote { border-left-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.85); }
+            a { color: #fff; text-decoration: underline; }
+        }
     }
 
     &[data-type="ai"] {

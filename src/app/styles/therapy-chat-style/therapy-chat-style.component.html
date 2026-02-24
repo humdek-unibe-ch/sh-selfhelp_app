@@ -24,10 +24,10 @@
         <app-chat-message
             *ngFor="let msg of messages"
             [content]="msg.formatted_content || msg.content"
-            [senderType]="msg.sender_type || msg.role"
+            [senderType]="getEffectiveSenderType(msg)"
             [senderLabel]="getSenderLabel(msg)"
             [timestamp]="msg.created_at || ''"
-            [isOwn]="msg.role === 'user' || msg.sender_type === 'subject'"
+            [isOwn]="isOwnMessage(msg)"
             [labels]="msg.labels || []">
         </app-chat-message>
 

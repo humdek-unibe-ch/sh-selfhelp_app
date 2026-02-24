@@ -227,8 +227,23 @@
         <!-- ======== NOTES TAB ======== -->
         <div *ngIf="conversationTab === 'notes'" class="notes-panel">
 
+            <!-- Summary action bar -->
+            <div class="summary-action-bar">
+                <ion-button size="small" fill="outline" color="secondary"
+                    [disabled]="isGeneratingSummary" (click)="generateSummary()">
+                    <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                    {{ isGeneratingSummary ? 'Summarizing...' : (pendingSummary || selectedNotes.length > 0 ? 'Re-Summarize' : 'Summarize Conversation') }}
+                </ion-button>
+            </div>
+
+            <!-- Loading state while generating summary -->
+            <div *ngIf="isGeneratingSummary" class="summary-loading-card">
+                <ion-spinner name="crescent" color="secondary"></ion-spinner>
+                <p>Generating AI summary of the conversation...</p>
+            </div>
+
             <!-- Pending AI Summary (shown at top when generated, before saving) -->
-            <div *ngIf="pendingSummary" class="summary-preview-card">
+            <div *ngIf="pendingSummary && !isGeneratingSummary" class="summary-preview-card">
                 <div class="summary-preview-header">
                     <ion-icon name="sparkles" color="tertiary"></ion-icon>
                     <span>AI Summary</span>
@@ -241,7 +256,12 @@
                         <ion-icon name="save-outline" slot="start"></ion-icon>
                         Save as Note
                     </ion-button>
-                    <ion-button size="small" fill="outline" color="medium" (click)="pendingSummary = ''">
+                    <ion-button size="small" fill="outline" color="secondary"
+                        [disabled]="isGeneratingSummary" (click)="generateSummary()">
+                        <ion-icon name="refresh" slot="start"></ion-icon>
+                        Re-Summarize
+                    </ion-button>
+                    <ion-button size="small" fill="clear" color="medium" (click)="pendingSummary = ''">
                         Dismiss
                     </ion-button>
                 </div>
@@ -265,9 +285,9 @@
 
             <!-- Notes list -->
             <div class="notes-list">
-                <div *ngIf="selectedNotes.length === 0 && !pendingSummary" class="empty-state compact">
+                <div *ngIf="selectedNotes.length === 0 && !pendingSummary && !isGeneratingSummary" class="empty-state compact">
                     <ion-icon name="document-text-outline"></ion-icon>
-                    <p>No notes yet. Add your first clinical note above.</p>
+                    <p>No notes yet. Add your first clinical note or generate an AI summary above.</p>
                 </div>
                 <div *ngFor="let note of selectedNotes" class="note-card"
                     [class.note-ai]="note.note_type === 'ai_summary'">
