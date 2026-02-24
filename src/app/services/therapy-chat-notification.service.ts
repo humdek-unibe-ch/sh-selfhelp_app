@@ -192,14 +192,15 @@ export class TherapyChatNotificationService implements OnDestroy {
             const params: any = { action: 'check_updates' };
             if (sectionId) params.section_id = sectionId;
 
-            // Use POST (execServerRequest) so the server sees $_POST['mobile']
-            // and routes through mobile_call → SectionPage → controller
             const res: any = await this.selfhelpService.execServerRequest(url, params);
 
-            if (res && res.unread_count !== undefined) {
+            if (res) {
+                const count = res.unread_count ?? res.unread_messages ?? 0;
+                const alertCount = res.unread_alerts ?? 0;
+                const totalUnread = count + alertCount;
                 const currentState = this.therapyChatState.value;
-                if (currentState.unreadCount !== res.unread_count) {
-                    const newState = { ...currentState, unreadCount: res.unread_count };
+                if (currentState.unreadCount !== totalUnread) {
+                    const newState = { ...currentState, unreadCount: totalUnread };
                     this.therapyChatState.next(newState);
                     this.updateSelfhelpState(newState);
                 }

@@ -1,8 +1,18 @@
+// When therapy chat tab is active, suppress the native selected state on regular tabs
+ion-tabs.therapy-chat-is-active {
+    ion-tab-bar ion-tab-button:not(.therapy-chat-tab) {
+        color: var(--ion-color-medium) !important;
+        --color-selected: var(--ion-color-medium) !important;
+        opacity: 0.7;
+    }
+}
+
 .therapy-chat-tab {
     position: relative;
 
     &.tab-selected {
         color: var(--ion-color-primary) !important;
+        opacity: 1 !important;
         ion-icon { color: var(--ion-color-primary); }
         ion-label { color: var(--ion-color-primary); font-weight: 600; }
     }

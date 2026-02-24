@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, NgZone, OnDestroy, ViewChild } from '@angular/core';
-import { IonTabs } from '@ionic/angular';
+import { IonTabs, ModalController } from '@ionic/angular';
 import { SelfHelp, TherapyChatState } from '../selfhelpInterfaces';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 import { EventListenerService } from '../services/event-listener.service';
 import { TherapyChatNotificationService } from '../services/therapy-chat-notification.service';
+import { ModalPageComponent } from '../components/modal-page/modal-page.component';
 import { Subscription } from 'rxjs';
 
 
@@ -34,7 +35,8 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
         public selfHelpService: SelfhelpService,
         private zone: NgZone,
         private eventListenerService: EventListenerService,
-        private therapyChatNotification: TherapyChatNotificationService
+        private therapyChatNotification: TherapyChatNotificationService,
+        private modalController: ModalController
     ) {
         this.selfHelpService.observeSelfhelp().subscribe((selfHelp: SelfHelp) => {
             this.zone.run(() => {
@@ -109,7 +111,6 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
     }
 
     public getTherapyChatIcon(): string {
-        // Prefer mobile_icon from backend (already mapped to Ionic)
         if (this.therapyChatState.mobileIcon) {
             return this.therapyChatState.mobileIcon;
         }
@@ -167,4 +168,17 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
         }
     }
 
+    public async openTherapyChatModal() {
+        if (!this.therapyChatState.url) return;
+        const url = this.therapyChatState.url;
+        await this.selfHelpService.getPage(url);
+        const modal = await this.modalController.create({
+            component: ModalPageComponent,
+            componentProps: {
+                url: url
+            },
+            cssClass: 'therapy-chat-modal-fullscreen'
+        });
+        await modal.present();
+    }
 }

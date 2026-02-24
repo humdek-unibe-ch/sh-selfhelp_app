@@ -434,12 +434,64 @@
     border-radius: 8px;
     border: 1px solid #ce93d8;
     font-size: 0.9rem;
+    --highlight-color-focused: transparent;
+    outline: none;
+
+    &.has-focus, &:focus-within {
+        border-color: #ab47bc;
+        box-shadow: 0 0 0 2px rgba(171, 71, 188, 0.15);
+    }
 }
 
 .draft-actions {
     display: flex;
     gap: 8px;
     margin-top: 8px;
+    justify-content: flex-end;
+}
+
+/* ============================================================
+   CHAT BOTTOM AREA
+   ============================================================ */
+.chat-bottom-area {
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   SUMMARY PREVIEW
+   ============================================================ */
+.summary-preview-card {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #d8b4fe;
+}
+
+.summary-preview-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: #6a1b9a;
+}
+
+.summary-preview-body {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 8px;
+}
+
+.summary-preview-actions {
+    display: flex;
+    gap: 8px;
     justify-content: flex-end;
 }
 
@@ -468,6 +520,13 @@
         font-size: 0.88rem;
         --padding-start: 12px;
         --padding-end: 12px;
+        --highlight-color-focused: transparent;
+        outline: none;
+
+        &.has-focus, &:focus-within {
+            border-color: var(--ion-color-primary-tint, #6aa3f8);
+            box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.12);
+        }
     }
 
     .add-note-footer {
@@ -561,6 +620,13 @@
         font-size: 0.88rem;
         --padding-start: 12px;
         --padding-end: 12px;
+        --highlight-color-focused: transparent;
+        outline: none;
+
+        &.has-focus, &:focus-within {
+            border-color: var(--ion-color-primary);
+            box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.12);
+        }
     }
 }
 

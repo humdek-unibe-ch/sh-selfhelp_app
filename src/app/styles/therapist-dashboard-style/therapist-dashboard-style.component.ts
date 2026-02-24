@@ -80,6 +80,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     isCreatingDraft = false;
     activeDraft: { id: number; ai_content: string; edited_content: string } | null = null;
     draftEditText = '';
+    pendingSummary = '';
 
     private pollTimer: any = null;
 
@@ -430,12 +431,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
                 conversation_id: this.selectedConversation.id
             });
             if (res?.summary) {
-                this.selectedNotes.unshift({
-                    id: res.summary_conversation_id || Date.now(),
-                    content: res.summary,
-                    note_type: 'ai_summary',
-                    created_at: new Date().toISOString()
-                });
+                this.pendingSummary = res.summary;
                 this.conversationTab = 'notes';
             }
             if (res?.error) {
@@ -446,6 +442,28 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         } finally {
             this.isGeneratingSummary = false;
         }
+    }
+
+    async saveSummaryAsNote() {
+        if (!this.pendingSummary || !this.selectedConversation) return;
+        try {
+            const res: any = await this.apiCall('add_note', {
+                conversation_id: this.selectedConversation.id,
+                content: this.pendingSummary,
+                note_type: 'ai_summary'
+            });
+            if (res?.note_id) {
+                this.selectedNotes.unshift({
+                    id: res.note_id,
+                    content: this.pendingSummary,
+                    note_type: 'ai_summary',
+                    created_at: new Date().toISOString()
+                });
+            }
+        } catch (e) {
+            console.error('Failed to save summary as note', e);
+        }
+        this.pendingSummary = '';
     }
 
     async createAIDraft() {
@@ -507,18 +525,45 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         this.draftEditText = '';
     }
 
-    async toggleAI() {
+    async regenerateDraft() {
+        if (!this.selectedConversation || this.isCreatingDraft) return;
+        this.isCreatingDraft = true;
+        this.errorMessage = '';
+        try {
+            const res: any = await this.apiCall('create_draft', {
+                conversation_id: this.selectedConversation.id
+            });
+            if (res?.draft) {
+                this.activeDraft = res.draft;
+                this.draftEditText = res.draft.ai_content || res.draft.edited_content || '';
+            } else if (res?.ai_content) {
+                this.activeDraft = { id: res.id || 0, ai_content: res.ai_content, edited_content: '' };
+                this.draftEditText = res.ai_content;
+            }
+            if (res?.error) {
+                this.errorMessage = 'Draft: ' + res.error;
+            }
+        } catch (e) {
+            this.errorMessage = 'Failed to regenerate draft';
+        } finally {
+            this.isCreatingDraft = false;
+        }
+    }
+
+    async setAIMode(enabled: boolean) {
         if (!this.selectedConversation) return;
-        const newVal = !this.selectedConversation.ai_enabled;
+        if (this.selectedConversation.ai_enabled === enabled) return;
         try {
             const res: any = await this.apiCall('toggle_ai', {
                 conversation_id: this.selectedConversation.id,
-                enabled: newVal
+                enabled: enabled
             });
             if (res?.success !== false) {
-                this.selectedConversation.ai_enabled = newVal;
+                this.selectedConversation.ai_enabled = enabled;
             }
-        } catch (e) { }
+        } catch (e) {
+            console.error('Failed to update AI mode', e);
+        }
     }
 
     async setRisk(level: string) {

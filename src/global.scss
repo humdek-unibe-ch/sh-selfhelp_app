@@ -375,3 +375,22 @@ ion-select::part(placeholder) {
         padding: 4px;
     }
 }
+
+// Full-screen modal for therapy chat (floating FAB mode)
+.therapy-chat-modal-fullscreen {
+    --width: 100%;
+    --height: 100%;
+    --border-radius: 0;
+}
+
+// Global: suppress aggressive focus outlines on ion-textarea
+ion-textarea {
+    --highlight-color-focused: transparent;
+    outline: none !important;
+
+    &.has-focus textarea,
+    textarea:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}

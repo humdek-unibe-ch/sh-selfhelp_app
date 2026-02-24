@@ -16,6 +16,13 @@
     font-size: 0.9rem;
     line-height: 1.4;
     --background: var(--ion-color-light, #f4f5f8);
+    --highlight-color-focused: transparent;
+    outline: none;
+
+    &.has-focus, &:focus-within {
+        border-color: var(--ion-color-primary-tint, #6aa3f8);
+        box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.15);
+    }
 }
 
 .actions-row {
