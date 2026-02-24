@@ -75,6 +75,8 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
 
         if (this.isSubject) {
             this.loadConfig();
+        } else if (this.taggingEnabled) {
+            this.loadTherapists();
         }
 
         this.startPolling();

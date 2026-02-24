@@ -68,6 +68,10 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
         this.therapyChatSub = this.therapyChatNotification.observeTherapyChatState().subscribe(state => {
             this.zone.run(() => {
                 this.therapyChatState = state;
+                if (state.available && !this.init && (!this.selfHelp || this.selfHelp.navigation.length === 0)) {
+                    this.init = true;
+                    this.navigateToTherapyChat();
+                }
             });
         });
     }
@@ -87,7 +91,7 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
     }
 
     getTabName(nav: SelfHelpNavigation): string {
-        return this.selfHelpService.getUrl(nav).replace('/', '');
+        return this.selfHelpService.getUrl(nav).replace(/^\//, '');
     }
 
     async setTab(nav: SelfHelpNavigation) {

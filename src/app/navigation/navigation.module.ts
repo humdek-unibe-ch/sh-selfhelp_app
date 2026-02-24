@@ -264,15 +264,15 @@ export class NavigationPageModule {
         let firstTab = '';
         selfhelp.navigation.forEach(nav => {
             if (nav.is_active) {
-                selectedTab = this.selfhelpService.getUrl(nav).replace('/', '');
+                selectedTab = this.selfhelpService.getUrl(nav).replace(/^\//, '');
             }
             if (firstTab === '') {
-                firstTab = this.selfhelpService.getUrl(nav).replace('/', '');
+                firstTab = this.selfhelpService.getUrl(nav).replace(/^\//, '');
             }
             if (newRoutes.length > 0 && newRoutes[0].children) {
                 newRoutes[0].children.push(
                     {
-                        path: this.selfhelpService.getUrl(nav).replace('/', ''),
+                        path: this.selfhelpService.getUrl(nav).replace(/^\//, ''),
                         // component: MenuComponent
                         loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
                     }
