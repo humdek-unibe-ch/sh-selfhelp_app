@@ -3,9 +3,10 @@
 }
 
 .chat-input-wrapper {
+    position: relative;
     background: var(--ion-color-light, #f4f5f8);
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 
     &.variant-default {
@@ -107,14 +108,18 @@
 // Tagging panel
 .tagging-panel {
     border-bottom: 1px solid var(--ion-color-light-shade, #d7d8da);
-    padding: 6px 10px;
+    padding: 8px 10px;
     background: var(--ion-color-light, #f4f5f8);
-    max-height: 140px;
+    max-height: 160px;
     overflow-y: auto;
 }
 
 .tagging-section {
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .tagging-section-label {
@@ -123,7 +128,14 @@
     color: var(--ion-color-medium-shade);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    ion-icon {
+        font-size: 12px;
+    }
 }
 
 .tagging-chips {
@@ -147,4 +159,67 @@
     height: 28px;
     font-size: 0.78rem;
     margin: 4px 8px 0;
+}
+
+// Inline mention popup
+.mention-popup {
+    position: absolute;
+    bottom: 100%;
+    left: 8px;
+    right: 8px;
+    background: var(--ion-background-color, #fff);
+    border: 1px solid var(--ion-color-light-shade, #d7d8da);
+    border-radius: 10px;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 4px;
+}
+
+.mention-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ion-color-medium-shade);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mention-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    font-size: 0.85rem;
+
+    ion-icon {
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    &:last-child {
+        border-radius: 0 0 10px 10px;
+    }
+
+    &.mention-item-active {
+        background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.1);
+    }
+
+    &:hover {
+        background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.06);
+    }
+}
+
+.mention-label {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

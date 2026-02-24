@@ -15,10 +15,12 @@
         [multiple]="fileInputMultiple"
         (change)="onFileInputChange($event)">
 
-    <!-- Tagging panel -->
+    <!-- Tagging panel (expanded) -->
     <div *ngIf="hasTaggingOptions && showTaggingPanel" class="tagging-panel">
         <div class="tagging-section" *ngIf="therapists.length > 0">
-            <div class="tagging-section-label">Tag therapist</div>
+            <div class="tagging-section-label">
+                <ion-icon name="people-outline"></ion-icon> Therapists
+            </div>
             <div class="tagging-chips">
                 <ion-chip color="primary" (click)="insertMentionAll()" class="tag-chip">
                     <ion-icon name="people-outline"></ion-icon>
@@ -31,7 +33,9 @@
             </div>
         </div>
         <div class="tagging-section" *ngIf="tagReasons.length > 0">
-            <div class="tagging-section-label">Topics</div>
+            <div class="tagging-section-label">
+                <ion-icon name="pricetag-outline"></ion-icon> Topics
+            </div>
             <div class="tagging-chips">
                 <ion-chip *ngFor="let r of tagReasons" color="tertiary" (click)="insertTopic(r)" class="tag-chip">
                     <ion-label>#{{ r.label || r.key }}</ion-label>
@@ -46,8 +50,25 @@
         (click)="toggleTaggingPanel()"
         class="tagging-toggle-btn">
         <ion-icon [name]="showTaggingPanel ? 'chevron-down' : 'pricetag-outline'" slot="start"></ion-icon>
-        {{ showTaggingPanel ? 'Hide tags' : 'Tag' }}
+        {{ showTaggingPanel ? 'Hide' : 'Tag' }}
     </ion-button>
+
+    <!-- Inline mention popup -->
+    <div *ngIf="mentionActive && mentionSuggestions.length > 0" class="mention-popup">
+        <div class="mention-header">
+            <ion-icon [name]="mentionActive === 'therapist' ? 'people-outline' : 'pricetag-outline'"></ion-icon>
+            {{ mentionActive === 'therapist' ? 'Mention therapist' : 'Select topic' }}
+        </div>
+        <div
+            *ngFor="let s of mentionSuggestions; let i = index"
+            class="mention-item"
+            [class.mention-item-active]="i === mentionSelectedIndex"
+            (click)="selectMentionSuggestion(s)"
+            (mouseenter)="mentionSelectedIndex = i">
+            <ion-icon [name]="s.icon" [color]="s.color"></ion-icon>
+            <span class="mention-label">{{ s.label }}</span>
+        </div>
+    </div>
 
     <ion-textarea
         [ngModel]="messageText"

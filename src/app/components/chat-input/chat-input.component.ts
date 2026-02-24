@@ -23,6 +23,16 @@ export interface ChatTherapistInfo {
     name: string;
 }
 
+type MentionType = 'therapist' | 'topic' | null;
+
+interface MentionSuggestion {
+    type: 'therapist' | 'therapist_all' | 'topic';
+    label: string;
+    insertText: string;
+    icon: string;
+    color: string;
+}
+
 @Component({
     selector: 'app-chat-input',
     templateUrl: './chat-input.component.html',
@@ -69,6 +79,13 @@ export class ChatInputComponent implements OnDestroy, OnChanges {
     private recognition: any = null;
     private textBeforeRecording: string = '';
 
+    // Inline mention autocomplete state
+    mentionActive: MentionType = null;
+    mentionQuery: string = '';
+    mentionSuggestions: MentionSuggestion[] = [];
+    mentionSelectedIndex: number = 0;
+    private mentionTriggerPos: number = -1;
+
     constructor(private zone: NgZone) {}
 
     ngOnChanges(changes: SimpleChanges) {
@@ -113,9 +130,33 @@ export class ChatInputComponent implements OnDestroy, OnChanges {
 
     onMessageTextChanged(value: string) {
         this.setMessageText(value || '');
+        this.detectMentionTrigger(value || '');
     }
 
     onKeyDown(event: KeyboardEvent) {
+        if (this.mentionActive && this.mentionSuggestions.length > 0) {
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                this.mentionSelectedIndex = (this.mentionSelectedIndex + 1) % this.mentionSuggestions.length;
+                return;
+            }
+            if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                this.mentionSelectedIndex = (this.mentionSelectedIndex - 1 + this.mentionSuggestions.length) % this.mentionSuggestions.length;
+                return;
+            }
+            if (event.key === 'Enter' || event.key === 'Tab') {
+                event.preventDefault();
+                this.selectMentionSuggestion(this.mentionSuggestions[this.mentionSelectedIndex]);
+                return;
+            }
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                this.closeMentionPopup();
+                return;
+            }
+        }
+
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             this.send();
@@ -125,6 +166,7 @@ export class ChatInputComponent implements OnDestroy, OnChanges {
     send() {
         if (!this.canSend) return;
         this.stopRecording();
+        this.closeMentionPopup();
         this.messageSend.emit(this.messageText.trim());
         this.setMessageText('');
     }
@@ -132,65 +174,47 @@ export class ChatInputComponent implements OnDestroy, OnChanges {
     clear() {
         this.setMessageText('');
         this.stopRecording();
+        this.closeMentionPopup();
     }
 
     onAttachClick(): void {
-        if (this.disabled || this.attachDisabled) {
-            return;
-        }
-
+        if (this.disabled || this.attachDisabled) return;
         this.attachRequested.emit();
     }
 
     openFileDialog(): void {
-        if (this.disabled || this.attachDisabled) {
-            return;
-        }
-
+        if (this.disabled || this.attachDisabled) return;
         this.fileInput?.nativeElement.click();
     }
 
     onFileInputChange(event: Event): void {
         const input = event.target as HTMLInputElement;
         const files = input.files ? Array.from(input.files) : [];
-
         if (files.length > 0) {
             this.filesSelected.emit(files);
         }
-
         input.value = '';
     }
 
     onDragOver(event: DragEvent): void {
         event.preventDefault();
-
-        if (!this.enableFileDrop || this.disabled || this.attachDisabled) {
-            return;
-        }
-
+        if (!this.enableFileDrop || this.disabled || this.attachDisabled) return;
         this.isDragging = true;
     }
 
     onDragLeave(event: DragEvent): void {
         event.preventDefault();
-
-        if (!this.enableFileDrop) {
-            return;
-        }
-
+        if (!this.enableFileDrop) return;
         this.isDragging = false;
     }
 
     onDrop(event: DragEvent): void {
         event.preventDefault();
-
         if (!this.enableFileDrop || this.disabled || this.attachDisabled) {
             this.isDragging = false;
             return;
         }
-
         this.isDragging = false;
-
         const files = event.dataTransfer?.files ? Array.from(event.dataTransfer.files) : [];
         if (files.length > 0) {
             this.filesSelected.emit(files);
@@ -221,6 +245,110 @@ export class ChatInputComponent implements OnDestroy, OnChanges {
         const separator = this.messageText && !this.messageText.match(/\s$/) ? ' ' : '';
         this.setMessageText(this.messageText + separator + text + ' ');
     }
+
+    // ======== Inline mention autocomplete ========
+
+    private detectMentionTrigger(text: string): void {
+        if (!this.taggingEnabled) {
+            this.closeMentionPopup();
+            return;
+        }
+
+        const lastAt = text.lastIndexOf('@');
+        const lastHash = text.lastIndexOf('#');
+
+        const triggerPos = Math.max(lastAt, lastHash);
+        if (triggerPos < 0) {
+            this.closeMentionPopup();
+            return;
+        }
+
+        const charBefore = triggerPos > 0 ? text[triggerPos - 1] : ' ';
+        if (charBefore !== ' ' && charBefore !== '\n' && triggerPos !== 0) {
+            this.closeMentionPopup();
+            return;
+        }
+
+        const query = text.substring(triggerPos + 1);
+        if (query.includes(' ') || query.includes('\n')) {
+            this.closeMentionPopup();
+            return;
+        }
+
+        const isMention = text[triggerPos] === '@';
+        const type: MentionType = isMention ? 'therapist' : 'topic';
+        this.mentionTriggerPos = triggerPos;
+        this.mentionQuery = query.toLowerCase();
+        this.mentionActive = type;
+        this.mentionSelectedIndex = 0;
+
+        this.buildSuggestions();
+    }
+
+    private buildSuggestions(): void {
+        const suggestions: MentionSuggestion[] = [];
+        const q = this.mentionQuery;
+
+        if (this.mentionActive === 'therapist') {
+            if ('therapist'.includes(q) || 'all'.includes(q)) {
+                suggestions.push({
+                    type: 'therapist_all',
+                    label: '@therapist (all)',
+                    insertText: '@therapist',
+                    icon: 'people-outline',
+                    color: 'primary'
+                });
+            }
+            for (const t of this.therapists) {
+                const name = (t.display || t.name).toLowerCase();
+                if (!q || name.includes(q)) {
+                    suggestions.push({
+                        type: 'therapist',
+                        label: '@' + (t.display || t.name),
+                        insertText: '@' + (t.display || t.name),
+                        icon: 'person-outline',
+                        color: 'secondary'
+                    });
+                }
+            }
+        } else if (this.mentionActive === 'topic') {
+            for (const r of this.tagReasons) {
+                const key = (r.key || '').toLowerCase();
+                const label = (r.label || '').toLowerCase();
+                if (!q || key.includes(q) || label.includes(q)) {
+                    suggestions.push({
+                        type: 'topic',
+                        label: '#' + r.key + (r.label ? ' — ' + r.label : ''),
+                        insertText: '#' + r.key,
+                        icon: 'pricetag-outline',
+                        color: 'tertiary'
+                    });
+                }
+            }
+        }
+
+        this.mentionSuggestions = suggestions;
+        if (suggestions.length === 0) {
+            this.mentionActive = null;
+        }
+    }
+
+    selectMentionSuggestion(suggestion: MentionSuggestion): void {
+        const before = this.messageText.substring(0, this.mentionTriggerPos);
+        const after = this.messageText.substring(this.mentionTriggerPos + 1 + this.mentionQuery.length);
+        this.setMessageText(before + suggestion.insertText + ' ' + after);
+        this.closeMentionPopup();
+    }
+
+    closeMentionPopup(): void {
+        this.mentionActive = null;
+        this.mentionQuery = '';
+        this.mentionSuggestions = [];
+        this.mentionSelectedIndex = 0;
+        this.mentionTriggerPos = -1;
+    }
+
+    // ======== Recording ========
 
     toggleRecording() {
         if (this.isRecording) {

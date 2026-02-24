@@ -103,20 +103,14 @@ const routes: Routes = [
         component: NavigationPage,
         children: [
             {
-                path: '/',
-                // component: MenuComponent
+                path: '',
                 loadChildren: () => import('./menu/menu.module').then(m => m.MenuPageModule)
-            },
-            {
-                path: '/',
-                redirectTo: '/',
-                pathMatch: 'full'
             }
         ]
     },
     {
         path: '**',
-        redirectTo: '/',
+        redirectTo: '',
         pathMatch: 'full'
     }
 ];
