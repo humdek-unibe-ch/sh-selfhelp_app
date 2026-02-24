@@ -103,7 +103,9 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
                     }));
                 }
                 if (res.config.labels && res.config.labels.chat_help_text) {
-                    this.helpText = res.config.labels.chat_help_text;
+                    let txt = res.config.labels.chat_help_text;
+                    txt = txt.replace(/^<p>\s*/i, '').replace(/\s*<\/p>\s*$/i, '');
+                    this.helpText = txt;
                 }
             }
         } catch (e) {

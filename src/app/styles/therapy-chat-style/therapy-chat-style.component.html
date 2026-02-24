@@ -10,7 +10,7 @@
         <!-- Help text -->
         <div *ngIf="helpText && taggingEnabled" class="help-banner">
             <ion-icon name="information-circle-outline"></ion-icon>
-            <span>{{ helpText }}</span>
+            <span [innerHTML]="helpText"></span>
         </div>
 
         <!-- Empty state -->
