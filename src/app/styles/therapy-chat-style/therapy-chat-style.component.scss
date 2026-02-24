@@ -64,81 +64,11 @@
     }
 }
 
-.message-wrapper {
-    display: flex;
+/* Message styles are handled by the shared app-chat-message component */
+
+.thinking-wrapper {
     padding: 0 8px;
-
-    &.user-message {
-        justify-content: flex-end;
-    }
-
-    &.assistant-message,
-    &.therapist-message {
-        justify-content: flex-start;
-    }
-
-    &.system-message {
-        justify-content: center;
-    }
-
-    .message-bubble {
-        max-width: 85%;
-        padding: 10px 14px;
-        border-radius: 16px;
-        font-size: 0.95rem;
-        line-height: 1.4;
-        background-color: var(--ion-color-light);
-        word-break: break-word;
-
-        &.therapist-bubble {
-            background-color: #e8f5e9;
-            border-left: 3px solid #4caf50;
-        }
-
-        &.ai-bubble {
-            background-color: #f3e5f5;
-            border-left: 3px solid #9c27b0;
-        }
-
-        &.system-bubble {
-            background-color: #fff3e0;
-            font-size: 0.85rem;
-            font-style: italic;
-            padding: 6px 12px;
-        }
-    }
-
-    &.user-message .message-bubble {
-        border-bottom-right-radius: 4px;
-    }
-
-    &.assistant-message .message-bubble,
-    &.therapist-message .message-bubble {
-        border-bottom-left-radius: 4px;
-    }
-}
-
-.sender-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--ion-color-medium);
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-.message-time {
-    font-size: 0.7rem;
-    color: var(--ion-color-medium);
-    margin-top: 4px;
-    text-align: right;
-}
-
-.message-labels {
-    .badge {
-        font-size: 0.7rem;
-        font-weight: normal;
-    }
+    margin-bottom: 10px;
 }
 
 .ai-thinking {

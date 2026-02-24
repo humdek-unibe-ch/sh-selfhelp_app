@@ -21,31 +21,19 @@
         </div>
 
         <!-- Messages -->
-        <div *ngFor="let msg of messages" class="message-wrapper mb-2"
-             [class.user-message]="msg.role === 'user' || msg.sender_type === 'subject'"
-             [class.assistant-message]="msg.role === 'assistant' || msg.sender_type === 'ai'"
-             [class.therapist-message]="msg.role === 'therapist' || msg.sender_type === 'therapist'"
-             [class.system-message]="msg.role === 'system' || msg.sender_type === 'system'">
-            <div class="message-bubble"
-                 [class.bg-primary]="msg.role === 'user' || msg.sender_type === 'subject'"
-                 [class.text-white]="msg.role === 'user' || msg.sender_type === 'subject'"
-                 [class.therapist-bubble]="msg.role === 'therapist' || msg.sender_type === 'therapist'"
-                 [class.ai-bubble]="msg.sender_type === 'ai'"
-                 [class.system-bubble]="msg.sender_type === 'system'">
-                <div *ngIf="getSenderLabel(msg)" class="sender-label">{{ getSenderLabel(msg) }}</div>
-                <app-markdown-renderer *ngIf="msg.formatted_content || msg.content"
-                    [content]="msg.formatted_content || msg.content">
-                </app-markdown-renderer>
-                <div *ngIf="msg.labels && msg.labels.length > 0" class="message-labels mt-1">
-                    <span *ngFor="let label of msg.labels" class="badge badge-secondary mr-1">{{ label.name || label }}</span>
-                </div>
-                <div *ngIf="msg.created_at" class="message-time">{{ msg.created_at }}</div>
-            </div>
-        </div>
+        <app-chat-message
+            *ngFor="let msg of messages"
+            [content]="msg.formatted_content || msg.content"
+            [senderType]="msg.sender_type || msg.role"
+            [senderLabel]="getSenderLabel(msg)"
+            [timestamp]="msg.created_at || ''"
+            [isOwn]="msg.role === 'user' || msg.sender_type === 'subject'"
+            [labels]="msg.labels || []">
+        </app-chat-message>
 
         <!-- Loading indicator -->
-        <div *ngIf="isLoading" class="message-wrapper assistant-message mb-2">
-            <div class="message-bubble ai-thinking">
+        <div *ngIf="isLoading" class="thinking-wrapper">
+            <div class="ai-thinking">
                 <div class="thinking-dots">
                     <span></span><span></span><span></span>
                 </div>

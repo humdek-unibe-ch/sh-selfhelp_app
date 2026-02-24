@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SelfhelpService } from '../../services/selfhelp.service';
 import { AlertController } from '@ionic/angular';
@@ -81,6 +81,9 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     activeDraft: { id: number; ai_content: string; edited_content: string } | null = null;
     draftEditText = '';
     pendingSummary = '';
+
+    @ViewChild('messagesEnd') messagesEnd?: ElementRef;
+    @ViewChild('messagesArea') messagesArea?: ElementRef;
 
     private pollTimer: any = null;
 
@@ -251,15 +254,14 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             console.error('Failed to load conversation', e);
         } finally {
             this.isLoadingMessages = false;
+            this.scrollToBottom();
         }
     }
 
     async refreshMessages() {
         if (!this.selectedConversation) return;
         try {
-            const lastId = this.selectedMessages.length > 0
-                ? this.selectedMessages[this.selectedMessages.length - 1].id
-                : null;
+            const lastId = this.getMaxMessageId();
             const res: any = await this.apiCall('get_messages', {
                 conversation_id: this.selectedConversation.id,
                 after_id: lastId
@@ -267,13 +269,32 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             const newMsgs = res?.messages || [];
             if (newMsgs.length > 0) {
                 const existingIds = new Set(this.selectedMessages.filter(m => m.id).map(m => m.id));
+                let added = false;
                 for (const msg of newMsgs) {
                     if (!msg.id || !existingIds.has(msg.id)) {
                         this.selectedMessages.push(msg);
+                        added = true;
                     }
                 }
+                if (added) this.scrollToBottom();
             }
         } catch (e) { }
+    }
+
+    private getMaxMessageId(): number | null {
+        let max: number | null = null;
+        for (const m of this.selectedMessages) {
+            if (m.id && (max === null || m.id > max)) max = m.id;
+        }
+        return max;
+    }
+
+    private scrollToBottom(): void {
+        setTimeout(() => {
+            if (this.messagesEnd) {
+                this.messagesEnd.nativeElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 100);
     }
 
     backToList() {
@@ -289,22 +310,28 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         if (!text.trim() || !this.selectedConversation || this.isSending) return;
         this.isSending = true;
         this.errorMessage = '';
+        const tempMsg: ChatMessage = {
+            role: 'therapist',
+            sender_type: 'therapist',
+            content: text,
+            created_at: new Date().toISOString()
+        };
+        this.selectedMessages.push(tempMsg);
+        this.scrollToBottom();
         try {
             const res: any = await this.apiCall('send_message', {
                 message: text,
                 conversation_id: this.selectedConversation.id
             });
-            if (res && !res.error) {
-                this.selectedMessages.push({
-                    role: 'therapist',
-                    sender_type: 'therapist',
-                    content: text,
-                    created_at: new Date().toISOString()
-                });
-            } else if (res?.error) {
+            if (res?.message_id) {
+                tempMsg.id = res.message_id;
+            }
+            if (res?.error) {
+                this.selectedMessages = this.selectedMessages.filter(m => m !== tempMsg);
                 this.errorMessage = res.error;
             }
         } catch (e) {
+            this.selectedMessages = this.selectedMessages.filter(m => m !== tempMsg);
             this.errorMessage = 'Failed to send message';
         } finally {
             this.isSending = false;
@@ -426,13 +453,13 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         if (!this.selectedConversation || this.isGeneratingSummary) return;
         this.isGeneratingSummary = true;
         this.errorMessage = '';
+        this.conversationTab = 'notes';
         try {
             const res: any = await this.apiCall('generate_summary', {
                 conversation_id: this.selectedConversation.id
             });
             if (res?.summary) {
                 this.pendingSummary = res.summary;
-                this.conversationTab = 'notes';
             }
             if (res?.error) {
                 this.errorMessage = 'Summary: ' + res.error;
@@ -501,6 +528,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             });
             if (res?.success !== false) {
                 this.selectedMessages.push({
+                    id: res.message_id || undefined,
                     role: 'therapist',
                     sender_type: 'therapist',
                     content: this.draftEditText || this.activeDraft.ai_content,
@@ -508,6 +536,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
                 });
                 this.activeDraft = null;
                 this.draftEditText = '';
+                this.scrollToBottom();
             }
         } catch (e) {
             this.errorMessage = 'Failed to send draft';

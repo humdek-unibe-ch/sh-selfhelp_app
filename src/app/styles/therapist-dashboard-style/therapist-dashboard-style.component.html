@@ -150,24 +150,25 @@
         <div *ngIf="conversationTab === 'chat'" class="chat-panel">
 
             <!-- Messages -->
-            <div class="messages-area">
+            <div class="messages-area" #messagesArea>
                 <div *ngIf="isLoadingMessages" class="loading-state">
                     <ion-spinner name="crescent"></ion-spinner>
                 </div>
 
-                <div *ngFor="let msg of selectedMessages" class="msg-row"
-                    [ngClass]="'msg-' + getSenderClass(msg)">
-                    <div class="msg-sender">{{ getSenderLabel(msg) }}</div>
-                    <div class="msg-bubble" [ngClass]="'bubble-' + getSenderClass(msg)">
-                        <app-markdown-renderer [content]="getMessageContent(msg)"></app-markdown-renderer>
-                    </div>
-                    <div *ngIf="msg.created_at" class="msg-time">{{ formatTime(msg.created_at) }}</div>
-                </div>
+                <app-chat-message
+                    *ngFor="let msg of selectedMessages"
+                    [content]="getMessageContent(msg)"
+                    [senderType]="getSenderClass(msg)"
+                    [senderLabel]="getSenderLabel(msg)"
+                    [timestamp]="formatTime(msg.created_at)"
+                    [isOwn]="getSenderClass(msg) === 'therapist'">
+                </app-chat-message>
 
                 <div *ngIf="!isLoadingMessages && selectedMessages.length === 0" class="empty-state compact">
                     <ion-icon name="chatbubble-outline"></ion-icon>
                     <p>No messages yet</p>
                 </div>
+                <div #messagesEnd></div>
             </div>
 
             <!-- Active Draft (positioned above input) -->
@@ -189,9 +190,9 @@
                     <ion-button size="small" fill="outline" color="tertiary"
                         [disabled]="isCreatingDraft" (click)="regenerateDraft()">
                         <ion-icon name="refresh" slot="start"></ion-icon>
-                        {{ isCreatingDraft ? 'Regenerating...' : 'Regenerate' }}
+                        Redo
                     </ion-button>
-                    <ion-button size="small" fill="outline" color="medium" (click)="discardDraft()">
+                    <ion-button size="small" fill="clear" color="medium" (click)="discardDraft()">
                         Discard
                     </ion-button>
                 </div>
@@ -208,7 +209,7 @@
                     <ion-button size="small" fill="outline" color="secondary"
                         [disabled]="isGeneratingSummary" (click)="generateSummary()">
                         <ion-icon name="document-text-outline" slot="start"></ion-icon>
-                        {{ isGeneratingSummary ? 'Summarize' : 'Summarize' }}
+                        {{ isGeneratingSummary ? 'Summarizing...' : 'Summarize' }}
                     </ion-button>
                 </div>
                 <app-chat-input *ngIf="!activeDraft"

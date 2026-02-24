@@ -13,8 +13,8 @@
     --llm-text-secondary: #8e8e93;
     --llm-bg-primary: #ffffff;
     --llm-bg-secondary: #f2f2f7;
-    --llm-bg-user-bubble: #007aff;
-    --llm-bg-assistant-bubble: #ffffff;
+    --llm-bg-user-bubble: var(--ion-color-primary, #007aff);
+    --llm-bg-assistant-bubble: #f3e5f5;
     --llm-border-color: rgba(0, 0, 0, 0.08);
 
     display: block;
