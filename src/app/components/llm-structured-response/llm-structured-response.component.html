@@ -104,20 +104,13 @@
                     (formSubmit)="onFormSubmit($event)">
                 </app-llm-form-renderer>
 
-                <!-- Historical form (read-only) -->
-                <div *ngIf="!isLastMessage" class="structured-form-historical">
-                    <div class="form-historical-header">
-                        <ion-icon name="document-text-outline"></ion-icon>
-                        {{ form.title || 'Form' }}
-                    </div>
-                    <div class="form-historical-body">
-                        <p *ngIf="form.description" class="form-description">{{ form.description }}</p>
-                        <p class="form-historical-notice">
-                            <ion-icon name="time-outline"></ion-icon>
-                            Form was presented here
-                        </p>
-                    </div>
-                </div>
+                <!-- Historical form (read-only / submitted state) -->
+                <app-llm-form-renderer 
+                    *ngIf="!isLastMessage"
+                    [formDefinition]="toFormDefinition(form)"
+                    [disabled]="true"
+                    [isSubmitted]="true">
+                </app-llm-form-renderer>
             </div>
         </ng-container>
     </div>

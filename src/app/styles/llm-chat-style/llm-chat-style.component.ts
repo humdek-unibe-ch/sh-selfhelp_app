@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked, AfterViewInit } from '@angular/core';
-import { AlertController, ModalController, ActionSheetController, Platform } from '@ionic/angular';
+import { AlertController, ActionSheetController, Platform } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Filesystem, Directory } from '@capacitor/filesystem';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import {
     LlmChatStyle,
@@ -18,7 +17,7 @@ import {
     parseLlmFormDefinition
 } from 'src/app/utils/llm-response-utils';
 import { LlmChatService, DEFAULT_FILE_CONFIG } from 'src/app/services/llm-chat.service';
-import { SelfhelpService } from 'src/app/services/selfhelp.service';
+import { ChatInputComponent } from 'src/app/components/chat-input/chat-input.component';
 
 @Component({
     selector: 'app-llm-chat-style',
@@ -28,7 +27,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
     @Input() override style!: LlmChatStyle;
     @ViewChild('messagesContainer') messagesContainer!: ElementRef;
-    @ViewChild('messageTextarea') messageTextarea!: ElementRef;
+    @ViewChild('chatInputRef') chatInput?: ChatInputComponent;
 
     // State
     conversations: LlmConversation[] = [];
@@ -46,7 +45,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     fileHashes: Set<string> = new Set();
     fileConfig: LlmFileConfig = DEFAULT_FILE_CONFIG;
     fileError: string | null = null;
-    isDragging = false;
     attachmentIdCounter = 0;
 
     // Progress tracking
@@ -76,11 +74,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     // Character limit
     readonly MAX_MESSAGE_LENGTH = 4000;
 
-    // Speech-to-text
-    isRecording = false;
-    private sttRecognition: any = null;
-    private textBeforeRecording = '';
-
     // ============================================================================
     // GETTERS FOR TEMPLATE BINDINGS
     // ============================================================================
@@ -91,10 +84,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
 
     get isTextareaDisabled(): boolean {
         return this.isProcessing || this.isLoading || this.isAutoStarting;
-    }
-
-    get isNearCharacterLimit(): boolean {
-        return this.characterCount > (this.MAX_MESSAGE_LENGTH * 0.9);
     }
 
     get isVisionAttachEnabled(): boolean {
@@ -121,19 +110,9 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         return this.getLabel('send_message_title', 'Send message');
     }
 
-    get isSendButtonDisabled(): boolean {
-        return this.isProcessing || this.isLoading || this.isAutoStarting || !this.currentMessage.trim();
-    }
-
-    get speechAvailable(): boolean {
-        return ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
-    }
-
     constructor(
         public llmChatService: LlmChatService,
-        private selfhelpService: SelfhelpService,
         private alertController: AlertController,
-        private modalController: ModalController,
         private actionSheetController: ActionSheetController,
         private platform: Platform,
         private cdr: ChangeDetectorRef
@@ -163,7 +142,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     }
 
     ngOnDestroy() {
-        this.stopSttRecording();
         this.selectedFiles.forEach(file => {
             if (file.previewUrl) {
                 URL.revokeObjectURL(file.previewUrl);
@@ -484,8 +462,8 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     /**
      * Send a message
      */
-    async sendMessage(): Promise<void> {
-        const message = this.currentMessage.trim();
+    async sendMessage(messageFromInput?: string): Promise<void> {
+        const message = (messageFromInput ?? this.currentMessage).trim();
         if (!message) {
             this.error = this.getLabel('empty_message_error', 'Please enter a message');
             return;
@@ -587,99 +565,21 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         }
     }
 
-    /**
-     * Handle keyboard enter to send message
-     */
-    onKeyPress(event: KeyboardEvent): void {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            this.sendMessage();
-        }
+    async onChatInputSend(message: string): Promise<void> {
+        await this.sendMessage(message);
     }
 
-    /**
-     * Clear the message input
-     */
-    clearInput(): void {
-        this.currentMessage = '';
-        this.clearSelectedFiles();
-        this.fileError = null;
-        this.stopSttRecording();
-    }
-
-    // ============================================================================
-    // SPEECH-TO-TEXT
-    // ============================================================================
-
-    toggleRecording(): void {
-        if (this.isRecording) {
-            this.stopSttRecording();
-        } else {
-            this.startSttRecording();
+    async onInputFilesSelected(files: File[]): Promise<void> {
+        if (!files || files.length === 0) {
+            return;
         }
-    }
 
-    private startSttRecording(): void {
-        const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
-        if (!SpeechRecognition) return;
-
-        this.textBeforeRecording = this.currentMessage;
-        this.sttRecognition = new SpeechRecognition();
-        this.sttRecognition.continuous = false;
-        this.sttRecognition.interimResults = true;
-        this.sttRecognition.lang = navigator.language || 'en-US';
-
-        this.sttRecognition.onresult = (event: any) => {
-            let transcript = '';
-            for (let i = 0; i < event.results.length; i++) {
-                transcript += event.results[i][0].transcript;
-            }
-            const base = this.textBeforeRecording;
-            const separator = base && !base.match(/\s$/) ? ' ' : '';
-            this.currentMessage = base + separator + transcript;
-            this.cdr.detectChanges();
-        };
-
-        this.sttRecognition.onerror = () => { this.isRecording = false; this.cdr.detectChanges(); };
-
-        this.sttRecognition.onend = () => {
-            if (this.isRecording) {
-                this.textBeforeRecording = this.currentMessage;
-                try { this.sttRecognition.start(); } catch (e) { this.isRecording = false; this.cdr.detectChanges(); }
-            }
-        };
-
-        try {
-            this.sttRecognition.start();
-            this.isRecording = true;
-        } catch (e) {
-            this.isRecording = false;
-        }
-    }
-
-    private stopSttRecording(): void {
-        this.isRecording = false;
-        if (this.sttRecognition) {
-            try { this.sttRecognition.stop(); } catch (e) {}
-            this.sttRecognition = null;
-        }
+        await this.handleFileSelection(files);
     }
 
     // ============================================================================
     // FILE ATTACHMENTS
     // ============================================================================
-
-    /**
-     * Handle file selection from input
-     */
-    async onFileSelected(event: Event): Promise<void> {
-        const input = event.target as HTMLInputElement;
-        if (input.files && input.files.length > 0) {
-            await this.handleFileSelection(Array.from(input.files));
-        }
-        // Reset input
-        input.value = '';
-    }
 
     /**
      * Handle file selection
@@ -826,10 +726,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
      * Trigger the hidden file input
      */
     private triggerFileInput(): void {
-        const fileInput = document.getElementById('llm-chat-file-input') as HTMLInputElement;
-        if (fileInput) {
-            fileInput.click();
-        }
+        this.chatInput?.openFileDialog();
     }
 
     /**
@@ -882,31 +779,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     private async dataUrlToBlob(dataUrl: string): Promise<Blob> {
         const response = await fetch(dataUrl);
         return response.blob();
-    }
-
-    // Drag and drop handlers
-    onDragOver(event: DragEvent): void {
-        event.preventDefault();
-        if (this.isFileUploadsEnabled() && this.isVisionModel()) {
-            this.isDragging = true;
-        }
-    }
-
-    onDragLeave(event: DragEvent): void {
-        event.preventDefault();
-        this.isDragging = false;
-    }
-
-    async onDrop(event: DragEvent): Promise<void> {
-        event.preventDefault();
-        this.isDragging = false;
-
-        if (!this.isFileUploadsEnabled() || !this.isVisionModel()) return;
-
-        const files = event.dataTransfer?.files;
-        if (files && files.length > 0) {
-            await this.handleFileSelection(Array.from(files));
-        }
     }
 
     // ============================================================================
@@ -1436,13 +1308,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
      */
     trackByFileId(index: number, file: LlmSelectedFile): string {
         return file.id;
-    }
-
-    /**
-     * Get character count
-     */
-    get characterCount(): number {
-        return this.currentMessage.length;
     }
 
     // ============================================================================

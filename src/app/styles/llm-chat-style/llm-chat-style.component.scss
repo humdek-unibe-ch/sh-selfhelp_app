@@ -1151,74 +1151,6 @@
 }
 
 // ============================================================================
-// INPUT WRAPPER - Clean design
-// ============================================================================
-
-.input-wrapper {
-    background: var(--llm-bg-secondary);
-    border-radius: var(--llm-radius-large);
-    overflow: hidden;
-
-    &.dragging {
-        background: rgba(var(--ion-color-primary-rgb), 0.08);
-    }
-
-    .message-textarea {
-        --background: transparent;
-        --padding-start: 12px;
-        --padding-end: 12px;
-        --padding-top: 10px;
-        --padding-bottom: 8px;
-        font-size: 0.875rem;
-        min-height: 38px;
-        max-height: 90px;
-    }
-
-    .input-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 4px 8px 6px;
-
-        .left-actions,
-        .right-actions {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .recording-btn {
-            animation: sttPulse 1.2s infinite;
-        }
-
-        ion-button {
-            --padding-start: 6px;
-            --padding-end: 6px;
-            height: 28px;
-            margin: 0;
-
-            ion-icon {
-                font-size: 16px;
-            }
-        }
-
-        .character-count {
-            font-size: 0.65rem;
-            color: var(--llm-text-secondary);
-
-            &.near-limit {
-                color: var(--ion-color-warning);
-                font-weight: 500;
-            }
-        }
-    }
-}
-
-.hidden-file-input {
-    display: none;
-}
-
-// ============================================================================
 // FLOATING BUTTON & PANEL
 // ============================================================================
 
@@ -1464,7 +1396,3 @@
     }
 }
 
-@keyframes sttPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-}

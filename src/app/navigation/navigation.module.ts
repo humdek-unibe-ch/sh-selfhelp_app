@@ -94,6 +94,7 @@ import { MarkdownRendererComponent } from '../components/markdown-renderer/markd
 import { LlmStructuredResponseComponent } from '../components/llm-structured-response/llm-structured-response.component';
 import { LlmFormRendererComponent } from '../components/llm-form-renderer/llm-form-renderer.component';
 import { ChatInputComponent } from '../components/chat-input/chat-input.component';
+import { TherapyChatModalComponent } from '../components/therapy-chat-modal/therapy-chat-modal.component';
 PlotlyModule.plotlyjs = PlotlyJS;
 
 const routes: Routes = [
@@ -237,7 +238,8 @@ const routes: Routes = [
         MarkdownRendererComponent,
         LlmStructuredResponseComponent,
         LlmFormRendererComponent,
-        ChatInputComponent
+        ChatInputComponent,
+        TherapyChatModalComponent
     ]
 })
 export class NavigationPageModule {

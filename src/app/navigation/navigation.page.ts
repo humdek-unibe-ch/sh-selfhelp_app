@@ -5,7 +5,7 @@ import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelpNavigation } from 'src/app/selfhelpInterfaces';
 import { EventListenerService } from '../services/event-listener.service';
 import { TherapyChatNotificationService } from '../services/therapy-chat-notification.service';
-import { ModalPageComponent } from '../components/modal-page/modal-page.component';
+import { TherapyChatModalComponent } from '../components/therapy-chat-modal/therapy-chat-modal.component';
 import { Subscription } from 'rxjs';
 
 
@@ -173,9 +173,12 @@ export class NavigationPage implements AfterViewInit, OnDestroy {
         const url = this.therapyChatState.url;
         await this.selfHelpService.getPage(url);
         const modal = await this.modalController.create({
-            component: ModalPageComponent,
+            component: TherapyChatModalComponent,
             componentProps: {
-                url: url
+                url_param: url,
+                title: this.getTherapyChatLabel(),
+                icon: this.getTherapyChatIcon(),
+                unreadCount: this.therapyChatState.unreadCount
             },
             cssClass: 'therapy-chat-modal-fullscreen'
         });

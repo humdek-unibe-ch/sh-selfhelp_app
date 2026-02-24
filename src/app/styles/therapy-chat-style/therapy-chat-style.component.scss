@@ -175,51 +175,6 @@
     font-style: italic;
 }
 
-// Tagging panel
-.tagging-panel {
-    border-top: 1px solid var(--ion-color-light-shade, #d7d8da);
-    padding: 6px 10px;
-    background: var(--ion-color-light, #f4f5f8);
-    max-height: 140px;
-    overflow-y: auto;
-}
-
-.tagging-section {
-    margin-bottom: 4px;
-}
-
-.tagging-section-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--ion-color-medium-shade);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-}
-
-.tagging-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-.tag-chip {
-    height: 28px;
-    font-size: 0.78rem;
-    --padding-start: 8px;
-    --padding-end: 8px;
-    margin: 0;
-    cursor: pointer;
-}
-
 .input-section {
     flex-shrink: 0;
-}
-
-.tagging-toggle-btn {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    height: 28px;
-    font-size: 0.78rem;
-    margin: 4px 8px 0;
 }

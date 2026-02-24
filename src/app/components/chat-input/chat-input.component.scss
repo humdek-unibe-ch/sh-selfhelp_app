@@ -1,36 +1,45 @@
+:host {
+    display: block;
+}
+
 .chat-input-wrapper {
-    border-top: 1px solid var(--ion-color-light-shade, #d7d8da);
-    padding: 8px 12px;
-    background: var(--ion-background-color, #fff);
+    background: var(--ion-color-light, #f4f5f8);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+    &.variant-default {
+        background: var(--ion-background-color, #fff);
+        border: 1px solid var(--ion-color-light-shade, #d7d8da);
+    }
+
+    &.variant-llm {
+        background: var(--llm-bg-secondary, var(--ion-color-light, #f4f5f8));
+    }
+
+    &.dragging {
+        background: rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.08);
+        box-shadow: inset 0 0 0 1px rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.35);
+    }
 }
 
 .chat-textarea {
+    --background: transparent;
     --padding-start: 12px;
     --padding-end: 12px;
-    --padding-top: 8px;
+    --padding-top: 10px;
     --padding-bottom: 8px;
-    border: 1px solid var(--ion-color-light-shade, #d7d8da);
-    border-radius: 12px;
-    min-height: 60px;
-    max-height: 140px;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    --background: var(--ion-color-light, #f4f5f8);
     --highlight-color-focused: transparent;
-    outline: none;
-
-    &.has-focus, &:focus-within {
-        border-color: var(--ion-color-primary-tint, #6aa3f8);
-        box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.15);
-    }
+    font-size: 0.875rem;
+    min-height: 40px;
+    max-height: 110px;
 }
 
 .actions-row {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-top: 4px;
-    padding: 0 2px;
+    align-items: center;
+    padding: 4px 8px 6px;
 }
 
 .left-actions,
@@ -46,11 +55,11 @@
 }
 
 .char-count {
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     color: var(--ion-color-medium);
 
     &.near-limit {
-        color: var(--ion-color-danger);
+        color: var(--ion-color-warning);
         font-weight: 600;
     }
 }
@@ -58,8 +67,12 @@
 .action-btn {
     --padding-start: 6px;
     --padding-end: 6px;
-    height: 32px;
-    min-width: 32px;
+    height: 28px;
+    margin: 0;
+
+    ion-icon {
+        font-size: 16px;
+    }
 
     &.recording {
         animation: pulse-recording 1.2s infinite;
@@ -67,14 +80,71 @@
 }
 
 .send-btn {
-    --border-radius: 50%;
-    --padding-start: 8px;
-    --padding-end: 8px;
-    min-width: 36px;
-    height: 36px;
+    --padding-start: 6px;
+    --padding-end: 6px;
+    height: 28px;
+    margin: 0;
+
+    ion-icon {
+        font-size: 16px;
+    }
+
+    ion-spinner {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.hidden-file-input {
+    display: none;
 }
 
 @keyframes pulse-recording {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
+}
+
+// Tagging panel
+.tagging-panel {
+    border-bottom: 1px solid var(--ion-color-light-shade, #d7d8da);
+    padding: 6px 10px;
+    background: var(--ion-color-light, #f4f5f8);
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.tagging-section {
+    margin-bottom: 4px;
+}
+
+.tagging-section-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--ion-color-medium-shade);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.tagging-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.tag-chip {
+    height: 28px;
+    font-size: 0.78rem;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.tagging-toggle-btn {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    height: 28px;
+    font-size: 0.78rem;
+    margin: 4px 8px 0;
 }

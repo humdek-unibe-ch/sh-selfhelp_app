@@ -205,20 +205,13 @@
                                             (formSubmit)="handleFormSubmit($event.values, $event.readableText)">
                                         </app-llm-form-renderer>
                                         
-                                        <!-- Historical Form (legacy form, not last message) -->
-                                        <div *ngIf="!getStructuredResponse(message) && getFormDefinition(message) && !isLast" class="historical-form">
-                                            <div class="historical-form-header">
-                                                <ion-icon name="document-text-outline"></ion-icon>
-                                                {{ getFormDefinition(message)?.title || 'Form' }}
-                                            </div>
-                                            <div class="historical-form-body">
-                                                <p *ngIf="getFormDefinition(message)?.description">{{ getFormDefinition(message)?.description }}</p>
-                                                <p class="historical-form-notice">
-                                                    <ion-icon name="time-outline"></ion-icon>
-                                                    Form was presented here
-                                                </p>
-                                            </div>
-                                        </div>
+                                        <!-- Historical Form (legacy form, not last message - read-only) -->
+                                        <app-llm-form-renderer
+                                            *ngIf="!getStructuredResponse(message) && getFormDefinition(message) && !isLast"
+                                            [formDefinition]="getFormDefinition(message)!"
+                                            [disabled]="true"
+                                            [isSubmitted]="true">
+                                        </app-llm-form-renderer>
                                         
                                         <!-- Plain Markdown (fallback for non-structured responses) -->
                                         <app-markdown-renderer 
@@ -345,97 +338,31 @@
                             </div>
                         </div>
 
-                        <!-- Input Wrapper -->
-                        <div 
-                            class="input-wrapper"
-                            [class.dragging]="isDragging"
-                            (dragover)="onDragOver($event)"
-                            (dragleave)="onDragLeave($event)"
-                            (drop)="onDrop($event)">
-                            
-                            <!-- Hidden File Input -->
-                            <input 
-                                type="file" 
-                                id="llm-chat-file-input"
-                                class="hidden-file-input"
-                                multiple
-                                [accept]="acceptFileTypes"
-                                (change)="onFileSelected($event)">
-
-                            <!-- Textarea -->
-                            <ion-textarea
-                                #messageTextarea
-                                [(ngModel)]="currentMessage"
-                                [placeholder]="getLabel('message_placeholder', 'Type your message...')"
-                                [disabled]="isTextareaDisabled"
-                                (keydown)="onKeyPress($event)"
-                                [maxlength]="MAX_MESSAGE_LENGTH"
-                                rows="2"
-                                auto-grow="true"
-                                class="message-textarea">
-                            </ion-textarea>
-
-                            <!-- Action Buttons -->
-                            <div class="input-actions">
-                                <!-- Left side - Attachment + Mic -->
-                                <div class="left-actions">
-                                    <ion-button
-                                        *ngIf="isVisionAttachEnabled"
-                                        fill="clear" 
-                                        size="small"
-                                        (click)="openFilePicker()"
-                                        [disabled]="isVisionAttachDisabled"
-                                        [title]="attachFilesTitle">
-                                        <ion-icon name="attach"></ion-icon>
-                                    </ion-button>
-                                    <ion-button 
-                                        *ngIf="isFileUploadsEnabled() && !isVisionModel()"
-                                        fill="clear" 
-                                        size="small"
-                                        disabled
-                                        [title]="noVisionSupportTitle">
-                                        <ion-icon name="attach" color="medium"></ion-icon>
-                                    </ion-button>
-                                    <ion-button
-                                        *ngIf="speechAvailable"
-                                        fill="clear"
-                                        size="small"
-                                        [color]="isRecording ? 'danger' : 'medium'"
-                                        (click)="toggleRecording()"
-                                        [class.recording-btn]="isRecording"
-                                        title="Speech to text">
-                                        <ion-icon [name]="isRecording ? 'radio-button-on' : 'mic'"></ion-icon>
-                                    </ion-button>
-                                </div>
-
-                                <!-- Center - Character count -->
-                                <div class="character-count" [class.near-limit]="isNearCharacterLimit">
-                                    {{ characterCount }}/{{ MAX_MESSAGE_LENGTH }}
-                                </div>
-
-                                <!-- Right side - Clear and Send buttons -->
-                                <div class="right-actions">
-                                    <ion-button 
-                                        fill="clear" 
-                                        size="small"
-                                        (click)="clearInput()"
-                                        [disabled]="isVisionAttachDisabled"
-                                        [title]="clearButtonTitle">
-                                        <ion-icon name="close"></ion-icon>
-                                    </ion-button>
-                                    <ion-button 
-                                        fill="solid" 
-                                        size="small"
-                                        color="primary"
-                                        [disabled]="isSendButtonDisabled"
-                                        (click)="sendMessage()"
-                                        [title]="sendButtonTitle">
-                                        <ion-icon *ngIf="!isProcessing" name="send"></ion-icon>
-                                        <ion-spinner *ngIf="isProcessing" name="crescent"></ion-spinner>
-                                    </ion-button>
-                                </div>
-                            </div>
-                        </div>
+                        <app-chat-input
+                            #chatInputRef
+                            [variant]="'llm'"
+                            [message]="currentMessage"
+                            (messageChange)="currentMessage = $event"
+                            [placeholder]="getLabel('message_placeholder', 'Type your message...')"
+                            [disabled]="isTextareaDisabled"
+                            [maxLength]="MAX_MESSAGE_LENGTH"
+                            [rows]="2"
+                            [showCharCount]="true"
+                            [speechToTextEnabled]="true"
+                            [showAttachButton]="isVisionAttachEnabled"
+                            [showDisabledAttachButton]="isFileUploadsEnabled() && !isVisionModel()"
+                            [attachDisabled]="isVisionAttachDisabled"
+                            [attachButtonTitle]="isVisionModel() ? attachFilesTitle : noVisionSupportTitle"
+                            [showSendSpinner]="isProcessing"
+                            [clearButtonTitle]="clearButtonTitle"
+                            [sendButtonTitle]="sendButtonTitle"
+                            [enableFileDrop]="isFileUploadsEnabled() && isVisionModel()"
+                            [fileInputAccept]="acceptFileTypes"
+                            [fileInputMultiple]="true"
+                            (attachRequested)="openFilePicker()"
+                            (filesSelected)="onInputFilesSelected($event)"
+                            (messageSend)="onChatInputSend($event)">
+                        </app-chat-input>
                     </ng-container>
                 </div>
             </div>

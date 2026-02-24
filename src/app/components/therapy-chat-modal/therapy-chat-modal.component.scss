@@ -1,0 +1,55 @@
+.therapy-modal-header {
+    ion-toolbar {
+        --min-height: 48px;
+    }
+
+    .close-btn {
+        --padding-start: 8px;
+        --padding-end: 8px;
+    }
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.header-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.header-badge {
+    font-size: 0.65rem;
+    min-width: 18px;
+    height: 18px;
+    line-height: 18px;
+    border-radius: 9px;
+    padding: 0 5px;
+}
+
+.therapy-modal-content {
+    --background: var(--ion-background-color, #fff);
+}
+
+.missing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
+    color: var(--ion-color-medium);
+
+    ion-icon {
+        font-size: 3rem;
+        margin-bottom: 12px;
+    }
+
+    p {
+        font-size: 0.95rem;
+        margin: 0;
+    }
+}

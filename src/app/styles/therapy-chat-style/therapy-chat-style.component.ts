@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, NgZone } fr
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { TherapyChatStyle } from '../../selfhelpInterfaces';
 import { SelfhelpService } from '../../services/selfhelp.service';
+import { ChatTagReason, ChatTherapistInfo } from '../../components/chat-input/chat-input.component';
 
 interface TherapyMessage {
     id?: number;
@@ -12,18 +13,6 @@ interface TherapyMessage {
     sender_type?: string;
     label?: string;
     labels?: any[];
-}
-
-interface TagReason {
-    key: string;
-    label: string;
-    urgency?: string;
-}
-
-interface TherapistInfo {
-    id: number;
-    display: string;
-    name: string;
 }
 
 @Component({
@@ -46,10 +35,9 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
     labels: any[] = [];
     unreadCount: number = 0;
 
-    tagReasons: TagReason[] = [];
-    therapists: TherapistInfo[] = [];
+    tagReasons: ChatTagReason[] = [];
+    therapists: ChatTherapistInfo[] = [];
     helpText: string = '';
-    showTaggingPanel: boolean = false;
 
     private pollingTimer: any = null;
     private pollingInterval: number = 3000;
@@ -65,6 +53,13 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         this.isSubject = this.style.is_subject !== false;
         this.taggingEnabled = this.style.tagging_enabled === true;
         this.labels = this.style.labels || [];
+
+        const reasonsField = (this.style as any)?.therapy_tag_reasons;
+        if (reasonsField?.content && Array.isArray(reasonsField.content)) {
+            this.tagReasons = reasonsField.content;
+        } else if (Array.isArray(reasonsField)) {
+            this.tagReasons = reasonsField;
+        }
 
         if (this.style.conversation) {
             this.conversationId = this.style.conversation.id;
@@ -98,8 +93,12 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
             });
             if (res && res.config) {
                 this.taggingEnabled = res.config.taggingEnabled === true || res.config.tagging_enabled === true || this.taggingEnabled;
-                if (res.config.tagReasons) {
-                    this.tagReasons = res.config.tagReasons;
+                if (res.config.tagReasons && Array.isArray(res.config.tagReasons)) {
+                    this.tagReasons = res.config.tagReasons.map((r: any) => ({
+                        key: r.key || r.code || '',
+                        label: r.label || '',
+                        urgency: r.urgency
+                    }));
                 }
                 if (res.config.labels && res.config.labels.chat_help_text) {
                     this.helpText = res.config.labels.chat_help_text;
@@ -126,36 +125,6 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         } catch (e) {
             // Non-fatal
         }
-    }
-
-    toggleTaggingPanel() {
-        this.showTaggingPanel = !this.showTaggingPanel;
-    }
-
-    insertMention(therapist: TherapistInfo) {
-        const mention = '@' + (therapist.display || therapist.name);
-        this.appendToInput(mention);
-    }
-
-    insertMentionAll() {
-        this.appendToInput('@therapist');
-    }
-
-    insertTopic(reason: TagReason) {
-        this.appendToInput('#' + reason.key);
-    }
-
-    private appendToInput(text: string) {
-        // This will be picked up by ChatInputComponent through a ViewChild or by modifying input
-        // For now we emit via a shared approach - set a pending text
-        this.pendingInsert = text;
-    }
-
-    pendingInsert: string = '';
-
-    onMessageFromInput(text: string) {
-        this.sendMessage(text);
-        this.showTaggingPanel = false;
     }
 
     async loadConversation() {

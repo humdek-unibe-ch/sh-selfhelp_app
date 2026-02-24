@@ -212,6 +212,7 @@
                     </ion-button>
                 </div>
                 <app-chat-input *ngIf="!activeDraft"
+                    [variant]="'llm'"
                     placeholder="Reply to patient..."
                     [disabled]="isSending"
                     [maxLength]="4000"

@@ -56,48 +56,18 @@
         <div #messagesEnd></div>
     </div>
 
-    <!-- Tagging panel -->
-    <div *ngIf="taggingEnabled && showTaggingPanel && !isInitialLoading" class="tagging-panel">
-        <div class="tagging-section" *ngIf="therapists.length > 0">
-            <div class="tagging-section-label">Tag therapist</div>
-            <div class="tagging-chips">
-                <ion-chip color="primary" (click)="insertMentionAll()" class="tag-chip">
-                    <ion-icon name="people-outline"></ion-icon>
-                    <ion-label>&#64;therapist</ion-label>
-                </ion-chip>
-                <ion-chip *ngFor="let t of therapists" color="secondary" (click)="insertMention(t)" class="tag-chip">
-                    <ion-icon name="person-outline"></ion-icon>
-                    <ion-label>&#64;{{ t.display || t.name }}</ion-label>
-                </ion-chip>
-            </div>
-        </div>
-        <div class="tagging-section" *ngIf="tagReasons.length > 0">
-            <div class="tagging-section-label">Topics</div>
-            <div class="tagging-chips">
-                <ion-chip *ngFor="let r of tagReasons" color="tertiary" (click)="insertTopic(r)" class="tag-chip">
-                    <ion-label>#{{ r.label || r.key }}</ion-label>
-                </ion-chip>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tagging toggle + Chat input -->
+    <!-- Chat input with integrated tagging -->
     <div *ngIf="!isInitialLoading" class="input-section">
-        <ion-button *ngIf="taggingEnabled && (therapists.length > 0 || tagReasons.length > 0)"
-            fill="clear" size="small" color="medium"
-            (click)="toggleTaggingPanel()"
-            class="tagging-toggle-btn">
-            <ion-icon [name]="showTaggingPanel ? 'chevron-down' : 'pricetag-outline'" slot="start"></ion-icon>
-            {{ showTaggingPanel ? 'Hide tags' : 'Tag' }}
-        </ion-button>
         <app-chat-input
+            [variant]="'llm'"
             [placeholder]="'Type your message here...'"
             [disabled]="isLoading"
             [maxLength]="4000"
             [showCharCount]="true"
             [speechToTextEnabled]="true"
-            [appendText]="pendingInsert"
-            (appendTextConsumed)="pendingInsert = ''"
+            [taggingEnabled]="taggingEnabled"
+            [therapists]="therapists"
+            [tagReasons]="tagReasons"
             (messageSend)="onMessageSend($event)">
         </app-chat-input>
     </div>

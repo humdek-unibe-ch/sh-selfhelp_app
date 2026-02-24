@@ -218,9 +218,27 @@ export class TherapyChatNotificationService implements OnDestroy {
     }
 
     private statesEqual(a: TherapyChatState, b: TherapyChatState): boolean {
+        const configA = a.config;
+        const configB = b.config;
+        const sameConfig = (!configA && !configB) || (
+            !!configA &&
+            !!configB &&
+            configA.icon === configB.icon &&
+            configA.label === configB.label &&
+            configA.position === configB.position &&
+            configA.ai_enabled === configB.ai_enabled &&
+            configA.ai_label === configB.ai_label &&
+            configA.therapist_label === configB.therapist_label
+        );
+
         return a.available === b.available
             && a.url === b.url
             && a.sectionId === b.sectionId
-            && a.unreadCount === b.unreadCount;
+            && a.unreadCount === b.unreadCount
+            && a.mobileIcon === b.mobileIcon
+            && a.role === b.role
+            && a.enableFloating === b.enableFloating
+            && a.position === b.position
+            && sameConfig;
     }
 }

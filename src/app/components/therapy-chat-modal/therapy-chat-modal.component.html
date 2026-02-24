@@ -1,0 +1,31 @@
+<ion-header class="therapy-modal-header">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button (click)="close()" class="close-btn">
+                <ion-icon name="close" slot="icon-only"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>
+            <div class="header-title">
+                <ion-icon [name]="icon" class="header-icon"></ion-icon>
+                <span>{{ displayTitle }}</span>
+                <ion-badge *ngIf="unreadCount > 0" color="danger" class="header-badge">
+                    {{ unreadCount }}
+                </ion-badge>
+            </div>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content #content *ngIf="selfHelp.urls[url]" fullscreen class="therapy-modal-content">
+    <app-basic-style
+        *ngFor="let style of selfHelp.urls[url].content"
+        [style]="style"
+        [url]="url"
+        [ionContent]="content">
+    </app-basic-style>
+    <div *ngIf="isMissing()" class="missing-page">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <p>Page not found</p>
+    </div>
+</ion-content>
