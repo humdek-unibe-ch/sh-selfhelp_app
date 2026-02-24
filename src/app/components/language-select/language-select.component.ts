@@ -6,6 +6,7 @@ import { Language } from 'src/app/selfhelpInterfaces';
     selector: 'app-language-select',
     templateUrl: './language-select.component.html',
     styleUrls: ['./language-select.component.scss'],
+    standalone: false
 })
 export class LanguageSelectComponent extends BasicComponentComponent implements OnInit {
     @Input() override url!: string;

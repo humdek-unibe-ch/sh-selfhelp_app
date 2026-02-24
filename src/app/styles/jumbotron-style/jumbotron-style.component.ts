@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-jumbotron-style',
     templateUrl: './jumbotron-style.component.html',
     styleUrls: ['./jumbotron-style.component.scss'],
+    standalone: false
 })
 export class JumbotronStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: Style;

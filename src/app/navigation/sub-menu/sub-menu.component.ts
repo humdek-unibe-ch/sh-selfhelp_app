@@ -6,6 +6,7 @@ import { SelfHelp, SelfHelpNavigation, Styles } from '../../selfhelpInterfaces';
     selector: 'app-sub-menu',
     templateUrl: './sub-menu.component.html',
     styleUrls: ['./sub-menu.component.scss'],
+    standalone: false
 })
 export class SubMenuComponent implements OnInit {
     @Input() selfhelp!: SelfHelp;

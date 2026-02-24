@@ -1,404 +1,469 @@
 <div [class]="getCss()" class="therapist-dashboard">
 
-    <!-- STATS BAR -->
-    <div class="stats-row">
-        <div class="stat-card">
-            <div class="stat-value">{{ totalConversations }}</div>
-            <div class="stat-label">Patients</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ activeConversations }}</div>
-            <div class="stat-label">Active</div>
-        </div>
-        <div class="stat-card" [class.stat-alert]="unreadAlertCount > 0">
-            <div class="stat-value">{{ unreadAlertCount }}</div>
-            <div class="stat-label">Alerts</div>
-        </div>
+  <!-- STATS BAR -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value">{{ totalConversations }}</div>
+      <div class="stat-label">Patients</div>
     </div>
-
-    <!-- ERROR BANNER -->
-    <div *ngIf="errorMessage" class="error-banner">
-        <ion-icon name="alert-circle-outline"></ion-icon>
-        <span>{{ errorMessage }}</span>
-        <ion-button fill="clear" size="small" (click)="errorMessage = ''">
-            <ion-icon name="close" slot="icon-only"></ion-icon>
-        </ion-button>
+    <div class="stat-card">
+      <div class="stat-value">{{ activeConversations }}</div>
+      <div class="stat-label">Active</div>
     </div>
+    <div class="stat-card" [class.stat-alert]="unreadAlertCount > 0">
+      <div class="stat-value">{{ unreadAlertCount }}</div>
+      <div class="stat-label">Alerts</div>
+    </div>
+  </div>
 
-    <!-- ============================================================ -->
-    <!-- MAIN TAB SWITCHER (Conversations / Alerts)                   -->
-    <!-- ============================================================ -->
-    <ion-segment *ngIf="!selectedConversation" [(ngModel)]="activeTab" (ionChange)="onTabChange()">
-        <ion-segment-button value="conversations">
-            <ion-label>Conversations</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="alerts">
-            <ion-label>
-                Alerts
-                <ion-badge *ngIf="unreadAlertCount > 0" color="danger" class="tab-badge">{{ unreadAlertCount }}</ion-badge>
-            </ion-label>
-        </ion-segment-button>
+  <!-- ERROR BANNER -->
+  @if (errorMessage) {
+    <div class="error-banner">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <span>{{ errorMessage }}</span>
+      <ion-button fill="clear" size="small" (click)="errorMessage = ''">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  }
+
+  <!-- ============================================================ -->
+  <!-- MAIN TAB SWITCHER (Conversations / Alerts)                   -->
+  <!-- ============================================================ -->
+  @if (!selectedConversation) {
+    <ion-segment [(ngModel)]="activeTab" (ionChange)="onTabChange()">
+      <ion-segment-button value="conversations">
+        <ion-label>Conversations</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="alerts">
+        <ion-label>
+          Alerts
+          @if (unreadAlertCount > 0) {
+            <ion-badge color="danger" class="tab-badge">{{ unreadAlertCount }}</ion-badge>
+          }
+        </ion-label>
+      </ion-segment-button>
     </ion-segment>
+  }
 
-    <!-- ============================================================ -->
-    <!-- CONVERSATIONS LIST                                           -->
-    <!-- ============================================================ -->
-    <div *ngIf="!selectedConversation && activeTab === 'conversations'" class="list-panel">
-        <div *ngIf="isLoading" class="loading-state">
-            <ion-spinner name="crescent"></ion-spinner>
+  <!-- ============================================================ -->
+  <!-- CONVERSATIONS LIST                                           -->
+  <!-- ============================================================ -->
+  @if (!selectedConversation && activeTab === 'conversations') {
+    <div class="list-panel">
+      @if (isLoading) {
+        <div class="loading-state">
+          <ion-spinner name="crescent"></ion-spinner>
         </div>
-        <div *ngIf="!isLoading && conversations.length === 0" class="empty-state">
-            <ion-icon name="chatbubbles-outline"></ion-icon>
-            <p>No conversations assigned</p>
+      }
+      @if (!isLoading && conversations.length === 0) {
+        <div class="empty-state">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+          <p>No conversations assigned</p>
         </div>
-        <div *ngIf="conversations.length > 0" class="conv-list">
-            <div *ngFor="let conv of conversations" class="conv-item" (click)="selectConversation(conv)">
-                <div class="conv-avatar">
-                    <ion-icon name="person-circle"></ion-icon>
+      }
+      @if (conversations.length > 0) {
+        <div class="conv-list">
+          @for (conv of conversations; track conv) {
+            <div class="conv-item" (click)="selectConversation(conv)">
+              <div class="conv-avatar">
+                <ion-icon name="person-circle"></ion-icon>
+              </div>
+              <div class="conv-info">
+                <div class="conv-name">{{ getDisplayName(conv) }}</div>
+                <div class="conv-badges">
+                  @if (conv.status) {
+                    <span class="badge" [attr.data-color]="getStatusColor(conv.status)">{{ conv.status }}</span>
+                  }
+                  @if (conv.risk_level) {
+                    <span class="badge" [attr.data-color]="getRiskColor(conv.risk_level)">{{ conv.risk_level }}</span>
+                  }
+                  @if (conv.ai_enabled === false) {
+                    <span class="badge" data-color="warning">manual</span>
+                  }
                 </div>
-                <div class="conv-info">
-                    <div class="conv-name">{{ getDisplayName(conv) }}</div>
-                    <div class="conv-badges">
-                        <span *ngIf="conv.status" class="badge" [attr.data-color]="getStatusColor(conv.status)">{{ conv.status }}</span>
-                        <span *ngIf="conv.risk_level" class="badge" [attr.data-color]="getRiskColor(conv.risk_level)">{{ conv.risk_level }}</span>
-                        <span *ngIf="conv.ai_enabled === false" class="badge" data-color="warning">manual</span>
-                    </div>
-                    <div *ngIf="conv.last_message_at" class="conv-time">{{ formatTime(conv.last_message_at) }}</div>
-                </div>
-                <div class="conv-end">
-                    <ion-badge *ngIf="getConvUnread(conv) > 0" color="primary" class="unread-badge">{{ getConvUnread(conv) }}</ion-badge>
-                    <ion-icon name="chevron-forward-outline" class="conv-arrow"></ion-icon>
-                </div>
+                @if (conv.last_message_at) {
+                  <div class="conv-time">{{ formatTime(conv.last_message_at) }}</div>
+                }
+              </div>
+              <div class="conv-end">
+                @if (getConvUnread(conv) > 0) {
+                  <ion-badge color="primary" class="unread-badge">{{ getConvUnread(conv) }}</ion-badge>
+                }
+                <ion-icon name="chevron-forward-outline" class="conv-arrow"></ion-icon>
+              </div>
             </div>
+          }
         </div>
+      }
     </div>
+  }
 
-    <!-- ============================================================ -->
-    <!-- ALERTS LIST                                                  -->
-    <!-- ============================================================ -->
-    <div *ngIf="!selectedConversation && activeTab === 'alerts'" class="list-panel">
-        <div *ngIf="alerts.length === 0" class="empty-state">
-            <ion-icon name="notifications-outline"></ion-icon>
-            <p>No alerts</p>
+  <!-- ============================================================ -->
+  <!-- ALERTS LIST                                                  -->
+  <!-- ============================================================ -->
+  @if (!selectedConversation && activeTab === 'alerts') {
+    <div class="list-panel">
+      @if (alerts.length === 0) {
+        <div class="empty-state">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <p>No alerts</p>
         </div>
-        <div *ngIf="alerts.length > 0" class="alerts-container">
-            <div class="alerts-header" *ngIf="unreadAlertCount > 0">
-                <ion-button size="small" fill="clear" (click)="markAllAlertsRead()">
-                    <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
-                    Mark all read
+      }
+      @if (alerts.length > 0) {
+        <div class="alerts-container">
+          @if (unreadAlertCount > 0) {
+            <div class="alerts-header">
+              <ion-button size="small" fill="clear" (click)="markAllAlertsRead()">
+                <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+                Mark all read
+              </ion-button>
+            </div>
+          }
+          @for (alert of alerts; track alert) {
+            <div class="alert-item" [class.alert-unread]="!alert.is_read"
+              (click)="onAlertClick(alert)">
+              <div class="alert-icon">
+                <ion-icon [name]="alert.is_read ? 'notifications-outline' : 'notifications'"
+                [color]="alert.is_read ? 'medium' : 'danger'"></ion-icon>
+              </div>
+              <div class="alert-content">
+                <div class="alert-type">{{ alert.type }}</div>
+                <div class="alert-message">{{ alert.message }}</div>
+                @if (alert.subject_name) {
+                  <div class="alert-patient">Patient: {{ alert.subject_name }}</div>
+                }
+                <div class="alert-time">{{ formatTime(alert.created_at) }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ============================================================ -->
+  <!-- CONVERSATION DETAIL VIEW                                     -->
+  <!-- ============================================================ -->
+  @if (selectedConversation) {
+    <div class="detail-panel">
+      <!-- Header -->
+      <div class="detail-header">
+        <ion-button fill="clear" size="small" (click)="backToList()" class="back-btn">
+          <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+        </ion-button>
+        <div class="header-info">
+          <span class="patient-name">{{ getDisplayName(selectedConversation) }}</span>
+          <div class="header-badges">
+            @if (selectedConversation.risk_level) {
+              <ion-badge
+                [color]="getRiskColor(selectedConversation.risk_level)">
+                {{ selectedConversation.risk_level }}
+              </ion-badge>
+            }
+            @if (selectedConversation.status) {
+              <ion-badge
+                [color]="getStatusColor(selectedConversation.status)">
+                {{ selectedConversation.status }}
+              </ion-badge>
+            }
+            @if (selectedConversation.ai_enabled === false) {
+              <ion-badge color="warning">manual</ion-badge>
+            }
+          </div>
+        </div>
+      </div>
+      <!-- Sub-tabs: Chat | Notes | Settings -->
+      <ion-segment [(ngModel)]="conversationTab" class="detail-tabs" mode="ios">
+        <ion-segment-button value="chat">
+          <ion-label>Chat</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="notes">
+          <ion-label>
+            Notes
+            @if (selectedNotes.length > 0) {
+              <ion-badge color="tertiary" class="tab-badge">{{ selectedNotes.length }}</ion-badge>
+            }
+          </ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="settings">
+          <ion-label>Settings</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <!-- ======== CHAT TAB ======== -->
+      @if (conversationTab === 'chat') {
+        <div class="chat-panel">
+          <!-- Messages -->
+          <div class="messages-area" #messagesArea>
+            @if (isLoadingMessages) {
+              <div class="loading-state">
+                <ion-spinner name="crescent"></ion-spinner>
+              </div>
+            }
+            @for (msg of selectedMessages; track msg) {
+              <app-chat-message
+                [content]="getMessageContent(msg)"
+                [senderType]="getSenderClass(msg)"
+                [senderLabel]="getSenderLabel(msg)"
+                [timestamp]="formatTime(msg.created_at)"
+                [isOwn]="getSenderClass(msg) === 'therapist'">
+              </app-chat-message>
+            }
+            @if (!isLoadingMessages && selectedMessages.length === 0) {
+              <div class="empty-state compact">
+                <ion-icon name="chatbubble-outline"></ion-icon>
+                <p>No messages yet</p>
+              </div>
+            }
+            <div #messagesEnd></div>
+          </div>
+          <!-- Active Draft (positioned above input) -->
+          @if (activeDraft) {
+            <div class="draft-panel">
+              <div class="draft-header">
+                <ion-icon name="sparkles" color="tertiary"></ion-icon>
+                <span>AI-Generated Draft</span>
+              </div>
+              <ion-textarea [(ngModel)]="draftEditText"
+                [autoGrow]="true"
+                [rows]="3"
+              class="draft-textarea"></ion-textarea>
+              <div class="draft-actions">
+                <ion-button size="small" fill="solid" color="primary"
+                  [disabled]="isSending || !draftEditText.trim()" (click)="sendDraft()">
+                  <ion-icon name="send" slot="start"></ion-icon>
+                  Send
                 </ion-button>
+                <ion-button size="small" fill="outline" color="tertiary"
+                  [disabled]="isCreatingDraft" (click)="regenerateDraft()">
+                  <ion-icon name="refresh" slot="start"></ion-icon>
+                  Redo
+                </ion-button>
+                <ion-button size="small" fill="clear" color="medium" (click)="discardDraft()">
+                  Discard
+                </ion-button>
+              </div>
             </div>
-            <div *ngFor="let alert of alerts" class="alert-item" [class.alert-unread]="!alert.is_read"
-                (click)="onAlertClick(alert)">
-                <div class="alert-icon">
-                    <ion-icon [name]="alert.is_read ? 'notifications-outline' : 'notifications'"
-                        [color]="alert.is_read ? 'medium' : 'danger'"></ion-icon>
-                </div>
-                <div class="alert-content">
-                    <div class="alert-type">{{ alert.type }}</div>
-                    <div class="alert-message">{{ alert.message }}</div>
-                    <div *ngIf="alert.subject_name" class="alert-patient">Patient: {{ alert.subject_name }}</div>
-                    <div class="alert-time">{{ formatTime(alert.created_at) }}</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- CONVERSATION DETAIL VIEW                                     -->
-    <!-- ============================================================ -->
-    <div *ngIf="selectedConversation" class="detail-panel">
-
-        <!-- Header -->
-        <div class="detail-header">
-            <ion-button fill="clear" size="small" (click)="backToList()" class="back-btn">
-                <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
-            </ion-button>
-            <div class="header-info">
-                <span class="patient-name">{{ getDisplayName(selectedConversation) }}</span>
-                <div class="header-badges">
-                    <ion-badge *ngIf="selectedConversation.risk_level"
-                        [color]="getRiskColor(selectedConversation.risk_level)">
-                        {{ selectedConversation.risk_level }}
-                    </ion-badge>
-                    <ion-badge *ngIf="selectedConversation.status"
-                        [color]="getStatusColor(selectedConversation.status)">
-                        {{ selectedConversation.status }}
-                    </ion-badge>
-                    <ion-badge *ngIf="selectedConversation.ai_enabled === false" color="warning">manual</ion-badge>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sub-tabs: Chat | Notes | Settings -->
-        <ion-segment [(ngModel)]="conversationTab" class="detail-tabs" mode="ios">
-            <ion-segment-button value="chat">
-                <ion-label>Chat</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="notes">
-                <ion-label>
-                    Notes
-                    <ion-badge *ngIf="selectedNotes.length > 0" color="tertiary" class="tab-badge">{{ selectedNotes.length }}</ion-badge>
-                </ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="settings">
-                <ion-label>Settings</ion-label>
-            </ion-segment-button>
-        </ion-segment>
-
-        <!-- ======== CHAT TAB ======== -->
-        <div *ngIf="conversationTab === 'chat'" class="chat-panel">
-
-            <!-- Messages -->
-            <div class="messages-area" #messagesArea>
-                <div *ngIf="isLoadingMessages" class="loading-state">
-                    <ion-spinner name="crescent"></ion-spinner>
-                </div>
-
-                <app-chat-message
-                    *ngFor="let msg of selectedMessages"
-                    [content]="getMessageContent(msg)"
-                    [senderType]="getSenderClass(msg)"
-                    [senderLabel]="getSenderLabel(msg)"
-                    [timestamp]="formatTime(msg.created_at)"
-                    [isOwn]="getSenderClass(msg) === 'therapist'">
-                </app-chat-message>
-
-                <div *ngIf="!isLoadingMessages && selectedMessages.length === 0" class="empty-state compact">
-                    <ion-icon name="chatbubble-outline"></ion-icon>
-                    <p>No messages yet</p>
-                </div>
-                <div #messagesEnd></div>
-            </div>
-
-            <!-- Active Draft (positioned above input) -->
-            <div *ngIf="activeDraft" class="draft-panel">
-                <div class="draft-header">
-                    <ion-icon name="sparkles" color="tertiary"></ion-icon>
-                    <span>AI-Generated Draft</span>
-                </div>
-                <ion-textarea [(ngModel)]="draftEditText"
-                    [autoGrow]="true"
-                    [rows]="3"
-                    class="draft-textarea"></ion-textarea>
-                <div class="draft-actions">
-                    <ion-button size="small" fill="solid" color="primary"
-                        [disabled]="isSending || !draftEditText.trim()" (click)="sendDraft()">
-                        <ion-icon name="send" slot="start"></ion-icon>
-                        Send
-                    </ion-button>
-                    <ion-button size="small" fill="outline" color="tertiary"
-                        [disabled]="isCreatingDraft" (click)="regenerateDraft()">
-                        <ion-icon name="refresh" slot="start"></ion-icon>
-                        Redo
-                    </ion-button>
-                    <ion-button size="small" fill="clear" color="medium" (click)="discardDraft()">
-                        Discard
-                    </ion-button>
-                </div>
-            </div>
-
-            <!-- Bottom action area: AI buttons + input -->
-            <div class="chat-bottom-area">
-                <div class="ai-action-bar" *ngIf="!activeDraft">
-                    <ion-button size="small" fill="outline" color="tertiary"
-                        [disabled]="isCreatingDraft" (click)="createAIDraft()">
-                        <ion-icon name="sparkles-outline" slot="start"></ion-icon>
-                        {{ isCreatingDraft ? 'Generating...' : 'AI Draft' }}
-                    </ion-button>
-                    <ion-button size="small" fill="outline" color="secondary"
-                        [disabled]="isGeneratingSummary" (click)="generateSummary()">
-                        <ion-icon name="document-text-outline" slot="start"></ion-icon>
-                        {{ isGeneratingSummary ? 'Summarizing...' : 'Summarize' }}
-                    </ion-button>
-                </div>
-                <app-chat-input *ngIf="!activeDraft"
-                    [variant]="'llm'"
-                    placeholder="Reply to patient..."
-                    [disabled]="isSending"
-                    [maxLength]="4000"
-                    [showCharCount]="true"
-                    [speechToTextEnabled]="true"
-                    (messageSend)="onMessageSend($event)">
-                </app-chat-input>
-            </div>
-        </div>
-
-        <!-- ======== NOTES TAB ======== -->
-        <div *ngIf="conversationTab === 'notes'" class="notes-panel">
-
-            <!-- Summary action bar -->
-            <div class="summary-action-bar">
+          }
+          <!-- Bottom action area: AI buttons + input -->
+          <div class="chat-bottom-area">
+            @if (!activeDraft) {
+              <div class="ai-action-bar">
+                <ion-button size="small" fill="outline" color="tertiary"
+                  [disabled]="isCreatingDraft" (click)="createAIDraft()">
+                  <ion-icon name="sparkles-outline" slot="start"></ion-icon>
+                  {{ isCreatingDraft ? 'Generating...' : 'AI Draft' }}
+                </ion-button>
                 <ion-button size="small" fill="outline" color="secondary"
-                    [disabled]="isGeneratingSummary" (click)="generateSummary()">
-                    <ion-icon name="document-text-outline" slot="start"></ion-icon>
-                    {{ isGeneratingSummary ? 'Summarizing...' : (pendingSummary || selectedNotes.length > 0 ? 'Re-Summarize' : 'Summarize Conversation') }}
+                  [disabled]="isGeneratingSummary" (click)="generateSummary()">
+                  <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                  {{ isGeneratingSummary ? 'Summarizing...' : 'Summarize' }}
                 </ion-button>
+              </div>
+            }
+            @if (!activeDraft) {
+              <app-chat-input
+                [variant]="'llm'"
+                placeholder="Reply to patient..."
+                [disabled]="isSending"
+                [maxLength]="4000"
+                [showCharCount]="true"
+                [speechToTextEnabled]="true"
+                (messageSend)="onMessageSend($event)">
+              </app-chat-input>
+            }
+          </div>
+        </div>
+      }
+      <!-- ======== NOTES TAB ======== -->
+      @if (conversationTab === 'notes') {
+        <div class="notes-panel">
+          <!-- Summary action bar -->
+          <div class="summary-action-bar">
+            <ion-button size="small" fill="outline" color="secondary"
+              [disabled]="isGeneratingSummary" (click)="generateSummary()">
+              <ion-icon name="document-text-outline" slot="start"></ion-icon>
+              {{ isGeneratingSummary ? 'Summarizing...' : (pendingSummary || selectedNotes.length > 0 ? 'Re-Summarize' : 'Summarize Conversation') }}
+            </ion-button>
+          </div>
+          <!-- Loading state while generating summary -->
+          @if (isGeneratingSummary) {
+            <div class="summary-loading-card">
+              <ion-spinner name="crescent" color="secondary"></ion-spinner>
+              <p>Generating AI summary of the conversation...</p>
             </div>
-
-            <!-- Loading state while generating summary -->
-            <div *ngIf="isGeneratingSummary" class="summary-loading-card">
-                <ion-spinner name="crescent" color="secondary"></ion-spinner>
-                <p>Generating AI summary of the conversation...</p>
+          }
+          <!-- Pending AI Summary (shown at top when generated, before saving) -->
+          @if (pendingSummary && !isGeneratingSummary) {
+            <div class="summary-preview-card">
+              <div class="summary-preview-header">
+                <ion-icon name="sparkles" color="tertiary"></ion-icon>
+                <span>AI Summary</span>
+              </div>
+              <div class="summary-preview-body">
+                <app-markdown-renderer [content]="pendingSummary"></app-markdown-renderer>
+              </div>
+              <div class="summary-preview-actions">
+                <ion-button size="small" fill="solid" color="primary" (click)="saveSummaryAsNote()">
+                  <ion-icon name="save-outline" slot="start"></ion-icon>
+                  Save as Note
+                </ion-button>
+                <ion-button size="small" fill="outline" color="secondary"
+                  [disabled]="isGeneratingSummary" (click)="generateSummary()">
+                  <ion-icon name="refresh" slot="start"></ion-icon>
+                  Re-Summarize
+                </ion-button>
+                <ion-button size="small" fill="clear" color="medium" (click)="pendingSummary = ''">
+                  Dismiss
+                </ion-button>
+              </div>
             </div>
-
-            <!-- Pending AI Summary (shown at top when generated, before saving) -->
-            <div *ngIf="pendingSummary && !isGeneratingSummary" class="summary-preview-card">
-                <div class="summary-preview-header">
-                    <ion-icon name="sparkles" color="tertiary"></ion-icon>
-                    <span>AI Summary</span>
-                </div>
-                <div class="summary-preview-body">
-                    <app-markdown-renderer [content]="pendingSummary"></app-markdown-renderer>
-                </div>
-                <div class="summary-preview-actions">
-                    <ion-button size="small" fill="solid" color="primary" (click)="saveSummaryAsNote()">
-                        <ion-icon name="save-outline" slot="start"></ion-icon>
-                        Save as Note
-                    </ion-button>
-                    <ion-button size="small" fill="outline" color="secondary"
-                        [disabled]="isGeneratingSummary" (click)="generateSummary()">
-                        <ion-icon name="refresh" slot="start"></ion-icon>
-                        Re-Summarize
-                    </ion-button>
-                    <ion-button size="small" fill="clear" color="medium" (click)="pendingSummary = ''">
-                        Dismiss
-                    </ion-button>
-                </div>
+          }
+          <!-- Add note -->
+          <div class="add-note-card">
+            <ion-textarea [(ngModel)]="noteText"
+              placeholder="Write a clinical note..."
+              [autoGrow]="true" [rows]="3"
+            class="note-textarea"></ion-textarea>
+            <div class="add-note-footer">
+              <ion-button size="small" fill="solid" color="primary"
+                [disabled]="!noteText.trim() || isAddingNote"
+                (click)="addNote()">
+                <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+                {{ isAddingNote ? 'Adding...' : 'Add Note' }}
+              </ion-button>
             </div>
-
-            <!-- Add note -->
-            <div class="add-note-card">
-                <ion-textarea [(ngModel)]="noteText"
-                    placeholder="Write a clinical note..."
-                    [autoGrow]="true" [rows]="3"
+          </div>
+          <!-- Notes list -->
+          <div class="notes-list">
+            @if (selectedNotes.length === 0 && !pendingSummary && !isGeneratingSummary) {
+              <div class="empty-state compact">
+                <ion-icon name="document-text-outline"></ion-icon>
+                <p>No notes yet. Add your first clinical note or generate an AI summary above.</p>
+              </div>
+            }
+            @for (note of selectedNotes; track note) {
+              <div class="note-card"
+                [class.note-ai]="note.note_type === 'ai_summary'">
+                <div class="note-top">
+                  <div class="note-meta">
+                    <ion-badge [color]="note.note_type === 'ai_summary' ? 'tertiary' : 'primary'" class="note-type-badge">
+                      <ion-icon [name]="note.note_type === 'ai_summary' ? 'sparkles' : 'create'" slot="start"></ion-icon>
+                      {{ note.note_type === 'ai_summary' ? 'AI Summary' : 'Note' }}
+                    </ion-badge>
+                    <span class="note-date">{{ formatTime(note.created_at) }}</span>
+                    @if (note.author_name) {
+                      <span class="note-author">by {{ note.author_name }}</span>
+                    }
+                  </div>
+                  @if (editingNoteId !== note.id) {
+                    <div class="note-actions">
+                      <ion-button fill="clear" size="small" color="primary" (click)="startEditNote(note)">
+                        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                      </ion-button>
+                      <ion-button fill="clear" size="small" color="danger" (click)="deleteNote(note)">
+                        <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                      </ion-button>
+                    </div>
+                  }
+                </div>
+                <!-- View mode -->
+                @if (editingNoteId !== note.id) {
+                  <div class="note-body">
+                    <app-markdown-renderer [content]="note.content"></app-markdown-renderer>
+                  </div>
+                }
+                <!-- Edit mode -->
+                @if (editingNoteId === note.id) {
+                  <div class="note-edit">
+                    <ion-textarea [(ngModel)]="editingNoteText"
+                      [autoGrow]="true" [rows]="3"
                     class="note-textarea"></ion-textarea>
-                <div class="add-note-footer">
-                    <ion-button size="small" fill="solid" color="primary"
-                        [disabled]="!noteText.trim() || isAddingNote"
-                        (click)="addNote()">
-                        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-                        {{ isAddingNote ? 'Adding...' : 'Add Note' }}
-                    </ion-button>
-                </div>
-            </div>
-
-            <!-- Notes list -->
-            <div class="notes-list">
-                <div *ngIf="selectedNotes.length === 0 && !pendingSummary && !isGeneratingSummary" class="empty-state compact">
-                    <ion-icon name="document-text-outline"></ion-icon>
-                    <p>No notes yet. Add your first clinical note or generate an AI summary above.</p>
-                </div>
-                <div *ngFor="let note of selectedNotes" class="note-card"
-                    [class.note-ai]="note.note_type === 'ai_summary'">
-                    <div class="note-top">
-                        <div class="note-meta">
-                            <ion-badge [color]="note.note_type === 'ai_summary' ? 'tertiary' : 'primary'" class="note-type-badge">
-                                <ion-icon [name]="note.note_type === 'ai_summary' ? 'sparkles' : 'create'" slot="start"></ion-icon>
-                                {{ note.note_type === 'ai_summary' ? 'AI Summary' : 'Note' }}
-                            </ion-badge>
-                            <span class="note-date">{{ formatTime(note.created_at) }}</span>
-                            <span *ngIf="note.author_name" class="note-author">by {{ note.author_name }}</span>
-                        </div>
-                        <div class="note-actions" *ngIf="editingNoteId !== note.id">
-                            <ion-button fill="clear" size="small" color="primary" (click)="startEditNote(note)">
-                                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
-                            </ion-button>
-                            <ion-button fill="clear" size="small" color="danger" (click)="deleteNote(note)">
-                                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-                            </ion-button>
-                        </div>
+                    <div class="note-edit-actions">
+                      <ion-button size="small" fill="solid" color="primary"
+                        [disabled]="!editingNoteText.trim()"
+                        (click)="saveEditNote(note)">
+                        Save
+                      </ion-button>
+                      <ion-button size="small" fill="outline" color="medium" (click)="cancelEditNote()">
+                        Cancel
+                      </ion-button>
                     </div>
-
-                    <!-- View mode -->
-                    <div *ngIf="editingNoteId !== note.id" class="note-body">
-                        <app-markdown-renderer [content]="note.content"></app-markdown-renderer>
-                    </div>
-
-                    <!-- Edit mode -->
-                    <div *ngIf="editingNoteId === note.id" class="note-edit">
-                        <ion-textarea [(ngModel)]="editingNoteText"
-                            [autoGrow]="true" [rows]="3"
-                            class="note-textarea"></ion-textarea>
-                        <div class="note-edit-actions">
-                            <ion-button size="small" fill="solid" color="primary"
-                                [disabled]="!editingNoteText.trim()"
-                                (click)="saveEditNote(note)">
-                                Save
-                            </ion-button>
-                            <ion-button size="small" fill="outline" color="medium" (click)="cancelEditNote()">
-                                Cancel
-                            </ion-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
-
-        <!-- ======== SETTINGS TAB ======== -->
-        <div *ngIf="conversationTab === 'settings'" class="settings-panel">
-
-            <!-- AI Mode -->
-            <div class="setting-card">
-                <div class="setting-card-header">
-                    <ion-icon name="hardware-chip-outline" color="primary"></ion-icon>
-                    <span>AI Mode</span>
-                </div>
-                <div class="setting-card-body">
-                    <div class="ai-mode-toggle">
-                        <div class="ai-mode-option"
-                            [class.active]="isAIEnabled()"
-                            (click)="setAIMode(true)">
-                            <ion-icon name="sparkles"></ion-icon>
-                            <div class="mode-label">AI Assisted</div>
-                            <div class="mode-desc">AI responds with therapist oversight</div>
-                        </div>
-                        <div class="ai-mode-option"
-                            [class.active]="!isAIEnabled()"
-                            (click)="setAIMode(false)">
-                            <ion-icon name="person"></ion-icon>
-                            <div class="mode-label">Therapist Only</div>
-                            <div class="mode-desc">Only human therapist responds</div>
-                        </div>
-                    </div>
-                </div>
+      }
+      <!-- ======== SETTINGS TAB ======== -->
+      @if (conversationTab === 'settings') {
+        <div class="settings-panel">
+          <!-- AI Mode -->
+          <div class="setting-card">
+            <div class="setting-card-header">
+              <ion-icon name="hardware-chip-outline" color="primary"></ion-icon>
+              <span>AI Mode</span>
             </div>
-
-            <!-- Risk Level -->
-            <div class="setting-card">
-                <div class="setting-card-header">
-                    <ion-icon name="shield-outline" color="primary"></ion-icon>
-                    <span>Risk Level</span>
+            <div class="setting-card-body">
+              <div class="ai-mode-toggle">
+                <div class="ai-mode-option"
+                  [class.active]="isAIEnabled()"
+                  (click)="setAIMode(true)">
+                  <ion-icon name="sparkles"></ion-icon>
+                  <div class="mode-label">AI Assisted</div>
+                  <div class="mode-desc">AI responds with therapist oversight</div>
                 </div>
-                <div class="setting-card-body">
-                    <div class="option-chips">
-                        <ion-chip *ngFor="let level of ['low', 'medium', 'high', 'critical']"
-                            [color]="getRiskColor(level)"
-                            [outline]="selectedConversation.risk_level !== level"
-                            (click)="setRisk(level)">
-                            <ion-label>{{ level | titlecase }}</ion-label>
-                        </ion-chip>
-                    </div>
+                <div class="ai-mode-option"
+                  [class.active]="!isAIEnabled()"
+                  (click)="setAIMode(false)">
+                  <ion-icon name="person"></ion-icon>
+                  <div class="mode-label">Therapist Only</div>
+                  <div class="mode-desc">Only human therapist responds</div>
                 </div>
+              </div>
             </div>
-
-            <!-- Conversation Status -->
-            <div class="setting-card">
-                <div class="setting-card-header">
-                    <ion-icon name="flag-outline" color="primary"></ion-icon>
-                    <span>Conversation Status</span>
-                </div>
-                <div class="setting-card-body">
-                    <div class="option-chips">
-                        <ion-chip *ngFor="let s of ['active', 'paused', 'closed']"
-                            [color]="getStatusColor(s)"
-                            [outline]="selectedConversation.status !== s"
-                            (click)="setStatus(s)">
-                            <ion-label>{{ s | titlecase }}</ion-label>
-                        </ion-chip>
-                    </div>
-                </div>
+          </div>
+          <!-- Risk Level -->
+          <div class="setting-card">
+            <div class="setting-card-header">
+              <ion-icon name="shield-outline" color="primary"></ion-icon>
+              <span>Risk Level</span>
             </div>
+            <div class="setting-card-body">
+              <div class="option-chips">
+                @for (level of ['low', 'medium', 'high', 'critical']; track level) {
+                  <ion-chip
+                    [color]="getRiskColor(level)"
+                    [outline]="selectedConversation.risk_level !== level"
+                    (click)="setRisk(level)">
+                    <ion-label>{{ level | titlecase }}</ion-label>
+                  </ion-chip>
+                }
+              </div>
+            </div>
+          </div>
+          <!-- Conversation Status -->
+          <div class="setting-card">
+            <div class="setting-card-header">
+              <ion-icon name="flag-outline" color="primary"></ion-icon>
+              <span>Conversation Status</span>
+            </div>
+            <div class="setting-card-body">
+              <div class="option-chips">
+                @for (s of ['active', 'paused', 'closed']; track s) {
+                  <ion-chip
+                    [color]="getStatusColor(s)"
+                    [outline]="selectedConversation.status !== s"
+                    (click)="setStatus(s)">
+                    <ion-label>{{ s | titlecase }}</ion-label>
+                  </ion-chip>
+                }
+              </div>
+            </div>
+          </div>
         </div>
+      }
     </div>
+  }
 </div>

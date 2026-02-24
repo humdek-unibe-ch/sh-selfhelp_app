@@ -12,6 +12,7 @@ import { UtilsService } from 'src/app/services/utils.service';
     selector: 'app-shepherd-js-style',
     templateUrl: './shepherd-js-style.component.html',
     styleUrls: ['./shepherd-js-style.component.scss'],
+    standalone: false
 })
 export class ShepherdJsStyleComponent extends BasicStyleComponent implements AfterViewInit {
     @Input() override style!: ShepherdJSStyle;
@@ -138,28 +139,31 @@ export class ShepherdJsStyleComponent extends BasicStyleComponent implements Aft
             this.tour.start();
             this.tour.show(currentShepherdState.step_index);
             let shepherdTour = this;
-            this.tour.tourObject.on('show', function (event: any) {
-                if (currentShepherdState && currentShepherdState.tourName) {
-                    currentShepherdState.step_index = event.tour.steps.indexOf(event.step);
-                    if (!currentShepherdState.trigger_type) {
-                        currentShepherdState.trigger_type = 'started';
-                    } else if (currentShepherdState.trigger_type !== 'finished') {
-                        currentShepherdState.trigger_type = 'updated';
+            const tourObject = this.tour.tourObject;
+            if (tourObject) {
+                tourObject.on('show', function (event: any) {
+                    if (currentShepherdState && currentShepherdState.tourName) {
+                        currentShepherdState.step_index = event.tour.steps.indexOf(event.step);
+                        if (!currentShepherdState.trigger_type) {
+                            currentShepherdState.trigger_type = 'started';
+                        } else if (currentShepherdState.trigger_type !== 'finished') {
+                            currentShepherdState.trigger_type = 'updated';
+                        }
+                        shepherdTour.saveShepherdState(currentShepherdState, true);
                     }
-                    shepherdTour.saveShepherdState(currentShepherdState, true);
-                }
-                setTimeout(() => {
-                    // move it inside ion-app so thr elements have the same stacking context
-                    $('.shepherd-modal-overlay-container').appendTo('ion-app');
-                    $('.shepherd-element').appendTo('ion-app');
-                }, 50);
-            });
+                    setTimeout(() => {
+                        // move it inside ion-app so thr elements have the same stacking context
+                        $('.shepherd-modal-overlay-container').appendTo('ion-app');
+                        $('.shepherd-element').appendTo('ion-app');
+                    }, 50);
+                });
 
-            // Catch the complete event
-            this.tour.tourObject.on('complete', function () {
-                currentShepherdState['trigger_type'] = 'finished';
-                shepherdTour.saveShepherdState(currentShepherdState, true);
-            });
+                // Catch the complete event
+                tourObject.on('complete', function () {
+                    currentShepherdState['trigger_type'] = 'finished';
+                    shepherdTour.saveShepherdState(currentShepherdState, true);
+                });
+            }
         } else {
             this.tour.show(currentShepherdState.step_index);
         }

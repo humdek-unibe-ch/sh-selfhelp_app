@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
     selector: 'app-container-style',
     templateUrl: './container-style.component.html',
     styleUrls: ['./container-style.component.scss'],
+    standalone: false
 })
 export class ContainerStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ContainerStyle;

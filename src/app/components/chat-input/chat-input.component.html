@@ -1,148 +1,172 @@
 <div
-    class="chat-input-wrapper"
-    [class.variant-default]="variant === 'default'"
-    [class.variant-llm]="variant === 'llm'"
-    [class.dragging]="isDragging"
-    (dragover)="onDragOver($event)"
-    (dragleave)="onDragLeave($event)"
-    (drop)="onDrop($event)">
+  class="chat-input-wrapper"
+  [class.variant-default]="variant === 'default'"
+  [class.variant-llm]="variant === 'llm'"
+  [class.dragging]="isDragging"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)">
 
-    <input
-        #fileInput
-        type="file"
-        class="hidden-file-input"
-        [accept]="fileInputAccept"
-        [multiple]="fileInputMultiple"
-        (change)="onFileInputChange($event)">
+  <input
+    #fileInput
+    type="file"
+    class="hidden-file-input"
+    [accept]="fileInputAccept"
+    [multiple]="fileInputMultiple"
+    (change)="onFileInputChange($event)">
 
     <!-- Tagging panel (expanded) -->
-    <div *ngIf="hasTaggingOptions && showTaggingPanel" class="tagging-panel">
-        <div class="tagging-section" *ngIf="therapists.length > 0">
+    @if (hasTaggingOptions && showTaggingPanel) {
+      <div class="tagging-panel">
+        @if (therapists.length > 0) {
+          <div class="tagging-section">
             <div class="tagging-section-label">
-                <ion-icon name="people-outline"></ion-icon> Therapists
+              <ion-icon name="people-outline"></ion-icon> Therapists
             </div>
             <div class="tagging-chips">
-                <ion-chip color="primary" (click)="insertMentionAll()" class="tag-chip">
-                    <ion-icon name="people-outline"></ion-icon>
-                    <ion-label>&#64;therapist</ion-label>
+              <ion-chip color="primary" (click)="insertMentionAll()" class="tag-chip">
+                <ion-icon name="people-outline"></ion-icon>
+                <ion-label>&#64;therapist</ion-label>
+              </ion-chip>
+              @for (t of therapists; track t) {
+                <ion-chip color="secondary" (click)="insertMention(t)" class="tag-chip">
+                  <ion-icon name="person-outline"></ion-icon>
+                  <ion-label>&#64;{{ t.display || t.name }}</ion-label>
                 </ion-chip>
-                <ion-chip *ngFor="let t of therapists" color="secondary" (click)="insertMention(t)" class="tag-chip">
-                    <ion-icon name="person-outline"></ion-icon>
-                    <ion-label>&#64;{{ t.display || t.name }}</ion-label>
-                </ion-chip>
+              }
             </div>
-        </div>
-        <div class="tagging-section" *ngIf="tagReasons.length > 0">
+          </div>
+        }
+        @if (tagReasons.length > 0) {
+          <div class="tagging-section">
             <div class="tagging-section-label">
-                <ion-icon name="pricetag-outline"></ion-icon> Topics
+              <ion-icon name="pricetag-outline"></ion-icon> Topics
             </div>
             <div class="tagging-chips">
-                <ion-chip *ngFor="let r of tagReasons" color="tertiary" (click)="insertTopic(r)" class="tag-chip">
-                    <ion-label>#{{ r.label || r.key }}</ion-label>
+              @for (r of tagReasons; track r) {
+                <ion-chip color="tertiary" (click)="insertTopic(r)" class="tag-chip">
+                  <ion-label>#{{ r.label || r.key }}</ion-label>
                 </ion-chip>
+              }
             </div>
-        </div>
-    </div>
+          </div>
+        }
+      </div>
+    }
 
     <!-- Tagging toggle -->
-    <ion-button *ngIf="hasTaggingOptions"
+    @if (hasTaggingOptions) {
+      <ion-button
         fill="clear" size="small" color="medium"
         (click)="toggleTaggingPanel()"
         class="tagging-toggle-btn">
         <ion-icon [name]="showTaggingPanel ? 'chevron-down' : 'pricetag-outline'" slot="start"></ion-icon>
         {{ showTaggingPanel ? 'Hide' : 'Tag' }}
-    </ion-button>
+      </ion-button>
+    }
 
     <!-- Inline mention popup -->
-    <div *ngIf="mentionActive && mentionSuggestions.length > 0" class="mention-popup">
+    @if (mentionActive && mentionSuggestions.length > 0) {
+      <div class="mention-popup">
         <div class="mention-header">
-            <ion-icon [name]="mentionActive === 'therapist' ? 'people-outline' : 'pricetag-outline'"></ion-icon>
-            {{ mentionActive === 'therapist' ? 'Mention therapist' : 'Select topic' }}
+          <ion-icon [name]="mentionActive === 'therapist' ? 'people-outline' : 'pricetag-outline'"></ion-icon>
+          {{ mentionActive === 'therapist' ? 'Mention therapist' : 'Select topic' }}
         </div>
-        <div
-            *ngFor="let s of mentionSuggestions; let i = index"
+        @for (s of mentionSuggestions; track s; let i = $index) {
+          <div
             class="mention-item"
             [class.mention-item-active]="i === mentionSelectedIndex"
             (click)="selectMentionSuggestion(s)"
             (mouseenter)="mentionSelectedIndex = i">
             <ion-icon [name]="s.icon" [color]="s.color"></ion-icon>
             <span class="mention-label">{{ s.label }}</span>
-        </div>
-    </div>
+          </div>
+        }
+      </div>
+    }
 
     <ion-textarea
-        [ngModel]="messageText"
-        (ngModelChange)="onMessageTextChanged($event)"
-        [placeholder]="placeholder"
-        [rows]="rows"
-        auto-grow="true"
-        [disabled]="disabled"
-        [maxlength]="maxLength > 0 ? maxLength : null"
-        (keydown)="onKeyDown($event)"
-        class="chat-textarea">
+      [ngModel]="messageText"
+      (ngModelChange)="onMessageTextChanged($event)"
+      [placeholder]="placeholder"
+      [rows]="rows"
+      auto-grow="true"
+      [disabled]="disabled"
+      [maxlength]="maxLength > 0 ? maxLength : null"
+      (keydown)="onKeyDown($event)"
+      class="chat-textarea">
     </ion-textarea>
 
     <div class="actions-row">
-        <div class="left-actions">
-            <ion-button
-                *ngIf="showAttachButton"
-                fill="clear"
-                size="small"
-                (click)="onAttachClick()"
-                [disabled]="attachDisabled || disabled"
-                [title]="attachButtonTitle"
-                class="action-btn">
-                <ion-icon name="attach"></ion-icon>
-            </ion-button>
-            <ion-button
-                *ngIf="showDisabledAttachButton"
-                fill="clear"
-                size="small"
-                disabled
-                [title]="attachButtonTitle"
-                class="action-btn">
-                <ion-icon name="attach" color="medium"></ion-icon>
-            </ion-button>
-            <ion-button
-                *ngIf="speechAvailable"
-                fill="clear"
-                size="small"
-                [color]="isRecording ? 'danger' : 'medium'"
-                (click)="toggleRecording()"
-                [class.recording]="isRecording"
-                class="action-btn">
-                <ion-icon [name]="isRecording ? 'radio-button-on' : 'mic'"></ion-icon>
-            </ion-button>
-        </div>
+      <div class="left-actions">
+        @if (showAttachButton) {
+          <ion-button
+            fill="clear"
+            size="small"
+            (click)="onAttachClick()"
+            [disabled]="attachDisabled || disabled"
+            [title]="attachButtonTitle"
+            class="action-btn">
+            <ion-icon name="attach"></ion-icon>
+          </ion-button>
+        }
+        @if (showDisabledAttachButton) {
+          <ion-button
+            fill="clear"
+            size="small"
+            disabled
+            [title]="attachButtonTitle"
+            class="action-btn">
+            <ion-icon name="attach" color="medium"></ion-icon>
+          </ion-button>
+        }
+        @if (speechAvailable) {
+          <ion-button
+            fill="clear"
+            size="small"
+            [color]="isRecording ? 'danger' : 'medium'"
+            (click)="toggleRecording()"
+            [class.recording]="isRecording"
+            class="action-btn">
+            <ion-icon [name]="isRecording ? 'radio-button-on' : 'mic'"></ion-icon>
+          </ion-button>
+        }
+      </div>
 
-        <div class="center-info">
-            <span *ngIf="showCharCount && maxLength > 0" class="char-count" [class.near-limit]="isNearLimit">
-                {{ characterCount }}/{{ maxLength }}
-            </span>
-        </div>
+      <div class="center-info">
+        @if (showCharCount && maxLength > 0) {
+          <span class="char-count" [class.near-limit]="isNearLimit">
+            {{ characterCount }}/{{ maxLength }}
+          </span>
+        }
+      </div>
 
-        <div class="right-actions">
-            <ion-button
-                fill="clear"
-                size="small"
-                color="medium"
-                (click)="clear()"
-                [disabled]="!canClear"
-                [title]="clearButtonTitle"
-                class="action-btn">
-                <ion-icon name="close"></ion-icon>
-            </ion-button>
-            <ion-button
-                fill="solid"
-                size="small"
-                color="primary"
-                [disabled]="!canSend"
-                (click)="send()"
-                [title]="sendButtonTitle"
-                class="send-btn">
-                <ion-icon *ngIf="!showSendSpinner" name="send"></ion-icon>
-                <ion-spinner *ngIf="showSendSpinner" name="crescent"></ion-spinner>
-            </ion-button>
-        </div>
+      <div class="right-actions">
+        <ion-button
+          fill="clear"
+          size="small"
+          color="medium"
+          (click)="clear()"
+          [disabled]="!canClear"
+          [title]="clearButtonTitle"
+          class="action-btn">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="solid"
+          size="small"
+          color="primary"
+          [disabled]="!canSend"
+          (click)="send()"
+          [title]="sendButtonTitle"
+          class="send-btn">
+          @if (!showSendSpinner) {
+            <ion-icon name="send"></ion-icon>
+          }
+          @if (showSendSpinner) {
+            <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
+      </div>
     </div>
-</div>
+  </div>

@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-nested-list-style',
     templateUrl: './nested-list-style.component.html',
     styleUrls: ['./nested-list-style.component.scss'],
+    standalone: false
 })
 export class NestedListStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: NestedListStyle;

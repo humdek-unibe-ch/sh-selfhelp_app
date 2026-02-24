@@ -12,7 +12,8 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-navigation',
     templateUrl: 'navigation.page.html',
-    styleUrls: ['navigation.page.scss']
+    styleUrls: ['navigation.page.scss'],
+    standalone: false
 })
 export class NavigationPage implements AfterViewInit, OnDestroy {
     public selfHelp?: SelfHelp;

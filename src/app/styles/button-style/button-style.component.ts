@@ -7,6 +7,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-button-style',
     templateUrl: './button-style.component.html',
     styleUrls: ['./button-style.component.scss'],
+    standalone: false
 })
 export class ButtonStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ButtonStyle;

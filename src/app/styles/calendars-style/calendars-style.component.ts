@@ -8,7 +8,8 @@ import { CalendarStyleComponent } from '../calendar-style/calendar-style.compone
 @Component({
     selector: 'app-calendars-style',
     templateUrl: './calendars-style.component.html',
-    styleUrls: ['./calendars-style.component.css']
+    styleUrls: ['./calendars-style.component.css'],
+    standalone: false
 })
 export class CalendarsStyleComponent extends CalendarStyleComponent implements OnInit {
     @Input() override style!: CalendarsStyle;

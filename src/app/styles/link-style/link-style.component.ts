@@ -7,6 +7,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-link-style',
     templateUrl: './link-style.component.html',
     styleUrls: ['./link-style.component.scss'],
+    standalone: false
 })
 export class LinkStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: LinkStyle;

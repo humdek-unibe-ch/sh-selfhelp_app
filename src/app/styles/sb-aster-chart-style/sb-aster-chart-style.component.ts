@@ -7,6 +7,7 @@ declare var d3: any;
     selector: 'app-sb-aster-chart-style',
     templateUrl: './sb-aster-chart-style.component.html',
     styleUrls: ['./sb-aster-chart-style.component.scss'],
+    standalone: false
 })
 export class SbAsterChartStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: SbAsterChart;

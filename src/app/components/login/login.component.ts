@@ -5,6 +5,7 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent extends BasicComponentComponent implements OnInit {
 

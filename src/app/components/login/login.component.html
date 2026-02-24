@@ -1,11 +1,15 @@
 <ion-header translucent>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="#" (click)="close()"></ion-back-button>
-        </ion-buttons>
-        <ion-title>{{getTitle()}}</ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="#" (click)="close()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{getTitle()}}</ion-title>
+  </ion-toolbar>
 </ion-header>
-<ion-content #content *ngIf="selfHelp.urls[url]"  fullscreen>
-    <app-basic-style *ngFor="let style of selfHelp.urls[url].content" [style]="style" [url]="url" [ionContent]="content"></app-basic-style>
-</ion-content>
+@if (selfHelp.urls[url]) {
+  <ion-content #content  fullscreen>
+    @for (style of selfHelp.urls[url].content; track style) {
+      <app-basic-style [style]="style" [url]="url" [ionContent]="content"></app-basic-style>
+    }
+  </ion-content>
+}

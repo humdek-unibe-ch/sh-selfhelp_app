@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-profile-style',
     templateUrl: './profile-style.component.html',
     styleUrls: ['./profile-style.component.scss'],
+    standalone: false
 })
 export class ProfileStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ProfileStyle;

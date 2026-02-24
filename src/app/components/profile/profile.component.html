@@ -1,27 +1,31 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="#" (click)="close()">close</ion-back-button>
-        </ion-buttons>
-        <ion-title>{{getProfileTitle()}}</ion-title>
-        <ion-buttons slot="end">
-            <ion-button (click)="logout()">
-                <ion-icon slot="start" name="power"></ion-icon>
-                Logout
-            </ion-button>
-        </ion-buttons>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="#" (click)="close()">close</ion-back-button>
+    </ion-buttons>
+    <ion-title>{{getProfileTitle()}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="start" name="power"></ion-icon>
+        Logout
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
-<ion-content #content *ngIf="selfHelp.urls[url]" fullscreen>
-    <app-basic-style *ngFor="let style of selfHelp.urls[url].content" [style]="style" [url]="url"
-        [ionContent]="content"></app-basic-style>
+@if (selfHelp.urls[url]) {
+  <ion-content #content fullscreen>
+    @for (style of selfHelp.urls[url].content; track style) {
+      <app-basic-style [style]="style" [url]="url"
+      [ionContent]="content"></app-basic-style>
+    }
     <ion-card class="my-3">
-        <ion-card-header>
-            <ion-card-title>{{'settings' | translate}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            <app-language-select [url]="url"></app-language-select>
-        </ion-card-content>
+      <ion-card-header>
+        <ion-card-title>{{'settings' | translate}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <app-language-select [url]="url"></app-language-select>
+      </ion-card-content>
     </ion-card>
     <app-app-version></app-app-version>
-</ion-content>
+  </ion-content>
+}

@@ -1,4 +1,6 @@
 <a [class]="'primaryColor ' + getCss()" (click)="btnClick()">
-    {{getFieldContent('label')}}
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style>
+  {{getFieldContent('label')}}
+  @for (child of style.children; track child) {
+    <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style>
+  }
 </a>

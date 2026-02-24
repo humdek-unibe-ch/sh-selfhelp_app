@@ -1,32 +1,40 @@
 <div [class]="getCss()">
-    <!-- Loading state while form is submitting -->
-    <div *ngIf="showLoading" class="llm-response-loading">
-        <div class="llm-loading-indicator">
-            <ion-spinner name="crescent" color="primary"></ion-spinner>
-            <div class="llm-loading-text">
-                <span class="llm-thinking-dots">
-                    <span></span><span></span><span></span>
-                </span>
-                Generating response...
-            </div>
+  <!-- Loading state while form is submitting -->
+  @if (showLoading) {
+    <div class="llm-response-loading">
+      <div class="llm-loading-indicator">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <div class="llm-loading-text">
+          <span class="llm-thinking-dots">
+            <span></span><span></span><span></span>
+          </span>
+          Generating response...
         </div>
+      </div>
     </div>
+  }
 
-    <!-- Read-only mode: render content as HTML/markdown -->
-    <div *ngIf="!isEditable && !showLoading" class="llm-response-content" [innerHTML]="content"></div>
+  <!-- Read-only mode: render content as HTML/markdown -->
+  @if (!isEditable && !showLoading) {
+    <div class="llm-response-content" [innerHTML]="content"></div>
+  }
 
-    <!-- Edit mode: textarea for editing -->
-    <div *ngIf="isEditable" class="llm-response-edit">
-        <ion-textarea
-            [(ngModel)]="editValue"
-            [attr.name]="fieldName"
-            rows="4"
-            autoGrow="true"
-            class="llm-response-textarea"
-            (ionInput)="onValueChange($event.detail.value || '')">
-        </ion-textarea>
+  <!-- Edit mode: textarea for editing -->
+  @if (isEditable) {
+    <div class="llm-response-edit">
+      <ion-textarea
+        [(ngModel)]="editValue"
+        [attr.name]="fieldName"
+        rows="4"
+        autoGrow="true"
+        class="llm-response-textarea"
+        (ionInput)="onValueChange($event.detail.value || '')">
+      </ion-textarea>
     </div>
+  }
 
-    <!-- Children -->
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-basic-style>
+  <!-- Children -->
+  @for (child of style.children; track child) {
+    <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-basic-style>
+  }
 </div>

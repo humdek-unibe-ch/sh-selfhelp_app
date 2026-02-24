@@ -4,9 +4,10 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { FormUserInputStyleComponent } from './../form-user-input-style/form-user-input-style.component';
 
 @Component({
-  selector: 'app-form-style',
-  templateUrl: './form-style.component.html',
-  styleUrls: ['./form-style.component.scss'],
+    selector: 'app-form-style',
+    templateUrl: './form-style.component.html',
+    styleUrls: ['./form-style.component.scss'],
+    standalone: false
 })
 export class FormStyleComponent extends FormUserInputStyleComponent {
 

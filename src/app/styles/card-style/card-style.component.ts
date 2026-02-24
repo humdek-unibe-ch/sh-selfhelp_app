@@ -8,6 +8,7 @@ import { FormGroup } from '@angular/forms';
     selector: 'app-card-style',
     templateUrl: './card-style.component.html',
     styleUrls: ['./card-style.component.scss'],
+    standalone: false
 })
 export class CardStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: CardStyle;

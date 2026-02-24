@@ -6,6 +6,7 @@ import { GraphStyle } from './../../selfhelpInterfaces';
     selector: 'app-graph-style',
     templateUrl: './graph-style.component.html',
     styleUrls: ['./graph-style.component.scss'],
+    standalone: false
 })
 export class GraphStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: GraphStyle;

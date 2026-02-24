@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-sortable-list',
     templateUrl: './sortable-list.component.html',
     styleUrls: ['./sortable-list.component.scss'],
+    standalone: false
 })
 export class SortableListComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: SortableListStyle;

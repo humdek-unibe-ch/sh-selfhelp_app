@@ -33,10 +33,12 @@ Serializer.addClass(
 );
 
 // Create a component that renders Quill
+// eslint-disable-next-line @angular-eslint/component-selector
 @Component({
     selector: "quill",
     styleUrls: ['./quil.component.css'],
-    templateUrl: "./quill.component.html"
+    templateUrl: "./quill.component.html",
+    standalone: false
 })
 export class QuillComponent extends QuestionAngular<QuestionQuillModel> {
     quillModules = {

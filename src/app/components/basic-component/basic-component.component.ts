@@ -6,6 +6,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-basic-component',
     templateUrl: './basic-component.component.html',
     styleUrls: ['./basic-component.component.scss'],
+    standalone: false
 })
 export class BasicComponentComponent implements OnInit {
 

@@ -14,6 +14,7 @@ declare var $: any;
     selector: 'app-calendar-style',
     templateUrl: './calendar-style.component.html',
     styleUrls: ['./calendar-style.component.scss'],
+    standalone: false
 })
 export class CalendarStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: CalendarStyle;

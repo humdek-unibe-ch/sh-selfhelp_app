@@ -7,6 +7,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-radio-style',
     templateUrl: './radio-style.component.html',
     styleUrls: ['./radio-style.component.scss'],
+    standalone: false
 })
 
 export class RadioStyleComponent extends BasicStyleComponent implements OnInit {

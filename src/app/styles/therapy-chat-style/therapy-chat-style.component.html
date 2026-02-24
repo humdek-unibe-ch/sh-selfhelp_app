@@ -1,62 +1,71 @@
 <div [class]="getCss()" class="therapy-chat-container">
-    <!-- Initial loading -->
-    <div *ngIf="isInitialLoading" class="initial-loading">
-        <ion-spinner name="crescent" color="primary"></ion-spinner>
-        <p>Loading conversation...</p>
+  <!-- Initial loading -->
+  @if (isInitialLoading) {
+    <div class="initial-loading">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Loading conversation...</p>
     </div>
+  }
 
-    <!-- Messages area -->
-    <div *ngIf="!isInitialLoading" class="messages-area">
-        <!-- Help text -->
-        <div *ngIf="helpText && taggingEnabled" class="help-banner">
-            <ion-icon name="information-circle-outline"></ion-icon>
-            <span [innerHTML]="helpText"></span>
+  <!-- Messages area -->
+  @if (!isInitialLoading) {
+    <div class="messages-area">
+      <!-- Help text -->
+      @if (helpText && taggingEnabled) {
+        <div class="help-banner">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <span [innerHTML]="helpText"></span>
         </div>
-
-        <!-- Empty state -->
-        <div *ngIf="messages.length === 0 && !isLoading" class="empty-state text-center p-4">
-            <ion-icon name="chatbubble-ellipses-outline" class="empty-state-icon"></ion-icon>
-            <h6>Start your conversation</h6>
-            <p class="text-muted">Send a message to begin.</p>
+      }
+      <!-- Empty state -->
+      @if (messages.length === 0 && !isLoading) {
+        <div class="empty-state text-center p-4">
+          <ion-icon name="chatbubble-ellipses-outline" class="empty-state-icon"></ion-icon>
+          <h6>Start your conversation</h6>
+          <p class="text-muted">Send a message to begin.</p>
         </div>
-
-        <!-- Messages -->
+      }
+      <!-- Messages -->
+      @for (msg of messages; track msg) {
         <app-chat-message
-            *ngFor="let msg of messages"
-            [content]="msg.formatted_content || msg.content"
-            [senderType]="getEffectiveSenderType(msg)"
-            [senderLabel]="getSenderLabel(msg)"
-            [timestamp]="msg.created_at || ''"
-            [isOwn]="isOwnMessage(msg)"
-            [labels]="msg.labels || []">
+          [content]="msg.formatted_content || msg.content"
+          [senderType]="getEffectiveSenderType(msg)"
+          [senderLabel]="getSenderLabel(msg)"
+          [timestamp]="msg.created_at || ''"
+          [isOwn]="isOwnMessage(msg)"
+          [labels]="msg.labels || []">
         </app-chat-message>
-
-        <!-- Loading indicator -->
-        <div *ngIf="isLoading" class="thinking-wrapper">
-            <div class="ai-thinking">
-                <div class="thinking-dots">
-                    <span></span><span></span><span></span>
-                </div>
-                <span class="thinking-text">AI is thinking...</span>
+      }
+      <!-- Loading indicator -->
+      @if (isLoading) {
+        <div class="thinking-wrapper">
+          <div class="ai-thinking">
+            <div class="thinking-dots">
+              <span></span><span></span><span></span>
             </div>
+            <span class="thinking-text">AI is thinking...</span>
+          </div>
         </div>
-
-        <div #messagesEnd></div>
+      }
+      <div #messagesEnd></div>
     </div>
+  }
 
-    <!-- Chat input with integrated tagging -->
-    <div *ngIf="!isInitialLoading" class="input-section">
-        <app-chat-input
-            [variant]="'llm'"
-            [placeholder]="'Type your message here...'"
-            [disabled]="isLoading"
-            [maxLength]="4000"
-            [showCharCount]="true"
-            [speechToTextEnabled]="true"
-            [taggingEnabled]="taggingEnabled"
-            [therapists]="therapists"
-            [tagReasons]="tagReasons"
-            (messageSend)="onMessageSend($event)">
-        </app-chat-input>
+  <!-- Chat input with integrated tagging -->
+  @if (!isInitialLoading) {
+    <div class="input-section">
+      <app-chat-input
+        [variant]="'llm'"
+        [placeholder]="'Type your message here...'"
+        [disabled]="isLoading"
+        [maxLength]="4000"
+        [showCharCount]="true"
+        [speechToTextEnabled]="true"
+        [taggingEnabled]="taggingEnabled"
+        [therapists]="therapists"
+        [tagReasons]="tagReasons"
+        (messageSend)="onMessageSend($event)">
+      </app-chat-input>
     </div>
+  }
 </div>

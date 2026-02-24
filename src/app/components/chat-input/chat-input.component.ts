@@ -37,6 +37,7 @@ interface MentionSuggestion {
     selector: 'app-chat-input',
     templateUrl: './chat-input.component.html',
     styleUrls: ['./chat-input.component.scss'],
+    standalone: false
 })
 export class ChatInputComponent implements OnDestroy, OnChanges {
     @Input() placeholder: string = 'Type your message...';

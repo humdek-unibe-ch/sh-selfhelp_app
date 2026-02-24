@@ -1,9 +1,25 @@
-<span [ngSwitch]="getFieldContent('level')">
-    <h1 *ngSwitchCase="'1'" [class]="getCss()">{{getFieldContent('title')}}</h1>
-    <h2 *ngSwitchCase="'2'" [class]="getCss()">{{getFieldContent('title')}}</h2>
-    <h3 *ngSwitchCase="'3'" [class]="getCss()">{{getFieldContent('title')}}</h3>
-    <h4 *ngSwitchCase="'4'" [class]="getCss()">{{getFieldContent('title')}}</h4>
-    <h5 *ngSwitchCase="'5'" [class]="getCss()">{{getFieldContent('title')}}</h5>
-    <h6 *ngSwitchCase="'6'" [class]="getCss()">{{getFieldContent('title')}}</h6>
-    <h1 *ngSwitchDefault [class]="getCss()">{{getFieldContent('title')}}</h1>
+<span>
+  @switch (getFieldContent('level')) {
+    @case ('1') {
+      <h1 [class]="getCss()">{{getFieldContent('title')}}</h1>
+    }
+    @case ('2') {
+      <h2 [class]="getCss()">{{getFieldContent('title')}}</h2>
+    }
+    @case ('3') {
+      <h3 [class]="getCss()">{{getFieldContent('title')}}</h3>
+    }
+    @case ('4') {
+      <h4 [class]="getCss()">{{getFieldContent('title')}}</h4>
+    }
+    @case ('5') {
+      <h5 [class]="getCss()">{{getFieldContent('title')}}</h5>
+    }
+    @case ('6') {
+      <h6 [class]="getCss()">{{getFieldContent('title')}}</h6>
+    }
+    @default {
+      <h1 [class]="getCss()">{{getFieldContent('title')}}</h1>
+    }
+  }
 </span>

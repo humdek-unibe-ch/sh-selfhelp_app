@@ -1,17 +1,19 @@
 <div class="d-flex flex-column">
-    <div class="d-flex">
-        <button (click)="startRecording()" class="icon-button" [disabled]="isRecording || disabled">
-            <ion-icon name="mic"></ion-icon>
-        </button>
-        <button (click)="stopRecording()" class="icon-button" [disabled]="!isRecording">
-            <ion-icon name="square" color="danger" class="danger-icon"></ion-icon>
-        </button>
-    </div>
+  <div class="d-flex">
+    <button (click)="startRecording()" class="icon-button" [disabled]="isRecording || disabled">
+      <ion-icon name="mic"></ion-icon>
+    </button>
+    <button (click)="stopRecording()" class="icon-button" [disabled]="!isRecording">
+      <ion-icon name="square" color="danger" class="danger-icon"></ion-icon>
+    </button>
+  </div>
 
-    <div *ngIf="recording" class="d-flex align-items-center">
-        <audio class="audio-size" [src]="recording" controls></audio>
-        <button (click)="deleteRecording()" class="icon-button">
-            <ion-icon name="trash" class="danger-icon" color="danger"></ion-icon>
-        </button>
+  @if (recording) {
+    <div class="d-flex align-items-center">
+      <audio class="audio-size" [src]="recording" controls></audio>
+      <button (click)="deleteRecording()" class="icon-button">
+        <ion-icon name="trash" class="danger-icon" color="danger"></ion-icon>
+      </button>
     </div>
+  }
 </div>

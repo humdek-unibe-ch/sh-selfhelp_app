@@ -7,6 +7,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-tabs-style',
     templateUrl: './tabs-style.component.html',
     styleUrls: ['./tabs-style.component.scss'],
+    standalone: false
 })
 export class TabsStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: Style;

@@ -8,6 +8,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-entry-record-delete-style',
     templateUrl: './entry-record-delete-style.component.html',
     styleUrls: ['./entry-record-delete-style.component.scss'],
+    standalone: false
 })
 export class EntryRecordDeleteStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: EntryRecordDeleteStyle;

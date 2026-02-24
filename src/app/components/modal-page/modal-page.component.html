@@ -1,12 +1,20 @@
-<ion-header *ngIf="this.showHeader()">
+@if (this.showHeader()) {
+  <ion-header>
     <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="#" (click)="close()"></ion-back-button>
-        </ion-buttons>
-        <ion-title>{{getTitle()}}</ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="#" (click)="close()"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{getTitle()}}</ion-title>
     </ion-toolbar>
-</ion-header>
-<ion-content #content *ngIf="selfHelp.urls[url]"  fullscreen>
-    <app-basic-style *ngFor="let style of selfHelp.urls[url].content" [style]="style" [url]="url" [ionContent]="content"></app-basic-style>
-    <div *ngIf="isMissing()"  class="p-5">Missing page</div>
-</ion-content>
+  </ion-header>
+}
+@if (selfHelp.urls[url]) {
+  <ion-content #content  fullscreen>
+    @for (style of selfHelp.urls[url].content; track style) {
+      <app-basic-style [style]="style" [url]="url" [ionContent]="content"></app-basic-style>
+    }
+    @if (isMissing()) {
+      <div  class="p-5">Missing page</div>
+    }
+  </ion-content>
+}

@@ -1,143 +1,180 @@
-<div class="llm-form-renderer" *ngIf="formDefinition" [class.submitted]="isSubmitted">
+@if (formDefinition) {
+  <div class="llm-form-renderer" [class.submitted]="isSubmitted">
     <!-- Form Card -->
     <div class="form-card">
-        <!-- Form Header -->
-        <div class="form-header" *ngIf="formDefinition.title">
-            <ion-icon name="list-outline"></ion-icon>
-            <span class="form-title-text">{{ formDefinition.title }}</span>
-            <ion-badge *ngIf="isSubmitted" color="success" class="submitted-badge">
-                <ion-icon name="checkmark-outline"></ion-icon>
-                Submitted
+      <!-- Form Header -->
+      @if (formDefinition.title) {
+        <div class="form-header">
+          <ion-icon name="list-outline"></ion-icon>
+          <span class="form-title-text">{{ formDefinition.title }}</span>
+          @if (isSubmitted) {
+            <ion-badge color="success" class="submitted-badge">
+              <ion-icon name="checkmark-outline"></ion-icon>
+              Submitted
             </ion-badge>
+          }
         </div>
-
-        <!-- Form Description -->
-        <p *ngIf="formDefinition.description" class="form-description">
-            {{ formDefinition.description }}
+      }
+      <!-- Form Description -->
+      @if (formDefinition.description) {
+        <p class="form-description">
+          {{ formDefinition.description }}
         </p>
-
-        <!-- Content Before -->
-        <div *ngIf="formDefinition.contentBefore" class="form-content-before">
-            <app-markdown-renderer [content]="formDefinition.contentBefore"></app-markdown-renderer>
+      }
+      <!-- Content Before -->
+      @if (formDefinition.contentBefore) {
+        <div class="form-content-before">
+          <app-markdown-renderer [content]="formDefinition.contentBefore"></app-markdown-renderer>
         </div>
-
-        <!-- Form Body -->
-        <div class="form-body">
-            <!-- Form Fields -->
-            <ng-container *ngFor="let field of formDefinition.fields; trackBy: trackByFieldId">
-                <div class="form-field" [class.has-error]="formErrors[field.id]" *ngIf="field.type !== 'hidden'">
-                    <!-- Field Label -->
-                    <div class="field-label">
-                        {{ field.label }}
-                        <span *ngIf="field.required" class="required">*</span>
-                    </div>
-
-                    <!-- Help Text -->
-                    <p *ngIf="field.helpText" class="field-description">{{ field.helpText }}</p>
-
-                    <!-- Radio Buttons using ion-radio-group -->
-                    <ion-list *ngIf="field.type === 'radio'">
-                        <ion-radio-group *ngIf="field.type === 'radio'" [(ngModel)]="formValues[field.id]"
-                            (ionChange)="onIonRadioChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted">
-                            <ion-item *ngFor="let option of field.options; trackBy: trackByOptionValue" lines="none"
-                                class="radio-item" [class.selected]="isRadioSelected(field, option.value)">
-                                <ion-radio class="wrapped" [value]="option.value">
-                                    {{ option.label }}
-                                </ion-radio>
-                            </ion-item>
-                        </ion-radio-group>
-                    </ion-list>
-
-                    <!-- Checkboxes using ion-checkbox -->
-                    <div *ngIf="field.type === 'checkbox'" class="checkbox-group">
-                        <ion-item *ngFor="let option of field.options; trackBy: trackByOptionValue" lines="none"
-                            class="checkbox-item" [class.selected]="isCheckboxChecked(field, option.value)">
-                            <ion-checkbox [checked]="isCheckboxChecked(field, option.value)"
-                                (ionChange)="onIonCheckboxChange(field, option.value, $event)"
-                                [disabled]="isSubmitting || disabled || isSubmitted" class="wrapped">
-                                {{ option.label }}
-                            </ion-checkbox>
+      }
+      <!-- Form Body -->
+      <div class="form-body">
+        <!-- Form Fields -->
+        @for (field of formDefinition.fields; track trackByFieldId($index, field)) {
+          @if (field.type !== 'hidden') {
+            <div class="form-field" [class.has-error]="formErrors[field.id]">
+              <!-- Field Label -->
+              <div class="field-label">
+                {{ field.label }}
+                @if (field.required) {
+                  <span class="required">*</span>
+                }
+              </div>
+              <!-- Help Text -->
+              @if (field.helpText) {
+                <p class="field-description">{{ field.helpText }}</p>
+              }
+              <!-- Radio Buttons using ion-radio-group -->
+              @if (field.type === 'radio') {
+                <ion-list>
+                  @if (field.type === 'radio') {
+                    <ion-radio-group [(ngModel)]="formValues[field.id]"
+                      (ionChange)="onIonRadioChange(field, $event)"
+                      [disabled]="isSubmitting || disabled || isSubmitted">
+                      @for (option of field.options; track trackByOptionValue($index, option)) {
+                        <ion-item lines="none"
+                          class="radio-item" [class.selected]="isRadioSelected(field, option.value)">
+                          <ion-radio class="wrapped" [value]="option.value">
+                            {{ option.label }}
+                          </ion-radio>
                         </ion-item>
-                    </div>
-
-                    <!-- Select Dropdown using ion-select -->
-                    <ion-item *ngIf="field.type === 'select'" lines="none" class="select-item">
-                        <ion-select [value]="formValues[field.id]"
-                            [placeholder]="field.placeholder || 'Select an option...'"
-                            (ionChange)="onIonSelectChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted" interface="action-sheet">
-                            <ion-select-option *ngFor="let option of field.options; trackBy: trackByOptionValue"
-                                [value]="option.value">
-                                {{ option.label }}
-                            </ion-select-option>
-                        </ion-select>
+                      }
+                    </ion-radio-group>
+                  }
+                </ion-list>
+              }
+              <!-- Checkboxes using ion-checkbox -->
+              @if (field.type === 'checkbox') {
+                <div class="checkbox-group">
+                  @for (option of field.options; track trackByOptionValue($index, option)) {
+                    <ion-item lines="none"
+                      class="checkbox-item" [class.selected]="isCheckboxChecked(field, option.value)">
+                      <ion-checkbox [checked]="isCheckboxChecked(field, option.value)"
+                        (ionChange)="onIonCheckboxChange(field, option.value, $event)"
+                        [disabled]="isSubmitting || disabled || isSubmitted" class="wrapped">
+                        {{ option.label }}
+                      </ion-checkbox>
                     </ion-item>
-
-                    <!-- Text Input using ion-input -->
-                    <ion-item *ngIf="field.type === 'text'" lines="none" class="input-item">
-                        <ion-input type="text" [placeholder]="field.placeholder || ''" [value]="formValues[field.id]"
-                            [maxlength]="field.maxLength" (ionInput)="onIonInputChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted">
-                        </ion-input>
-                    </ion-item>
-
-                    <!-- Textarea using ion-textarea -->
-                    <ion-textarea *ngIf="field.type === 'textarea'" [placeholder]="field.placeholder || ''"
-                        [value]="formValues[field.id]" [rows]="field.rows || 3" [maxlength]="field.maxLength"
-                        (ionInput)="onIonInputChange(field, $event)" fill="outline" mode="md"
-                        [disabled]="isSubmitting || disabled || isSubmitted" auto-grow="true">
-                    </ion-textarea>
-
-                    <!-- Number Input using ion-input -->
-                    <ion-item *ngIf="field.type === 'number'" lines="none" class="input-item">
-                        <ion-input type="number" [placeholder]="field.placeholder || ''" [value]="formValues[field.id]"
-                            [min]="field.min" [max]="field.max" [step]="field.step || 1"
-                            (ionInput)="onIonInputChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted">
-                        </ion-input>
-                    </ion-item>
-
-                    <!-- Scale Input using ion-range -->
-                    <div *ngIf="field.type === 'scale'" class="scale-input">
-                        <div class="scale-labels">
-                            <span>{{ field.min || 1 }}</span>
-                            <span class="scale-value">{{ formValues[field.id] || field.min || 1 }}</span>
-                            <span>{{ field.max || 10 }}</span>
-                        </div>
-                        <ion-range [min]="field.min || 1" [max]="field.max || 10" [step]="field.step || 1"
-                            [value]="formValues[field.id] || field.min || 1"
-                            (ionChange)="onIonRangeChange(field, $event)"
-                            [disabled]="isSubmitting || disabled || isSubmitted" color="primary">
-                        </ion-range>
-                    </div>
-
-                    <!-- Error Message -->
-                    <div *ngIf="formErrors[field.id]" class="field-error">
-                        <ion-icon name="alert-circle-outline"></ion-icon>
-                        {{ formErrors[field.id] }}
-                    </div>
+                  }
                 </div>
-            </ng-container>
-
-            <!-- Hidden fields -->
-            <ng-container *ngFor="let field of formDefinition.fields">
-                <input *ngIf="field.type === 'hidden'" type="hidden" [name]="field.id" [value]="field.value || ''">
-            </ng-container>
+              }
+              <!-- Select Dropdown using ion-select -->
+              @if (field.type === 'select') {
+                <ion-item lines="none" class="select-item">
+                  <ion-select [value]="formValues[field.id]"
+                    [placeholder]="field.placeholder || 'Select an option...'"
+                    (ionChange)="onIonSelectChange(field, $event)"
+                    [disabled]="isSubmitting || disabled || isSubmitted" interface="action-sheet">
+                    @for (option of field.options; track trackByOptionValue($index, option)) {
+                      <ion-select-option
+                        [value]="option.value">
+                        {{ option.label }}
+                      </ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
+              }
+              <!-- Text Input using ion-input -->
+              @if (field.type === 'text') {
+                <ion-item lines="none" class="input-item">
+                  <ion-input type="text" [placeholder]="field.placeholder || ''" [value]="formValues[field.id]"
+                    [maxlength]="field.maxLength" (ionInput)="onIonInputChange(field, $event)"
+                    [disabled]="isSubmitting || disabled || isSubmitted">
+                  </ion-input>
+                </ion-item>
+              }
+              <!-- Textarea using ion-textarea -->
+              @if (field.type === 'textarea') {
+                <ion-textarea [placeholder]="field.placeholder || ''"
+                  [value]="formValues[field.id]" [rows]="field.rows || 3" [maxlength]="field.maxLength"
+                  (ionInput)="onIonInputChange(field, $event)" fill="outline" mode="md"
+                  [disabled]="isSubmitting || disabled || isSubmitted" auto-grow="true">
+                </ion-textarea>
+              }
+              <!-- Number Input using ion-input -->
+              @if (field.type === 'number') {
+                <ion-item lines="none" class="input-item">
+                  <ion-input type="number" [placeholder]="field.placeholder || ''" [value]="formValues[field.id]"
+                    [min]="field.min" [max]="field.max" [step]="field.step || 1"
+                    (ionInput)="onIonInputChange(field, $event)"
+                    [disabled]="isSubmitting || disabled || isSubmitted">
+                  </ion-input>
+                </ion-item>
+              }
+              <!-- Scale Input using ion-range -->
+              @if (field.type === 'scale') {
+                <div class="scale-input">
+                  <div class="scale-labels">
+                    <span>{{ field.min || 1 }}</span>
+                    <span class="scale-value">{{ formValues[field.id] || field.min || 1 }}</span>
+                    <span>{{ field.max || 10 }}</span>
+                  </div>
+                  <ion-range [min]="field.min || 1" [max]="field.max || 10" [step]="field.step || 1"
+                    [value]="formValues[field.id] || field.min || 1"
+                    (ionChange)="onIonRangeChange(field, $event)"
+                    [disabled]="isSubmitting || disabled || isSubmitted" color="primary">
+                  </ion-range>
+                </div>
+              }
+              <!-- Error Message -->
+              @if (formErrors[field.id]) {
+                <div class="field-error">
+                  <ion-icon name="alert-circle-outline"></ion-icon>
+                  {{ formErrors[field.id] }}
+                </div>
+              }
+            </div>
+          }
+        }
+        <!-- Hidden fields -->
+        @for (field of formDefinition.fields; track field) {
+          @if (field.type === 'hidden') {
+            <input type="hidden" [name]="field.id" [value]="field.value || ''">
+          }
+        }
+      </div>
+      <!-- Content After -->
+      @if (formDefinition.contentAfter) {
+        <div class="form-content-after">
+          <app-markdown-renderer [content]="formDefinition.contentAfter"></app-markdown-renderer>
         </div>
-
-        <!-- Content After -->
-        <div *ngIf="formDefinition.contentAfter" class="form-content-after">
-            <app-markdown-renderer [content]="formDefinition.contentAfter"></app-markdown-renderer>
+      }
+      <!-- Form Footer with Submit Button -->
+      @if (!isSubmitted) {
+        <div class="form-footer">
+          <ion-button expand="block" size="small" [disabled]="isSubmitting || disabled" (click)="onSubmit()">
+            @if (isSubmitting) {
+              <ion-spinner name="crescent" slot="start"></ion-spinner>
+            }
+            @if (!isSubmitting) {
+              <span>{{ submitLabel }}</span>
+            }
+            @if (isSubmitting) {
+              <span>Submitting...</span>
+            }
+          </ion-button>
         </div>
-
-        <!-- Form Footer with Submit Button -->
-        <div class="form-footer" *ngIf="!isSubmitted">
-            <ion-button expand="block" size="small" [disabled]="isSubmitting || disabled" (click)="onSubmit()">
-                <ion-spinner *ngIf="isSubmitting" name="crescent" slot="start"></ion-spinner>
-                <span *ngIf="!isSubmitting">{{ submitLabel }}</span>
-                <span *ngIf="isSubmitting">Submitting...</span>
-            </ion-button>
-        </div>
+      }
     </div>
-</div>
+  </div>
+}

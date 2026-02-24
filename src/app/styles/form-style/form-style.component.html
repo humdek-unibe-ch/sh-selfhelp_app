@@ -1,16 +1,26 @@
 <form [formGroup]="form" [class]="getCss()">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="form"></app-basic-style>
-    <div class="d-flex align-items-center">
-        <ion-button [color]="getFieldContent('type')" size='small' [disabled]="!form.valid || isSubmitting"
-            (click)="submitForm(form.value)">
-            <ion-spinner *ngIf="isSubmitting" name="dots" class="submit-spinner"></ion-spinner>
-            <span *ngIf="!isSubmitting">{{getFieldContent('label')}}</span>
-            <span *ngIf="isSubmitting">Processing...</span>
-        </ion-button>
-        <ion-button *ngIf="getFieldContent('submit_and_send_email') === '1'" [color]="getFieldContent('type')" size='small'
-            [class]="'btn-' + getFieldContent('type')" [disabled]="!form.valid || isSubmitting"
-            (click)="submitFormAndSendEmail(form.value)">{{getFieldContent('submit_and_send_label')}}
-        </ion-button>
-    </div>
+  @for (child of style.children; track child) {
+    <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+    [parentForm]="form"></app-basic-style>
+  }
+  <div class="d-flex align-items-center">
+    <ion-button [color]="getFieldContent('type')" size='small' [disabled]="!form.valid || isSubmitting"
+      (click)="submitForm(form.value)">
+      @if (isSubmitting) {
+        <ion-spinner name="dots" class="submit-spinner"></ion-spinner>
+      }
+      @if (!isSubmitting) {
+        <span>{{getFieldContent('label')}}</span>
+      }
+      @if (isSubmitting) {
+        <span>Processing...</span>
+      }
+    </ion-button>
+    @if (getFieldContent('submit_and_send_email') === '1') {
+      <ion-button [color]="getFieldContent('type')" size='small'
+        [class]="'btn-' + getFieldContent('type')" [disabled]="!form.valid || isSubmitting"
+        (click)="submitFormAndSendEmail(form.value)">{{getFieldContent('submit_and_send_label')}}
+      </ion-button>
+    }
+  </div>
 </form>

@@ -9,6 +9,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-input-style',
     templateUrl: './input-style.component.html',
     styleUrls: ['./input-style.component.scss'],
+    standalone: false
 })
 
 export class InputStyleComponent extends BasicStyleComponent implements OnInit {

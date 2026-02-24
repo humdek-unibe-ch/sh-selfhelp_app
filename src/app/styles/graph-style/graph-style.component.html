@@ -1,2 +1,4 @@
-<plotly-plot *ngIf="style.show_graph" [class]="getCss()" [useResizeHandler]="true" [data]="getFieldContent('traces')"
-    [layout]="getFieldContent('layout')" [config]="getFieldContent('config')"></plotly-plot>
+@if (style.show_graph) {
+  <plotly-plot [class]="getCss()" [useResizeHandler]="true" [data]="getFieldContent('traces')"
+  [layout]="getFieldContent('layout')" [config]="getFieldContent('config')"></plotly-plot>
+}

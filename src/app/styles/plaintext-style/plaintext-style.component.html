@@ -1,2 +1,6 @@
-<p *ngIf="getFieldContent('is_paragraph') == '1'" [class]="getCss()">{{getFieldContent('text')}}</p>
-<span *ngIf="getFieldContent('is_paragraph') == '0'" [class]="getCss()">{{getFieldContent('text')}}</span>
+@if (getFieldContent('is_paragraph') === '1') {
+  <p [class]="getCss()">{{getFieldContent('text')}}</p>
+}
+@if (getFieldContent('is_paragraph') === '0') {
+  <span [class]="getCss()">{{getFieldContent('text')}}</span>
+}

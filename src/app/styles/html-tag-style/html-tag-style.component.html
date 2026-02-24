@@ -1,54 +1,98 @@
-<figure *ngIf="this.getFieldContent('html_tag') === 'figure'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</figure>
+@if (this.getFieldContent('html_tag') === 'figure') {
+  <figure>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </figure>
+}
 
-<figcaption *ngIf="this.getFieldContent('html_tag') === 'figcaption'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</figcaption>
+@if (this.getFieldContent('html_tag') === 'figcaption') {
+  <figcaption>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </figcaption>
+}
 
-<ul *ngIf="this.getFieldContent('html_tag') === 'ul'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</ul>
+@if (this.getFieldContent('html_tag') === 'ul') {
+  <ul>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </ul>
+}
 
-<ol *ngIf="this.getFieldContent('html_tag') === 'ol'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</ol>
+@if (this.getFieldContent('html_tag') === 'ol') {
+  <ol>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </ol>
+}
 
-<li *ngIf="this.getFieldContent('html_tag') === 'li'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</li>
+@if (this.getFieldContent('html_tag') === 'li') {
+  <li>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </li>
+}
 
-<table *ngIf="this.getFieldContent('html_tag') === 'table'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</table>
+@if (this.getFieldContent('html_tag') === 'table') {
+  <table>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </table>
+}
 
-<tr *ngIf="this.getFieldContent('html_tag') === 'tr'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</tr>
+@if (this.getFieldContent('html_tag') === 'tr') {
+  <tr>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </tr>
+}
 
-<td *ngIf="this.getFieldContent('html_tag') === 'td'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</td>
+@if (this.getFieldContent('html_tag') === 'td') {
+  <td>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </td>
+}
 
-<th *ngIf="this.getFieldContent('html_tag') === 'th'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</th>
+@if (this.getFieldContent('html_tag') === 'th') {
+  <th>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </th>
+}
 
-<dd *ngIf="this.getFieldContent('html_tag') === 'dd'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</dd>
+@if (this.getFieldContent('html_tag') === 'dd') {
+  <dd>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </dd>
+}
 
-<dl *ngIf="this.getFieldContent('html_tag') === 'dl'">
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"
-        [parentForm]="parentForm"></app-basic-style>
-</dl>
+@if (this.getFieldContent('html_tag') === 'dl') {
+  <dl>
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+      [parentForm]="parentForm"></app-basic-style>
+    }
+  </dl>
+}

@@ -26,7 +26,8 @@ import {
 @Component({
     selector: 'app-llm-structured-response',
     templateUrl: './llm-structured-response.component.html',
-    styleUrls: ['./llm-structured-response.component.scss']
+    styleUrls: ['./llm-structured-response.component.scss'],
+    standalone: false
 })
 export class LlmStructuredResponseComponent implements OnChanges {
     @Input() response!: LlmStructuredResponse;

@@ -6,6 +6,7 @@ import { MarkdownStyle } from './../../selfhelpInterfaces';
     selector: 'app-markdown-style',
     templateUrl: './markdown-style.component.html',
     styleUrls: ['./markdown-style.component.scss'],
+    standalone: false
 })
 export class MarkdownStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: MarkdownStyle;

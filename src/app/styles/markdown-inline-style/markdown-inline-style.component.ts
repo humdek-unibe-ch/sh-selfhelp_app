@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-markdown-inline-style',
     templateUrl: './markdown-inline-style.component.html',
     styleUrls: ['./markdown-inline-style.component.scss'],
+    standalone: false
 })
 export class MarkdownInlineStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: MarkdownInlineStyle;

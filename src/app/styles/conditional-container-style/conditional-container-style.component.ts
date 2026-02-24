@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
     selector: 'app-conditional-container-style',
     templateUrl: './conditional-container-style.component.html',
     styleUrls: ['./conditional-container-style.component.scss'],
+    standalone: false
 })
 export class ConditionalContainerStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ConditionalContainerStyle;

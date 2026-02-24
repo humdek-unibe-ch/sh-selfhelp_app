@@ -2,7 +2,7 @@ import { ApplicationRef, Component, Injector, ComponentFactoryResolver, Input, N
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SurveyJSMetaData, SurveyJSStyle } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
-import { Model, StylesManager, Serializer } from "survey-core";
+import { Model, Serializer } from "survey-core";
 import "survey-core/survey.i18n";
 import { IDocOptions, SurveyPDF } from 'survey-pdf';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
@@ -28,7 +28,8 @@ SurveyCore.FunctionFactory.Instance.register("encodeHtml", encodeHtml);
 @Component({
     selector: 'app-survey-js-style',
     templateUrl: './survey-js-style.component.html',
-    styleUrls: ['./survey-js-style.component.css']
+    styleUrls: ['./survey-js-style.component.css'],
+    standalone: false
 })
 export class SurveyJSStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: SurveyJSStyle;
@@ -253,7 +254,6 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         if (this.style.show_survey) {
             // this.loadMicrophone();
             this.expandSurveyJsForSelfhelp();
-            StylesManager.applyTheme(this.getFieldContent('survey-js-theme'));
             let survey = new Model(this.style.survey_json);
             survey.applyTheme(this.selfhelpService.getSystemTheme() === 'dark' ? DefaultDark : DefaultLight);
             survey.locale = this.selfhelpService.getUserLanguage().locale;

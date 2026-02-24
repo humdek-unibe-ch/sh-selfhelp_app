@@ -8,6 +8,7 @@ import { AppLauncher, OpenURLResult } from '@capacitor/app-launcher';
     selector: 'app-open-app-button-style',
     templateUrl: './open-app-button-style.component.html',
     styleUrls: ['./open-app-button-style.component.scss'],
+    standalone: false
 })
 export class OpenAppButtonStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: OpenAppButtonStyle;

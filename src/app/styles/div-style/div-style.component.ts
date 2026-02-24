@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
     selector: 'app-div-style',
     templateUrl: './div-style.component.html',
     styleUrls: ['./div-style.component.scss'],
+    standalone: false
 })
 export class DivStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: DivStyle;

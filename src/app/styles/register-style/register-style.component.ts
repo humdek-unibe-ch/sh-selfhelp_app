@@ -8,8 +8,9 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-register-style',
     templateUrl: './register-style.component.html',
     styleUrls: ['./register-style.component.scss'],
+    standalone: false
 })
-export class RegisterStyleComponen extends BasicStyleComponent implements OnInit {
+export class RegisterStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: RegisterStyle;
     public form!: FormGroup;
     public reg_success = false;

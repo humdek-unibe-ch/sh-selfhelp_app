@@ -6,6 +6,7 @@ import { HeadingStyle } from './../../selfhelpInterfaces';
     selector: 'app-heading-style',
     templateUrl: './heading-style.component.html',
     styleUrls: ['./heading-style.component.scss'],
+    standalone: false
 })
 export class HeadingStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: HeadingStyle;

@@ -8,6 +8,7 @@ import { BasicStyleComponent } from './../basic-style/basic-style.component';
     selector: 'app-form-user-input-style',
     templateUrl: './form-user-input-style.component.html',
     styleUrls: ['./form-user-input-style.component.scss'],
+    standalone: false
 })
 export class FormUserInputStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: FormUserInputStyle;

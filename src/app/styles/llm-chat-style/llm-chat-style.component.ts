@@ -23,6 +23,7 @@ import { ChatInputComponent } from 'src/app/components/chat-input/chat-input.com
     selector: 'app-llm-chat-style',
     templateUrl: './llm-chat-style.component.html',
     styleUrls: ['./llm-chat-style.component.scss'],
+    standalone: false
 })
 export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy, AfterViewChecked, AfterViewInit {
     @Input() override style!: LlmChatStyle;

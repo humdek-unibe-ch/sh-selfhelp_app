@@ -21,7 +21,8 @@ import { LlmFormDefinition, LlmFormField, LlmFormFieldOption } from 'src/app/sel
 @Component({
     selector: 'app-llm-form-renderer',
     templateUrl: './llm-form-renderer.component.html',
-    styleUrls: ['./llm-form-renderer.component.scss']
+    styleUrls: ['./llm-form-renderer.component.scss'],
+    standalone: false
 })
 export class LlmFormRendererComponent implements OnChanges {
     @Input() formDefinition!: LlmFormDefinition;

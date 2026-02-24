@@ -8,6 +8,7 @@ import { ModalController } from '@ionic/angular';
     selector: 'app-image-style',
     templateUrl: './image-style.component.html',
     styleUrls: ['./image-style.component.scss'],
+    standalone: false
 })
 export class ImageStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ImageStyle;

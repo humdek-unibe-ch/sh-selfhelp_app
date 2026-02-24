@@ -1,14 +1,16 @@
 <div [id]="this.getFieldContent('id')" [class]="this.getCss()">
-    <ion-header>
-        <ion-toolbar>
-            <ion-buttons slot="start">
-                <ion-back-button defaultHref="#" (click)="closeModal()"></ion-back-button>
-            </ion-buttons>
-            <ion-title>{{this.getFieldContent('title')}}</ion-title>
-        </ion-toolbar>
-    </ion-header>
-    <ion-content #content fullscreen>
-        <app-basic-style *ngFor="let child of this.style.children" [style]="child" [url]="url"
-            [ionContent]="ionContent"></app-basic-style>
-    </ion-content>
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="#" (click)="closeModal()"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{this.getFieldContent('title')}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content #content fullscreen>
+    @for (child of this.style.children; track child) {
+      <app-basic-style [style]="child" [url]="url"
+      [ionContent]="ionContent"></app-basic-style>
+    }
+  </ion-content>
 </div>

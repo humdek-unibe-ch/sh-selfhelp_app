@@ -1,371 +1,435 @@
 <!-- Floating Button Mode -->
-<ng-container *ngIf="isFloatingButtonEnabled()">
-    <!-- Floating Button -->
+@if (isFloatingButtonEnabled()) {
+  <!-- Floating Button -->
+  @if (!isFloatingPanelOpen) {
     <button
-        *ngIf="!isFloatingPanelOpen"
-        class="floating-chat-button"
-        [class]="'position-' + getFloatingButtonPosition()"
-        (click)="toggleFloatingPanel()">
-        <ion-icon [name]="getFloatingButtonIcon()"></ion-icon>
-        <span *ngIf="getLabel('floating_button_label', '')">{{ getLabel('floating_button_label', 'Chat') }}</span>
+      class="floating-chat-button"
+      [class]="'position-' + getFloatingButtonPosition()"
+      (click)="toggleFloatingPanel()">
+      <ion-icon [name]="getFloatingButtonIcon()"></ion-icon>
+      @if (getLabel('floating_button_label', '')) {
+        <span>{{ getLabel('floating_button_label', 'Chat') }}</span>
+      }
     </button>
-
-    <!-- Floating Panel - Full Screen Modal -->
-    <div *ngIf="isFloatingPanelOpen" class="floating-chat-panel">
-        <div class="floating-panel-header">
-            <button *ngIf="isConversationsListEnabled()" class="sidebar-toggle-btn" (click)="toggleSidebar()">
-                <ion-icon name="menu"></ion-icon>
-            </button>
-            <h4>{{ getChatTitle() }}</h4>
-            <ion-button fill="clear" size="small" (click)="closeFloatingPanel()">
-                <ion-icon name="close"></ion-icon>
-            </ion-button>
-        </div>
-        <ng-container *ngTemplateOutlet="chatContent"></ng-container>
+  }
+  <!-- Floating Panel - Full Screen Modal -->
+  @if (isFloatingPanelOpen) {
+    <div class="floating-chat-panel">
+      <div class="floating-panel-header">
+        @if (isConversationsListEnabled()) {
+          <button class="sidebar-toggle-btn" (click)="toggleSidebar()">
+            <ion-icon name="menu"></ion-icon>
+          </button>
+        }
+        <h4>{{ getChatTitle() }}</h4>
+        <ion-button fill="clear" size="small" (click)="closeFloatingPanel()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </div>
+      <ng-container *ngTemplateOutlet="chatContent"></ng-container>
     </div>
-</ng-container>
+  }
+}
 
 <!-- Regular Mode -->
-<ng-container *ngIf="!isFloatingButtonEnabled()">
-    <ng-container *ngTemplateOutlet="chatContent"></ng-container>
-</ng-container>
+@if (!isFloatingButtonEnabled()) {
+  <ng-container *ngTemplateOutlet="chatContent"></ng-container>
+}
 
 <!-- Chat Content Template -->
 <ng-template #chatContent>
-    <div [class]="'llm-chat-container ' + getCss()" [class.floating-mode]="isFloatingButtonEnabled() && isFloatingPanelOpen">
+  <div [class]="'llm-chat-container ' + getCss()" [class.floating-mode]="isFloatingButtonEnabled() && isFloatingPanelOpen">
 
-        <!-- Custom Sidebar Drawer -->
-        <div *ngIf="isConversationsListEnabled()" class="sidebar-backdrop" [class.open]="isSidebarOpen" (click)="closeSidebar()"></div>
-        <div *ngIf="isConversationsListEnabled()" class="sidebar-drawer" [class.open]="isSidebarOpen">
-            <div class="sidebar-header">
-                <h4>{{ getLabel('conversations_heading', 'Conversations') }}</h4>
-                <button class="sidebar-close-btn" (click)="closeSidebar()">
-                    <ion-icon name="close"></ion-icon>
-                </button>
-            </div>
-            <div class="sidebar-body">
-                <button class="new-conversation-btn-pro" (click)="createConversation(); closeSidebar()">
-                    <span class="btn-icon"><ion-icon name="add"></ion-icon></span>
-                    <span class="btn-text">{{ getLabel('new_chat_button_label', 'New Conversation') }}</span>
-                </button>
-                <div class="conversations-list-container">
-                    <div *ngIf="isLoading" class="conversations-loading">
-                        <ion-spinner name="crescent" color="primary"></ion-spinner>
-                        <p class="loading-text">{{ getLabel('loading_text', 'Loading...') }}</p>
-                    </div>
-                    <div class="conversations-list-pro" *ngIf="!isLoading && conversations.length > 0">
-                        <div
-                            *ngFor="let conversation of conversations; trackBy: trackByConversationId"
-                            class="conversation-item"
-                            [class.active]="currentConversation?.id === conversation.id"
-                            [class.blocked]="conversation.blocked"
-                            (click)="handleConversationClick(conversation)">
-                            <div class="conversation-icon-wrapper" [class.blocked-icon]="conversation.blocked">
-                                <ion-icon [name]="conversation.blocked ? 'lock-closed' : 'chatbubble-ellipses'"></ion-icon>
-                            </div>
-                            <div class="conversation-details">
-                                <div class="conversation-header-row">
-                                    <h4 class="conversation-name">{{ conversation.title }}</h4>
-                                    <span *ngIf="conversation.blocked" class="blocked-badge">
-                                        <ion-icon name="alert-circle"></ion-icon> Blocked
-                                    </span>
-                                </div>
-                                <div class="conversation-meta">
-                                    <span class="conversation-date">{{ formatDate(conversation.updated_at) }}</span>
-                                    <span *ngIf="conversation.blocked && conversation.blocked_reason" class="blocked-reason">{{ conversation.blocked_reason }}</span>
-                                </div>
-                            </div>
-                            <button class="conversation-delete-btn" (click)="deleteConversation(conversation, $event)" [title]="getLabel('delete_button_title', 'Delete conversation')">
-                                <ion-icon name="trash-outline"></ion-icon>
-                            </button>
-                        </div>
-                    </div>
-                    <div *ngIf="!isLoading && conversations.length === 0" class="empty-conversations-pro">
-                        <div class="empty-icon"><ion-icon name="chatbubbles-outline"></ion-icon></div>
-                        <h4 class="empty-title">{{ getLabel('no_conversations_title', 'No conversations yet') }}</h4>
-                        <p class="empty-description">{{ getLabel('no_conversations_message', 'Start a new conversation to begin chatting with the AI assistant.') }}</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Custom Sidebar Drawer -->
+    @if (isConversationsListEnabled()) {
+      <div class="sidebar-backdrop" [class.open]="isSidebarOpen" (click)="closeSidebar()"></div>
+    }
+    @if (isConversationsListEnabled()) {
+      <div class="sidebar-drawer" [class.open]="isSidebarOpen">
+        <div class="sidebar-header">
+          <h4>{{ getLabel('conversations_heading', 'Conversations') }}</h4>
+          <button class="sidebar-close-btn" (click)="closeSidebar()">
+            <ion-icon name="close"></ion-icon>
+          </button>
         </div>
-
-        <!-- Error Alert -->
-        <ion-item *ngIf="error" color="danger" class="error-alert" lines="none">
-            <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
-            <ion-label class="ion-text-wrap">{{ error }}</ion-label>
-            <ion-button slot="end" fill="clear" size="small" (click)="clearError()">
-                <ion-icon name="close-outline"></ion-icon>
-            </ion-button>
-        </ion-item>
-
-        <!-- Main Chat Layout -->
-        <div class="chat-layout">
-            <!-- Chat Panel -->
-            <div class="chat-panel">
-                <!-- Chat Header -->
-                <div class="chat-header">
-                    <button *ngIf="isConversationsListEnabled()" class="sidebar-toggle-btn" (click)="toggleSidebar()">
-                        <ion-icon name="menu"></ion-icon>
+        <div class="sidebar-body">
+          <button class="new-conversation-btn-pro" (click)="createConversation(); closeSidebar()">
+            <span class="btn-icon"><ion-icon name="add"></ion-icon></span>
+            <span class="btn-text">{{ getLabel('new_chat_button_label', 'New Conversation') }}</span>
+          </button>
+          <div class="conversations-list-container">
+            @if (isLoading) {
+              <div class="conversations-loading">
+                <ion-spinner name="crescent" color="primary"></ion-spinner>
+                <p class="loading-text">{{ getLabel('loading_text', 'Loading...') }}</p>
+              </div>
+            }
+            @if (!isLoading && conversations.length > 0) {
+              <div class="conversations-list-pro">
+                @for (conversation of conversations; track trackByConversationId($index, conversation)) {
+                  <div
+                    class="conversation-item"
+                    [class.active]="currentConversation?.id === conversation.id"
+                    [class.blocked]="conversation.blocked"
+                    (click)="handleConversationClick(conversation)">
+                    <div class="conversation-icon-wrapper" [class.blocked-icon]="conversation.blocked">
+                      <ion-icon [name]="conversation.blocked ? 'lock-closed' : 'chatbubble-ellipses'"></ion-icon>
+                    </div>
+                    <div class="conversation-details">
+                      <div class="conversation-header-row">
+                        <h4 class="conversation-name">{{ conversation.title }}</h4>
+                        @if (conversation.blocked) {
+                          <span class="blocked-badge">
+                            <ion-icon name="alert-circle"></ion-icon> Blocked
+                          </span>
+                        }
+                      </div>
+                      <div class="conversation-meta">
+                        <span class="conversation-date">{{ formatDate(conversation.updated_at) }}</span>
+                        @if (conversation.blocked && conversation.blocked_reason) {
+                          <span class="blocked-reason">{{ conversation.blocked_reason }}</span>
+                        }
+                      </div>
+                    </div>
+                    <button class="conversation-delete-btn" (click)="deleteConversation(conversation, $event)" [title]="getLabel('delete_button_title', 'Delete conversation')">
+                      <ion-icon name="trash-outline"></ion-icon>
                     </button>
-
-                    <div class="header-info">
-                        <div class="chat-icon-wrapper">
-                            <ion-icon name="chatbubble-ellipses"></ion-icon>
-                        </div>
-                        <h4>{{ getChatTitle() }}</h4>
-                    </div>
-                    <ion-badge color="medium" class="model-badge">
-                        <ion-icon name="hardware-chip-outline"></ion-icon>
-                        {{ getConfiguredModel() }}
-                    </ion-badge>
-                </div>
-
-                <!-- Progress Indicator -->
-                <div *ngIf="isProgressTrackingEnabled() && progress" class="progress-indicator" [class.updating]="isProgressUpdating">
-                    <div class="progress-header">
-                        <span class="progress-label">
-                            <ion-icon name="analytics-outline"></ion-icon>
-                            {{ getLabel('progress_bar_label', 'Progress') }}
-                        </span>
-                        <span class="progress-percentage" [style.color]="getProgressColor(progress.percentage)">
-                            {{ progress.percentage | number:'1.0-0' }}%
-                        </span>
-                    </div>
-                    <ion-progress-bar [value]="progress.percentage / 100" [color]="getProgressColor(progress.percentage)"></ion-progress-bar>
-                    <div class="progress-summary">
-                        <small>{{ progress.topics_covered }} of {{ progress.topics_total }} topics covered</small>
-                    </div>
-                    <div *ngIf="progress.is_complete" class="progress-complete">
-                        <ion-icon name="checkmark-circle" color="success"></ion-icon>
-                        <span>{{ getLabel('progress_complete_message', 'Great job! You have covered all topics.') }}</span>
-                    </div>
-                </div>
-
-                <!-- Messages Container -->
-                <div #messagesContainer class="messages-container" (scroll)="onScroll()">
-                    <!-- Loading State -->
-                    <div *ngIf="isLoading" class="loading-state">
-                        <ion-spinner name="crescent"></ion-spinner>
-                        <p>{{ getLabel('loading_messages_text', 'Loading messages...') }}</p>
-                    </div>
-
-                    <!-- Auto-starting State -->
-                    <div *ngIf="isAutoStarting" class="loading-state">
-                        <ion-spinner name="crescent"></ion-spinner>
-                        <p>{{ getLabel('loading_text', 'Starting conversation...') }}</p>
-                    </div>
-
-                    <!-- Empty State -->
-                    <div *ngIf="!isLoading && !isAutoStarting && messages.length === 0" class="empty-state">
-                        <ion-icon name="chatbubbles-outline"></ion-icon>
-                        <h4>{{ getLabel('empty_state_title', 'Start a conversation') }}</h4>
-                        <p>{{ getLabel('empty_state_description', 'Send a message to start chatting with the AI assistant.') }}</p>
-                    </div>
-
-                    <!-- Messages List -->
-                    <div *ngIf="!isLoading && !isAutoStarting && messages.length > 0" class="messages-list">
-                        <div
-                            *ngFor="let message of messages; trackBy: trackByMessageId; let isLast = last"
-                            class="message-wrapper"
-                            [class.user-message]="isUserMessage(message)"
-                            [class.assistant-message]="!isUserMessage(message)">
-                            
-                            <!-- Message Bubble with icon on top -->
-                            <div class="message-bubble">
-                                <!-- Message Header with Icon -->
-                                <div class="message-header" *ngIf="!isUserMessage(message)">
-                                    <div class="message-avatar-inline">
-                                        <ion-icon name="chatbubble-ellipses"></ion-icon>
-                                    </div>
-                                    <span class="message-sender">AI Assistant</span>
-                                    <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
-                                </div>
-                                
-                                <div class="message-content">
-                                    <!-- User messages: plain text -->
-                                    <span *ngIf="isUserMessage(message)">{{ message.content }}</span>
-                                    
-                                    <!-- Assistant messages: check for structured response -->
-                                    <ng-container *ngIf="!isUserMessage(message)">
-                                        <!-- Structured Response -->
-                                        <app-llm-structured-response
-                                            *ngIf="getStructuredResponse(message)"
-                                            [response]="getStructuredResponse(message)!"
-                                            [isLastMessage]="isLast"
-                                            [isFormSubmitting]="isFormSubmitting"
-                                            (formSubmit)="handleFormSubmit($event.values, $event.readableText)"
-                                            (suggestionClick)="handleSuggestionClick($event)">
-                                        </app-llm-structured-response>
-                                        
-                                        <!-- Active Form (legacy form definition) -->
-                                        <app-llm-form-renderer
-                                            *ngIf="!getStructuredResponse(message) && getFormDefinition(message) && isLast"
-                                            [formDefinition]="getFormDefinition(message)!"
-                                            [isSubmitting]="isFormSubmitting"
-                                            (formSubmit)="handleFormSubmit($event.values, $event.readableText)">
-                                        </app-llm-form-renderer>
-                                        
-                                        <!-- Historical Form (legacy form, not last message - read-only) -->
-                                        <app-llm-form-renderer
-                                            *ngIf="!getStructuredResponse(message) && getFormDefinition(message) && !isLast"
-                                            [formDefinition]="getFormDefinition(message)!"
-                                            [disabled]="true"
-                                            [isSubmitted]="true">
-                                        </app-llm-form-renderer>
-                                        
-                                        <!-- Plain Markdown (fallback for non-structured responses) -->
-                                        <app-markdown-renderer 
-                                            *ngIf="!getStructuredResponse(message) && !getFormDefinition(message)"
-                                            [content]="message.content">
-                                        </app-markdown-renderer>
-                                    </ng-container>
-                                </div>
-                                
-                                <!-- Attachment Indicator -->
-                                <div *ngIf="getAttachmentCount(message) > 0" class="attachment-indicator">
-                                    <ion-icon name="attach"></ion-icon>
-                                    <span *ngIf="getAttachmentCount(message) === 1">{{ getLabel('single_file_attached_text', '1 file attached') }}</span>
-                                    <span *ngIf="getAttachmentCount(message) > 1">{{ getLabel('multiple_files_attached_text', '{count} files attached').replace('{count}', getAttachmentCount(message).toString()) }}</span>
-                                </div>
-                                
-                                <!-- Message Meta for user messages -->
-                                <div class="message-meta" *ngIf="isUserMessage(message)">
-                                    <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
-                                </div>
-                                
-                                <!-- Token count for assistant messages -->
-                                <div class="message-meta" *ngIf="!isUserMessage(message) && message.tokens_used">
-                                    <span class="message-tokens">
-                                        <ion-icon name="flash-outline"></ion-icon>
-                                        {{ message.tokens_used }}{{ getLabel('tokens_used_suffix', ' tokens') }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Processing Indicator -->
-                    <div *ngIf="isProcessing" class="message-wrapper assistant-message processing-indicator">
-                        <div class="message-bubble">
-                            <div class="processing-content">
-                                <div class="typing-animation">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                <p class="thinking-text">{{ getLabel('ai_thinking_text', 'AI is thinking...') }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Continue Button (Form Mode) -->
-                    <div *ngIf="isFormModeEnabled() && !isProcessing && messages.length > 0" class="continue-button-wrapper">
-                        <ion-button 
-                            expand="block" 
-                            size="small"
-                            (click)="handleContinue()"
-                            [disabled]="isProcessing || isFormSubmitting">
-                            <ion-icon name="arrow-forward" slot="start"></ion-icon>
-                            {{ getLabel('continue_button_label', 'Continue') }}
-                        </ion-button>
-                    </div>
-
-                    <!-- Retry Form Button -->
-                    <div *ngIf="lastFailedFormSubmission" class="retry-form-wrapper">
-                        <ion-item color="warning" lines="none">
-                            <ion-icon name="warning" slot="start"></ion-icon>
-                            <ion-label class="ion-text-wrap">
-                                <strong>Form submission failed</strong>
-                                <p>Your previous form submission could not be processed.</p>
-                            </ion-label>
-                        </ion-item>
-                        <ion-button expand="block" size="small" color="warning" (click)="retryFormSubmission()" [disabled]="isFormSubmitting">
-                            <ion-icon name="refresh" slot="start"></ion-icon>
-                            Retry Form Submission
-                        </ion-button>
-                    </div>
-                </div>
-
-                <!-- Message Input -->
-                <div class="message-input-container">
-                    <!-- Blocked Notice -->
-                    <div *ngIf="isConversationBlocked()" class="blocked-notice">
-                        <ion-icon name="ban-outline"></ion-icon>
-                        <span [innerHTML]="getLabel('danger_blocked_message', 'This conversation has been blocked.')"></span>
-                    </div>
-
-                    <!-- Form Mode Notice -->
-                    <div *ngIf="isFormModeEnabled() && !isConversationBlocked()" class="form-mode-notice">
-                        <ion-icon name="list-outline"></ion-icon>
-                        <div>
-                            <strong>{{ getLabel('form_mode_active_title', 'Form Mode Active') }}</strong>
-                            <p>{{ getLabel('form_mode_active_description', 'Please use the form above to respond.') }}</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Regular Input -->
-                    <ng-container *ngIf="!isConversationBlocked() && !isFormModeEnabled()">
-                        <!-- File Error -->
-                        <ion-item *ngIf="fileError" color="danger" class="file-error-alert" lines="none">
-                            <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
-                            <ion-label class="ion-text-wrap">{{ fileError }}</ion-label>
-                            <ion-button slot="end" fill="clear" size="small" (click)="clearFileError()">
-                                <ion-icon name="close-outline"></ion-icon>
-                            </ion-button>
-                        </ion-item>
-
-                        <!-- File Attachments Preview -->
-                        <div *ngIf="selectedFiles.length > 0" class="attachments-preview">
-                            <div 
-                                *ngFor="let file of selectedFiles; trackBy: trackByFileId"
-                                class="attachment-item">
-                                <div class="attachment-preview">
-                                    <img *ngIf="file.previewUrl" [src]="file.previewUrl" alt="Preview">
-                                    <ion-icon *ngIf="!file.previewUrl" name="document-outline"></ion-icon>
-                                </div>
-                                <div class="attachment-info">
-                                    <span class="attachment-name">{{ llmChatService.truncateFileName(file.file.name) }}</span>
-                                    <span class="attachment-size">{{ llmChatService.formatFileSize(file.file.size) }}</span>
-                                </div>
-                                <ion-button 
-                                    fill="clear" 
-                                    size="small" 
-                                    color="danger"
-                                    (click)="removeFile(file.id)"
-                                    [title]="getLabel('remove_file_title', 'Remove file')">
-                                    <ion-icon name="close-circle"></ion-icon>
-                                </ion-button>
-                            </div>
-                        </div>
-
-                        <app-chat-input
-                            #chatInputRef
-                            [variant]="'llm'"
-                            [message]="currentMessage"
-                            (messageChange)="currentMessage = $event"
-                            [placeholder]="getLabel('message_placeholder', 'Type your message...')"
-                            [disabled]="isTextareaDisabled"
-                            [maxLength]="MAX_MESSAGE_LENGTH"
-                            [rows]="2"
-                            [showCharCount]="true"
-                            [speechToTextEnabled]="true"
-                            [showAttachButton]="isVisionAttachEnabled"
-                            [showDisabledAttachButton]="isFileUploadsEnabled() && !isVisionModel()"
-                            [attachDisabled]="isVisionAttachDisabled"
-                            [attachButtonTitle]="isVisionModel() ? attachFilesTitle : noVisionSupportTitle"
-                            [showSendSpinner]="isProcessing"
-                            [clearButtonTitle]="clearButtonTitle"
-                            [sendButtonTitle]="sendButtonTitle"
-                            [enableFileDrop]="isFileUploadsEnabled() && isVisionModel()"
-                            [fileInputAccept]="acceptFileTypes"
-                            [fileInputMultiple]="true"
-                            (attachRequested)="openFilePicker()"
-                            (filesSelected)="onInputFilesSelected($event)"
-                            (messageSend)="onChatInputSend($event)">
-                        </app-chat-input>
-                    </ng-container>
-                </div>
-            </div>
+                  </div>
+                }
+              </div>
+            }
+            @if (!isLoading && conversations.length === 0) {
+              <div class="empty-conversations-pro">
+                <div class="empty-icon"><ion-icon name="chatbubbles-outline"></ion-icon></div>
+                <h4 class="empty-title">{{ getLabel('no_conversations_title', 'No conversations yet') }}</h4>
+                <p class="empty-description">{{ getLabel('no_conversations_message', 'Start a new conversation to begin chatting with the AI assistant.') }}</p>
+              </div>
+            }
+          </div>
         </div>
+      </div>
+    }
+
+    <!-- Error Alert -->
+    @if (error) {
+      <ion-item color="danger" class="error-alert" lines="none">
+        <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+        <ion-label class="ion-text-wrap">{{ error }}</ion-label>
+        <ion-button slot="end" fill="clear" size="small" (click)="clearError()">
+          <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    }
+
+    <!-- Main Chat Layout -->
+    <div class="chat-layout">
+      <!-- Chat Panel -->
+      <div class="chat-panel">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          @if (isConversationsListEnabled()) {
+            <button class="sidebar-toggle-btn" (click)="toggleSidebar()">
+              <ion-icon name="menu"></ion-icon>
+            </button>
+          }
+
+          <div class="header-info">
+            <div class="chat-icon-wrapper">
+              <ion-icon name="chatbubble-ellipses"></ion-icon>
+            </div>
+            <h4>{{ getChatTitle() }}</h4>
+          </div>
+          <ion-badge color="medium" class="model-badge">
+            <ion-icon name="hardware-chip-outline"></ion-icon>
+            {{ getConfiguredModel() }}
+          </ion-badge>
+        </div>
+
+        <!-- Progress Indicator -->
+        @if (isProgressTrackingEnabled() && progress) {
+          <div class="progress-indicator" [class.updating]="isProgressUpdating">
+            <div class="progress-header">
+              <span class="progress-label">
+                <ion-icon name="analytics-outline"></ion-icon>
+                {{ getLabel('progress_bar_label', 'Progress') }}
+              </span>
+              <span class="progress-percentage" [style.color]="getProgressColor(progress.percentage)">
+                {{ progress.percentage | number:'1.0-0' }}%
+              </span>
+            </div>
+            <ion-progress-bar [value]="progress.percentage / 100" [color]="getProgressColor(progress.percentage)"></ion-progress-bar>
+            <div class="progress-summary">
+              <small>{{ progress.topics_covered }} of {{ progress.topics_total }} topics covered</small>
+            </div>
+            @if (progress.is_complete) {
+              <div class="progress-complete">
+                <ion-icon name="checkmark-circle" color="success"></ion-icon>
+                <span>{{ getLabel('progress_complete_message', 'Great job! You have covered all topics.') }}</span>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Messages Container -->
+        <div #messagesContainer class="messages-container" (scroll)="onScroll()">
+          <!-- Loading State -->
+          @if (isLoading) {
+            <div class="loading-state">
+              <ion-spinner name="crescent"></ion-spinner>
+              <p>{{ getLabel('loading_messages_text', 'Loading messages...') }}</p>
+            </div>
+          }
+
+          <!-- Auto-starting State -->
+          @if (isAutoStarting) {
+            <div class="loading-state">
+              <ion-spinner name="crescent"></ion-spinner>
+              <p>{{ getLabel('loading_text', 'Starting conversation...') }}</p>
+            </div>
+          }
+
+          <!-- Empty State -->
+          @if (!isLoading && !isAutoStarting && messages.length === 0) {
+            <div class="empty-state">
+              <ion-icon name="chatbubbles-outline"></ion-icon>
+              <h4>{{ getLabel('empty_state_title', 'Start a conversation') }}</h4>
+              <p>{{ getLabel('empty_state_description', 'Send a message to start chatting with the AI assistant.') }}</p>
+            </div>
+          }
+
+          <!-- Messages List -->
+          @if (!isLoading && !isAutoStarting && messages.length > 0) {
+            <div class="messages-list">
+              @for (message of messages; track trackByMessageId($index, message); let isLast = $last) {
+                <div
+                  class="message-wrapper"
+                  [class.user-message]="isUserMessage(message)"
+                  [class.assistant-message]="!isUserMessage(message)">
+                  <!-- Message Bubble with icon on top -->
+                  <div class="message-bubble">
+                    <!-- Message Header with Icon -->
+                    @if (!isUserMessage(message)) {
+                      <div class="message-header">
+                        <div class="message-avatar-inline">
+                          <ion-icon name="chatbubble-ellipses"></ion-icon>
+                        </div>
+                        <span class="message-sender">AI Assistant</span>
+                        <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
+                      </div>
+                    }
+                    <div class="message-content">
+                      <!-- User messages: plain text -->
+                      @if (isUserMessage(message)) {
+                        <span>{{ message.content }}</span>
+                      }
+                      <!-- Assistant messages: check for structured response -->
+                      @if (!isUserMessage(message)) {
+                        <!-- Structured Response -->
+                        @if (getStructuredResponse(message)) {
+                          <app-llm-structured-response
+                            [response]="getStructuredResponse(message)!"
+                            [isLastMessage]="isLast"
+                            [isFormSubmitting]="isFormSubmitting"
+                            (formSubmit)="handleFormSubmit($event.values, $event.readableText)"
+                            (suggestionClick)="handleSuggestionClick($event)">
+                          </app-llm-structured-response>
+                        }
+                        <!-- Active Form (legacy form definition) -->
+                        @if (!getStructuredResponse(message) && getFormDefinition(message) && isLast) {
+                          <app-llm-form-renderer
+                            [formDefinition]="getFormDefinition(message)!"
+                            [isSubmitting]="isFormSubmitting"
+                            (formSubmit)="handleFormSubmit($event.values, $event.readableText)">
+                          </app-llm-form-renderer>
+                        }
+                        <!-- Historical Form (legacy form, not last message - read-only) -->
+                        @if (!getStructuredResponse(message) && getFormDefinition(message) && !isLast) {
+                          <app-llm-form-renderer
+                            [formDefinition]="getFormDefinition(message)!"
+                            [disabled]="true"
+                            [isSubmitted]="true">
+                          </app-llm-form-renderer>
+                        }
+                        <!-- Plain Markdown (fallback for non-structured responses) -->
+                        @if (!getStructuredResponse(message) && !getFormDefinition(message)) {
+                          <app-markdown-renderer
+                            [content]="message.content">
+                          </app-markdown-renderer>
+                        }
+                      }
+                    </div>
+                    <!-- Attachment Indicator -->
+                    @if (getAttachmentCount(message) > 0) {
+                      <div class="attachment-indicator">
+                        <ion-icon name="attach"></ion-icon>
+                        @if (getAttachmentCount(message) === 1) {
+                          <span>{{ getLabel('single_file_attached_text', '1 file attached') }}</span>
+                        }
+                        @if (getAttachmentCount(message) > 1) {
+                          <span>{{ getLabel('multiple_files_attached_text', '{count} files attached').replace('{count}', getAttachmentCount(message).toString()) }}</span>
+                        }
+                      </div>
+                    }
+                    <!-- Message Meta for user messages -->
+                    @if (isUserMessage(message)) {
+                      <div class="message-meta">
+                        <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
+                      </div>
+                    }
+                    <!-- Token count for assistant messages -->
+                    @if (!isUserMessage(message) && message.tokens_used) {
+                      <div class="message-meta">
+                        <span class="message-tokens">
+                          <ion-icon name="flash-outline"></ion-icon>
+                          {{ message.tokens_used }}{{ getLabel('tokens_used_suffix', ' tokens') }}
+                        </span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Processing Indicator -->
+          @if (isProcessing) {
+            <div class="message-wrapper assistant-message processing-indicator">
+              <div class="message-bubble">
+                <div class="processing-content">
+                  <div class="typing-animation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <p class="thinking-text">{{ getLabel('ai_thinking_text', 'AI is thinking...') }}</p>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Continue Button (Form Mode) -->
+          @if (isFormModeEnabled() && !isProcessing && messages.length > 0) {
+            <div class="continue-button-wrapper">
+              <ion-button
+                expand="block"
+                size="small"
+                (click)="handleContinue()"
+                [disabled]="isProcessing || isFormSubmitting">
+                <ion-icon name="arrow-forward" slot="start"></ion-icon>
+                {{ getLabel('continue_button_label', 'Continue') }}
+              </ion-button>
+            </div>
+          }
+
+          <!-- Retry Form Button -->
+          @if (lastFailedFormSubmission) {
+            <div class="retry-form-wrapper">
+              <ion-item color="warning" lines="none">
+                <ion-icon name="warning" slot="start"></ion-icon>
+                <ion-label class="ion-text-wrap">
+                  <strong>Form submission failed</strong>
+                  <p>Your previous form submission could not be processed.</p>
+                </ion-label>
+              </ion-item>
+              <ion-button expand="block" size="small" color="warning" (click)="retryFormSubmission()" [disabled]="isFormSubmitting">
+                <ion-icon name="refresh" slot="start"></ion-icon>
+                Retry Form Submission
+              </ion-button>
+            </div>
+          }
+        </div>
+
+        <!-- Message Input -->
+        <div class="message-input-container">
+          <!-- Blocked Notice -->
+          @if (isConversationBlocked()) {
+            <div class="blocked-notice">
+              <ion-icon name="ban-outline"></ion-icon>
+              <span [innerHTML]="getLabel('danger_blocked_message', 'This conversation has been blocked.')"></span>
+            </div>
+          }
+
+          <!-- Form Mode Notice -->
+          @if (isFormModeEnabled() && !isConversationBlocked()) {
+            <div class="form-mode-notice">
+              <ion-icon name="list-outline"></ion-icon>
+              <div>
+                <strong>{{ getLabel('form_mode_active_title', 'Form Mode Active') }}</strong>
+                <p>{{ getLabel('form_mode_active_description', 'Please use the form above to respond.') }}</p>
+              </div>
+            </div>
+          }
+
+          <!-- Regular Input -->
+          @if (!isConversationBlocked() && !isFormModeEnabled()) {
+            <!-- File Error -->
+            @if (fileError) {
+              <ion-item color="danger" class="file-error-alert" lines="none">
+                <ion-icon name="alert-circle-outline" slot="start"></ion-icon>
+                <ion-label class="ion-text-wrap">{{ fileError }}</ion-label>
+                <ion-button slot="end" fill="clear" size="small" (click)="clearFileError()">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </ion-item>
+            }
+            <!-- File Attachments Preview -->
+            @if (selectedFiles.length > 0) {
+              <div class="attachments-preview">
+                @for (file of selectedFiles; track trackByFileId($index, file)) {
+                  <div
+                    class="attachment-item">
+                    <div class="attachment-preview">
+                      @if (file.previewUrl) {
+                        <img [src]="file.previewUrl" alt="Preview">
+                      }
+                      @if (!file.previewUrl) {
+                        <ion-icon name="document-outline"></ion-icon>
+                      }
+                    </div>
+                    <div class="attachment-info">
+                      <span class="attachment-name">{{ llmChatService.truncateFileName(file.file.name) }}</span>
+                      <span class="attachment-size">{{ llmChatService.formatFileSize(file.file.size) }}</span>
+                    </div>
+                    <ion-button
+                      fill="clear"
+                      size="small"
+                      color="danger"
+                      (click)="removeFile(file.id)"
+                      [title]="getLabel('remove_file_title', 'Remove file')">
+                      <ion-icon name="close-circle"></ion-icon>
+                    </ion-button>
+                  </div>
+                }
+              </div>
+            }
+            <app-chat-input
+              #chatInputRef
+              [variant]="'llm'"
+              [message]="currentMessage"
+              (messageChange)="currentMessage = $event"
+              [placeholder]="getLabel('message_placeholder', 'Type your message...')"
+              [disabled]="isTextareaDisabled"
+              [maxLength]="MAX_MESSAGE_LENGTH"
+              [rows]="2"
+              [showCharCount]="true"
+              [speechToTextEnabled]="true"
+              [showAttachButton]="isVisionAttachEnabled"
+              [showDisabledAttachButton]="isFileUploadsEnabled() && !isVisionModel()"
+              [attachDisabled]="isVisionAttachDisabled"
+              [attachButtonTitle]="isVisionModel() ? attachFilesTitle : noVisionSupportTitle"
+              [showSendSpinner]="isProcessing"
+              [clearButtonTitle]="clearButtonTitle"
+              [sendButtonTitle]="sendButtonTitle"
+              [enableFileDrop]="isFileUploadsEnabled() && isVisionModel()"
+              [fileInputAccept]="acceptFileTypes"
+              [fileInputMultiple]="true"
+              (attachRequested)="openFilePicker()"
+              (filesSelected)="onInputFilesSelected($event)"
+              (messageSend)="onChatInputSend($event)">
+            </app-chat-input>
+          }
+        </div>
+      </div>
     </div>
+  </div>
 </ng-template>

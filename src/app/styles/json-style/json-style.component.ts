@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-json-style',
     templateUrl: './json-style.component.html',
     styleUrls: ['./json-style.component.scss'],
+    standalone: false
 })
 export class JsonStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: JsonStyle;

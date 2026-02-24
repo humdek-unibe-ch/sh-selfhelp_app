@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-quiz-style',
     templateUrl: './quiz-style.component.html',
     styleUrls: ['./quiz-style.component.scss'],
+    standalone: false
 })
 export class QuizStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: QuizStyle;

@@ -5,8 +5,7 @@ import { NavigationPage } from './navigation.page';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { SelfhelpService } from '../services/selfhelp.service';
 import { SelfHelp } from '../selfhelpInterfaces';
-import { SafePipeModule } from 'safe-pipe';
-import { DataTablesModule } from 'angular-datatables';
+import { SafePipe } from 'safe-pipe';
 import { LoginComponent } from '../components/login/login.component';
 import { ProfileComponent } from '../components/profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -53,7 +52,7 @@ import { NavigationContainerStyleComponent } from '../styles/navigation-containe
 import { JsonStyleComponent } from '../styles/json-style/json-style.component';
 import { QuizStyleComponent } from '../styles/quiz-style/quiz-style.component';
 import { LoginStyleComponent } from '../styles/login-style/login-style.component';
-import { RegisterStyleComponen } from '../styles/register-style/register-style.component';
+import { RegisterStyleComponent } from '../styles/register-style/register-style.component';
 import { ProfileStyleComponent } from '../styles/profile-style/profile-style.component';
 import { FormStyleComponent } from '../styles/form-style/form-style.component';
 import { ResetPasswordStyleComponent } from '../styles/reset-password-style/reset-password-style.component';
@@ -96,7 +95,7 @@ import { LlmFormRendererComponent } from '../components/llm-form-renderer/llm-fo
 import { ChatInputComponent } from '../components/chat-input/chat-input.component';
 import { ChatMessageComponent } from '../components/chat-message/chat-message.component';
 import { TherapyChatModalComponent } from '../components/therapy-chat-modal/therapy-chat-modal.component';
-PlotlyModule.plotlyjs = PlotlyJS;
+import { AppDatatableDirective } from '../directives/app-datatable.directive';
 
 const routes: Routes = [
     {
@@ -125,12 +124,11 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         FormsModule,
         ReactiveFormsModule,
-        SafePipeModule,
-        DataTablesModule,
+        SafePipe,
         TranslateModule,
         FullCalendarModule,
         SurveyModule,
-        PlotlyModule,
+        PlotlyModule.forRoot(PlotlyJS),
         NgxColorsModule,
         QuillModule.forRoot({
             suppressGlobalRegisterWarning: true,
@@ -199,7 +197,7 @@ const routes: Routes = [
         JsonStyleComponent,
         QuizStyleComponent,
         LoginStyleComponent,
-        RegisterStyleComponen,
+        RegisterStyleComponent,
         ProfileStyleComponent,
         FormStyleComponent,
         ResetPasswordStyleComponent,
@@ -216,6 +214,7 @@ const routes: Routes = [
         CalendarsStyleComponent,
         SbAsterChartStyleComponent,
         AutofillDirective,
+        AppDatatableDirective,
         ShortcutButtonStyleComponent,
         OpenAppButtonStyleComponent,
         CheckboxStyleComponent,

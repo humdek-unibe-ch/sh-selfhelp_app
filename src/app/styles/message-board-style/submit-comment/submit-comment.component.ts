@@ -5,6 +5,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-submit-comment',
     templateUrl: './submit-comment.component.html',
     styleUrls: ['./submit-comment.component.scss'],
+    standalone: false
 })
 export class SubmitCommentComponent implements OnInit {
     @Input() reply_value!: string;

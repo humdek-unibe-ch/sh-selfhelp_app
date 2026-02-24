@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-html-tag-style',
     templateUrl: './html-tag-style.component.html',
     styleUrls: ['./html-tag-style.component.scss'],
+    standalone: false
 })
 export class HtmlTagStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: HTMLTagStyle;

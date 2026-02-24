@@ -8,6 +8,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-message-board-style',
     templateUrl: './message-board-style.component.html',
     styleUrls: ['./message-board-style.component.scss'],
+    standalone: false
 })
 export class MessageBoardStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: MessageBoardStyle;

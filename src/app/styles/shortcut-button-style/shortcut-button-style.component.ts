@@ -8,6 +8,7 @@ import { AndroidSettings, IOSSettings, NativeSettings } from 'capacitor-native-s
     selector: 'app-shortcut-button-style',
     templateUrl: './shortcut-button-style.component.html',
     styleUrls: ['./shortcut-button-style.component.scss'],
+    standalone: false
 })
 export class ShortcutButtonStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ShortcutButtonStyle;

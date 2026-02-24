@@ -5,6 +5,7 @@ import { VoiceRecorder } from 'capacitor-voice-recorder';
     selector: 'app-survey-js-voice-recorder',
     templateUrl: './survey-js-voice-recorder.component.html',
     styleUrls: ['./survey-js-voice-recorder.component.scss'],
+    standalone: false
 })
 export class SurveyJsVoiceRecorderComponent implements OnInit {
     @Input() question: any;  // Add this line to accept the question object

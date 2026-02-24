@@ -5,6 +5,7 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
     selector: 'app-modal-page',
     templateUrl: './modal-page.component.html',
     styleUrls: ['./modal-page.component.scss'],
+    standalone: false
 })
 export class ModalPageComponent extends BasicComponentComponent implements OnInit {
     @Input() url_param!: string;

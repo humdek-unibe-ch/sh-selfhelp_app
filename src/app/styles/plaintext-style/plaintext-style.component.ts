@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-plaintext-style',
     templateUrl: './plaintext-style.component.html',
     styleUrls: ['./plaintext-style.component.scss'],
+    standalone: false
 })
 export class PlaintextStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: PlaintextStyle;

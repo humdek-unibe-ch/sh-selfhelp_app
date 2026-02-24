@@ -1,43 +1,55 @@
-<ng-container *ngIf="this.init">
-    <ion-tabs #navigation [class.therapy-chat-is-active]="isTherapyChatActive">
-        <ion-tab-bar slot="bottom">
-            <!-- Regular navigation tabs (first) -->
-            <ion-tab-button *ngFor="let nav of selfHelp ? selfHelp.navigation : []; let i = index"
-                [tab]="getTabName(nav)" (click)="setTab(nav)">
-                <ion-icon *ngIf="getIcon(nav) !== ''" [name]="getIcon(nav)"></ion-icon>
-                <ion-label>{{nav.title}}</ion-label>
-            </ion-tab-button>
-            <!-- Therapy chat tab (after nav tabs): only when floating is NOT enabled -->
-            <ion-tab-button *ngIf="therapyChatState.available && !therapyChatState.enableFloating"
-                (click)="navigateToTherapyChat()"
-                class="therapy-chat-tab"
-                [class.tab-selected]="isTherapyChatActive">
-                <ion-icon [name]="getTherapyChatIcon()"></ion-icon>
-                <ion-label>{{ getTherapyChatLabel() }}</ion-label>
-                <ion-badge *ngIf="therapyChatState.unreadCount > 0" color="danger" class="tab-badge">
-                    {{ therapyChatState.unreadCount }}
-                </ion-badge>
-            </ion-tab-button>
-        </ion-tab-bar>
-    </ion-tabs>
-
-    <!-- Therapy Chat FAB: only when floating IS enabled -->
-    <ion-fab *ngIf="therapyChatState.available && therapyChatState.enableFloating"
-        [vertical]="getFabVertical()" [horizontal]="getFabHorizontal()" slot="fixed"
-        class="therapy-chat-fab">
-        <ion-fab-button (click)="openTherapyChatModal()" color="primary" size="small">
-            <ion-icon [name]="getTherapyChatIcon()"></ion-icon>
-        </ion-fab-button>
-        <ion-badge *ngIf="therapyChatState.unreadCount > 0" color="danger" class="fab-badge">
-            {{ therapyChatState.unreadCount }}
+@if (this.init) {
+  <ion-tabs #navigation [class.therapy-chat-is-active]="isTherapyChatActive">
+    <ion-tab-bar slot="bottom">
+      <!-- Regular navigation tabs (first) -->
+      @for (nav of selfHelp ? selfHelp.navigation : []; track nav; let i = $index) {
+        <ion-tab-button
+          [tab]="getTabName(nav)" (click)="setTab(nav)">
+          @if (getIcon(nav) !== '') {
+            <ion-icon [name]="getIcon(nav)"></ion-icon>
+          }
+          <ion-label>{{nav.title}}</ion-label>
+        </ion-tab-button>
+      }
+      <!-- Therapy chat tab (after nav tabs): only when floating is NOT enabled -->
+      @if (therapyChatState.available && !therapyChatState.enableFloating) {
+        <ion-tab-button
+          (click)="navigateToTherapyChat()"
+          class="therapy-chat-tab"
+          [class.tab-selected]="isTherapyChatActive">
+          <ion-icon [name]="getTherapyChatIcon()"></ion-icon>
+          <ion-label>{{ getTherapyChatLabel() }}</ion-label>
+          @if (therapyChatState.unreadCount > 0) {
+            <ion-badge color="danger" class="tab-badge">
+              {{ therapyChatState.unreadCount }}
+            </ion-badge>
+          }
+        </ion-tab-button>
+      }
+    </ion-tab-bar>
+  </ion-tabs>
+  <!-- Therapy Chat FAB: only when floating IS enabled -->
+  @if (therapyChatState.available && therapyChatState.enableFloating) {
+    <ion-fab
+      [vertical]="getFabVertical()" [horizontal]="getFabHorizontal()" slot="fixed"
+      class="therapy-chat-fab">
+      <ion-fab-button (click)="openTherapyChatModal()" color="primary" size="small">
+        <ion-icon [name]="getTherapyChatIcon()"></ion-icon>
+      </ion-fab-button>
+      @if (therapyChatState.unreadCount > 0) {
+        <ion-badge color="danger" class="fab-badge">
+          {{ therapyChatState.unreadCount }}
         </ion-badge>
+      }
     </ion-fab>
-
-    <ion-content *ngIf="selfHelp && selfHelp.navigation && selfHelp.navigation.length === 0">
-        <div class="h-100 w-100 d-flex justify-content-center align-items-center">
-            <div class=''>
-                <!-- Something went wrong -->
-            </div>
+  }
+  @if (selfHelp && selfHelp.navigation && selfHelp.navigation.length === 0) {
+    <ion-content>
+      <div class="h-100 w-100 d-flex justify-content-center align-items-center">
+        <div class=''>
+          <!-- Something went wrong -->
         </div>
+      </div>
     </ion-content>
-</ng-container>
+  }
+}

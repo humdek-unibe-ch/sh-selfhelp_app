@@ -1,25 +1,41 @@
-<table *ngIf="style.fields.length > 0 && getFieldContent('is_log') === '1'" datatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
+@if (style.fields.length > 0 && getFieldContent('is_log') === '1') {
+  <table appDatatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
     <thead>
-        <tr>
-            <th *ngFor="let label of header">{{label}}</th>
-        </tr>
+      <tr>
+        @for (label of header; track label) {
+          <th>{{label}}</th>
+        }
+      </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let row of rows">
-            <td *ngFor="let cell of getRowCells(row)">{{cell}}</td>
-            <td *ngIf="style.can_delete" class="remove-user-input-field"><a data-toggle="modal" data-target=""
-                    class="text-secondary" href="" (click)="deleteAlert(row)"><ion-icon name="trash-outline"></ion-icon></a></td>
-        </tr>
-    </tbody>
-</table>
+      @for (row of rows; track row) {
+        <tr>
+          @for (cell of getRowCells(row); track cell) {
+            <td>{{cell}}</td>
+          }
+          @if (style.can_delete) {
+            <td class="remove-user-input-field"><a data-toggle="modal" data-target=""
+              class="text-secondary" href="" (click)="deleteAlert(row)"><ion-icon name="trash-outline"></ion-icon></a></td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 
-<div *ngIf="style.fields.length > 0 && getFieldContent('is_log') === '0'" [class]="getCss()">
-    <ion-item *ngFor="let field of getLastRecordField()">
-        <ion-label>{{field.label}}</ion-label>
-        <ion-text>{{(field.value)}}</ion-text>
-    </ion-item>
-</div>
+  @if (style.fields.length > 0 && getFieldContent('is_log') === '0') {
+    <div [class]="getCss()">
+      @for (field of getLastRecordField(); track field) {
+        <ion-item>
+          <ion-label>{{field.label}}</ion-label>
+          <ion-text>{{(field.value)}}</ion-text>
+        </ion-item>
+      }
+    </div>
+  }
 
-<div *ngIf="style.fields.length === 0" >
-    No Data
-</div>
+  @if (style.fields.length === 0) {
+    <div >
+      No Data
+    </div>
+  }

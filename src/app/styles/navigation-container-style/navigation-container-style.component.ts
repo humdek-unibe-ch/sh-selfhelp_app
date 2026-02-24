@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-navigation-container-style',
     templateUrl: './navigation-container-style.component.html',
     styleUrls: ['./navigation-container-style.component.scss'],
+    standalone: false
 })
 export class NavigationContainerStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: NavigationContainerStyle;

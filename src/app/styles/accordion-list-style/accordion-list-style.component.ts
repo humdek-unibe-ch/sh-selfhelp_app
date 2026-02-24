@@ -6,6 +6,7 @@ import { AccordionListStyle } from './../../selfhelpInterfaces';
     selector: 'app-accordion-list-style',
     templateUrl: './accordion-list-style.component.html',
     styleUrls: ['./accordion-list-style.component.scss'],
+    standalone: false
 })
 export class AccordionListStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: AccordionListStyle;

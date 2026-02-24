@@ -5,6 +5,7 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
     selector: 'app-pdf-viewer',
     templateUrl: './pdf-viewer.component.html',
     styleUrls: ['./pdf-viewer.component.scss'],
+    standalone: false
 })
 export class PdfViewerComponent extends BasicComponentComponent implements OnInit {
 

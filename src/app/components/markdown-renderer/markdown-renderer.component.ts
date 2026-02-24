@@ -21,7 +21,8 @@ declare var Prism: any;
     selector: 'app-markdown-renderer',
     templateUrl: './markdown-renderer.component.html',
     styleUrls: ['./markdown-renderer.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class MarkdownRendererComponent implements OnChanges, AfterViewChecked {
     @Input() content: string = '';

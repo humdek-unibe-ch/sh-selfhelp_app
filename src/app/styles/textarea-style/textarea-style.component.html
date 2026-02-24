@@ -1,5 +1,9 @@
-<ion-item *ngIf="parentForm" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label" position="floating">{{getFieldContent('label')}}</ion-label>
+@if (parentForm) {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
+    @if (style.label) {
+      <ion-label position="floating">{{getFieldContent('label')}}</ion-label>
+    }
     <ion-textarea [rows]="5" [formControlName]="getFieldContent('name')" [placeholder]="getFieldContent('placeholder')"
-        [minlength]="getFieldContent('min')" [maxlength]="getFieldContent('max')"></ion-textarea>
-</ion-item>
+    [minlength]="getFieldContent('min')" [maxlength]="getFieldContent('max')"></ion-textarea>
+  </ion-item>
+}

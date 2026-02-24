@@ -10,6 +10,7 @@ import { GlobalsService } from 'src/app/services/globals.service';
     selector: 'app-validate-style',
     templateUrl: './validate-style.component.html',
     styleUrls: ['./validate-style.component.scss'],
+    standalone: false
 })
 export class ValidateStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ValidateStyle;

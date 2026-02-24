@@ -10,6 +10,7 @@ import { IonInput } from '@ionic/angular';
     selector: 'app-two-factor-auth-style',
     templateUrl: './two-factor-auth-style.component.html',
     styleUrls: ['./two-factor-auth-style.component.scss'],
+    standalone: false
 })
 export class TwoFactorAuthStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() override style!: TwoFactorAuthStyle;

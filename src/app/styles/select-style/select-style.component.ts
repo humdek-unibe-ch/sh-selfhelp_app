@@ -9,6 +9,7 @@ declare const IconSelect: any;
     selector: 'app-select-style',
     templateUrl: './select-style.component.html',
     styleUrls: ['./select-style.component.scss'],
+    standalone: false
 })
 export class SelectStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: SelectStyle;

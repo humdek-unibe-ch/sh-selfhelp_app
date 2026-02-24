@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
     selector: 'app-alert-style',
     templateUrl: './alert-style.component.html',
     styleUrls: ['./alert-style.component.scss'],
+    standalone: false
 })
 export class AlertStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: AlertStyle;

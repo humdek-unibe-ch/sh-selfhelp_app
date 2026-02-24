@@ -3,11 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy, isPlatform } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, FormBuilder } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import localeDe from '@angular/common/locales/de';
 import { SkinApp } from './selfhelpInterfaces';
 import { MobilePreviewComponent } from './mobile-preview/mobile-preview.component';
@@ -18,10 +18,6 @@ import { NgxColorsModule } from 'ngx-colors';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MarkdownModule } from 'ngx-markdown';
 registerLocaleData(localeDe);
-
-export function createTranslateLoader(http: HttpClient) {
-    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 export function getAppSkin(): SkinApp {
     if (isPlatform('ios')) {
@@ -38,13 +34,11 @@ export function getAppSkin(): SkinApp {
     }
 }
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         MobilePreviewComponent
     ],
-    imports: [
-        BrowserModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
         BrowserAnimationsModule,
         FormsModule,
         IonicModule.forRoot({
@@ -52,24 +46,19 @@ export function getAppSkin(): SkinApp {
             innerHTMLTemplatesEnabled: true
         }),
         AppRoutingModule,
-        HttpClientModule,
         SurveyModule,
         FullCalendarModule,
         NgxColorsModule,
         MarkdownModule.forRoot(),
         TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: (createTranslateLoader),
-                deps: [HttpClient]
-            }
-        }),
-    ],
-    providers: [
+            loader: provideTranslateHttpLoader({
+                prefix: './assets/i18n/',
+                suffix: '.json'
+            })
+        })], providers: [
         FormBuilder,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        { provide: LOCALE_ID, useValue: 'de-DE' }
-    ],
-    bootstrap: [AppComponent]
-})
+        { provide: LOCALE_ID, useValue: 'de-DE' },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }

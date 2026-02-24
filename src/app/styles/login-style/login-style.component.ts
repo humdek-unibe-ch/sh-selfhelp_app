@@ -8,6 +8,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-login-style',
     templateUrl: './login-style.component.html',
     styleUrls: ['./login-style.component.scss'],
+    standalone: false
 })
 export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: LoginStyle;

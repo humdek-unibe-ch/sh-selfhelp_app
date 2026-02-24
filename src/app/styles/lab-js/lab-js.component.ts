@@ -12,6 +12,7 @@ declare var $: any;
     selector: 'app-lab-js',
     templateUrl: './lab-js.component.html',
     styleUrls: ['./lab-js.component.scss'],
+    standalone: false
 })
 export class LabJSComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: LabJSStyle;

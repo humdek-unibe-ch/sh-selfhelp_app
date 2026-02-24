@@ -1,8 +1,12 @@
 <div #alert [class]="'alert ' + getCss() + ' alert-' + getFieldContent('type')">
-    <button *ngIf="getFieldContent('is_dismissable') === '1'" type="button" class="close" data-dismiss="alert" (click)="dismiss()"
-        aria-label="Close">
-        <span aria-hidden="true">&times;</span>
+  @if (getFieldContent('is_dismissable') === '1') {
+    <button type="button" class="close" data-dismiss="alert" (click)="dismiss()"
+      aria-label="Close">
+      <span aria-hidden="true">&times;</span>
     </button>
-    <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm">
+  }
+  @for (child of style.children; track child) {
+    <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm">
     </app-basic-style>
+  }
 </div>

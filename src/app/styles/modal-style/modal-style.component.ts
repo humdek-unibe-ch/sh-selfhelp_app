@@ -7,7 +7,8 @@ declare var $: any;
 @Component({
     selector: 'app-modal-style',
     templateUrl: './modal-style.component.html',
-    styleUrls: ['./modal-style.component.css']
+    styleUrls: ['./modal-style.component.css'],
+    standalone: false
 })
 export class ModalStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ModalStyle;

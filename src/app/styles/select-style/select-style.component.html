@@ -1,13 +1,19 @@
-<ion-item *ngIf="parentForm && style.items && getFieldContent('image_selector') !== '1'" [formGroup]="parentForm"
+@if (parentForm && style.items && getFieldContent('image_selector') !== '1') {
+  <ion-item [formGroup]="parentForm"
     [class]="getCss()">
     <ion-select [label]="getFieldContent('label')" [multiple]="getFieldContent('is_multiple') === '1'" interface="popover"
-        [formControlName]="getFieldContent('name')" [placeholder]="getFieldContent('alt')">
-        <ion-select-option *ngFor="let item of style.items" [value]="item.value">{{item.text}}
+      [formControlName]="getFieldContent('name')" [placeholder]="getFieldContent('alt')">
+      @for (item of style.items; track item) {
+        <ion-select-option [value]="item.value">{{item.text}}
         </ion-select-option>
+      }
     </ion-select>
-</ion-item>
-<div *ngIf="parentForm && style.items && getFieldContent('image_selector') === '1'" [formGroup]="parentForm"
+  </ion-item>
+}
+@if (parentForm && style.items && getFieldContent('image_selector') === '1') {
+  <div [formGroup]="parentForm"
     [class]="getCss()">
     <div [id]="'image_selector-' + getFieldContent('id')"></div>
     <input [id]="'selectValue-' + getFieldContent('id')" type="hidden" [formControlName]="getFieldContent('name')">
-</div>
+  </div>
+}

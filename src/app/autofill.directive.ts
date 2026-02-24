@@ -2,7 +2,8 @@ import { Directive, ElementRef, OnInit } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 
 @Directive({
-  selector: '[appAutofill]'
+    selector: '[appAutofill]',
+    standalone: false
 })
 export class AutofillDirective implements OnInit {
 

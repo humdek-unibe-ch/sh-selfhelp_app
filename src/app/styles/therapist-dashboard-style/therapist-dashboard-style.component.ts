@@ -52,6 +52,7 @@ interface ChatMessage {
     selector: 'app-therapist-dashboard-style',
     templateUrl: './therapist-dashboard-style.component.html',
     styleUrls: ['./therapist-dashboard-style.component.scss'],
+    standalone: false
 })
 export class TherapistDashboardStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
     conversations: DashboardConversation[] = [];

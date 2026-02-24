@@ -1,8 +1,7 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SafePipeModule } from 'safe-pipe';
-import { DataTablesModule } from 'angular-datatables';
+import { SafePipe } from 'safe-pipe';
 import { MenuRoutingModule } from './menu-routing.module';
 import { MarkdownModule } from 'ngx-markdown';
 
@@ -12,8 +11,7 @@ import { MarkdownModule } from 'ngx-markdown';
         MenuRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        SafePipeModule,
-        DataTablesModule,
+        SafePipe,
         MarkdownModule.forRoot()
     ],
     declarations: [

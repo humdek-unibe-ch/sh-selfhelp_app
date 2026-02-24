@@ -1,11 +1,13 @@
 <div [class]="getCss()">
-    <figure class="figure">
-        <app-basic-style *ngFor="let child of style.children" [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style>
-        <figcaption class="figure-caption mt-2">
-            <strong>
-                {{getFieldContent('caption_title')}}
-            </strong>
-            {{getFieldContent('caption')}}
-        </figcaption>
-    </figure>
+  <figure class="figure">
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"></app-basic-style>
+    }
+    <figcaption class="figure-caption mt-2">
+      <strong>
+        {{getFieldContent('caption_title')}}
+      </strong>
+      {{getFieldContent('caption')}}
+    </figcaption>
+  </figure>
 </div>

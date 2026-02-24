@@ -7,6 +7,7 @@ import { AudioStyle, MediaContent } from 'src/app/selfhelpInterfaces';
     selector: 'app-audio-style',
     templateUrl: './audio-style.component.html',
     styleUrls: ['./audio-style.component.scss'],
+    standalone: false
 })
 export class AudioStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: AudioStyle;

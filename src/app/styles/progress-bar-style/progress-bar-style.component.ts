@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-progress-bar-style',
     templateUrl: './progress-bar-style.component.html',
     styleUrls: ['./progress-bar-style.component.scss'],
+    standalone: false
 })
 export class ProgressBarStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ProgressBarStyle;

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { QualtricsSurveyStyle } from '../../selfhelpInterfaces';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { IFrameComponent, IFrameMessageData, iframeResizer } from 'iframe-resizer';
+import iframeResizerPackage from 'iframe-resizer';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
 import { GlobalsService } from 'src/app/services/globals.service';
 
@@ -9,12 +9,13 @@ import { GlobalsService } from 'src/app/services/globals.service';
     selector: 'app-qualtrics-survey-style',
     templateUrl: './qualtrics-survey-style.component.html',
     styleUrls: ['./qualtrics-survey-style.component.scss'],
+    standalone: false
 })
 export class QualtricsSurveyStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: QualtricsSurveyStyle;
     @ViewChild('iframe') iframe!: ElementRef;
     private time = (new Date()).getTime();
-    private component!: IFrameComponent | null;
+    private component!: any;
     public init = false;
 
     constructor(private selfhelpService: SelfhelpService, private globals: GlobalsService) {
@@ -31,9 +32,9 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
     initIFrame() {
         if (this.style.show_survey && !this.isContainer() && !this.init) {
             this.init = true;
-            const components = iframeResizer({
+            const components = (iframeResizerPackage as any).iframeResizer({
                 log: false,
-                messageCallback: (data: IFrameMessageData) => (this.iframeMessage(data)),
+                messageCallback: (data: any) => (this.iframeMessage(data)),
                 heightCalculationMethod: 'taggedElement',
                 checkOrigin: ["https://eu.qualtrics.com"],
             }, this.iframe.nativeElement);
@@ -48,7 +49,7 @@ export class QualtricsSurveyStyleComponent extends BasicStyleComponent implement
         }
     }
 
-    iframeMessage(data: IFrameMessageData) {
+    iframeMessage(data: any) {
         if (data.message == 'closeIFrame') {
             this.removeIFrame();
         }

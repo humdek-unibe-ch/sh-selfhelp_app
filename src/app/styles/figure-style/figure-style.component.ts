@@ -6,6 +6,7 @@ import { BasicStyleComponent } from '../basic-style/basic-style.component';
     selector: 'app-figure-style',
     templateUrl: './figure-style.component.html',
     styleUrls: ['./figure-style.component.scss'],
+    standalone: false
 })
 export class FigureStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: FigureStyle;

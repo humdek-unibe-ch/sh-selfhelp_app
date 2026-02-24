@@ -9,6 +9,7 @@ import { SelfhelpService } from '../../services/selfhelp.service';
     selector: 'app-llm-response-style',
     templateUrl: './llm-response-style.component.html',
     styleUrls: ['./llm-response-style.component.scss'],
+    standalone: false
 })
 export class LlmResponseStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
     @Input() override style!: LlmResponseStyle;

@@ -19,6 +19,7 @@ interface TherapyMessage {
     selector: 'app-therapy-chat-style',
     templateUrl: './therapy-chat-style.component.html',
     styleUrls: ['./therapy-chat-style.component.scss'],
+    standalone: false
 })
 export class TherapyChatStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
     @Input() override style!: TherapyChatStyle;

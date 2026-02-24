@@ -1,63 +1,87 @@
-<ion-item *ngIf="parentForm && getFieldContent('type_input') === 'text'" [formGroup]="parentForm" [class]="getCss()">
+@if (parentForm && getFieldContent('type_input') === 'text') {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
     <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')"
-        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''" [minlength]="getFieldContent('min')"
-        [maxlength]="getFieldContent('max')"></ion-input>
-</ion-item>
+      [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''" [minlength]="getFieldContent('min')"
+    [maxlength]="getFieldContent('max')"></ion-input>
+  </ion-item>
+}
 
-<ion-item *ngIf="parentForm && getFieldContent('type_input') === 'date'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
+@if (parentForm && getFieldContent('type_input') === 'date') {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
+    @if (style.label) {
+      <ion-label>{{getFieldContent('label')}}</ion-label>
+    }
     <ion-datetime-button [datetime]="'date-'+getFieldContent('name')"></ion-datetime-button>
-
     <ion-modal class="ion-modal-datepicker" [keepContentsMounted]="true">
-        <ng-template>
-            <ion-datetime [locale]="this.selfhelpService.getUserLanguage().locale" presentation="date" [id]="'date-'+getFieldContent('name')"
-                [formControlName]="getFieldContent('name')"
-                (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
-        </ng-template>
+      <ng-template>
+        <ion-datetime [locale]="this.selfhelpService.getUserLanguage().locale" presentation="date" [id]="'date-'+getFieldContent('name')"
+          [formControlName]="getFieldContent('name')"
+        (ionChange)="formatDate(getFieldContent('name'))"></ion-datetime>
+      </ng-template>
     </ion-modal>
-</ion-item>
+  </ion-item>
+}
 
-<ion-item *ngIf="parentForm && getFieldContent('type_input') === 'datetime'" [formGroup]="parentForm"
+@if (parentForm && getFieldContent('type_input') === 'datetime') {
+  <ion-item [formGroup]="parentForm"
     [class]="getCss()">
-    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
+    @if (style.label) {
+      <ion-label>{{getFieldContent('label')}}</ion-label>
+    }
     <ion-datetime-button [datetime]="'datetime-'+getFieldContent('name')"></ion-datetime-button>
-
     <ion-modal class="ion-modal-datepicker" [keepContentsMounted]="true">
-        <ng-template>
-            <ion-datetime [locale]="this.selfhelpService.getUserLanguage().locale" [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
-                (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>
-        </ng-template>
+      <ng-template>
+        <ion-datetime [locale]="this.selfhelpService.getUserLanguage().locale" [id]="'datetime-'+getFieldContent('name')" [formControlName]="getFieldContent('name')"
+        (ionChange)="formatDateTime(getFieldContent('name'))"></ion-datetime>
+      </ng-template>
     </ion-modal>
-</ion-item>
+  </ion-item>
+}
 
-<ion-item *ngIf="parentForm && getFieldContent('type_input') === 'email'" [formGroup]="parentForm" [class]="getCss()">
+@if (parentForm && getFieldContent('type_input') === 'email') {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
     <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')" email required appAutofill autocomplete="email"
-        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
-</ion-item>
+    [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+  </ion-item>
+}
 
-<ion-item *ngIf="parentForm && getFieldContent('type_input') === 'number'" [formGroup]="parentForm" [class]="getCss()">
+@if (parentForm && getFieldContent('type_input') === 'number') {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
     <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')" type="number"
-        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
-</ion-item>
+    [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+  </ion-item>
+}
 
-<ion-item *ngIf="parentForm && getFieldContent('type_input') === 'password'" [formGroup]="parentForm"
+@if (parentForm && getFieldContent('type_input') === 'password') {
+  <ion-item [formGroup]="parentForm"
     [class]="getCss()">
     <ion-input [label]="getFieldContent('label')" [formControlName]="getFieldContent('name')" type="password" appAutofill autocomplete="current-password"
-        [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
-</ion-item>
+    [placeholder]="style.placeholder ? getFieldContent('placeholder') : ''"></ion-input>
+  </ion-item>
+}
 
-<ion-item *ngIf="parentForm && getFieldContent('type_input') === 'range'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label" position="stacked">{{getFieldContent('label')}}</ion-label>
+@if (parentForm && getFieldContent('type_input') === 'range') {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
+    @if (style.label) {
+      <ion-label position="stacked">{{getFieldContent('label')}}</ion-label>
+    }
     <ion-range pin="true" color="secondary" [formControlName]="getFieldContent('name')">
     </ion-range>
-</ion-item>
+  </ion-item>
+}
 
-<ion-item *ngIf="getFieldContent('type_input') === 'checkbox'" [formGroup]="parentForm" [class]="getCss()">
+@if (getFieldContent('type_input') === 'checkbox') {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
     <ion-checkbox [label] color="primary" [formControlName]="getFieldContent('name')" slot="start">{{getFieldContent('label')}}</ion-checkbox>
-</ion-item>
+  </ion-item>
+}
 
-<ion-item *ngIf="getFieldContent('type_input') === 'color'" [formGroup]="parentForm" [class]="getCss()">
-    <ion-label *ngIf="style.label">{{getFieldContent('label')}}</ion-label>
+@if (getFieldContent('type_input') === 'color') {
+  <ion-item [formGroup]="parentForm" [class]="getCss()">
+    @if (style.label) {
+      <ion-label>{{getFieldContent('label')}}</ion-label>
+    }
     <ngx-colors ngx-colors-trigger
-        [formControlName]="getFieldContent('name')"></ngx-colors>
-</ion-item>
+    [formControlName]="getFieldContent('name')"></ngx-colors>
+  </ion-item>
+}

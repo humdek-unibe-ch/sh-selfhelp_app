@@ -7,6 +7,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-entry-list',
     templateUrl: './entry-list.component.html',
     styleUrls: ['./entry-list.component.scss'],
+    standalone: false
 })
 export class EntryListComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: EntryListStyle;
@@ -39,14 +40,14 @@ export class EntryListComponent extends BasicStyleComponent implements OnInit {
         //check for ordered columns **********************************************************************************
         // dt-order-0-asc dt-order-1-desc
         var ordered = css.filter(function (str) { return str.includes("dt-order"); });
-        let orderedColumnDef = [];
+        const orderedColumnDef: [number, 'asc' | 'desc'][] = [];
         for (let i = 0; i < ordered.length; i++) {
             const ordClassElements = ordered[i].split('-');
             if (ordClassElements.length == 4) {
                 //correct order pattern
                 if (this.selfhelp.isNumeric(ordClassElements[2]) && (ordClassElements[3] === 'asc' || ordClassElements[3] === 'desc')) {
                     // check is 3 element number and 4 asc or desc
-                    orderedColumnDef.push([ordClassElements[2], ordClassElements[3]])
+                    orderedColumnDef.push([parseInt(ordClassElements[2], 10), ordClassElements[3] as 'asc' | 'desc']);
                 }
             }
         }

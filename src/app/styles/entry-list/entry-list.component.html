@@ -1,19 +1,27 @@
-<table *ngIf="getFieldContent('load_as_table') === '1'" datatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
+@if (getFieldContent('load_as_table') === '1') {
+  <table appDatatable [dtOptions]="dtOptions" [className]="'table ' + getCss()">
     <thead>
-        <tr>
-            <th class="d-none"></th>
-        </tr>
+      <tr>
+        <th class="d-none"></th>
+      </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let child of style.children">
-            <td>
-                <app-basic-style [url]="url" [ionContent]="ionContent" [style]="child"></app-basic-style>
-            </td>
+      @for (child of style.children; track child) {
+        <tr>
+          <td>
+            <app-basic-style [url]="url" [ionContent]="ionContent" [style]="child"></app-basic-style>
+          </td>
         </tr>
+      }
     </tbody>
-</table>
+  </table>
+}
 
-<div [className]="'entryListHolder ' + getCss()" *ngIf="getFieldContent('load_as_table') === '0' || this.style.style_name === 'loop'">
-    <app-basic-style *ngFor="let child of style.children" [url]="url" [ionContent]="ionContent"
-        [style]="child"></app-basic-style>
-</div>
+@if (getFieldContent('load_as_table') === '0' || this.style.style_name === 'loop') {
+  <div [className]="'entryListHolder ' + getCss()">
+    @for (child of style.children; track child) {
+      <app-basic-style [url]="url" [ionContent]="ionContent"
+      [style]="child"></app-basic-style>
+    }
+  </div>
+}

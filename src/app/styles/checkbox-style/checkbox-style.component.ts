@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
     selector: 'app-checkbox-style',
     templateUrl: './checkbox-style.component.html',
     styleUrls: ['./checkbox-style.component.scss'],
+    standalone: false
 })
 export class CheckboxStyleComponent extends BasicStyleComponent {
     @Input() override style!: CheckboxStyle;

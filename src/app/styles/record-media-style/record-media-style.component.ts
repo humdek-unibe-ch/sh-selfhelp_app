@@ -15,6 +15,7 @@ const MEDIA_FOLDER_NAME = 'my_media';
     selector: 'app-record-media-style',
     templateUrl: './record-media-style.component.html',
     styleUrls: ['./record-media-style.component.scss'],
+    standalone: false
 })
 export class RecordMediaStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: Style;

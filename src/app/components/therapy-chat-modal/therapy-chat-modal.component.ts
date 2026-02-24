@@ -5,6 +5,7 @@ import { BasicComponentComponent } from '../basic-component/basic-component.comp
     selector: 'app-therapy-chat-modal',
     templateUrl: './therapy-chat-modal.component.html',
     styleUrls: ['./therapy-chat-modal.component.scss'],
+    standalone: false
 })
 export class TherapyChatModalComponent extends BasicComponentComponent implements OnInit {
     @Input() url_param!: string;

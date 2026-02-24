@@ -15,6 +15,7 @@ interface FormControls {
     selector: 'app-reset-password-style',
     templateUrl: './reset-password-style.component.html',
     styleUrls: ['./reset-password-style.component.scss'],
+    standalone: false
 })
 export class ResetPasswordStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: ResetPasswordStyle;

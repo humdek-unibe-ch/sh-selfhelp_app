@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
     selector: 'app-basic-style',
     templateUrl: './basic-style.component.html',
     styleUrls: ['./basic-style.component.scss'],
+    standalone: false
 })
 export class BasicStyleComponent implements OnInit {
     @Input() style!: Style;

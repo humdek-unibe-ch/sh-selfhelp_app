@@ -7,6 +7,7 @@ import { TextAreaStyle } from './../../selfhelpInterfaces';
     selector: 'app-textarea-style',
     templateUrl: './textarea-style.component.html',
     styleUrls: ['./textarea-style.component.scss'],
+    standalone: false
 })
 export class TextareaStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: TextAreaStyle;

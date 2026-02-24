@@ -7,6 +7,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-video-style',
     templateUrl: './video-style.component.html',
     styleUrls: ['./video-style.component.scss'],
+    standalone: false
 })
 export class VideoStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: VideoStyle;

@@ -7,6 +7,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
     selector: 'app-carousel-style',
     templateUrl: './carousel-style.component.html',
     styleUrls: ['./carousel-style.component.scss'],
+    standalone: false
 })
 export class CarouselStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: CarouselStyle;

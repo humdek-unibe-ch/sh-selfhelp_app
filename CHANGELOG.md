@@ -1,4 +1,4 @@
-# 3.4.9
+# 4.0.0
 ### New Features
  - add style `llmChat` - LLM chat interface with conversations list, message bubbles, and message input (requires LLM plugin)
 ### Enhancements
@@ -42,6 +42,14 @@
  - add `ngx-markdown` with PrismJS for markdown rendering in LLM chat responses (syntax highlighting, copy-to-clipboard, GFM support)
  - add `MarkdownRendererComponent` for consistent markdown rendering across the app
  - update `config.yaml` with iOS photo library permissions (`NSPhotoLibraryUsageDescription`, `NSPhotoLibraryAddUsageDescription`)
+
+### Tech Stack Updates
+ - update Angular to v21 and TypeScript to v5.9
+ - update Ionic to v8
+ - update Capacitor to v8 (including Android project migration updates)
+ - update major libraries to latest compatible versions (SurveyJS, ngx-translate, ngx-markdown, Plotly, DataTables, and others)
+ - replace `angular-datatables` with an internal `appDatatable` directive using `datatables.net` v2
+ - remove deprecated `@capacitor-community/http` and use `CapacitorHttp` from `@capacitor/core`
 
 # 3.4.8
 ### Bugfix

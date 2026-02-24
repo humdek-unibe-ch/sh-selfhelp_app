@@ -8,7 +8,8 @@ import { ProfileComponent } from 'src/app/components/profile/profile.component';
 @Component({
     selector: 'app-menu',
     templateUrl: 'menu.page.html',
-    styleUrls: ['menu.page.scss']
+    styleUrls: ['menu.page.scss'],
+    standalone: false
 })
 export class MenuPage {
 

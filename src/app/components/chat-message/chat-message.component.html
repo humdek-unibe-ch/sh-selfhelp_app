@@ -1,14 +1,22 @@
 <div class="chat-msg" [class.chat-msg-own]="isOwn" [class.chat-msg-system]="bubbleType === 'system'">
-    <div *ngIf="senderLabel" class="chat-msg-sender" [attr.data-type]="bubbleType">
-        {{ senderLabel }}
+  @if (senderLabel) {
+    <div class="chat-msg-sender" [attr.data-type]="bubbleType">
+      {{ senderLabel }}
     </div>
-    <div class="chat-msg-bubble" [attr.data-type]="bubbleType">
-        <app-markdown-renderer [content]="displayContent"></app-markdown-renderer>
+  }
+  <div class="chat-msg-bubble" [attr.data-type]="bubbleType">
+    <app-markdown-renderer [content]="displayContent"></app-markdown-renderer>
+  </div>
+  @if (labels && labels.length > 0) {
+    <div class="chat-msg-labels">
+      @for (l of labels; track l) {
+        <span class="chat-msg-label">{{ l.name || l }}</span>
+      }
     </div>
-    <div *ngIf="labels && labels.length > 0" class="chat-msg-labels">
-        <span *ngFor="let l of labels" class="chat-msg-label">{{ l.name || l }}</span>
+  }
+  @if (timestamp) {
+    <div class="chat-msg-time" [class.chat-msg-time-own]="isOwn">
+      {{ timestamp }}
     </div>
-    <div *ngIf="timestamp" class="chat-msg-time" [class.chat-msg-time-own]="isOwn">
-        {{ timestamp }}
-    </div>
+  }
 </div>
