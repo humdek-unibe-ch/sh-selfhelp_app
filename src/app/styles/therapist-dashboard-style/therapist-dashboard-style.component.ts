@@ -200,17 +200,33 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     }
 
     getSenderLabel(msg: ChatMessage): string {
-        if (msg.sender_type === 'subject' || msg.role === 'user') return 'Patient';
-        if (msg.sender_type === 'therapist' || msg.role === 'therapist') return 'You';
-        if (msg.sender_type === 'system') return 'System';
-        return 'AI';
+        if (msg.sender_type) {
+            switch (msg.sender_type) {
+                case 'therapist': return 'You';
+                case 'subject': return 'Patient';
+                case 'system': return 'System';
+                case 'ai': case 'assistant': return 'AI';
+            }
+        }
+        if (msg.role === 'therapist') return 'You';
+        if (msg.role === 'user') return 'Patient';
+        if (msg.role === 'assistant') return 'AI';
+        return '';
     }
 
     getSenderClass(msg: ChatMessage): string {
-        if (msg.sender_type === 'subject' || msg.role === 'user') return 'patient';
-        if (msg.sender_type === 'therapist' || msg.role === 'therapist') return 'therapist';
-        if (msg.sender_type === 'system') return 'system';
-        return 'ai';
+        if (msg.sender_type) {
+            switch (msg.sender_type) {
+                case 'therapist': return 'therapist';
+                case 'subject': return 'patient';
+                case 'system': return 'system';
+                case 'ai': case 'assistant': return 'ai';
+            }
+        }
+        if (msg.role === 'therapist') return 'therapist';
+        if (msg.role === 'user') return 'patient';
+        if (msg.role === 'assistant') return 'ai';
+        return 'patient';
     }
 
     getRiskColor(risk?: string): string {
