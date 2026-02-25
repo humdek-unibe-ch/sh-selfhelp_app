@@ -13,6 +13,7 @@ import { SelfhelpService } from 'src/app/services/selfhelp.service';
 export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
     @Input() override style!: LoginStyle;
     public form!: FormGroup;
+    public hasKeychainCredentials = false;
 
     constructor(private formBuilder: FormBuilder, private selfhelpService: SelfhelpService) {
         super();
@@ -20,6 +21,7 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
 
     override ngOnInit() {
         this.initForm();
+        this.prefillSavedCredentials();
     }
 
     private initForm(): void {
@@ -34,6 +36,18 @@ export class LoginStyleComponent extends BasicStyleComponent implements OnInit {
                 email: new FormControl('', Validators.required),
                 password: new FormControl('', Validators.required)
             });
+        }
+    }
+
+    private async prefillSavedCredentials(): Promise<void> {
+        const saved = await this.selfhelpService.readSavedCredentials();
+        if (saved) {
+            this.hasKeychainCredentials = true;
+            if (this.style.anonymous_users) {
+                this.form.patchValue({ user_name: saved.email, password: saved.password });
+            } else {
+                this.form.patchValue({ email: saved.email, password: saved.password });
+            }
         }
     }
 

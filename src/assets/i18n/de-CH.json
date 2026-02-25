@@ -1,4 +1,5 @@
 {
     "language": "Sprache",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "login.use_saved_password": "Gespeichertes Passwort verwenden"
 }

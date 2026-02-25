@@ -67,5 +67,41 @@ Sub pages are organized as sub-menus
 # Add new style
  - `ionic g component styles\myCoolStyle` - the command should be executed in the SelfHelpMobile folder
 
+# Password Management (iOS Keychain / Android Credential Manager)
+The app uses `@capgo/capacitor-autofill-save-password` to save and retrieve user credentials from the native system keychain. After successful login, the user is prompted to save their password. On subsequent logins (including reinstalls or new devices with the same account), saved credentials are read from the keychain and pre-filled.
+
+## iOS Setup (required per project)
+1. **Associated Domains**: In your Apple Developer account, enable "Associated Domains" for the app ID.
+2. **Trapeze config** (`config.yaml`): The `com.apple.developer.associated-domains` entitlement must include `webcredentials:YOUR_DOMAIN` (replace `SET_YOUR_SERVER_DOMAIN_HERE` in the config).
+3. **Server**: Add a `.well-known/apple-app-site-association` file at the root of your SelfHelp server domain:
+   ```json
+   {
+     "webcredentials": {
+       "apps": ["TEAM_ID.unibe.tpf.selfhelp"]
+     }
+   }
+   ```
+   Replace `TEAM_ID` with your Apple Developer Team ID and `unibe.tpf.selfhelp` with the actual bundle ID.
+
+## Android Setup (required per project)
+1. **Trapeze config** (`config.yaml`): The `asset_statements` string in `values/strings.xml` must be set with your server domain (replace `SET_YOUR_SERVER_DOMAIN_HERE`).
+2. **Server**: Add a `.well-known/assetlinks.json` file at the root of your SelfHelp server domain:
+   ```json
+   [{
+     "relation": ["delegate_permission/common.handle_all_urls", "delegate_permission/common.get_login_creds"],
+     "target": {
+       "namespace": "android_app",
+       "package_name": "unibe.tpf.selfhelp",
+       "sha256_cert_fingerprints": ["YOUR_SHA256_FINGERPRINT"]
+     }
+   }]
+   ```
+   Get the fingerprint with: `keytool -list -v -keystore your-keystore.jks | grep SHA256`
+
+## Per-Project Config Checklist
+When setting up a new project, update these placeholders in `config.yaml`:
+- `SET_YOUR_SERVER_DOMAIN_HERE` (appears in both iOS entitlements and Android strings.xml)
+- Bundle ID / package name if different from default
+- Version numbers
 
 

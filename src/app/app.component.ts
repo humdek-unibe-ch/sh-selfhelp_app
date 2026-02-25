@@ -42,6 +42,7 @@ export class AppComponent {
             if (await Capacitor.isNativePlatform()) {
                 this.initDeepLinking();
                 StatusBar.setStyle({ style: Style.Default });
+                this.applySafeAreaFallback();
                 await SplashScreen.hide();
                 this.notificationsService.initPushNotifications();
                 this.clearShepherdState();
@@ -91,6 +92,26 @@ export class AppComponent {
 
     public resetPreview(): void {
         this.selfhelpSerivce.resetServerSelection();
+    }
+
+    /**
+     * On older Android WebViews, neither env(safe-area-inset-bottom) nor the
+     * --safe-area-inset-bottom variable injected by the SystemBars plugin may
+     * be available. This method waits briefly for the plugin to inject values,
+     * then sets a hardcoded fallback if nothing was set.
+     * 48px is the standard Android 3-button navigation bar height.
+     */
+    private applySafeAreaFallback() {
+        if (Capacitor.getPlatform() !== 'android') {
+            return;
+        }
+        setTimeout(() => {
+            const root = document.documentElement;
+            const current = getComputedStyle(root).getPropertyValue('--safe-area-inset-bottom').trim();
+            if (!current || current === '0px' || current === '') {
+                root.style.setProperty('--safe-area-inset-bottom', '48px');
+            }
+        }, 500);
     }
 
     /**Clears Shepherd state by removing preferences keys with a specific prefix.

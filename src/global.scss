@@ -31,6 +31,31 @@
 
 @import '~quill/dist/quill.snow.css';
 
+// ============================================================================
+// EDGE-TO-EDGE SAFE AREA — Capacitor 8 / Android 15+
+// ============================================================================
+// Capacitor 8 enables edge-to-edge by default on Android 15+. The SystemBars
+// plugin (insetsHandling: "css") injects --safe-area-inset-* CSS variables.
+// On newer WebViews (140+), env(safe-area-inset-*) also works natively.
+// On older WebViews where neither works, app.component.ts sets
+// --safe-area-inset-bottom to 48px (standard Android nav bar height).
+// See: https://capacitorjs.com/docs/apis/system-bars#android-note
+// ============================================================================
+html {
+    // --safe-area-inset-bottom is set by either:
+    //   1. SystemBars plugin (all Android via insetsHandling: "css")
+    //   2. JS fallback in app.component.ts (48px for old WebViews)
+    padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+}
+
+ion-tab-bar {
+    padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+}
+
+ion-fab {
+    bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+}
+
 ion-loading {
     --max-height: 100% !important;
     --max-width: 100% !important;

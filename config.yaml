@@ -32,6 +32,19 @@ platforms:
         attrs:
           android:requestLegacyExternalStorage: true
 
+
+    # ─── Android Credential Manager (Digital Asset Links) ───
+    # The @capgo/capacitor-autofill-save-password plugin adds a default
+    # asset_statements entry during `cap sync`. This trapeze rule REPLACES
+    # it with the correct server domain so Android Credential Manager can
+    # associate saved passwords with your SelfHelp server.
+    # Each project MUST replace SET_YOUR_SERVER_DOMAIN_HERE with its domain.
+    xml:
+      - resFile: values/strings.xml
+        target: resources/string[@name="asset_statements"]
+        replace: |
+          <string name="asset_statements">[{"relation": ["delegate_permission/common.handle_all_urls","delegate_permission/common.get_login_creds"],"target": {"namespace": "web","site": "https://SET_YOUR_SERVER_DOMAIN_HERE"}}]</string>
+
   ios:    
     targets:
       App:
@@ -43,6 +56,16 @@ platforms:
         bundleId: unibe.tpf.selfhelp
         entitlements:
           - aps-environment: development
+          # ─── Password Autofill / Keychain Sharing ───
+          # Required for the @capgo/capacitor-autofill-save-password plugin.
+          # This associates the app with a web domain so iOS Keychain can
+          # store and retrieve passwords for the app. Each project must set
+          # its own domain here (the domain where the SelfHelp instance runs).
+          # You also need a .well-known/apple-app-site-association file on the
+          # server (see README for details).
+          - com.apple.developer.associated-domains:
+              - webcredentials:SET_YOUR_SERVER_DOMAIN_HERE
+
         plist:
           - replace: true
             file: GoogleService-Info.plist

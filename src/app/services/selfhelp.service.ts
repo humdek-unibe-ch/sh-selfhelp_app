@@ -16,7 +16,7 @@ import { Browser } from '@capacitor/browser';
 import packageJson from './../../../package.json'; // Replace with the actual path to your package.json file
 import config from 'capacitor.config';
 import appConfig from 'src/env/app.config';
-import { SavePassword } from 'capacitor-ios-autofill-save-password';
+import { SavePassword } from '@capgo/capacitor-autofill-save-password';
 import { App } from '@capacitor/app';
 import { GlobalsService } from './globals.service';
 const appVersion = packageJson.version;
@@ -350,8 +350,14 @@ export class SelfhelpService {
 
     private async autoLogin() {
         this.utils.debugLog('autoLogin', this.selfhelp.value.credentials);
-        if (this.selfhelp.value.credentials) {
-            const loginRes = await this.login(this.selfhelp.value.credentials, "Failed Auto Login!");
+        let credentials = this.selfhelp.value.credentials;
+
+        if (!credentials) {
+            credentials = await this.readSavedCredentials() ?? undefined;
+        }
+
+        if (credentials) {
+            const loginRes = await this.login(credentials, "Failed Auto Login!");
             this.utils.debugLog('autoLoginResult ', loginRes);
             if (!loginRes) {
                 this.openUrl(this.globals.SH_API_LOGIN);
@@ -399,12 +405,41 @@ export class SelfhelpService {
         let currSelfhelp = this.selfhelp.value;
         currSelfhelp.credentials = loginValues;
         this.setSelfhelp(currSelfhelp, true);
-        if (Capacitor.getPlatform() === 'ios') {
-            // await SavePassword.promptDialog({
-            //     username: loginValues.email,
-            //     password: loginValues.password
-            // });
+        if (this.isApp) {
+            try {
+                await SavePassword.promptDialog({
+                    username: loginValues.email || (loginValues as any).user_name || '',
+                    password: loginValues.password,
+                    url: this.API_ENDPOINT_NATIVE
+                });
+                this.utils.debugLog('saveCredentials', 'Password saved to system keychain');
+            } catch (err) {
+                this.utils.debugLog('saveCredentials', 'User declined or error saving password: ' + err);
+            }
         }
+    }
+
+    /**
+     * Reads saved credentials from the system keychain (iOS Keychain / Android Credential Manager).
+     * Returns null if no credentials are found or the platform doesn't support it.
+     */
+    public async readSavedCredentials(): Promise<LoginValues | null> {
+        if (!this.isApp) {
+            return null;
+        }
+        try {
+            const result = await SavePassword.readPassword();
+            if (result && result.username && result.password) {
+                this.utils.debugLog('readSavedCredentials', 'Found saved credentials for: ' + result.username);
+                return {
+                    email: result.username,
+                    password: result.password
+                };
+            }
+        } catch (err) {
+            this.utils.debugLog('readSavedCredentials', 'No saved credentials found: ' + err);
+        }
+        return null;
     }
 
     public register(regValues: RegistrationValues): Promise<RegistrationResult> {

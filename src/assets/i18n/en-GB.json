@@ -1,4 +1,5 @@
 {
     "language": "Language",
-    "settings": "Settigns"
+    "settings": "Settigns",
+    "login.use_saved_password": "Use Saved Password"
 }
