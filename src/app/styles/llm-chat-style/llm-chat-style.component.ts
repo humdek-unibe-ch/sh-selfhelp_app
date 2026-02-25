@@ -736,19 +736,24 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     async takePhoto(): Promise<void> {
         try {
             const image = await Camera.getPhoto({
-                quality: 90,
+                quality: 80,
                 allowEditing: false,
                 resultType: CameraResultType.DataUrl,
-                source: CameraSource.Camera
+                source: CameraSource.Camera,
+                width: 1024
             });
 
             if (image.dataUrl) {
                 const blob = await this.dataUrlToBlob(image.dataUrl);
-                const file = new File([blob], `photo_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                const file = new File([blob], `photo_${Date.now()}.${image.format || 'jpg'}`, {
+                    type: blob.type || 'image/jpeg'
+                });
                 await this.handleFileSelection([file]);
             }
-        } catch (err) {
+        } catch (err: any) {
+            if (err?.message?.includes('cancelled') || err?.message?.includes('User cancelled')) return;
             console.error('Camera error:', err);
+            this.fileError = 'Camera failed: ' + (err?.message || err);
         }
     }
 
@@ -758,28 +763,40 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     async pickFromGallery(): Promise<void> {
         try {
             const image = await Camera.getPhoto({
-                quality: 90,
+                quality: 80,
                 allowEditing: false,
                 resultType: CameraResultType.DataUrl,
-                source: CameraSource.Photos
+                source: CameraSource.Photos,
+                width: 1024
             });
 
             if (image.dataUrl) {
                 const blob = await this.dataUrlToBlob(image.dataUrl);
-                const file = new File([blob], `image_${Date.now()}.jpg`, { type: 'image/jpeg' });
+                const file = new File([blob], `image_${Date.now()}.${image.format || 'jpg'}`, {
+                    type: blob.type || 'image/jpeg'
+                });
                 await this.handleFileSelection([file]);
             }
-        } catch (err) {
+        } catch (err: any) {
+            if (err?.message?.includes('cancelled') || err?.message?.includes('User cancelled')) return;
             console.error('Gallery error:', err);
+            this.fileError = 'Gallery failed: ' + (err?.message || err);
         }
     }
 
     /**
      * Convert data URL to Blob
      */
-    private async dataUrlToBlob(dataUrl: string): Promise<Blob> {
-        const response = await fetch(dataUrl);
-        return response.blob();
+    private dataUrlToBlob(dataUrl: string): Promise<Blob> {
+        // Manual conversion — Capacitor's patched fetch() cannot handle data: URLs
+        const parts = dataUrl.split(',');
+        const mime = parts[0].match(/:(.*?);/)?.[1] || 'application/octet-stream';
+        const bstr = atob(parts[1]);
+        const arr = new Uint8Array(bstr.length);
+        for (let i = 0; i < bstr.length; i++) {
+            arr[i] = bstr.charCodeAt(i);
+        }
+        return Promise.resolve(new Blob([arr], { type: mime }));
     }
 
     // ============================================================================

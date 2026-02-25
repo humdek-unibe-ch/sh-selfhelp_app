@@ -426,10 +426,15 @@ export class LlmChatService {
      * @returns Promise resolving to hash string
      */
     async generateFileHash(file: File): Promise<string> {
-        const buffer = await file.arrayBuffer();
-        const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        try {
+            if (crypto?.subtle) {
+                const buffer = await file.arrayBuffer();
+                const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+        } catch { /* non-secure context (e.g. HTTP dev mode) */ }
+        return `${file.name}_${file.size}_${file.lastModified}`;
     }
 
     /**

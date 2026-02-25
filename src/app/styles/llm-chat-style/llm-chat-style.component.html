@@ -413,6 +413,8 @@
               [rows]="2"
               [showCharCount]="true"
               [speechToTextEnabled]="true"
+              [transcriptionUrl]="url"
+              [sectionId]="getSectionId()"
               [showAttachButton]="isVisionAttachEnabled"
               [showDisabledAttachButton]="isFileUploadsEnabled() && !isVisionModel()"
               [attachDisabled]="isVisionAttachDisabled"

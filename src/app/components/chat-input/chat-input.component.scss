@@ -25,6 +25,35 @@
     }
 }
 
+.speech-error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    margin: 4px 4px 0;
+    background: rgba(var(--ion-color-warning-rgb, 255, 196, 9), 0.15);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: var(--ion-color-warning-shade, #e0ac08);
+
+    ion-icon {
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    span {
+        flex: 1;
+        min-width: 0;
+    }
+
+    ion-button {
+        --padding-start: 2px;
+        --padding-end: 2px;
+        height: 20px;
+        margin: 0;
+    }
+}
+
 .chat-textarea {
     --background: transparent;
     --padding-start: 12px;
@@ -74,6 +103,11 @@
 
     ion-icon {
         font-size: 16px;
+    }
+
+    ion-spinner {
+        width: 16px;
+        height: 16px;
     }
 
     &.recording {

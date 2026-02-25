@@ -85,13 +85,24 @@
       </div>
     }
 
+    <!-- Speech error -->
+    @if (speechError) {
+      <div class="speech-error">
+        <ion-icon name="mic-off-outline"></ion-icon>
+        <span>{{ speechError }}</span>
+        <ion-button fill="clear" size="small" (click)="dismissSpeechError()">
+          <ion-icon name="close" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    }
+
     <ion-textarea
       [ngModel]="messageText"
       (ngModelChange)="onMessageTextChanged($event)"
       [placeholder]="placeholder"
       [rows]="rows"
       auto-grow="true"
-      [disabled]="disabled"
+      [disabled]="disabled || isTranscribing"
       [maxlength]="maxLength > 0 ? maxLength : null"
       (keydown)="onKeyDown($event)"
       class="chat-textarea">
@@ -124,11 +135,16 @@
           <ion-button
             fill="clear"
             size="small"
-            [color]="isRecording ? 'danger' : 'medium'"
+            [color]="isRecording ? 'danger' : isTranscribing ? 'primary' : 'medium'"
             (click)="toggleRecording()"
+            [disabled]="isTranscribing"
             [class.recording]="isRecording"
             class="action-btn">
-            <ion-icon [name]="isRecording ? 'radio-button-on' : 'mic'"></ion-icon>
+            @if (isTranscribing) {
+              <ion-spinner name="crescent"></ion-spinner>
+            } @else {
+              <ion-icon [name]="isRecording ? 'radio-button-on' : 'mic'"></ion-icon>
+            }
           </ion-button>
         }
       </div>
