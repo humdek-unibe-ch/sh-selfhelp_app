@@ -392,6 +392,8 @@
    ============================================================ */
 .chat-bottom-area {
     flex-shrink: 0;
+    background: var(--ion-background-color, #fff);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 /* ============================================================

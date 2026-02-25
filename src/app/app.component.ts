@@ -9,6 +9,7 @@ import { UtilsService } from './services/utils.service';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
+import { Keyboard } from '@capacitor/keyboard';
 import { GlobalsService } from './services/globals.service';
 register();
 
@@ -43,6 +44,7 @@ export class AppComponent {
                 this.initDeepLinking();
                 StatusBar.setStyle({ style: Style.Default });
                 this.applySafeAreaFallback();
+                this.setupKeyboard();
                 await SplashScreen.hide();
                 this.notificationsService.initPushNotifications();
                 this.clearShepherdState();
@@ -94,6 +96,17 @@ export class AppComponent {
         this.selfhelpSerivce.resetServerSelection();
     }
 
+    private setupKeyboard() {
+        Keyboard.addListener('keyboardWillShow', () => {
+            const active = document.activeElement as HTMLElement;
+            if (active) {
+                setTimeout(() => active.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+            }
+        });
+
+        Keyboard.setScroll({ isDisabled: false }).catch(() => {});
+    }
+
     /**
      * On older Android WebViews, neither env(safe-area-inset-bottom) nor the
      * --safe-area-inset-bottom variable injected by the SystemBars plugin may
@@ -107,9 +120,13 @@ export class AppComponent {
         }
         setTimeout(() => {
             const root = document.documentElement;
-            const current = getComputedStyle(root).getPropertyValue('--safe-area-inset-bottom').trim();
-            if (!current || current === '0px' || current === '') {
+            const currentBottom = getComputedStyle(root).getPropertyValue('--safe-area-inset-bottom').trim();
+            if (!currentBottom || currentBottom === '0px' || currentBottom === '') {
                 root.style.setProperty('--safe-area-inset-bottom', '48px');
+            }
+            const currentTop = getComputedStyle(root).getPropertyValue('--safe-area-inset-top').trim();
+            if (!currentTop || currentTop === '0px' || currentTop === '') {
+                root.style.setProperty('--safe-area-inset-top', '24px');
             }
         }, 500);
     }

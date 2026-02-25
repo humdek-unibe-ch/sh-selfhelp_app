@@ -70,6 +70,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
             this.latestMessageId = this.getMaxMessageId(this.messages);
             this.isInitialLoading = false;
             this.scrollToBottom();
+            this.markAsRead();
         } else {
             this.loadConversation();
         }
@@ -152,6 +153,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         } finally {
             this.isInitialLoading = false;
             this.scrollToBottom();
+            this.markAsRead();
         }
     }
 
@@ -284,14 +286,19 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
                 });
             }
 
-            this.selfhelpService.execServerRequest(this.url, {
-                action: 'mark_messages_read',
-                section_id: this.sectionId,
-                conversation_id: this.conversationId
-            }).catch(() => {});
+            this.markAsRead();
         } catch (e) {
             console.error('TherapyChat: Failed to fetch new messages', e);
         }
+    }
+
+    private markAsRead() {
+        if (!this.conversationId) return;
+        this.selfhelpService.execServerRequest(this.url, {
+            action: 'mark_messages_read',
+            section_id: this.sectionId,
+            conversation_id: this.conversationId
+        }).catch(() => {});
     }
 
     private getMaxMessageId(messages: TherapyMessage[]): number | null {

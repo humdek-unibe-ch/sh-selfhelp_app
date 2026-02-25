@@ -131,7 +131,7 @@
         background: var(--ion-color-primary);
         color: var(--ion-color-primary-contrast);
         min-height: 56px;
-        padding-top: calc(16px + env(safe-area-inset-top, 0px));
+        padding-top: calc(16px + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
 
         h4 {
             margin: 0;
@@ -1029,7 +1029,6 @@
 // ============================================================================
 
 .message-input-container {
-    padding: 8px 12px 12px;
     background: var(--llm-bg-primary);
     border-top: 1px solid var(--llm-border-color);
     flex-shrink: 0;
@@ -1231,8 +1230,7 @@
         background: var(--ion-color-primary);
         color: var(--ion-color-primary-contrast);
         min-height: 56px;
-        // Safe area for notch/status bar
-        padding-top: calc(12px + env(safe-area-inset-top, 0px));
+        padding-top: calc(12px + var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
 
         h4 {
             margin: 0;

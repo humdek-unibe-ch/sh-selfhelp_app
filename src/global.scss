@@ -409,7 +409,7 @@ ion-select::part(placeholder) {
     --border-radius: 0;
 
     ion-content {
-        --padding-bottom: env(safe-area-inset-bottom, 0px);
+        --padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
     }
 }
 
