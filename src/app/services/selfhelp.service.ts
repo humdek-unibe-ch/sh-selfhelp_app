@@ -75,6 +75,7 @@ export class SelfhelpService {
             // Preferences.remove({ key: this.local_selfhelp }); // enable for resetting the server when developing
             if (this.devApp) {
                 // give an option to select a server
+                // this.resetServerSelection();
                 if (await this.getServer()) {
                     this.utils.debugLog('Server is selected - load local info and get home page', null);
                     this.loadApp();
@@ -144,7 +145,7 @@ export class SelfhelpService {
         }
         params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.getUserLanguage().id;
         params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
-        params['mobile_web'] = true;
+        params['mobile_web'] = !this.isApp;
         if (this.notificationsService.getToken() !== '') {
             params['device_token'] = this.notificationsService.getToken();
         }
@@ -191,7 +192,7 @@ export class SelfhelpService {
         }
         params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.getUserLanguage().id;
         params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
-        params['mobile_web'] = true;
+        params['mobile_web'] = !this.isApp;
         if (this.notificationsService.getToken() !== '') {
             params['device_token'] = this.notificationsService.getToken();
         }

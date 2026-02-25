@@ -125,6 +125,7 @@ ion-loading .loading-wrapper {
 }
 
 .modal-fullscreen {
+    width: auto;
     &::part(content) {
         position: absolute;
         top: 0;
