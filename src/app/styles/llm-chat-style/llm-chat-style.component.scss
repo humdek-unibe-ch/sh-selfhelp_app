@@ -13,8 +13,10 @@
     --llm-text-secondary: #8e8e93;
     --llm-bg-primary: #ffffff;
     --llm-bg-secondary: #f2f2f7;
-    --llm-bg-user-bubble: var(--ion-color-primary, #007aff);
-    --llm-bg-assistant-bubble: #f3e5f5;
+    --llm-bg-user-bubble: #DCF8C6;
+    --llm-text-user-bubble: #1b5e20;
+    --llm-bg-assistant-bubble: #F3E5F5;
+    --llm-text-assistant-bubble: #4a148c;
     --llm-border-color: rgba(0, 0, 0, 0.08);
 
     display: block;
@@ -735,21 +737,23 @@
 
         .message-bubble {
             background: var(--llm-bg-user-bubble);
-            color: white;
+            color: var(--llm-text-user-bubble);
             border-radius: var(--llm-radius-bubble) var(--llm-radius-bubble) 4px var(--llm-radius-bubble);
             max-width: 85%;
 
             .message-content {
-                color: white;
+                color: inherit;
             }
 
             .message-meta {
-                color: rgba(255, 255, 255, 0.7);
+                color: inherit;
+                opacity: 0.7;
             }
 
             .attachment-indicator {
-                color: rgba(255, 255, 255, 0.8);
-                border-color: rgba(255, 255, 255, 0.2);
+                color: inherit;
+                opacity: 0.8;
+                border-color: currentColor;
             }
         }
     }
@@ -759,6 +763,7 @@
 
         .message-bubble {
             background: var(--llm-bg-assistant-bubble);
+            color: var(--llm-text-assistant-bubble);
             border-radius: var(--llm-radius-bubble) var(--llm-radius-bubble) var(--llm-radius-bubble) 4px;
             box-shadow: var(--llm-shadow-small);
             max-width: 100%;

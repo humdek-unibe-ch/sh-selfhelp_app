@@ -75,6 +75,10 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     // Character limit
     readonly MAX_MESSAGE_LENGTH = 4000;
 
+    // Chat colors
+    userColor: { bg: string; text: string; border: string } | null = null;
+    aiColor: { bg: string; text: string; border: string } | null = null;
+
     // ============================================================================
     // GETTERS FOR TEMPLATE BINDINGS
     // ============================================================================
@@ -122,7 +126,28 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     }
 
     override ngOnInit() {
+        this.loadChatColors();
         this.initializeChat();
+    }
+
+    private loadChatColors() {
+        const raw = (this.style as any)?.llm_chat_colors;
+        if (!raw) return;
+        let parsed: any = raw;
+        if (typeof raw === 'string') {
+            try { parsed = JSON.parse(raw); } catch { return; }
+        }
+        if (parsed?.content) {
+            if (typeof parsed.content === 'string') {
+                try { parsed = JSON.parse(parsed.content); } catch { return; }
+            } else {
+                parsed = parsed.content;
+            }
+        }
+        if (parsed && typeof parsed === 'object') {
+            this.userColor = parsed.user || null;
+            this.aiColor = parsed.ai || null;
+        }
     }
 
     ngAfterViewInit() {
@@ -1233,8 +1258,13 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
      */
     formatTimestamp(timestamp: string): string {
         try {
-            const date = new Date(timestamp);
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const d = new Date(timestamp);
+            if (isNaN(d.getTime())) return '';
+            const day = String(d.getDate()).padStart(2, '0');
+            const mon = String(d.getMonth() + 1).padStart(2, '0');
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            return `${day}.${mon} ${hh}:${mm}`;
         } catch {
             return '';
         }

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/co
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
 import { SelfhelpService } from '../../services/selfhelp.service';
 import { AlertController } from '@ionic/angular';
+import { ChatColorConfig, ChatColorEntry } from '../../selfhelpInterfaces';
 
 interface DashboardConversation {
     id: number;
@@ -42,10 +43,13 @@ interface ChatMessage {
     id?: number;
     role?: string;
     sender_type?: string;
+    sender_name?: string;
+    sender_id?: number;
     content: string;
     formatted_content?: string;
     created_at?: string;
     is_deleted?: boolean;
+    label?: string;
 }
 
 @Component({
@@ -59,6 +63,9 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     alerts: DashboardAlert[] = [];
     stats: any = {};
     sectionId: number | null = null;
+    currentUserId: number | null = null;
+    chatColors: ChatColorConfig = {};
+    private therapistIndexMap: Map<number, number> = new Map();
     activeTab: 'conversations' | 'alerts' = 'conversations';
     isLoading = false;
     errorMessage = '';
@@ -102,6 +109,8 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
     override ngOnInit() {
         const s: any = this.style;
         this.sectionId = s?.section_id || null;
+        this.currentUserId = s?.user_id || s?.userId || null;
+        this.loadChatColors();
         if (s?.conversations) {
             this.conversations = s.conversations;
         }
@@ -207,34 +216,102 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         return conv.subject_name || conv.user_name || 'Patient #' + conv.id;
     }
 
+    isOwnTherapistMessage(msg: ChatMessage): boolean {
+        if (msg.sender_type !== 'therapist' && msg.role !== 'therapist') return false;
+        if (this.currentUserId && msg.sender_id) {
+            return msg.sender_id === this.currentUserId;
+        }
+        return false;
+    }
+
     getSenderLabel(msg: ChatMessage): string {
+        if (msg.sender_type === 'therapist' || msg.role === 'therapist') {
+            if (this.isOwnTherapistMessage(msg)) return 'You';
+            if (msg.label) return msg.label;
+            if (msg.sender_name) return `Therapist (${msg.sender_name})`;
+            return 'Therapist';
+        }
         if (msg.sender_type) {
             switch (msg.sender_type) {
-                case 'therapist': return 'You';
                 case 'subject': return 'Patient';
                 case 'system': return 'System';
                 case 'ai': case 'assistant': return 'AI';
             }
         }
-        if (msg.role === 'therapist') return 'You';
         if (msg.role === 'user') return 'Patient';
         if (msg.role === 'assistant') return 'AI';
         return '';
     }
 
     getSenderClass(msg: ChatMessage): string {
+        if (msg.sender_type === 'therapist' || msg.role === 'therapist') {
+            return this.isOwnTherapistMessage(msg) ? 'therapist' : 'other-therapist';
+        }
         if (msg.sender_type) {
             switch (msg.sender_type) {
-                case 'therapist': return 'therapist';
                 case 'subject': return 'patient';
                 case 'system': return 'system';
                 case 'ai': case 'assistant': return 'ai';
             }
         }
-        if (msg.role === 'therapist') return 'therapist';
         if (msg.role === 'user') return 'patient';
         if (msg.role === 'assistant') return 'ai';
         return 'patient';
+    }
+
+    getSenderName(msg: ChatMessage): string {
+        return msg.sender_name || msg.label || '';
+    }
+
+    private loadChatColors() {
+        const raw = (this.style as any)?.therapy_chat_colors;
+        if (!raw) return;
+        let parsed: any = raw;
+        if (typeof raw === 'string') {
+            try { parsed = JSON.parse(raw); } catch { return; }
+        }
+        if (parsed?.content) {
+            if (typeof parsed.content === 'string') {
+                try { parsed = JSON.parse(parsed.content); } catch { return; }
+            } else {
+                parsed = parsed.content;
+            }
+        }
+        if (parsed && typeof parsed === 'object') {
+            this.chatColors = parsed;
+        }
+    }
+
+    rebuildTherapistIndexMap() {
+        this.therapistIndexMap.clear();
+        let idx = 1;
+        for (const msg of this.selectedMessages) {
+            if (msg.sender_type !== 'therapist' || !msg.sender_id) continue;
+            if (this.currentUserId && msg.sender_id === this.currentUserId) continue;
+            if (this.therapistIndexMap.has(msg.sender_id)) continue;
+            this.therapistIndexMap.set(msg.sender_id, idx);
+            idx++;
+            if (idx > 10) idx = 1;
+        }
+    }
+
+    getColorEntry(msg: ChatMessage): ChatColorEntry | null {
+        if (!this.chatColors || Object.keys(this.chatColors).length === 0) return null;
+
+        if (this.isOwnTherapistMessage(msg)) {
+            return (this.chatColors as any)['me_as_therapist'] || null;
+        }
+        if (msg.sender_type === 'therapist' || msg.role === 'therapist') {
+            const tIdx = msg.sender_id ? this.therapistIndexMap.get(msg.sender_id) : 1;
+            return (this.chatColors as any)[`therapist_${tIdx || 1}`] || null;
+        }
+        if (msg.sender_type === 'subject' || msg.role === 'user') {
+            return (this.chatColors as any)['patient'] || null;
+        }
+        if (msg.sender_type === 'ai' || msg.sender_type === 'assistant' || msg.role === 'assistant') {
+            return (this.chatColors as any)['ai'] || null;
+        }
+        return null;
     }
 
     getRiskColor(risk?: string): string {
@@ -266,6 +343,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
             const res: any = await this.apiCall('get_conversation', { conversation_id: conv.id });
             if (res?.messages) {
                 this.selectedMessages = res.messages;
+                this.rebuildTherapistIndexMap();
             }
             if (res?.notes) {
                 this.selectedNotes = res.notes;

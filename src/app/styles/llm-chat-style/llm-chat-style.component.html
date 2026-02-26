@@ -206,7 +206,10 @@
                   [class.user-message]="isUserMessage(message)"
                   [class.assistant-message]="!isUserMessage(message)">
                   <!-- Message Bubble with icon on top -->
-                  <div class="message-bubble">
+                  <div class="message-bubble"
+                       [style.background]="isUserMessage(message) ? (userColor ? userColor.bg : null) : (aiColor ? aiColor.bg : null)"
+                       [style.color]="isUserMessage(message) ? (userColor ? userColor.text : null) : (aiColor ? aiColor.text : null)"
+                       [style.border-left]="!isUserMessage(message) && aiColor ? '3px solid ' + aiColor.border : null">
                     <!-- Message Header with Icon -->
                     @if (!isUserMessage(message)) {
                       <div class="message-header">

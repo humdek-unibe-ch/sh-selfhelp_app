@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { BasicStyleComponent } from '../basic-style/basic-style.component';
-import { TherapyChatStyle } from '../../selfhelpInterfaces';
+import { TherapyChatStyle, ChatColorConfig, ChatColorEntry } from '../../selfhelpInterfaces';
 import { SelfhelpService } from '../../services/selfhelp.service';
 import { ChatTagReason, ChatTherapistInfo } from '../../components/chat-input/chat-input.component';
 
@@ -11,6 +11,8 @@ interface TherapyMessage {
     formatted_content?: string;
     created_at?: string;
     sender_type?: string;
+    sender_name?: string;
+    sender_id?: number;
     label?: string;
     labels?: any[];
 }
@@ -39,6 +41,8 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
     tagReasons: ChatTagReason[] = [];
     therapists: ChatTherapistInfo[] = [];
     helpText: string = '';
+    chatColors: ChatColorConfig = {};
+    private therapistIndexMap: Map<number, number> = new Map();
 
     private pollingTimer: any = null;
     private pollingInterval: number = 3000;
@@ -54,6 +58,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         this.isSubject = this.style.is_subject !== false;
         this.taggingEnabled = this.style.tagging_enabled === true;
         this.labels = this.style.labels || [];
+        this.loadChatColors();
 
         const reasonsField = (this.style as any)?.therapy_tag_reasons;
         if (reasonsField?.content && Array.isArray(reasonsField.content)) {
@@ -68,6 +73,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         if (this.style.messages && this.style.messages.length > 0) {
             this.messages = this.style.messages;
             this.latestMessageId = this.getMaxMessageId(this.messages);
+            this.rebuildTherapistIndexMap();
             this.isInitialLoading = false;
             this.scrollToBottom();
             this.markAsRead();
@@ -147,6 +153,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
             if (res && res.messages) {
                 this.messages = res.messages;
                 this.latestMessageId = this.getMaxMessageId(this.messages);
+                this.rebuildTherapistIndexMap();
             }
         } catch (e) {
             console.error('TherapyChat: Failed to load conversation', e);
@@ -222,12 +229,69 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
         switch (this.getEffectiveSenderType(msg)) {
             case 'ai':
             case 'assistant': return 'AI Assistant';
-            case 'therapist': return 'Therapist';
+            case 'therapist': return msg.sender_name ? `Therapist (${msg.sender_name})` : 'Therapist';
             case 'subject':
             case 'user': return '';
             case 'system': return 'System';
             default: return '';
         }
+    }
+
+    getSenderName(msg: TherapyMessage): string {
+        if (msg.sender_name) return msg.sender_name;
+        if (msg.label) return msg.label;
+        return '';
+    }
+
+    private loadChatColors() {
+        const raw = (this.style as any)?.therapy_chat_colors;
+        if (!raw) return;
+        let parsed: any = raw;
+        if (typeof raw === 'string') {
+            try { parsed = JSON.parse(raw); } catch { return; }
+        }
+        if (parsed?.content) {
+            if (typeof parsed.content === 'string') {
+                try { parsed = JSON.parse(parsed.content); } catch { return; }
+            } else {
+                parsed = parsed.content;
+            }
+        }
+        if (parsed && typeof parsed === 'object') {
+            this.chatColors = parsed;
+        }
+    }
+
+    private rebuildTherapistIndexMap() {
+        this.therapistIndexMap.clear();
+        let idx = 1;
+        for (const msg of this.messages) {
+            if (msg.sender_type !== 'therapist' || !msg.sender_id) continue;
+            if (this.therapistIndexMap.has(msg.sender_id)) continue;
+            this.therapistIndexMap.set(msg.sender_id, idx);
+            idx++;
+            if (idx > 10) idx = 1;
+        }
+    }
+
+    getColorEntry(msg: TherapyMessage): ChatColorEntry | null {
+        if (!this.chatColors || Object.keys(this.chatColors).length === 0) return null;
+        const type = this.getEffectiveSenderType(msg);
+        const own = this.isOwnMessage(msg);
+
+        if (own) {
+            return (this.chatColors as any)['me_as_patient'] || null;
+        }
+        if (type === 'ai' || type === 'assistant') {
+            return (this.chatColors as any)['ai'] || null;
+        }
+        if (type === 'system') return null;
+        if (type === 'therapist') {
+            const tIdx = msg.sender_id ? this.therapistIndexMap.get(msg.sender_id) : 1;
+            const key = `therapist_${tIdx || 1}`;
+            return (this.chatColors as any)[key] || null;
+        }
+        return null;
     }
 
     private startPolling() {
@@ -282,6 +346,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
                         }
                     }
                     this.latestMessageId = this.getMaxMessageId(res.messages);
+                    this.rebuildTherapistIndexMap();
                     this.scrollToBottom();
                 });
             }

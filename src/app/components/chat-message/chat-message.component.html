@@ -1,10 +1,14 @@
 <div class="chat-msg" [class.chat-msg-own]="isOwn" [class.chat-msg-system]="bubbleType === 'system'">
   @if (senderLabel) {
-    <div class="chat-msg-sender" [attr.data-type]="bubbleType">
+    <div class="chat-msg-sender" [attr.data-type]="bubbleType"
+         [style.color]="colorEntry ? colorEntry.border : null">
       {{ senderLabel }}
     </div>
   }
-  <div class="chat-msg-bubble" [attr.data-type]="bubbleType">
+  <div class="chat-msg-bubble" [attr.data-type]="bubbleType"
+       [style.background]="colorEntry ? colorEntry.bg : null"
+       [style.color]="colorEntry ? colorEntry.text : null"
+       [style.border-left-color]="colorEntry ? colorEntry.border : null">
     <app-markdown-renderer [content]="displayContent"></app-markdown-renderer>
   </div>
   @if (labels && labels.length > 0) {
@@ -14,9 +18,9 @@
       }
     </div>
   }
-  @if (timestamp) {
+  @if (formattedTimestamp) {
     <div class="chat-msg-time" [class.chat-msg-time-own]="isOwn">
-      {{ timestamp }}
+      {{ formattedTimestamp }}
     </div>
   }
 </div>

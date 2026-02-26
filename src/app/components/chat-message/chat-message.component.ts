@@ -1,5 +1,11 @@
 import { Component, Input } from '@angular/core';
 
+interface ColorEntry {
+    bg: string;
+    text: string;
+    border: string;
+}
+
 @Component({
     selector: 'app-chat-message',
     templateUrl: './chat-message.component.html',
@@ -11,9 +17,11 @@ export class ChatMessageComponent {
     @Input() formattedContent: string = '';
     @Input() senderType: string = '';
     @Input() senderLabel: string = '';
+    @Input() senderName: string = '';
     @Input() timestamp: string = '';
     @Input() isOwn: boolean = false;
     @Input() labels: any[] = [];
+    @Input() colorEntry: ColorEntry | null = null;
 
     get displayContent(): string {
         return this.formattedContent || this.content || '';
@@ -27,6 +35,8 @@ export class ChatMessageComponent {
                 return this.isOwn ? 'own' : 'patient';
             case 'therapist':
                 return this.isOwn ? 'own' : 'therapist';
+            case 'other-therapist':
+                return 'therapist';
             case 'ai':
             case 'assistant':
                 return 'ai';
@@ -34,6 +44,21 @@ export class ChatMessageComponent {
                 return 'system';
             default:
                 return this.isOwn ? 'own' : 'other';
+        }
+    }
+
+    get formattedTimestamp(): string {
+        if (!this.timestamp) return '';
+        try {
+            const d = new Date(this.timestamp);
+            if (isNaN(d.getTime())) return this.timestamp;
+            const day = String(d.getDate()).padStart(2, '0');
+            const mon = String(d.getMonth() + 1).padStart(2, '0');
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            return `${day}.${mon} ${hh}:${mm}`;
+        } catch {
+            return this.timestamp;
         }
     }
 }

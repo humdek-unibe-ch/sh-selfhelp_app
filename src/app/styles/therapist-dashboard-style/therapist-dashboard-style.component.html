@@ -205,8 +205,10 @@
                 [content]="getMessageContent(msg)"
                 [senderType]="getSenderClass(msg)"
                 [senderLabel]="getSenderLabel(msg)"
-                [timestamp]="formatTime(msg.created_at)"
-                [isOwn]="getSenderClass(msg) === 'therapist'">
+                [senderName]="getSenderName(msg)"
+                [timestamp]="msg.created_at || ''"
+                [isOwn]="isOwnTherapistMessage(msg)"
+                [colorEntry]="getColorEntry(msg)">
               </app-chat-message>
             }
             @if (!isLoadingMessages && selectedMessages.length === 0) {

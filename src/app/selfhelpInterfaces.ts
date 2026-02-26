@@ -419,6 +419,20 @@ export interface LlmResponseStyle extends Style {
     section_id: any,
 }
 
+export interface ChatColorEntry {
+    bg: string;
+    text: string;
+    border: string;
+}
+
+export interface ChatColorConfig {
+    me_as_patient?: ChatColorEntry;
+    me_as_therapist?: ChatColorEntry;
+    patient?: ChatColorEntry;
+    ai?: ChatColorEntry;
+    [key: string]: ChatColorEntry | undefined;
+}
+
 export interface TherapyChatConfig {
     icon: string;
     label: string;
@@ -438,6 +452,7 @@ export interface TherapyChatStyle extends Style {
     labels: any[],
     polling_interval: number,
     chat_config: TherapyChatConfig,
+    therapy_chat_colors?: any,
 }
 
 export interface TherapistDashboardStyle extends Style {
@@ -446,6 +461,7 @@ export interface TherapistDashboardStyle extends Style {
     conversations: any[],
     stats: any,
     alerts: any[],
+    therapy_chat_colors?: any,
 }
 
 export interface MessageBoardStyle extends Style {
@@ -819,6 +835,7 @@ export interface LlmChatStyle extends Style {
     conversations: LlmConversation[];
     messages: LlmMessage[];
     current_conversation: LlmConversation;
+    llm_chat_colors?: any;
 }
 
 /**

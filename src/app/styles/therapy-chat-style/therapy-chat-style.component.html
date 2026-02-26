@@ -31,9 +31,11 @@
           [content]="msg.formatted_content || msg.content"
           [senderType]="getEffectiveSenderType(msg)"
           [senderLabel]="getSenderLabel(msg)"
+          [senderName]="getSenderName(msg)"
           [timestamp]="msg.created_at || ''"
           [isOwn]="isOwnMessage(msg)"
-          [labels]="msg.labels || []">
+          [labels]="msg.labels || []"
+          [colorEntry]="getColorEntry(msg)">
         </app-chat-message>
       }
       <!-- Loading indicator -->

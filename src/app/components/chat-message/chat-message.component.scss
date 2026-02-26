@@ -117,9 +117,12 @@
 }
 
 .chat-msg-time {
-    font-size: 0.65rem;
-    color: var(--ion-text-color-step-500, #999);
-    margin-top: 3px;
+    font-size: 0.62rem;
+    color: var(--ion-text-color-step-500, #888);
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.2px;
+    opacity: 0.75;
 
     &.chat-msg-time-own {
         text-align: right;
