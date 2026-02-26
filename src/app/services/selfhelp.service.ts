@@ -162,18 +162,19 @@ export class SelfhelpService {
                 try {
                     if (typeof response.data === "object") {
                         this.utils.debugLog('execServerRequest() ' + keyword, response.data);
-                        resolve(response.data);
+                        return resolve(response.data);
                     }
-                    this.utils.debugLog('execServerRequest() ' + keyword, JSON.parse(response.data));
-                    resolve(JSON.parse(response.data));
+                    const parsed = JSON.parse(response.data);
+                    this.utils.debugLog('execServerRequest() ' + keyword, parsed);
+                    resolve(parsed);
                 } catch (error) {
                     this.utils.debugLog('error', response.data);
-                    reject(error);
+                    reject(new Error('Server returned invalid JSON for ' + keyword + ': ' + String(response.data).substring(0, 200)));
                 }
             })
                 .catch((err: any) => {
                     console.log(err);
-                    reject(err); // Here.
+                    reject(err);
                 });
         });
     }
@@ -191,13 +192,8 @@ export class SelfhelpService {
             params['mobile'] = true;
         }
         params['id_languages'] = this.selfhelp.value.user_language ? this.selfhelp.value.user_language : this.getUserLanguage().id;
-        params['device_id'] = this.isApp ? await this.getDeviceID() : "WEB";
-        params['mobile_web'] = !this.isApp;
-        if (this.notificationsService.getToken() !== '') {
-            params['device_token'] = this.notificationsService.getToken();
-        }
 
-        // Build query string from params
+        // Build query string from params (keep GET URLs short to avoid DB column overflow)
         const queryString = new URLSearchParams(
             Object.entries(params).map(([key, value]) => [key, String(value)])
         ).toString();
@@ -215,13 +211,14 @@ export class SelfhelpService {
                 try {
                     if (typeof response.data === "object") {
                         this.utils.debugLog('execServerGetRequest() ' + keyword, response.data);
-                        resolve(response.data);
+                        return resolve(response.data);
                     }
-                    this.utils.debugLog('execServerGetRequest() ' + keyword, JSON.parse(response.data));
-                    resolve(JSON.parse(response.data));
+                    const parsed = JSON.parse(response.data);
+                    this.utils.debugLog('execServerGetRequest() ' + keyword, parsed);
+                    resolve(parsed);
                 } catch (error) {
                     this.utils.debugLog('error', response.data);
-                    reject(error);
+                    reject(new Error('Server returned invalid JSON for ' + keyword + ': ' + String(response.data).substring(0, 200)));
                 }
             })
                 .catch((err: any) => {
