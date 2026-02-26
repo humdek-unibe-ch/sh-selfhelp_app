@@ -57,6 +57,10 @@ export class MarkdownRendererComponent implements OnChanges, AfterViewChecked {
     private preprocessContent(content: string): string {
         if (!content) return '';
 
+        // Some backend responses arrive with escaped newlines as literal text ("\n").
+        // Convert them before markdown parsing so paragraphs/lists render correctly.
+        content = content.replace(/\\r\\n|\\n|\\r/g, '\n');
+
         // Process video URLs in markdown image syntax
         // ![video:controls](path.mp4) -> <video> element
         content = content.replace(
