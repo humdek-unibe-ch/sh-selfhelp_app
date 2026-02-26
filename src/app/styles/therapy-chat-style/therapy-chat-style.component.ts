@@ -174,7 +174,7 @@ export class TherapyChatStyleComponent extends BasicStyleComponent implements On
             userMessage = this.messageText.trim();
             this.messageText = '';
         }
-        this.messages.push({ role: 'user', content: userMessage, sender_type: 'subject' });
+        this.messages.push({ role: 'user', content: userMessage, sender_type: 'subject', created_at: new Date().toISOString() });
         this.isLoading = true;
         this.scrollToBottom();
 
