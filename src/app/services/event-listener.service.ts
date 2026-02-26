@@ -32,6 +32,9 @@ export class EventListenerService implements OnDestroy {
                 this.startPolling(selfhelp.current_url, interval);
             }
         } else {
+            if (this.isPolling) {
+                this.utils.debugLog('EventListener', `Stopping polling (enable_event_listener=${selfhelp.enable_event_listener}, url=${selfhelp.current_url})`);
+            }
             this.stopPolling();
         }
     }

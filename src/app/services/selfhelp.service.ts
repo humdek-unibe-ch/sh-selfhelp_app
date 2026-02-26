@@ -238,6 +238,9 @@ export class SelfhelpService {
         let urlFound = false;
         let currSelfhelp = this.selfhelp.value;
         currSelfhelp.current_url = url;
+
+        currSelfhelp.enable_event_listener = page.enable_event_listener || false;
+        currSelfhelp.event_listener_interval = page.event_listener_interval || 5;
         for (let i = 0; i < currSelfhelp.navigation.length; i++) {
             const nav = currSelfhelp.navigation[i];
             if (this.getUrl(nav) == url) {
@@ -321,16 +324,6 @@ export class SelfhelpService {
             let newSelfhelp = this.selfhelp.value;
             newSelfhelp.user_language = page.user_language;
             this.setSelfhelp(newSelfhelp, true);
-        }
-        // Update event listener config from page response
-        let eventListenerChanged = false;
-        if (currSelfhelp.enable_event_listener !== (page.enable_event_listener || false)) {
-            currSelfhelp.enable_event_listener = page.enable_event_listener || false;
-            eventListenerChanged = true;
-        }
-        if (currSelfhelp.event_listener_interval !== (page.event_listener_interval || 5)) {
-            currSelfhelp.event_listener_interval = page.event_listener_interval || 5;
-            eventListenerChanged = true;
         }
         // Process therapy_chat info from page response
         if (page.therapy_chat) {
@@ -621,23 +614,22 @@ export class SelfhelpService {
         });
     }
 
-    public submitForm(keyword: string, params: any): Promise<boolean> {
+    public async submitForm(keyword: string, params: any): Promise<boolean> {
         this.utils.debugLog('submitForm', 'submitForm');
-        return this.execServerRequest(keyword, params)
-            .then((res: SelfHelpPageRequest) => {
-                if (res) {
-                    this.lastToastMsg = '';
-                    if (!this.output_messages(res.content)) {
-                        return false;
-                    };
-                    this.setPage(keyword, res);
+        try {
+            const res: SelfHelpPageRequest = await this.execServerRequest(keyword, params);
+            if (res) {
+                this.lastToastMsg = '';
+                if (!this.output_messages(res.content)) {
+                    return false;
                 }
-                return true;
-            })
-            .catch((err: any) => {
-                console.log(err);
-                return false;
-            });
+                await this.setPage(keyword, res);
+            }
+            return true;
+        } catch (err: any) {
+            console.log(err);
+            return false;
+        }
     }
 
     private output_messages(content: Styles): boolean {
