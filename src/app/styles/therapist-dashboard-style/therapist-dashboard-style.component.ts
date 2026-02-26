@@ -222,6 +222,9 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         if (this.currentUserId && msg.sender_id) {
             return msg.sender_id === this.currentUserId;
         }
+        if (!msg.sender_id && !msg.id) {
+            return true;
+        }
         return false;
     }
 
@@ -418,6 +421,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
         const tempMsg: ChatMessage = {
             role: 'therapist',
             sender_type: 'therapist',
+            sender_id: this.currentUserId || undefined,
             content: text,
             created_at: new Date().toISOString()
         };
@@ -636,6 +640,7 @@ export class TherapistDashboardStyleComponent extends BasicStyleComponent implem
                     id: res.message_id || undefined,
                     role: 'therapist',
                     sender_type: 'therapist',
+                    sender_id: this.currentUserId || undefined,
                     content: this.draftEditText || this.activeDraft.ai_content,
                     created_at: new Date().toISOString()
                 });
