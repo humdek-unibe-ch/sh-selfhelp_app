@@ -32,7 +32,7 @@
           [senderType]="getEffectiveSenderType(msg)"
           [senderLabel]="getSenderLabel(msg)"
           [senderName]="getSenderName(msg)"
-          [timestamp]="msg.created_at || ''"
+          [timestamp]="msg.created_at || msg.timestamp || ''"
           [isOwn]="isOwnMessage(msg)"
           [labels]="msg.labels || []"
           [colorEntry]="getColorEntry(msg)">

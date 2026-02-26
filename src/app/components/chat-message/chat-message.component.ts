@@ -52,11 +52,22 @@ export class ChatMessageComponent {
         try {
             const d = new Date(this.timestamp);
             if (isNaN(d.getTime())) return this.timestamp;
+            const now = new Date();
             const day = String(d.getDate()).padStart(2, '0');
             const mon = String(d.getMonth() + 1).padStart(2, '0');
             const hh = String(d.getHours()).padStart(2, '0');
             const mm = String(d.getMinutes()).padStart(2, '0');
-            return `${day}.${mon} ${hh}:${mm}`;
+            const isToday = d.getDate() === now.getDate()
+                && d.getMonth() === now.getMonth()
+                && d.getFullYear() === now.getFullYear();
+            if (isToday) {
+                return `${hh}:${mm}`;
+            }
+            const isSameYear = d.getFullYear() === now.getFullYear();
+            if (isSameYear) {
+                return `${day}.${mon} ${hh}:${mm}`;
+            }
+            return `${day}.${mon}.${d.getFullYear()} ${hh}:${mm}`;
         } catch {
             return this.timestamp;
         }

@@ -206,7 +206,7 @@
                 [senderType]="getSenderClass(msg)"
                 [senderLabel]="getSenderLabel(msg)"
                 [senderName]="getSenderName(msg)"
-                [timestamp]="msg.created_at || ''"
+                [timestamp]="msg.created_at || msg.timestamp || ''"
                 [isOwn]="isOwnTherapistMessage(msg)"
                 [colorEntry]="getColorEntry(msg)">
               </app-chat-message>

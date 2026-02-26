@@ -48,6 +48,7 @@ interface ChatMessage {
     content: string;
     formatted_content?: string;
     created_at?: string;
+    timestamp?: string;
     is_deleted?: boolean;
     label?: string;
 }

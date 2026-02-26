@@ -10,6 +10,7 @@ interface TherapyMessage {
     content: string;
     formatted_content?: string;
     created_at?: string;
+    timestamp?: string;
     sender_type?: string;
     sender_name?: string;
     sender_id?: number;
