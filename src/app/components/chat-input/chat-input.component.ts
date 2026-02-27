@@ -442,12 +442,15 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.speechError = null;
-        if (this.hasMediaRecorderApi) {
-            this.startMediaRecorderRecording();
+        // On native platforms, prefer the Capacitor recorder plugin.
+        // WebView getUserMedia may still fail with browser-style permission issues
+        // even when Android runtime permissions are granted.
+        if (this.isNativePlatform && this.nativeRecorderAvailable) {
+            this.startNativeRecording();
             return;
         }
 
-        this.startNativeRecording();
+        this.startMediaRecorderRecording();
     }
 
     private stopRecording() {
