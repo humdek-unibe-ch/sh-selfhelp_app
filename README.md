@@ -1,107 +1,130 @@
-# SelfHelp Mobile App
+# SelfHelp Mobile App (Submodule)
 
-The SelfHelp Mobile app is a tool thar renders SelfHelp CMS in the app
-The basic concept is as follows:
+This repository contains the shared Ionic/Angular mobile app used by multiple wrapper repositories.
 
-Pages are organized as menus.
-Sub pages are organized as sub-menus
+If you are shipping a branded project app, most project-specific settings are managed in the wrapper repo (the parent repository), not directly here.
 
-# Instructions
- - require JAVA 17
- - set the NODE_ENV: see the commands bellow in the section `based on projects`
- - generate file `./src/env/project.config.ts` with command: `node ./src/env/script.js`
- - `ionic cap add android`
- - for `android` copy file `google-services.json` in `android/app` folder 
- - `npx capacitor-assets generate` - add resources
- - `ionic cap build`
- - `ionic cap sync`
- - `ionic cap sync --inline` for debugging add source maps
- - `npx ionic cap run android --target=ce09193988d5244e0d7e  --livereload --external --configuration=production` - local command for Stefan's tablet
- - `ionic capacitor run android -l --external` for local testing; check firewall and ports if it does not work on device but works on emulator. Also the device should be in the same network. Check if node is added.
- - `ionic cap run ios -l --external` - iOS - after the error, go to the folder and rename `your_app.app` to `App.app` [fix](https://stackoverflow.com/questions/72969163/problem-with-debugging-on-physical-device-on-ios/73546894#73546894)
+## Stack
 
-# Instructions for build and release
-## General
- - run `ionic cap build` 
- - run `ionic cap copy`
- - run `ionic cap sync`
- - then in Android / Xcode studio generate bundle and sign it
-## Based on project
- - Set the environmental variable. Check the options in `capacitor.config.ts`
-    - Windows:
-      - CMD: `set NODE_ENV=habirupt` , check: `echo %NODE_ENV%`
-      - Powershell: `$env:NODE_ENV = "habirupt"` , check `echo $env:NODE_ENV`
-    - Unix: 
-      - `NODE_ENV=habirupt`
- - Run the commands
-    - run `ionic cap build` 
-    - run `ionic cap copy`
-    - run `ionic cap sync`
-- Generate the icons:
-  - Powershell: `npx capacitor-assets generate --assetPath "./projects/$env:NODE_ENV"`
- - Update the android or iOS project: 
-  - Powershell: `npx trapeze run .\projects\$env:NODE_ENV\config.yaml --android-project android` Be sure that the files are not locked when executed. Sometimes a java process is not closed and keep the files locked. Kill it.
+- Angular `21`
+- Ionic Angular `8`
+- Capacitor `8`
+- TypeScript `5.9`
+- Android target/compile SDK `36`
 
+## Prerequisites
 
-# iOS Push notifications
- - [instructions](https://capacitorjs.com/docs/guides/push-notifications-firebase) 
+- Node.js `20+` (Node `22 LTS` recommended) and npm.
+- Java `17+` (Android build).
+- Android Studio.
+- macOS + Xcode + CocoaPods (iOS build).
 
-# Instructions App center Code-Push
- - Install: `npm install -g appcenter-cli`
- - Login: `appcenter login`
- - Create: create react-native app in the [appcenter](https://appcenter.ms) web interface
- - Publish: 
-  - `ionic cap build android`
-  - `ionic cap build ios`
-  - `ionic cap sync android`
-  - `ionic cap sync ios`
-  - Android
-   - `appcenter codepush release -a TPF-UniBe/SelfHelp-Android -c android/app/src/main/assets/public/ -d Production -t 3.3.0 --description 'v3.3.12' --mandatory true`
-   - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-Android Production`
-  - iOS
-   - create production: `appcenter codepush deployment add -a TPF-UniBe/SelfHelp-ios Production`
-   - check keys: `appcenter codepush deployment list -k --app TPF-UniBe/SelfHelp-ios`
-   - `appcenter codepush release -a TPF-UniBe/SelfHelp-ios -c ios/App/App/public/ -d Production -t 3.0.0 --description 'My Description' --mandatory true`
-   - History Check: `appcenter codepush deployment history -a TPF-UniBe/SelfHelp-ios Production`
+## Local Development (Web)
 
-# Add new style
- - `ionic g component styles\myCoolStyle` - the command should be executed in the SelfHelpMobile folder
+```bash
+npm install
+npm start
+```
 
-# Password Management (iOS Keychain / Android Credential Manager)
-The app uses `@capgo/capacitor-autofill-save-password` to save and retrieve user credentials from the native system keychain. After successful login, the user is prompted to save their password. On subsequent logins (including reinstalls or new devices with the same account), saved credentials are read from the keychain and pre-filled.
+Other useful scripts:
+- `npm run build`
+- `npm run watch`
+- `npm run test`
+- `npm run lint`
 
-## iOS Setup (required per project)
-1. **Associated Domains**: In your Apple Developer account, enable "Associated Domains" for the app ID.
-2. **Trapeze config** (`config.yaml`): The `com.apple.developer.associated-domains` entitlement must include `webcredentials:YOUR_DOMAIN` (replace `SET_YOUR_SERVER_DOMAIN_HERE` in the config).
-3. **Server**: Add a `.well-known/apple-app-site-association` file at the root of your SelfHelp server domain:
-   ```json
-   {
-     "webcredentials": {
-       "apps": ["TEAM_ID.unibe.tpf.selfhelp"]
-     }
-   }
-   ```
-   Replace `TEAM_ID` with your Apple Developer Team ID and `unibe.tpf.selfhelp` with the actual bundle ID.
+## Native Build (from this folder)
 
-## Android Setup (required per project)
-1. **Trapeze config** (`config.yaml`): The `asset_statements` string in `values/strings.xml` must be set with your server domain (replace `SET_YOUR_SERVER_DOMAIN_HERE`).
-2. **Server**: Add a `.well-known/assetlinks.json` file at the root of your SelfHelp server domain:
-   ```json
-   [{
-     "relation": ["delegate_permission/common.handle_all_urls", "delegate_permission/common.get_login_creds"],
-     "target": {
-       "namespace": "android_app",
-       "package_name": "unibe.tpf.selfhelp",
-       "sha256_cert_fingerprints": ["YOUR_SHA256_FINGERPRINT"]
-     }
-   }]
-   ```
-   Get the fingerprint with: `keytool -list -v -keystore your-keystore.jks | grep SHA256`
+Add platform once:
+```bash
+npx cap add android
+npx cap add ios
+```
 
-## Per-Project Config Checklist
-When setting up a new project, update these placeholders in `config.yaml`:
-- `SET_YOUR_SERVER_DOMAIN_HERE` (appears in both iOS entitlements and Android strings.xml)
-- Bundle ID / package name if different from default
-- Version numbers
+Build and sync:
+```bash
+npx ionic cap build --configuration production
+npx ionic cap sync
+```
+
+Platform-specific sync:
+```bash
+npx ionic cap sync android
+npx ionic cap sync ios
+```
+
+Run Android with live reload:
+```bash
+npx ionic cap run android -l --external
+```
+
+The app can also be opened directly in Android Studio/Xcode after sync.
+
+## Configuration Source of Truth
+
+This app reads runtime configuration from:
+- `src/env/app.config.ts`
+
+In wrapper-based projects, this file is generated by the parent repo command:
+- `npm run config` (in wrapper root)
+
+Do not maintain `src/env/app.config.ts` manually in wrapper workflows. Update the wrapper `configs/config.ts` instead.
+
+`capacitor.config.ts` loads values from `src/env/app.config.ts`.
+
+## Wrapper Integration (recommended release flow)
+
+From wrapper root:
+1. Update wrapper config files (`configs/config.ts`, `configs/config.yaml`, Firebase files, assets).
+2. Run `npm run config`.
+3. Build/sync inside this app folder.
+4. Run wrapper scripts (`trapeze-android`, `trapeze-ios`, asset generation, iOS patch script).
+
+See wrapper root README for exact commands and order.
+
+## Permissions and Native Capabilities
+
+Features used by the app:
+- Push notifications (`@capacitor/push-notifications`)
+- Camera/photo picking (`@capacitor/camera`)
+- Microphone recording (`capacitor-voice-recorder`, `@capgo/capacitor-audio-recorder`)
+- Native password save/autofill (`@capgo/capacitor-autofill-save-password`)
+
+Permission declarations and entitlements are applied through wrapper `configs/config.yaml` via Trapeze.
+
+Current wrapper defaults include:
+- Android: camera, microphone, external storage permissions.
+- iOS: camera and microphone usage descriptions.
+
+Push permissions are requested at runtime in `src/app/services/notifications.service.ts`.
+
+## Password Autofill Setup (per project)
+
+For iOS Keychain and Android Credential Manager, each project must set its domain and server files.
+
+1. In wrapper `config.yaml`, replace `SET_YOUR_SERVER_DOMAIN_HERE` for:
+   - iOS `com.apple.developer.associated-domains` (`webcredentials:<domain>`)
+   - Android `asset_statements`
+2. Add server files:
+   - `https://<domain>/.well-known/apple-app-site-association`
+   - `https://<domain>/.well-known/assetlinks.json`
+
+Android fingerprint helper:
+```bash
+keytool -list -v -keystore your-keystore.jks | grep SHA256
+```
+
+## Preview Build
+
+```bash
+ng build --base-href "/SelfHelpMobilePreview/<version>/" --deploy-url "/SelfHelpMobilePreview/<version>/"
+```
+
+For additional preview notes, see `PREVIEW.md`.
+
+## Notes on Legacy CodePush
+
+AppCenter/CodePush steps from old Cordova workflows are intentionally not part of the current standard instructions.
+
+Legacy CodePush snippets may still exist in template files, but current Capacitor build/release should be treated as the default path.
 
 
