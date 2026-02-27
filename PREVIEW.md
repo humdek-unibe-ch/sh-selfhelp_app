@@ -6,7 +6,13 @@
 
 # Preview Instructions Build
 
-- run command: `npx ng build --base-href "/SelfHelpMobilePreview/v3_0_0/" --deploy-url "/SelfHelpMobilePreview/v3_0_0/"` for the version number you want. 
-  - hint: last time this was not working and i replaced it with `ng build --base-href "/SelfHelpMobilePreview/v3_0_0/" --deploy-url "/SelfHelpMobilePreview/v3_0_0/"` and later repalced all `./SelfHelpMobilePreview` with `/SelfHelpMobilePreview`. Somehting was changed in angualr generation
+- recommended command (v4_0_0): `npm run build:preview:v4_0_0`
+- equivalent direct command: `npx ng build --configuration production --base-href /SelfHelpMobilePreview/v4_0_0/ --deploy-url /SelfHelpMobilePreview/v4_0_0/`
+- for other versions, replace `v4_0_0` in both flags with your version folder
 - copy the files in folder `SelfHelpMobilePreview` and the `version_number`
-- change the `.htaccess` file `RewriteRule ^(.*) /SelfHelpMobilePreview/v3_0_0/index.html [NC,L]` to much the version
+- change the `.htaccess` file to match the version, example:
+  - `RewriteRule ^(.*) /SelfHelpMobilePreview/v4_0_0/index.html [NC,L]`
+- do not open `index.html` directly as `file://...`
+  - this causes `Not allowed to load local resource` for JS/CSS chunks
+  - always open through a web server URL (`http://` or `https://`)
+- important: never use a filesystem path in `--base-href` or `--deploy-url` (for example `C:/Program Files/...`), otherwise Angular writes absolute local paths into `index.html`

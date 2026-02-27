@@ -7,6 +7,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:preview:v4_0_0": "ng build --configuration production --base-href /SelfHelpMobilePreview/v4_0_0/ --deploy-url /SelfHelpMobilePreview/v4_0_0/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
