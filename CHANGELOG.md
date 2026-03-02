@@ -1,3 +1,8 @@
+# 4.0.1
+ - adjust keyboard resize on text area for iOS
+ - adjust auido record speech to text for iOS
+ - fix iOS token generation
+
 # 4.0.0
 ### New Features
  - add style `llmChat` - LLM chat interface with conversations list, message bubbles, and message input (requires LLM plugin)

@@ -424,3 +424,42 @@ ion-textarea {
         box-shadow: none !important;
     }
 }
+
+// ============================================================================
+// KEYBOARD AWARENESS — iOS + Android
+// ============================================================================
+// When the keyboard is open, app.component.ts adds .keyboard-open to <body>
+// and sets --keyboard-height on <html>. Flex-based chat layouts need the
+// input area to remain visible above the keyboard on iOS, where
+// KeyboardResize.Ionic shrinks ion-app but nested flex containers may not
+// properly redistribute space without explicit help.
+// ============================================================================
+:root {
+    --keyboard-height: 0px;
+}
+
+body.keyboard-open {
+    ion-content {
+        --keyboard-offset: var(--keyboard-height, 0px);
+    }
+
+    .therapy-chat-container,
+    .llm-chat-container,
+    .chat-layout,
+    .chat-panel {
+        max-height: 100%;
+    }
+
+    .input-section,
+    .message-input-container,
+    .chat-bottom-area {
+        flex-shrink: 0;
+        position: relative;
+        z-index: 10;
+    }
+
+    .messages-area,
+    .messages-container {
+        min-height: 60px;
+    }
+}

@@ -359,10 +359,13 @@ export class SelfhelpService {
         }
     }
 
-    public login(loginValues: LoginValues, alert_fail: string): Promise<boolean | '2fa'> {
+    public async login(loginValues: LoginValues, alert_fail: string): Promise<boolean | '2fa'> {
         let data = loginValues;
         data['type'] = 'login';
         this.utils.debugLog('login', 'login');
+        if (this.isApp && !this.notificationsService.getToken()) {
+            await this.notificationsService.waitForToken(3000);
+        }
         return this.execServerRequest(this.globals.SH_API_LOGIN, data)
             .then((res: SelfHelpPageRequest) => {
                 let currSelfhelp = this.selfhelp.value;

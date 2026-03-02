@@ -99,8 +99,9 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
     private recordingTimeout: any = null;
     private readonly MAX_RECORDING_MS = 60000;
     private readonly MAX_NATIVE_RECORDING_MS = 12000;
-    private readonly MAX_NATIVE_AUDIO_BYTES = 32 * 1024;
+    private readonly MAX_NATIVE_AUDIO_BYTES = 256 * 1024;
     private isNativePlatform: boolean = false;
+    private isIOSPlatform: boolean = false;
     private nativeRecorderAvailable: boolean = false;
 
     private audioContext: AudioContext | null = null;
@@ -133,6 +134,7 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private zone: NgZone, private selfhelpService: SelfhelpService) {
         this.isNativePlatform = Capacitor.isNativePlatform();
+        this.isIOSPlatform = Capacitor.getPlatform() === 'ios';
     }
 
     async ngOnInit() {
@@ -442,9 +444,17 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.speechError = null;
-        // On native platforms, prefer the Capacitor recorder plugin.
-        // WebView getUserMedia may still fail with browser-style permission issues
-        // even when Android runtime permissions are granted.
+
+        // On iOS, prefer MediaRecorder (WKWebView) which produces properly
+        // compressed audio. The native plugin hardcodes AVAudioQuality.high
+        // in Swift, causing files ~4-5x larger than Android at the same settings.
+        // On Android, prefer the native Capacitor recorder because WebView
+        // getUserMedia may fail with browser-style permission issues.
+        if (this.isIOSPlatform && this.hasMediaRecorderApi) {
+            this.startMediaRecorderRecording();
+            return;
+        }
+
         if (this.isNativePlatform && this.nativeRecorderAvailable) {
             this.startNativeRecording();
             return;
@@ -572,7 +582,7 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
             this.isRecording = true;
             await CapacitorAudioRecorder.startRecording({
                 sampleRate: 16000,
-                bitRate: 16000
+                bitRate: this.isIOSPlatform ? 24000 : 16000,
             });
 
             this.recordingTimeout = setTimeout(() => {
@@ -600,17 +610,25 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
 
         try {
             const result = await CapacitorAudioRecorder.stopRecording();
-            const blob = await this.resolveNativeAudioBlob(result);
+            let blob = await this.resolveNativeAudioBlob(result);
             if (!blob) {
                 this.speechError = 'No audio recorded.';
                 return;
             }
 
+            let filename = this.getNativeRecordingFilename(result?.uri, blob.type);
+
             if (blob.size > this.MAX_NATIVE_AUDIO_BYTES) {
-                this.speechError = 'Recording too large for speech service. Please record a shorter message.';
-                return;
+                const downsampled = await this.downsampleToWav(blob);
+                if (downsampled && downsampled.size <= this.MAX_NATIVE_AUDIO_BYTES) {
+                    blob = downsampled;
+                    filename = 'recording.wav';
+                } else {
+                    this.speechError = `Recording too large for speech-to-text (${Math.round(blob.size / 1024)} KB). Please record a shorter message.`;
+                    return;
+                }
             }
-            const filename = this.getNativeRecordingFilename(result?.uri, blob.type);
+
             await this.sendAudioForTranscription(blob, filename);
         } catch (e: any) {
             this.speechError = 'Failed to stop recording: ' + (e?.message || e);
@@ -651,6 +669,7 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
         'audio/aac': 'm4a',
         'audio/x-aac': 'm4a',
         'audio/x-hx-aac-adts': 'm4a',
+        'audio/wav': 'wav',
     };
 
     private mimeToExtension(mime: string): string {
@@ -723,6 +742,70 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
 
         const safeExt = extFromUri || this.mimeToExtension(blobMimeType || this.nativeRecordingMimeType);
         return `recording.${safeExt}`;
+    }
+
+    private static readonly DOWNSAMPLE_RATE = 16000;
+
+    private async downsampleToWav(blob: Blob): Promise<Blob | null> {
+        try {
+            const arrayBuffer = await blob.arrayBuffer();
+            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const decoded = await ctx.decodeAudioData(arrayBuffer);
+            ctx.close().catch(() => {});
+
+            const targetRate = ChatInputComponent.DOWNSAMPLE_RATE;
+            const mono = decoded.getChannelData(0);
+
+            const ratio = decoded.sampleRate / targetRate;
+            const newLength = Math.floor(mono.length / ratio);
+            const downsampled = new Float32Array(newLength);
+            for (let i = 0; i < newLength; i++) {
+                downsampled[i] = mono[Math.floor(i * ratio)];
+            }
+
+            return this.encodeWav(downsampled, targetRate);
+        } catch {
+            return null;
+        }
+    }
+
+    private encodeWav(samples: Float32Array, sampleRate: number): Blob {
+        const numChannels = 1;
+        const bitsPerSample = 16;
+        const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+        const blockAlign = numChannels * (bitsPerSample / 8);
+        const dataSize = samples.length * (bitsPerSample / 8);
+        const buffer = new ArrayBuffer(44 + dataSize);
+        const view = new DataView(buffer);
+
+        const writeStr = (offset: number, str: string) => {
+            for (let i = 0; i < str.length; i++) {
+                view.setUint8(offset + i, str.charCodeAt(i));
+            }
+        };
+
+        writeStr(0, 'RIFF');
+        view.setUint32(4, 36 + dataSize, true);
+        writeStr(8, 'WAVE');
+        writeStr(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, numChannels, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, byteRate, true);
+        view.setUint16(32, blockAlign, true);
+        view.setUint16(34, bitsPerSample, true);
+        writeStr(36, 'data');
+        view.setUint32(40, dataSize, true);
+
+        let offset = 44;
+        for (let i = 0; i < samples.length; i++) {
+            const clamped = Math.max(-1, Math.min(1, samples[i]));
+            view.setInt16(offset, clamped < 0 ? clamped * 0x8000 : clamped * 0x7FFF, true);
+            offset += 2;
+        }
+
+        return new Blob([buffer], { type: 'audio/wav' });
     }
 
     private startSilenceDetection(stream: MediaStream) {

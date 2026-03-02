@@ -9,7 +9,7 @@ import { UtilsService } from './services/utils.service';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
-import { Keyboard } from '@capacitor/keyboard';
+import { Keyboard, KeyboardInfo } from '@capacitor/keyboard';
 import { GlobalsService } from './services/globals.service';
 register();
 
@@ -97,14 +97,49 @@ export class AppComponent {
     }
 
     private setupKeyboard() {
-        Keyboard.addListener('keyboardWillShow', () => {
-            const active = document.activeElement as HTMLElement;
-            if (active) {
-                setTimeout(() => active.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+        const isIOS = Capacitor.getPlatform() === 'ios';
+
+        Keyboard.addListener('keyboardWillShow', (info: KeyboardInfo) => {
+            document.documentElement.style.setProperty(
+                '--keyboard-height', `${info.keyboardHeight}px`
+            );
+            document.body.classList.add('keyboard-open');
+            if (!isIOS) {
+                this.scrollActiveElementIntoView(50);
             }
         });
 
+        Keyboard.addListener('keyboardDidShow', () => {
+            if (isIOS) {
+                this.scrollActiveElementIntoView(80);
+            }
+        });
+
+        Keyboard.addListener('keyboardWillHide', () => {
+            document.documentElement.style.setProperty('--keyboard-height', '0px');
+            document.body.classList.remove('keyboard-open');
+        });
+
         Keyboard.setScroll({ isDisabled: false }).catch(() => {});
+    }
+
+    private scrollActiveElementIntoView(delayMs: number) {
+        setTimeout(() => {
+            const active = document.activeElement as HTMLElement;
+            if (!active) return;
+
+            const target = active.closest('ion-textarea, ion-input, textarea, input') as HTMLElement || active;
+            const ionContent = target.closest('ion-content');
+            if (ionContent) {
+                const rect = target.getBoundingClientRect();
+                const contentRect = ionContent.getBoundingClientRect();
+                if (rect.bottom > contentRect.bottom || rect.top < contentRect.top) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, delayMs);
     }
 
     /**
