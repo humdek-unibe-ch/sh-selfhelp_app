@@ -1,0 +1,85 @@
+<div [class]="layoutClass + ' ' + getCss()">
+  @if (placement === 'top' || placement === 'left') {
+    <ng-container *ngTemplateOutlet="resultPanel"></ng-container>
+  }
+
+  <form [formGroup]="form" class="llm-form-layout__form">
+    @for (child of style.children; track child) {
+      <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent"
+        [parentForm]="form"></app-basic-style>
+    }
+    <div class="d-flex justify-content-between flex-wrap">
+      <div class="d-flex align-items-center flex-wrap">
+        @if (getFieldContent('label')) {
+          <ion-button [color]="getFieldContent('type')" size="small"
+            [disabled]="!form.valid || isSubmitting || llmIsGenerating"
+            (click)="formSubmitClick(form.value)">
+            @if (isSubmitting) {
+              <ion-spinner name="dots" class="submit-spinner"></ion-spinner>
+            }
+            @if (!isSubmitting) {
+              <span>{{ getFieldContent('label') }}</span>
+            }
+            @if (isSubmitting) {
+              <span>Processing...</span>
+            }
+          </ion-button>
+        }
+        @if (getFieldContent('submit_and_send_email') === '1') {
+          <ion-button [color]="getFieldContent('type')" size="small"
+            [class]="'btn-' + getFieldContent('type')"
+            [disabled]="!form.valid || isSubmitting || llmIsGenerating"
+            (click)="submitFormAndSendEmail(form.value)">
+            {{ getFieldContent('submit_and_send_label') }}
+          </ion-button>
+        }
+        @if (showFeedbackButton && manualFeedbackPending) {
+          <ion-button [color]="getFieldContent('llm_feedback_button_color') || 'primary'"
+            size="small"
+            [disabled]="isSubmitting || llmIsGenerating"
+            (click)="onGenerateFeedback()">
+            <ion-icon name="sparkles-outline" slot="start"></ion-icon>
+            {{ getFieldContent('llm_feedback_button_label') || 'Generate Feedback' }}
+          </ion-button>
+        }
+      </div>
+      @if (getFieldContent('url_cancel') !== '') {
+        <ion-button size="small" class="selfhelp-form-cancel-btn"
+          [disabled]="isSubmitting || llmIsGenerating"
+          (click)="cancelUrl()">
+          {{ getFieldContent('label_cancel') }}
+        </ion-button>
+      }
+    </div>
+  </form>
+
+  @if (placement === 'bottom' || placement === 'right') {
+    <ng-container *ngTemplateOutlet="resultPanel"></ng-container>
+  }
+</div>
+
+<ng-template #resultPanel>
+  <app-llm-form-result
+    class="llm-form-layout__result"
+    [result]="llmResult"
+    [meta]="llmMeta"
+    [mode]="panelMode"
+    [title]="getFieldContent('llm_result_title') || 'Result'"
+    [closable]="getFieldContent('llm_result_closable') === '1'"
+    [cssClass]="resultCssClass"
+    [isGenerating]="llmIsGenerating"
+    [generatingText]="getFieldContent('llm_generating_text') || 'Generating response...'"
+    [error]="llmError"
+    [showErrors]="getFieldContent('llm_show_errors') === '1'"
+    [retryEnabled]="getFieldContent('llm_retry_enabled') === '1'"
+    [retryLabel]="getFieldContent('llm_retry_label') || 'Retry'"
+    [regenerateEnabled]="getFieldContent('llm_regenerate_enabled') === '1'"
+    [regenerateLabel]="getFieldContent('llm_regenerate_label') || 'Regenerate'"
+    [manualFeedbackEnabled]="false"
+    [useSmallButtons]="getFieldContent('use_small_buttons') === '1'"
+    (retry)="onRetry()"
+    (regenerate)="onRegenerate()"
+    (generateFeedback)="onGenerateFeedback()"
+    (close)="onClosePanel()">
+  </app-llm-form-result>
+</ng-template>

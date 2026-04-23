@@ -77,6 +77,5 @@ src/env/app.config.ts
 src/manifest.webmanifest
 
 /.nx
-/sh-shp-llm
 /playwright-tests
 config.yaml

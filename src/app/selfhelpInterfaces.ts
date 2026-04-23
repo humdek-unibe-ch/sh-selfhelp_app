@@ -838,6 +838,61 @@ export interface LlmChatStyle extends Style {
     llm_chat_colors?: any;
 }
 
+// ============================================================================
+// LLM FORM TYPES (llmFormRecord / llmFormLog)
+// ============================================================================
+
+/**
+ * Style payload for `llmFormRecord` and `llmFormLog`.
+ * Inherits every field of `FormUserInputStyle` and adds LLM-specific fields
+ * exposed by `LlmFormView::output_content_mobile()` in the sh-shp-llm plugin.
+ */
+export interface LlmFormStyle extends FormUserInputStyle {
+    llm_enabled: StyleField;
+    llm_model: StyleField;
+    llm_temperature: StyleField;
+    llm_max_tokens: StyleField;
+    llm_context: StyleField;
+    llm_show_previous_result: StyleField;
+    llm_result_field_name: StyleField;
+    llm_result_meta_field_name: StyleField;
+    llm_result_placement: StyleField;        // 'top' | 'bottom' | 'left' | 'right'
+    llm_result_panel: StyleField;            // 'default' | 'card' | 'modal' | 'collapse'
+    llm_result_title: StyleField;
+    llm_result_closable: StyleField;
+    llm_result_css: StyleField;
+    llm_result_css_mobile: StyleField;
+    llm_show_errors: StyleField;
+    llm_retry_enabled: StyleField;
+    llm_retry_label: StyleField;
+    llm_regenerate_enabled: StyleField;
+    llm_regenerate_label: StyleField;
+    llm_generating_text: StyleField;
+    use_small_buttons: StyleField;
+    llm_manual_feedback_enabled: StyleField;
+    llm_feedback_button_label: StyleField;
+    llm_feedback_button_color: StyleField;
+    // Dynamic values added by the view
+    llm_previous_result?: StyleField;
+    llm_previous_meta?: StyleField;
+    current_record_id?: StyleField;
+    section_id?: number | string;
+    user_language?: string;
+}
+
+/**
+ * JSON response returned by `LlmFormController` for LLM form submits and
+ * `__llm_action=regenerate|retry|generate_feedback` actions.
+ */
+export interface LlmFormSubmitResponse {
+    success: boolean;
+    llm_result?: string;
+    llm_meta?: Record<string, unknown>;
+    form_errors?: string[] | Record<string, string>;
+    manual_feedback_mode?: boolean;
+    error?: string;
+}
+
 /**
  * LLM Chat Conversation
  */

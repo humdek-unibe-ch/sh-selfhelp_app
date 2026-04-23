@@ -1,0 +1,59 @@
+.llm-form-layout {
+    display: flex;
+    gap: 16px;
+
+    &--top {
+        flex-direction: column;
+    }
+
+    &--bottom {
+        flex-direction: column;
+    }
+
+    &--left {
+        flex-direction: row;
+        align-items: flex-start;
+
+        .llm-form-layout__form {
+            flex: 1;
+        }
+
+        .llm-form-layout__result {
+            flex: 1;
+        }
+    }
+
+    &--right {
+        flex-direction: row;
+        align-items: flex-start;
+
+        .llm-form-layout__form {
+            flex: 1;
+        }
+
+        .llm-form-layout__result {
+            flex: 1;
+        }
+    }
+
+    &__form {
+        min-width: 0;
+    }
+
+    &__result {
+        display: block;
+        min-width: 0;
+    }
+}
+
+// Stack on narrow viewports even if placement is left/right.
+@media (max-width: 768px) {
+    .llm-form-layout--left,
+    .llm-form-layout--right {
+        flex-direction: column;
+    }
+}
+
+.submit-spinner {
+    margin-right: 6px;
+}
