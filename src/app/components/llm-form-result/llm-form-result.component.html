@@ -42,18 +42,31 @@
       </ion-card>
     }
     @case ('collapse') {
-      <div [class]="'llm-form-result llm-form-result--collapse ' + cssClass">
-        <button type="button"
-          class="llm-form-result__header llm-form-result__header--button"
+      <div [class]="'llm-form-result llm-form-result--collapse ' + cssClass"
+        [class.llm-form-result--collapsed]="!expanded">
+        <div class="llm-form-result__header llm-form-result__header--collapse"
+          role="button"
+          tabindex="0"
           [attr.aria-expanded]="expanded"
-          (click)="onToggleExpanded()">
+          (click)="onToggleExpanded()"
+          (keydown.enter)="onToggleExpanded()"
+          (keydown.space)="onToggleExpanded(); $event.preventDefault()">
           <div class="llm-form-result__header-main">
             <ion-icon name="sparkles-outline" class="llm-form-result__icon"></ion-icon>
             <span class="llm-form-result__title">{{ title }}</span>
           </div>
-          <ion-icon class="llm-form-result__chevron"
-            [name]="expanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
-        </button>
+          <div class="llm-form-result__header-actions">
+            <ion-icon class="llm-form-result__chevron"
+              [name]="expanded ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+            @if (closable) {
+              <ion-button fill="clear" size="small"
+                class="llm-form-result__close" aria-label="Close"
+                (click)="onClose(); $event.stopPropagation()">
+                <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            }
+          </div>
+        </div>
         @if (expanded) {
           <div class="llm-form-result__body">
             <ng-container *ngTemplateOutlet="body"></ng-container>
