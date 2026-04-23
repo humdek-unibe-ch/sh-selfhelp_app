@@ -1,0 +1,160 @@
+.llm-form-result {
+    --llm-border: var(--ion-color-light-shade, #d7d8da);
+    --llm-header-bg: var(--ion-color-light-tint, #f4f5f8);
+    --llm-primary: var(--ion-color-primary, #3880ff);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        min-height: 44px;
+    }
+
+    &__header-main {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    &__icon {
+        font-size: 1.2rem;
+        color: var(--llm-primary);
+        flex-shrink: 0;
+    }
+
+    &__title {
+        font-weight: 600;
+        font-size: 1rem;
+        line-height: 1.2;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__close {
+        --padding-start: 6px;
+        --padding-end: 6px;
+        margin: 0;
+        flex-shrink: 0;
+    }
+
+    &__chevron {
+        font-size: 1.2rem;
+        color: var(--ion-color-medium, #8c8c8c);
+        flex-shrink: 0;
+    }
+
+    &__header-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    &__generating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 0;
+        color: var(--ion-color-medium);
+    }
+
+    &__error {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px;
+        background: var(--ion-color-danger-tint, rgba(235, 68, 90, 0.12));
+        color: var(--ion-color-danger-shade, #cf3c4f);
+        border-radius: 6px;
+        margin-bottom: 8px;
+
+        ion-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+    }
+
+    &__markdown {
+        display: block;
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+        justify-content: flex-end;
+
+        ion-button {
+            margin: 0;
+        }
+    }
+
+    /* ---------- Card mode ---------- */
+    &--card {
+        margin: 12px 0;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+        .llm-form-result__header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--llm-border);
+            background: var(--llm-header-bg);
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .llm-form-result__content {
+            padding: 16px;
+        }
+    }
+
+    /* ---------- Collapse mode ---------- */
+    &--collapse {
+        border: 1px solid var(--llm-border);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 12px 0;
+        background: var(--ion-background-color, #fff);
+
+        .llm-form-result__header--collapse {
+            width: 100%;
+            padding: 8px 8px 8px 16px;
+            background: var(--llm-header-bg);
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.15s ease;
+            border-bottom: 1px solid var(--llm-border);
+
+            &:hover,
+            &:focus-visible {
+                background: var(--ion-color-light-shade, #e4e6eb);
+                outline: none;
+            }
+        }
+
+        &.llm-form-result--collapsed .llm-form-result__header--collapse {
+            border-bottom: 0;
+        }
+
+        .llm-form-result__body {
+            padding: 16px;
+        }
+    }
+
+    /* ---------- Default mode ---------- */
+    &--default {
+        padding: 12px 0;
+
+        .llm-form-result__header {
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--llm-border);
+        }
+    }
+}

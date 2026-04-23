@@ -1,3 +1,27 @@
+# 4.0.2
+### Fixes
+ - **LLM form regenerate button works** - `onRegenerate()` / `onRetry()` no longer require a known `lastRecordId` before running; the backend falls back to the user's most recent record, so the button works even on a fresh page load. The new `current_record_id` exposed by `LlmFormView::output_content_mobile()` (sh-shp-llm v1.2.0+) is consumed in `LlmFormStyleComponent.ngOnInit()` to seed `lastRecordId`, and `record_id` from the response meta is kept in sync after every action.
+ - **Previous LLM response shown after navigation** - relies on the plugin's `getPreviousLlmResult()` / `getPreviousLlmMeta()` direct dataTable fallback, so the last generated response reappears whenever the user reopens an `llmFormRecord` form.
+ - **Manual-feedback save keeps the previous result visible** - when `llm_manual_feedback_enabled === '1'`, pressing *Save* no longer clears the currently displayed feedback. When `llm_show_previous_result === '1'` the last generated response stays on screen (matching the React plugin behaviour); when the flag is off the previous result is cleared as before.
+ - **Close button now visible in collapse mode** - when `llm_result_closable` is on, the `X` button is rendered in the collapse header next to the chevron and dismisses the panel without toggling the collapse (`stopPropagation`). Keyboard-accessible too (the header is a `role="button"` with Enter / Space toggling).
+ - add `current_record_id?: StyleField` to `LlmFormStyle` and make `LlmFormService.regenerateLlm()` / `.retryLlm()` accept a nullable record id (server falls back to latest record).
+
+### New Features
+ - add style `llmFormRecord` - form with an LLM-generated result panel appended after a normal save; requires the sh-shp-llm plugin v1.1.0+. Extends the standard `formUserInputRecord` so all existing form fields, validation, confirmation dialog, cancel URL and submit-and-send-email behaviour are reused as-is
+ - add style `llmFormLog` - identical to `llmFormRecord` but uses append-only log semantics on the backend (a new row per submission)
+### Enhancements
+ - **LLM result panel styling** - cleaner card mode (proper header row with a sparkles icon on the left, close button on the right, soft radius and shadow) and cleaner collapse mode (the whole header is an accessible button with a right-aligned chevron and hover/focus states). Action buttons (Regenerate / Retry / Generate Feedback) now right-align for a more polished look on narrow viewports.
+ - **LLM result panel** - four display modes supported: `default` (plain div), `card` (Ionic card), `collapse` (expandable header), `modal` (Ionic overlay). Modal opens automatically on first result
+ - **Result panel placement** - `top`, `bottom`, `left`, `right` around the form, with automatic stacking on narrow viewports
+ - **Regenerate / Retry actions** - user can regenerate an LLM result or retry a failed generation without resubmitting the whole form (via `__record_id` + `__llm_action` backend contract)
+ - **Manual feedback mode** - when `llm_manual_feedback_enabled` is on, form submit only saves the data and a separate "Generate Feedback" button is shown; the LLM is called only when the user presses it
+ - **Previous result display** - if `llm_show_previous_result` is on, a stored LLM result from an earlier submit is shown on page load (populated from `llm_previous_result` / `llm_previous_meta` exposed by the plugin's `LlmFormView::output_content_mobile()`)
+ - **Localized labels** - all button labels, generating text, result title and error display respect style fields (`llm_result_title`, `llm_retry_label`, `llm_regenerate_label`, `llm_generating_text`, `llm_feedback_button_label`, `llm_feedback_button_color`, `use_small_buttons`)
+ - add `LlmFormStyle` and `LlmFormSubmitResponse` interfaces in `selfhelpInterfaces.ts`
+ - add `LlmFormService` (`submitLlmForm`, `regenerateLlm`, `retryLlm`, `generateManualFeedback`) - posts directly via `execServerRequest` so the structured LLM response is preserved (bypasses the generic `submitForm` wrapper which returns a boolean)
+ - add shared `LlmFormResultComponent` (`app-llm-form-result`) used by both `llmFormRecord` and `llmFormLog`; supports all four display modes, markdown rendering via `<app-markdown-renderer>`, and emits `retry` / `regenerate` / `generateFeedback` / `close` events
+ - add `LlmFormStyleComponent` as shared base extending `FormUserInputStyleComponent`; two thin subclasses (`LlmFormRecordStyleComponent`, `LlmFormLogStyleComponent`) register the two style names independently
+
 # 4.0.1
  - adjust keyboard resize on text area for iOS
  - adjust auido record speech to text for iOS

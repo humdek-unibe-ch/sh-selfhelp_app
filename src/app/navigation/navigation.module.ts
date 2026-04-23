@@ -86,6 +86,10 @@ import { QuillModule } from 'ngx-quill';
 import { QuillComponent } from '../styles/survey-js-style/quill-component/quill.component';
 import { LlmChatStyleComponent } from '../styles/llm-chat-style/llm-chat-style.component';
 import { LlmResponseStyleComponent } from '../styles/llm-response-style/llm-response-style.component';
+import { LlmFormStyleComponent } from '../styles/llm-form-style/llm-form-style.component';
+import { LlmFormRecordStyleComponent } from '../styles/llm-form-record-style/llm-form-record-style.component';
+import { LlmFormLogStyleComponent } from '../styles/llm-form-log-style/llm-form-log-style.component';
+import { LlmFormResultComponent } from '../components/llm-form-result/llm-form-result.component';
 import { TherapyChatStyleComponent } from '../styles/therapy-chat-style/therapy-chat-style.component';
 import { TherapistDashboardStyleComponent } from '../styles/therapist-dashboard-style/therapist-dashboard-style.component';
 import { MarkdownModule } from 'ngx-markdown';
@@ -227,6 +231,10 @@ const routes: Routes = [
         QuillComponent,
         LlmChatStyleComponent,
         LlmResponseStyleComponent,
+        LlmFormStyleComponent,
+        LlmFormRecordStyleComponent,
+        LlmFormLogStyleComponent,
+        LlmFormResultComponent,
         TherapyChatStyleComponent,
         TherapistDashboardStyleComponent,
         MarkdownRendererComponent,

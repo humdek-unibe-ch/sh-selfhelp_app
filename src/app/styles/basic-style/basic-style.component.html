@@ -93,6 +93,12 @@
     @case (isStyle('llmResponse')) {
       <app-llm-response-style [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-llm-response-style>
     }
+    @case (isStyle('llmFormRecord')) {
+      <app-llm-form-record-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-llm-form-record-style>
+    }
+    @case (isStyle('llmFormLog')) {
+      <app-llm-form-log-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-llm-form-log-style>
+    }
     @case (isStyle('login')) {
       <app-login-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-login-style>
     }
