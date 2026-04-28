@@ -14,6 +14,7 @@ import * as SurveyCore from "survey-core";
 import { SurveyJsVoiceRecorderComponent } from './survey-js-voice-recorder/survey-js-voice-recorder.component';
 import { DefaultDark, DefaultLight } from "survey-core/themes";
 import { QuillComponent } from './quill-component/quill.component';
+import { addVideoQuestionWidget } from './survey-js-video-question';
 
 function encodeHtml(params: any[]) {
     const input = params[0];
@@ -47,6 +48,10 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     ) {
         super();
         this.addVoiceRecorderWidget(this.injector, this.appRef, this.componentFactoryResolver);
+        // Video custom question type. Resolves the API endpoint lazily
+        // so a server switch from the dev menu is picked up without
+        // re-registering the widget.
+        addVideoQuestionWidget(() => this.selfhelpService.getApiEndPointNative());
     }
 
     override async ngOnInit() {

@@ -1,0 +1,34 @@
+/*
+ * Styles for the custom `video` SurveyJS question (v4.0.3).
+ *
+ * Keep these :host-encapsulated so they only apply inside the
+ * SurveyJS Angular component. The widget root in the SurveyJS
+ * template is a plain <div class="sjs-video"> so we don't depend on
+ * any SurveyJS-version-specific class names.
+ */
+:host ::ng-deep .sjs-video {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+:host ::ng-deep .sjs-video__player {
+    width: 100%;
+    max-width: 100%;
+    background: #000;
+    object-fit: contain;
+}
+
+:host ::ng-deep .sjs-video__error {
+    display: none;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    background: var(--ion-color-danger, #eb445a);
+    color: var(--ion-color-danger-contrast, #ffffff);
+    font-size: 0.9rem;
+}
+
+:host ::ng-deep .sjs-video__error.is-visible {
+    display: block;
+}
