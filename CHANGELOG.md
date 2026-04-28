@@ -1,3 +1,60 @@
+# 4.0.3
+
+### New Features
+ - **SurveyJS `video` custom question type** — runtime port of the `5_videoSegmentWidget.js` widget shipped in `sh-shp-survey_js` v1.4.8. Mobile is client-only (no Creator / admin) so only the participant-facing behaviour is included; the property panel, toolbox icon registration and Creator-only localization are intentionally omitted.
+   - Registered as a brand-new SurveyJS question class `video` (lowercased — SurveyJS lowercases every class name internally) inheriting from `empty`. We deliberately do NOT extend the built-in `image` question — extending it caused the native image renderer to take over (full-video playback with no segment clamping, no `BASE_PATH` resolution, and a stray drag-and-drop / upload affordance for empty values).
+   - Wired in via a new helper `addVideoQuestionWidget(getApiEndpoint)` in `src/app/styles/survey-js-style/survey-js-video-question.ts`, called once from `SurveyJSStyleComponent`'s constructor next to the existing voice-recorder widget. The endpoint is resolved lazily so a server switch from the dev menu is picked up without re-registering the widget.
+ - **Question properties** (mirrors the CMS plugin schema so JSON authored in the Creator round-trips into the mobile app unchanged):
+   - `videoUrl` (string, required) — Video URL
+   - `startTimestamp` (number, optional, no default) — start time in seconds (≥ 0)
+   - `endTimestamp` (number, optional, no default) — end time in seconds (≥ 0; `0` is treated as "not configured" since a 0-second segment is nonsensical)
+   - `autoStart` (boolean, default `false`) — auto-start playback when the question becomes visible
+   - `videoFit` (`none` | `contain` | `cover` | `fill`, default `contain`) → applied as `object-fit`
+   - `videoHeight` / `videoWidth` (string, default `""`) → applied as inline CSS height/width
+   - `requiredWatchMessage:text` (`isLocalizable: true`) — translatable alert shown when a required `video` question hasn't been watched to the end. Round-trips through the Creator's Translation tab as `{ default: "…", de: "…", … }`.
+ - **Playback semantics**:
+   - Both timestamps unset (or `end ≤ 0`) → plays the entire video.
+   - Only `startTimestamp` set → starts there and continues to the natural end.
+   - Only `endTimestamp` set → plays from 0 until that timestamp.
+   - Both set with `end > start` → enforces the exact playback segment: seeks before `start` snap forward, seeks past `end` snap back, the player auto-pauses at `end`, and pressing play after the end restarts at `start`.
+   - Internal: unset `endTimestamp` is treated as `Infinity` until metadata loads, then resolved to `video.duration`. Bound checks use `isFinite(end)` so missing end timestamps cleanly mean "no upper limit".
+   - Safety net: an explicit `endTimestamp` greater than the actual file duration is capped to `video.duration` on `loadedmetadata` so a misconfigured upper bound can never make `watched` permanently unreachable.
+ - **URL resolution** — `videoUrl` accepts:
+   - `https://`, `data:`, `blob:`, `file:`, protocol-relative (`//cdn…`) → unchanged
+   - Root-relative (e.g. `/assets/video.mp4`) → prefixed with `SelfhelpService.getApiEndPointNative()` so the asset is fetched from whichever backend the mobile app is currently pointed at (handles the dev-menu server switch automatically)
+   - Page-relative (`assets/video.mp4`) → unchanged, browser resolves
+ - **Required questions enforce a complete watch** — when `isRequired: true`, the user must watch to the configured `endTimestamp` (or to the file's natural end if unset) before the survey lets them advance / submit. Implemented as a lazy, idempotent `survey.onValidateQuestion` hook (tagged `__videoQuestionRequiredHookAttached` on the survey so multiple video questions in the same survey share one validator) that emits the message resolved by `getRequiredWatchMessage(question)`. The `value.watched === true` flag is the gate — set by the playback enforcer once `currentTime >= end - 0.05`. Anything weaker (never-played, paused mid-segment, abandoned near the end) keeps the question failing required-validation.
+ - **Localized required-watch alert** — resolution order at runtime:
+   1. SurveyJS-resolved per-locale string (the property is `isLocalizable: true`, so reading `question.requiredWatchMessage` returns the entry for `survey.locale`, falling back to the `default` locale entry, or `""` when neither is set in the Creator).
+   2. Built-in `DEFAULT_REQUIRED_WATCH_MESSAGES[survey.locale]` backstop bundled in `survey-js-video-question.ts` (`en`, `de`, `fr`, `it`). Adding a locale is a one-line change to the constant — no other code edits required.
+   3. English default as the final fallback.
+   - The CMS already pushes the active locale into `survey.locale` via `4_surveyJS.js` at survey-render time, so a German-locale page automatically gets the German alert with no per-question configuration.
+ - **Auto-start playback** (`autoStart`) — when truthy, the widget seeks to `startTimestamp` (or `0` if unset) on `loadedmetadata` and immediately calls `video.play()`, silently swallowing the autoplay-policy rejection promise. Suppressed in two situations:
+   1. Read-only mode (`question.isReadOnly`) — we should never restart a video the participant has already submitted an answer for.
+   2. Creator Designer tab (`survey.isDesignMode === true`) — guard kept for parity with the CMS widget; mobile never enters design mode but the check is cheap.
+   No implicit muting — the video plays with its natural sound. Browser autoplay policies still apply: autoplay-with-sound usually requires a recent user gesture, so on the very first page of a directly-opened survey the browser may block the play attempt; on subsequent pages reached via the Next button it generally works.
+ - **Continuous playback tracking** — question value updates on every meaningful playback event (`play`, `pause`, `seek`, `clamp`, `ended`). Snapshot schema (assigned to `question.value` on every event so partial playback survives navigation):
+
+```jsonc
+{
+  "watched": true,
+  "currentTime": 12.4,
+  "startTimestamp": 5,
+  "endTimestamp": null,
+  "duration": null,
+  "watchedSeconds": 7.4,
+  "percentWatched": 0.32,
+  "startedAt": "ISO timestamp",
+  "lastUpdatedAt": "ISO timestamp",
+  "lastEvent": "pause",
+  "completedAt": null
+}
+```
+ - **Configuration validation** — only `videoUrl` is required at runtime (mobile authors don't see the property panel — invalid configs that escape the Creator are surfaced as a question-level red banner above the player rather than crashing). Errors are tagged `__fromVideoQuestion` and self-cleared on every `afterRender`, matching the CMS widget's behaviour so we never accidentally drop unrelated errors set by other validators.
+ - **Read-only mode** — when the question is `isReadOnly` the native HTML5 `<video>` controls are hidden; the existing `readOnlyChangedCallback` is wired so toggling the flag at runtime keeps the controls in sync.
+ - **Cleanup** — `willUnmount` detaches every event listener, pauses the player and clears the `<video src>` so the widget doesn't leak into the next survey page.
+ - add minimal `:host ::ng-deep` styling for `.sjs-video`, `.sjs-video__player` and `.sjs-video__error` in `survey-js-style.component.css` (full-width player, black background, Ionic-themed danger banner).
+
 # 4.0.2
 ### Fixes
  - **LLM form regenerate button works** - `onRegenerate()` / `onRetry()` no longer require a known `lastRecordId` before running; the backend falls back to the user's most recent record, so the button works even on a fresh page load. The new `current_record_id` exposed by `LlmFormView::output_content_mobile()` (sh-shp-llm v1.2.0+) is consumed in `LlmFormStyleComponent.ngOnInit()` to seed `lastRecordId`, and `record_id` from the response meta is kept in sync after every action.
