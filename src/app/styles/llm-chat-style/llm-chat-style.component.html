@@ -215,7 +215,10 @@
                        [style.color]="isUserMessage(message) ? userAppearance.text : aiAppearance.text"
                        [style.border-left]="!isUserMessage(message) ? '3px solid ' + aiAppearance.border : null"
                        [style.border-right]="isUserMessage(message) ? '3px solid ' + userAppearance.border : null">
-                    <!-- Message Header with Icon -->
+                    <!-- AI message header — always shown (avatar +
+                         sender label + time). Avatar prefers the
+                         `iconImage` URL when set, otherwise falls
+                         back to `iconMobile` (Ionic icon name). -->
                     @if (!isUserMessage(message)) {
                       <div class="message-header">
                         <div class="message-avatar-inline">
@@ -226,6 +229,24 @@
                           }
                         </div>
                         <span class="message-sender">AI Assistant</span>
+                        <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
+                      </div>
+                    }
+                    <!-- User message header — rendered ONLY when
+                         the author configured a `userAppearance.
+                         iconImage`. With no image set we keep the
+                         pre-v1.3.0 layout (no header on the user
+                         side); the bubble shows just the message
+                         body and the meta time below. The header
+                         is `flex-direction: row-reverse` so the
+                         avatar mirrors the AI side (right-aligned
+                         beside the right-aligned bubble). -->
+                    @if (isUserMessage(message) && userAppearance.iconImage) {
+                      <div class="message-header user-header">
+                        <div class="message-avatar-inline">
+                          <img [src]="userAppearance.iconImage" alt="You" class="message-avatar-img" />
+                        </div>
+                        <span class="message-sender">{{ getLabel('user_sender_label', 'You') }}</span>
                         <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
                       </div>
                     }
@@ -283,8 +304,12 @@
                         }
                       </div>
                     }
-                    <!-- Message Meta for user messages -->
-                    @if (isUserMessage(message)) {
+                    <!-- Message meta for user messages (timestamp
+                         beneath the bubble body). Suppressed when
+                         the user header is rendered above, since
+                         the timestamp already lives there and we
+                         don't want to show it twice. -->
+                    @if (isUserMessage(message) && !userAppearance.iconImage) {
                       <div class="message-meta">
                         <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
                       </div>

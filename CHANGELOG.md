@@ -158,6 +158,51 @@ backend / web-admin and require no mobile work.
     - `llm-form-result`, `llm-response-style`, `llm-structured-response`
       were already using Ionic theme variables end-to-end (audited and
       left untouched).
+- **LLM chat surfaces flip in `ionic serve` too.** The previous fix wired
+  the chat to `--ion-background-color` and `--ion-color-step-50`, which
+  is the right call on a real device — Ionic's `theme/variables.scss`
+  flips those vars inside `.md body` / `.ios body` when
+  `prefers-color-scheme: dark` is active. In the browser preview
+  (`ionic serve`, dev mobile-preview frame) the platform class is not
+  always present on `<body>`, so the `step-*` ramp and
+  `--ion-background-color` stayed at their light defaults even when iOS
+  reported dark mode and the toolbar / tab bar (which use Ionic
+  primitives that *do* flip without the class) had already gone black.
+  The chat ended up in a half-flipped state — dark chrome around a
+  cream `#f8f9fa` (a `--ion-color-step-50` light-mode value) message
+  surface.
+
+  Now `:host` in `llm-chat-style.component.scss` declares its own
+  `@media (prefers-color-scheme: dark)` block that mirrors Ionic's
+  Material dark values (`--ion-background-color: #121212`,
+  `--ion-color-step-50…300`, `--ion-text-color: #ffffff`,
+  `--ion-card-background`, `--ion-item-background`,
+  `--ion-toolbar-background`). Real devices already get the same values
+  from Ionic's class-scoped block, so the two co-exist without
+  conflict; browser preview gets them from this block alone. End
+  result: the chat container, panel, header, messages container,
+  input wrapper, sidebar drawer, conversation cards, and the
+  "AI is thinking…" placeholder all flip together with the rest of the
+  app whenever the system flips, regardless of whether `<body>` carries
+  a platform class.
+- **User-side avatar (`userAppearance.iconImage`) is now rendered.**
+  v1.3.0 of the plugin added a per-side `iconImage` slot to
+  `llm_chat_appearance`, but the mobile chat template only consumed
+  the AI-side image. Authors who configured a user avatar saw it on
+  the web client but not in the app. The user bubble now renders a
+  mirrored `.message-header.user-header` (avatar + sender label +
+  time) when `userAppearance.iconImage` is set, using
+  `flex-direction: row-reverse` so the avatar lands on the right edge
+  of the (right-aligned) user bubble. The label uses
+  `getLabel('user_sender_label', 'You')` so the existing CMS label
+  pipeline can localise it (no new field is required on the plugin
+  side; the fallback `'You'` ships out of the box). When `iconImage`
+  is empty the pre-v1.3.0 layout is preserved exactly: no header,
+  just the message body and the meta timestamp below — symmetrical
+  with the AI side, which already used `iconMobile` (Ionic icon name)
+  as the default. The duplicate `.message-meta` timestamp under the
+  bubble is suppressed when the header is rendered, matching the
+  AI-side rhythm.
 
 # 4.0.3
 
