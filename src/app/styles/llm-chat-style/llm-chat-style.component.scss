@@ -52,20 +52,34 @@
 // `--ion-text-color`, and the `--ion-color-step-*` ramp inside
 // `.md body` / `.ios body` when `prefers-color-scheme: dark`. In
 // `ionic serve` the platform class is sometimes missing on `<body>`
-// (Capacitor only adds it natively), so without this block the chat
-// surfaces stay light even when iOS / Android is in dark mode and
-// the outer toolbar / tab bar (which rely on Ionic primitives that
-// flip without the class) have already gone dark — exactly the
-// half-flipped state the screenshot showed.
+// (Capacitor only adds it natively), and Bootstrap's
+// `bootstrap.min.css` (loaded globally by the host app) sits ABOVE
+// the chat in the cascade for any non-component-scoped property. The
+// safest fix is to override our OWN `--llm-*` vars directly here
+// instead of trying to override the underlying Ionic vars, because
+// the `--llm-*` vars are declared on `:host` and only consumed
+// inside the chat — no global rule can pre-empt them.
 //
-// The values mirror Ionic's own Material dark theme (see
-// `theme/variables.scss → .md body`). On real devices both this
-// block and Ionic's class-scoped block fire and produce the same
-// values — no double-flip, no conflict. On browser preview without
-// the platform class, this block is the only thing keeping the chat
-// in sync with the rest of the chrome.
+// Real-device behaviour is unchanged: Ionic's class-scoped block
+// already flips `--ion-background-color` / `--ion-color-step-50`
+// for everything OUTSIDE the chat (toolbar, tab bar, etc), and this
+// block re-anchors the chat's surfaces to the same values. Light
+// mode falls through to the original `:host` block above which
+// still consumes the Ionic vars (and falls back to the light defaults).
 @media (prefers-color-scheme: dark) {
     :host {
+        // Surface palette — overridden DIRECTLY (not via the Ionic
+        // var indirection) so Bootstrap / Ionic-platform-class
+        // ordering can't strand them at the light defaults.
+        --llm-bg-primary: #121212;
+        --llm-bg-secondary: #1e1e1e;
+        --llm-text-secondary: #989aa2;
+        --llm-border-color: rgba(255, 255, 255, 0.12);
+
+        // Also flip the Ionic vars used by descendant rules that
+        // reference them directly (`--ion-color-step-50`,
+        // `--ion-color-step-100`, `--ion-card-background`, etc).
+        // Mirrors Ionic's Material dark values.
         --ion-background-color: #121212;
         --ion-background-color-rgb: 18, 18, 18;
         --ion-text-color: #ffffff;

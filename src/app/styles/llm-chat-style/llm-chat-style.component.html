@@ -232,19 +232,28 @@
                         <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
                       </div>
                     }
-                    <!-- User message header — rendered ONLY when
-                         the author configured a `userAppearance.
-                         iconImage`. With no image set we keep the
-                         pre-v1.3.0 layout (no header on the user
-                         side); the bubble shows just the message
-                         body and the meta time below. The header
-                         is `flex-direction: row-reverse` so the
-                         avatar mirrors the AI side (right-aligned
-                         beside the right-aligned bubble). -->
-                    @if (isUserMessage(message) && userAppearance.iconImage) {
+                    <!-- User message header — rendered when the
+                         author configured EITHER `userAppearance.
+                         iconImage` (custom URL/path) OR
+                         `userAppearance.iconMobile` (Ionic icon
+                         name). When both are empty we skip the
+                         header entirely (no default Ionic fallback
+                         on the user side, unlike AI which defaults
+                         to `chatbubble-ellipses`). The header is
+                         `flex-direction: row-reverse` so the avatar
+                         mirrors the AI side (right-aligned beside
+                         the right-aligned bubble). `iconImage` wins
+                         over `iconMobile` when both are set —
+                         matching the resolution priority on the
+                         AI side. -->
+                    @if (isUserMessage(message) && (userAppearance.iconImage || userAppearance.iconMobile)) {
                       <div class="message-header user-header">
                         <div class="message-avatar-inline">
-                          <img [src]="userAppearance.iconImage" alt="You" class="message-avatar-img" />
+                          @if (userAppearance.iconImage) {
+                            <img [src]="userAppearance.iconImage" alt="You" class="message-avatar-img" />
+                          } @else {
+                            <ion-icon [name]="userAppearance.iconMobile"></ion-icon>
+                          }
                         </div>
                         <span class="message-sender">{{ getLabel('user_sender_label', 'You') }}</span>
                         <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
@@ -306,10 +315,12 @@
                     }
                     <!-- Message meta for user messages (timestamp
                          beneath the bubble body). Suppressed when
-                         the user header is rendered above, since
-                         the timestamp already lives there and we
-                         don't want to show it twice. -->
-                    @if (isUserMessage(message) && !userAppearance.iconImage) {
+                         the user header is rendered above (i.e.
+                         when EITHER `iconImage` or `iconMobile` is
+                         configured), since the timestamp already
+                         lives in that header and we don't want to
+                         show it twice. -->
+                    @if (isUserMessage(message) && !userAppearance.iconImage && !userAppearance.iconMobile) {
                       <div class="message-meta">
                         <span class="message-time">{{ formatTimestamp(message.timestamp) }}</span>
                       </div>
