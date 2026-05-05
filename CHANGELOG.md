@@ -80,6 +80,54 @@ backend / web-admin and require no mobile work.
   mirrors the canonical defaults shipped in the plugin's v1.3.0 SQL
   migration and `LlmChatModel::getDefaultChatAppearance()`.
 
+### Fixed
+
+- **`iconImage` paths now resolve against the configured server.** Root-
+  relative (`/assets/avatar.png`) and bare-relative (`assets/avatar.png`)
+  paths in `llm_chat_appearance.iconImage` no longer 404. The plugin
+  sends the field to mobile as a raw JSON blob (server-side `BASE_PATH`
+  prefixing only happens for the web renderer's
+  `getReactConfig()`), so on mobile we now run the merged `iconImage`
+  values through a new `LlmChatStyleComponent.normalizeAssetUrl()`
+  helper — mirroring the long-standing pattern from
+  `image-style.component.ts`, `video-style.component.ts`, and friends:
+    - `data:` / `blob:` URIs and `http(s)://...` URLs pass through
+      unchanged (already self-contained).
+    - Empty / null / non-string values stay empty so the template
+      cleanly falls back to `<ion-icon [name]="iconMobile">`.
+    - Otherwise the value is prefixed with
+      `SelfhelpService.getApiEndPointNative()`, with a single
+      slash between host and path even when the author writes either
+      `/assets/x.png` or `assets/x.png`.
+  Authors can now paste the same string into the CMS field that they
+  use on the web side and have it work in the app too.
+
+- **Dark / light mode no longer breaks the LLM chat input.** When the
+  device was in system dark mode, Ionic flipped `--ion-text-color` to
+  white and `--ion-color-light` toward black, but the chat keeps a
+  hardcoded light surface (white body, pastel bubbles configured by
+  the author through `llm_chat_appearance`). The result was an
+  invisible textarea placeholder, an unreadable char-count, and
+  mismatched form / notice areas inside the chat. The fix is purely
+  scoped: `LlmChatStyleComponent` now declares `color-scheme: light`
+  on its host plus a small set of Ionic CSS-variable overrides
+  (`--ion-text-color`, `--ion-color-light(-shade/-tint)`,
+  `--ion-color-medium(-shade/-tint)`, `--ion-color-dark`,
+  `--ion-color-step-50` … `--ion-color-step-950`,
+  `--ion-background-color`, `--ion-item-background`,
+  `--ion-toolbar-background`, `--ion-card-background`). These
+  overrides cascade through the chat subtree (including the
+  `<app-chat-input>`, `<app-llm-structured-response>`, and
+  `<app-llm-form-renderer>` children — CSS custom properties pierce
+  Ionic's Shadow DOM), so the chat now renders identically in light
+  and dark mode while the surrounding app shell (page header, tab
+  bar, navigation) keeps its native dark-mode chrome. Other LLM
+  styles (`llm-response-style`, `llm-form-result`,
+  `llm-form-renderer`) already used Ionic's theme-aware variables
+  end-to-end and worked correctly in both modes — only the chat
+  needed the scope-pinning fix because of its hardcoded light
+  surfaces.
+
 # 4.0.3
 
 ### New Features

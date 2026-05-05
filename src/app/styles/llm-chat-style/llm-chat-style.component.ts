@@ -18,6 +18,7 @@ import {
 } from 'src/app/utils/llm-response-utils';
 import { LlmChatService, DEFAULT_FILE_CONFIG } from 'src/app/services/llm-chat.service';
 import { ChatInputComponent } from 'src/app/components/chat-input/chat-input.component';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 /**
  * Per-side chat bubble appearance (v1.3.0+, sh-shp-llm
@@ -171,7 +172,8 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         private alertController: AlertController,
         private actionSheetController: ActionSheetController,
         private platform: Platform,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private selfhelp: SelfhelpService
     ) {
         super();
     }
@@ -211,6 +213,50 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         }
         this.userAppearance = this.mergeAppearanceSide(parsed.user, DEFAULT_USER_APPEARANCE);
         this.aiAppearance = this.mergeAppearanceSide(parsed.ai, DEFAULT_AI_APPEARANCE);
+        this.userAppearance.iconImage = this.normalizeAssetUrl(this.userAppearance.iconImage);
+        this.aiAppearance.iconImage = this.normalizeAssetUrl(this.aiAppearance.iconImage);
+    }
+
+    /**
+     * Resolve a custom avatar URL against the configured server.
+     *
+     * The plugin sends `llm_chat_appearance` to mobile as a raw JSON
+     * blob (no server-side `BASE_PATH` is applied — that's the web
+     * renderer's job), so we must rebuild absolute URLs here:
+     *
+     *   - empty / null                  → return as-is (template falls
+     *                                     back to the Ionic icon)
+     *   - data:* / blob:* URI           → return as-is (already self-
+     *                                     contained)
+     *   - http(s)://... full URL        → return as-is
+     *   - root-relative `/assets/x.png` → prefix the API endpoint and
+     *                                     drop the leading slash so we
+     *                                     never produce `host//assets`
+     *   - bare relative `assets/x.png`  → prefix `endpoint + '/'`
+     *
+     * Mirrors the pattern used by `image-style.component.ts` and the
+     * other media styles, so authors can paste a path the way the web
+     * CMS understands it (`/assets/avatar.png`) and have it work in
+     * the mobile app too.
+     */
+    private normalizeAssetUrl(url: string): string {
+        if (!url || typeof url !== 'string') {
+            return '';
+        }
+        const trimmed = url.trim();
+        if (!trimmed) {
+            return '';
+        }
+        if (/^(data:|blob:)/i.test(trimmed)) {
+            return trimmed;
+        }
+        if (this.selfhelp.isURL(trimmed)) {
+            return trimmed;
+        }
+        const endpoint = this.selfhelp.getApiEndPointNative() || '';
+        const base = endpoint.replace(/\/+$/, '');
+        const relative = trimmed.replace(/^\/+/, '');
+        return base + '/' + relative;
     }
 
     /**
