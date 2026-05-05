@@ -19,6 +19,48 @@ import {
 import { LlmChatService, DEFAULT_FILE_CONFIG } from 'src/app/services/llm-chat.service';
 import { ChatInputComponent } from 'src/app/components/chat-input/chat-input.component';
 
+/**
+ * Per-side chat bubble appearance (v1.3.0+, sh-shp-llm
+ * `llm_chat_appearance` field).
+ *
+ * `icon` is the FontAwesome class for the WEB renderer and is
+ * intentionally ignored on mobile — Ionic does not load FontAwesome.
+ * `iconMobile` is the Ionic icon name (`person-circle`,
+ * `chatbubble-ellipses`, etc.) and `iconImage` is an optional custom
+ * URL that wins over `iconMobile` when non-empty.
+ */
+export interface ChatAppearanceSide {
+    bg: string;
+    text: string;
+    border: string;
+    icon: string;
+    iconMobile: string;
+    iconImage: string;
+}
+
+/**
+ * Mirror of `LlmChatModel::getDefaultChatAppearance()` from the plugin.
+ * Used as the merge floor whenever the saved JSON is absent or partial,
+ * so the avatar and palette never appear unstyled.
+ */
+const DEFAULT_USER_APPEARANCE: ChatAppearanceSide = {
+    bg: '#DCF8C6',
+    text: '#1b5e20',
+    border: '#a5d6a7',
+    icon: 'fa-user',
+    iconMobile: 'person-circle',
+    iconImage: ''
+};
+
+const DEFAULT_AI_APPEARANCE: ChatAppearanceSide = {
+    bg: '#F3E5F5',
+    text: '#4a148c',
+    border: '#ce93d8',
+    icon: 'fa-robot',
+    iconMobile: 'chatbubble-ellipses',
+    iconImage: ''
+};
+
 @Component({
     selector: 'app-llm-chat-style',
     templateUrl: './llm-chat-style.component.html',
@@ -75,9 +117,18 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     // Character limit
     readonly MAX_MESSAGE_LENGTH = 4000;
 
-    // Chat colors
-    userColor: { bg: string; text: string; border: string } | null = null;
-    aiColor: { bg: string; text: string; border: string } | null = null;
+    /**
+     * Unified chat appearance per side (v1.3.0+, sh-shp-llm).
+     *
+     * Read once on init from `style.llm_chat_appearance`. The PHP
+     * side always serialises a complete tree (defaults merged with
+     * author overrides), so we keep both halves populated even when
+     * the field was left at its default. Bubble colours come from
+     * `bg` / `text` / `border`; the avatar uses `iconImage` first
+     * and falls back to `iconMobile` (Ionic icon name).
+     */
+    userAppearance: ChatAppearanceSide = DEFAULT_USER_APPEARANCE;
+    aiAppearance: ChatAppearanceSide = DEFAULT_AI_APPEARANCE;
 
     // ============================================================================
     // GETTERS FOR TEMPLATE BINDINGS
@@ -126,28 +177,79 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     }
 
     override ngOnInit() {
-        this.loadChatColors();
+        this.loadChatAppearance();
         this.initializeChat();
     }
 
-    private loadChatColors() {
-        const raw = (this.style as any)?.llm_chat_colors;
+    /**
+     * Read `style.llm_chat_appearance` and merge it on top of the
+     * default appearance tree.
+     *
+     * The plugin's `LlmChatView::output_content_mobile()` exposes the
+     * field through the standard `StyleField` envelope, so the value
+     * we receive is `{ content: "<json string>" }` (or already a
+     * parsed object on legacy callers). We unwrap both shapes, decode
+     * the JSON, and clamp it to the canonical schema — anything
+     * missing or non-string falls back to the default for that key.
+     */
+    private loadChatAppearance() {
+        const raw = (this.style as any)?.llm_chat_appearance;
         if (!raw) return;
         let parsed: any = raw;
         if (typeof raw === 'string') {
             try { parsed = JSON.parse(raw); } catch { return; }
         }
-        if (parsed?.content) {
+        if (parsed?.content !== undefined) {
             if (typeof parsed.content === 'string') {
                 try { parsed = JSON.parse(parsed.content); } catch { return; }
             } else {
                 parsed = parsed.content;
             }
         }
-        if (parsed && typeof parsed === 'object') {
-            this.userColor = parsed.user || null;
-            this.aiColor = parsed.ai || null;
+        if (!parsed || typeof parsed !== 'object') {
+            return;
         }
+        this.userAppearance = this.mergeAppearanceSide(parsed.user, DEFAULT_USER_APPEARANCE);
+        this.aiAppearance = this.mergeAppearanceSide(parsed.ai, DEFAULT_AI_APPEARANCE);
+    }
+
+    /**
+     * Merge a partial side override on top of a defaults floor.
+     *
+     * Empty strings are treated as "use default" so authors can
+     * intentionally clear a single key without dropping the whole
+     * side back to colourless. Non-string values are coerced through
+     * `String()` to stay defensive against unusual JSON.
+     */
+    private mergeAppearanceSide(
+        override: Partial<ChatAppearanceSide> | undefined | null,
+        defaults: ChatAppearanceSide
+    ): ChatAppearanceSide {
+        if (!override || typeof override !== 'object') {
+            return { ...defaults };
+        }
+        const out: ChatAppearanceSide = { ...defaults };
+        (Object.keys(defaults) as (keyof ChatAppearanceSide)[]).forEach((key) => {
+            const value = (override as any)[key];
+            if (typeof value === 'string' && value !== '') {
+                out[key] = value;
+            }
+        });
+        return out;
+    }
+
+    /**
+     * Whether the AI's quick-reply suggestion buttons should be
+     * rendered (v1.3.0+ `enable_hint_suggestions` toggle on the
+     * `llmChat` style). Defaults to true so chats configured before
+     * v1.3.0 keep their existing behaviour.
+     */
+    get hintSuggestionsEnabled(): boolean {
+        const value = this.getFieldContent('enable_hint_suggestions');
+        if (value === undefined || value === null || value === '') {
+            return true;
+        }
+        return value !== '0' && value !== 0 as any && value !== false as any;
     }
 
     ngAfterViewInit() {

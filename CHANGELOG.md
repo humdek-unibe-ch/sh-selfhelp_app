@@ -1,3 +1,85 @@
+# 4.0.4
+
+### Mobile compatibility for sh-shp-llm v1.3.0
+
+This release wires the mobile chat client to the v1.3.0 plugin
+contract. All v1.3.0 plugin changes that have a mobile surface area
+are honoured here; the rest (default style field backfills,
+conversation-source filter, default-model dropdown fix, admin viewer
+JSON-tree fallback, suppress-suggestions prompt asset) are entirely
+backend / web-admin and require no mobile work.
+
+### Changed
+
+- **Unified chat appearance — `llm_chat_appearance`.** v1.3.0 of the
+  plugin collapses the legacy `llm_chat_colors` JSON field (and the
+  short-lived `llm_chat_icons` field that was prototyped earlier in
+  the same release) into a single `llm_chat_appearance` field.
+  `LlmChatStyleComponent.loadChatColors()` is replaced by
+  `loadChatAppearance()`, which reads the new field, unwraps the
+  `StyleField` envelope (`{ content: "<json string>" }`), and merges
+  the parsed JSON on top of a defaults floor mirrored from
+  `LlmChatModel::getDefaultChatAppearance()`. The new model exposes
+  `userAppearance` / `aiAppearance` of type `ChatAppearanceSide` with
+  six keys per side:
+    - `bg`, `text`, `border` — bubble palette (unchanged from
+      pre-v1.3.0). Applied as inline styles on the `.message-bubble`
+      element exactly as before.
+    - `icon` — FontAwesome class. **Ignored on mobile** (Ionic does
+      not load FontAwesome); kept on the wire so the same field
+      payload renders correctly in the web client.
+    - `iconMobile` — Ionic icon name (e.g. `person-circle`,
+      `chatbubble-ellipses`). Bound to `<ion-icon [name]>` on the
+      AI-side avatar in the chat template.
+    - `iconImage` — custom avatar URL/path. **Wins over `iconMobile`
+      when non-empty** — the template renders an `<img>` instead of
+      the Ionic icon. URL normalisation (interpolation,
+      `BASE_PATH` prepending) happens server-side, so the mobile app
+      receives an already-resolved string and treats it as opaque.
+  The old `userColor` / `aiColor` fields and the
+  `loadChatColors()` method are removed; both halves are now always
+  populated (defaults are merged on top of partial author overrides),
+  so the chat layout never appears unstyled even when the field is at
+  its default value.
+- **Custom avatar image rendering.** The AI bubble's
+  `.message-avatar-inline` slot now conditionally renders either an
+  `<img class="message-avatar-img">` (when `iconImage` is set) or the
+  existing `<ion-icon>` (when only `iconMobile` is set). New SCSS
+  rules apply `object-fit: cover` to the image so any aspect ratio
+  crops cleanly into the round 22 × 22 slot, and use `:has()` to drop
+  the coloured disc background when an image is rendered (transparent
+  PNG corners would otherwise show a primary-colour halo).
+- **User bubble border.** Bubbles now also carry the per-side `border`
+  colour as a right rail on user messages (previously only the AI side
+  rendered a border rail). This matches the web client's behaviour and
+  keeps the visual identity consistent across platforms when authors
+  use the new field's per-side `border` key.
+
+### Added
+
+- **`enable_hint_suggestions` toggle support
+  (`LlmChatStyleComponent.hintSuggestionsEnabled` getter).** v1.3.0
+  introduces a per-section toggle on the `llmChat` style that hides
+  the AI's quick-reply suggestion buttons (the `next_step.suggestions`
+  block in structured responses) AND tells the model not to emit them
+  in the first place. The mobile client now honours the flag
+  client-side too:
+    - `LlmStructuredResponseComponent` gains a new `@Input()
+      showSuggestions = true` input; the chat template binds it to
+      the new `hintSuggestionsEnabled` getter.
+    - The structured-response template gates the `<ion-button>`
+      suggestion chip block on this input. The `next_step.prompt`
+      sentence (when present) is always shown — only the chips are
+      suppressed, so the AI can still close the turn with an
+      open-ended question.
+    - Defaults to enabled, so chats configured before v1.3.0 keep
+      their existing behaviour even after upgrading the mobile client.
+- **`ChatAppearanceSide` interface** exported from
+  `llm-chat-style.component.ts` for downstream consumers / tests. The
+  default tree (`DEFAULT_USER_APPEARANCE`, `DEFAULT_AI_APPEARANCE`)
+  mirrors the canonical defaults shipped in the plugin's v1.3.0 SQL
+  migration and `LlmChatModel::getDefaultChatAppearance()`.
+
 # 4.0.3
 
 ### New Features

@@ -814,11 +814,34 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
 
             ion-icon {
                 color: white;
                 font-size: 12px;
             }
+
+            // v1.3.0+ — custom avatar image (`iconImage` from
+            // `llm_chat_appearance`). Fills the round slot via
+            // `object-fit: cover` and inherits the rounded clip
+            // from the parent so any aspect ratio crops cleanly.
+            .message-avatar-img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+                border-radius: 50%;
+                display: block;
+                pointer-events: none;
+                user-select: none;
+            }
+        }
+
+        // When a custom avatar image is rendered, drop the coloured
+        // disc background so transparent PNG corners do not show a
+        // primary-colour halo around the artwork.
+        .message-avatar-inline:has(.message-avatar-img) {
+            background: transparent;
         }
 
         .message-sender {

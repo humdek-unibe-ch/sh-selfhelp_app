@@ -829,13 +829,32 @@ export interface LlmChatStyle extends Style {
     form_mode_active_title: StyleField;
     form_mode_active_description: StyleField;
     continue_button_label: StyleField;
+    /**
+     * v1.3.0+ — when set to '0', the mobile chat hides the
+     * AI-generated quick-reply suggestion buttons (the structured
+     * response `next_step.suggestions` block). The plugin backend ALSO
+     * tells the model to stop emitting suggestions, but we honour the
+     * flag client-side as well so legacy/cached payloads still respect
+     * it.
+     */
+    enable_hint_suggestions?: StyleField;
     // Runtime data
     user_id: string;
     section_id: number;
     conversations: LlmConversation[];
     messages: LlmMessage[];
     current_conversation: LlmConversation;
-    llm_chat_colors?: any;
+    /**
+     * v1.3.0+ unified chat appearance JSON (replaces the legacy
+     * `llm_chat_colors` field). Per-side keys — `bg`, `text`,
+     * `border`, `icon` (FontAwesome class — ignored on mobile),
+     * `iconMobile` (Ionic icon name), `iconImage` (custom URL/path
+     * — wins over `iconMobile` when set, normalised server-side).
+     * The plugin always serialises a complete tree (defaults merged
+     * with author overrides), so the mobile component can read every
+     * key unconditionally.
+     */
+    llm_chat_appearance?: StyleField;
 }
 
 // ============================================================================

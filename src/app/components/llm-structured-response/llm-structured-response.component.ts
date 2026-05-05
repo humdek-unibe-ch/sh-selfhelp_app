@@ -33,6 +33,15 @@ export class LlmStructuredResponseComponent implements OnChanges {
     @Input() response!: LlmStructuredResponse;
     @Input() isLastMessage = false;
     @Input() isFormSubmitting = false;
+    /**
+     * v1.3.0+ — whether to render the AI's `next_step.suggestions`
+     * quick-reply buttons. Defaults to `true` so chats configured
+     * before v1.3.0 keep their existing behaviour. The plugin also
+     * tells the model not to emit suggestions when this flag is
+     * false, but we honour the flag client-side as well so cached /
+     * legacy payloads are still respected.
+     */
+    @Input() showSuggestions = true;
 
     @Output() formSubmit = new EventEmitter<{ values: Record<string, string | string[]>; readableText: string }>();
     @Output() suggestionClick = new EventEmitter<string>();

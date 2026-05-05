@@ -205,16 +205,25 @@
                   class="message-wrapper"
                   [class.user-message]="isUserMessage(message)"
                   [class.assistant-message]="!isUserMessage(message)">
-                  <!-- Message Bubble with icon on top -->
+                  <!-- Message Bubble with icon on top.
+                       v1.3.0+: bubble palette and AI-side avatar both come
+                       from the unified `llm_chat_appearance` JSON. Image
+                       (iconImage) wins over the Ionic icon (iconMobile)
+                       when set, on every platform. -->
                   <div class="message-bubble"
-                       [style.background]="isUserMessage(message) ? (userColor ? userColor.bg : null) : (aiColor ? aiColor.bg : null)"
-                       [style.color]="isUserMessage(message) ? (userColor ? userColor.text : null) : (aiColor ? aiColor.text : null)"
-                       [style.border-left]="!isUserMessage(message) && aiColor ? '3px solid ' + aiColor.border : null">
+                       [style.background]="isUserMessage(message) ? userAppearance.bg : aiAppearance.bg"
+                       [style.color]="isUserMessage(message) ? userAppearance.text : aiAppearance.text"
+                       [style.border-left]="!isUserMessage(message) ? '3px solid ' + aiAppearance.border : null"
+                       [style.border-right]="isUserMessage(message) ? '3px solid ' + userAppearance.border : null">
                     <!-- Message Header with Icon -->
                     @if (!isUserMessage(message)) {
                       <div class="message-header">
                         <div class="message-avatar-inline">
-                          <ion-icon name="chatbubble-ellipses"></ion-icon>
+                          @if (aiAppearance.iconImage) {
+                            <img [src]="aiAppearance.iconImage" alt="AI" class="message-avatar-img" />
+                          } @else {
+                            <ion-icon [name]="aiAppearance.iconMobile || 'chatbubble-ellipses'"></ion-icon>
+                          }
                         </div>
                         <span class="message-sender">AI Assistant</span>
                         <span class="message-time-inline">{{ formatTimestamp(message.timestamp) }}</span>
@@ -233,6 +242,7 @@
                             [response]="getStructuredResponse(message)!"
                             [isLastMessage]="isLast"
                             [isFormSubmitting]="isFormSubmitting"
+                            [showSuggestions]="hintSuggestionsEnabled"
                             (formSubmit)="handleFormSubmit($event.values, $event.readableText)"
                             (suggestionClick)="handleSuggestionClick($event)">
                           </app-llm-structured-response>

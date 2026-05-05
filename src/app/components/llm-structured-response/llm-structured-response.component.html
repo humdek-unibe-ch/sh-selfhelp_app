@@ -143,7 +143,12 @@
       </div>
     }
 
-    <!-- Next step suggestions -->
+    <!-- Next step suggestions.
+         v1.3.0+: gated by `showSuggestions` (defaults true). Authors
+         can disable the buttons via `enable_hint_suggestions = 0` on
+         the `llmChat` style for guided / linear flows where free-form
+         replies are preferred. The prompt sentence is still shown
+         when present, only the quick-reply chips are suppressed. -->
     @if (nextStep && isLastMessage) {
       <div class="structured-next-step">
         @if (nextStep.prompt) {
@@ -152,7 +157,7 @@
             {{ nextStep.prompt }}
           </p>
         }
-        @if (nextStep.suggestions && nextStep.suggestions.length > 0) {
+        @if (showSuggestions && nextStep.suggestions && nextStep.suggestions.length > 0) {
           <div class="suggestion-buttons">
             @for (suggestion of nextStep.suggestions; track $index) {
               <ion-button
