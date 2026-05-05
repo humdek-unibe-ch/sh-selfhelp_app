@@ -17,7 +17,7 @@
 // ============================================================================
 
 .form-card {
-    background: #ffffff;
+    background: var(--ion-background-color, #ffffff);
     border: 1px solid var(--ion-color-step-150);
     border-radius: 10px;
     overflow: hidden;

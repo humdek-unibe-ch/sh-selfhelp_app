@@ -62,9 +62,21 @@
         }
     }
 
+    // Each `[data-type]` variant pairs a hardcoded pastel background
+    // with an explicit text colour so the bubble stays legible in
+    // both light and dark mode. Without the explicit `color`, dark
+    // mode would flip `--ion-text-color` to white and leave white
+    // text on the light pastel surfaces unreadable.
     &[data-type="patient"] {
         background: #e3f2fd;
+        color: #0d47a1;
         border-bottom-left-radius: 4px;
+
+        ::ng-deep {
+            code { background: rgba(0,0,0,0.06); }
+            blockquote { border-left-color: rgba(0,0,0,0.15); color: inherit; opacity: 0.85; }
+            a { color: inherit; text-decoration: underline; }
+        }
     }
 
     &[data-type="therapist"] {
@@ -82,7 +94,14 @@
 
     &[data-type="ai"] {
         background: #f3e5f5;
+        color: #4a148c;
         border-bottom-left-radius: 4px;
+
+        ::ng-deep {
+            code { background: rgba(0,0,0,0.06); }
+            blockquote { border-left-color: rgba(0,0,0,0.15); color: inherit; opacity: 0.85; }
+            a { color: inherit; text-decoration: underline; }
+        }
     }
 
     &[data-type="system"] {
@@ -95,8 +114,12 @@
         padding: 6px 12px;
     }
 
+    // `other` keeps theme-aware surfaces — `--ion-color-light` flips
+    // toward dark in dark mode, and `--ion-text-color` flips white,
+    // so this variant naturally adapts without a hardcoded pairing.
     &[data-type="other"] {
         background: var(--ion-color-light, #f4f4f4);
+        color: var(--ion-text-color);
         border-bottom-left-radius: 4px;
     }
 }

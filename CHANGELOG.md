@@ -102,31 +102,62 @@ backend / web-admin and require no mobile work.
   Authors can now paste the same string into the CMS field that they
   use on the web side and have it work in the app too.
 
-- **Dark / light mode no longer breaks the LLM chat input.** When the
-  device was in system dark mode, Ionic flipped `--ion-text-color` to
-  white and `--ion-color-light` toward black, but the chat keeps a
-  hardcoded light surface (white body, pastel bubbles configured by
-  the author through `llm_chat_appearance`). The result was an
-  invisible textarea placeholder, an unreadable char-count, and
-  mismatched form / notice areas inside the chat. The fix is purely
-  scoped: `LlmChatStyleComponent` now declares `color-scheme: light`
-  on its host plus a small set of Ionic CSS-variable overrides
-  (`--ion-text-color`, `--ion-color-light(-shade/-tint)`,
-  `--ion-color-medium(-shade/-tint)`, `--ion-color-dark`,
-  `--ion-color-step-50` … `--ion-color-step-950`,
-  `--ion-background-color`, `--ion-item-background`,
-  `--ion-toolbar-background`, `--ion-card-background`). These
-  overrides cascade through the chat subtree (including the
-  `<app-chat-input>`, `<app-llm-structured-response>`, and
-  `<app-llm-form-renderer>` children — CSS custom properties pierce
-  Ionic's Shadow DOM), so the chat now renders identically in light
-  and dark mode while the surrounding app shell (page header, tab
-  bar, navigation) keeps its native dark-mode chrome. Other LLM
-  styles (`llm-response-style`, `llm-form-result`,
-  `llm-form-renderer`) already used Ionic's theme-aware variables
-  end-to-end and worked correctly in both modes — only the chat
-  needed the scope-pinning fix because of its hardcoded light
-  surfaces.
+- **LLM chat now follows the device's dark / light theme.** Previously
+  the chat hardcoded `--llm-bg-primary: #ffffff`, `--llm-bg-secondary:
+  #f2f2f7`, `--llm-text-secondary: #8e8e93`, and
+  `--llm-border-color: rgba(0, 0, 0, 0.08)` — light-mode surfaces that
+  did not flip with the system theme. When iOS / Android went dark,
+  Ionic still flipped `--ion-text-color` to white inside the chat
+  subtree, leaving the textarea placeholder, char-count, AI-bubble
+  sender label, blockquotes, attachment indicators, and message-meta
+  rows unreadable on top of those frozen-light surfaces. Fix follows
+  the same convention as `image-style`, `select-style`,
+  `llm-form-result`, `llm-response-style`, and the rest of the mobile
+  app:
+    - All four chat custom properties are rewired to Ionic theme
+      variables (`var(--ion-background-color)`, `var(--ion-color-step-50)`,
+      `var(--ion-color-medium)`, `rgba(var(--ion-text-color-rgb), 0.08)`)
+      so the chat chrome (chat container, panel, header, input wrapper,
+      sidebar drawer, conversation cards, attachments preview,
+      historical-form panels) automatically tracks the system theme
+      everywhere these vars are consumed — no per-mode overrides
+      anywhere.
+    - Inside-bubble labels (`.message-sender`, `.message-time-inline`,
+      `.attachment-indicator`, `.message-meta`,
+      `.message-content blockquote`) now `color: inherit` (with a
+      muted `opacity` for the secondary slots) so they pair with the
+      author-configured `aiAppearance.text` / `userAppearance.text`
+      from `llm_chat_appearance` instead of pulling
+      `var(--ion-color-dark)` (which flipped white in dark mode and
+      vanished against the light pastel bubbles).
+    - The `.sidebar-toggle-btn:active` ripple is now
+      `rgba(var(--ion-text-color-rgb), 0.08)` so the press feedback is
+      visible in both modes.
+    - The bubble-fallback custom properties
+      (`--llm-bg-user-bubble` / `--llm-bg-assistant-bubble`) are kept
+      as light pastels intentionally — they only apply to the
+      "AI is thinking…" placeholder bubble (which has no inline
+      palette binding); regular messages always carry the
+      author-configured palette via inline `[style.background]` /
+      `[style.color]`.
+- **Other LLM-related styles cleaned up for dark mode.**
+    - `chat-message` (used by other chat-style components — patient /
+      therapist / AI / system / other variants): the `[data-type]`
+      bubbles that had a hardcoded light pastel background but no
+      paired `color` (`patient`, `ai`) now ship with explicit dark
+      pastel-friendly text colours, plus `code` /  `blockquote` / `a`
+      `::ng-deep` overrides matching the `therapist` / `own` variants.
+      The `other` variant (theme-aware `--ion-color-light` background)
+      now also sets `color: var(--ion-text-color)` so the bubble pairs
+      cleanly in either mode instead of inheriting from a possibly
+      different parent surface.
+    - `llm-form-renderer`: `.form-card` background switched from
+      hardcoded `#ffffff` to `var(--ion-background-color, #ffffff)` so
+      the structured-response form card adapts to dark mode like the
+      `<ion-card>` default surface.
+    - `llm-form-result`, `llm-response-style`, `llm-structured-response`
+      were already using Ionic theme variables end-to-end (audited and
+      left untouched).
 
 # 4.0.3
 
