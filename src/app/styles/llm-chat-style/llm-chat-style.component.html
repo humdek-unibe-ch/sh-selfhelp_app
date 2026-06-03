@@ -1,5 +1,25 @@
 <!-- Floating Button Mode -->
 @if (isFloatingButtonEnabled()) {
+  <!-- Shortcut Tray Backdrop - closes tray when tapped -->
+  @if (!isFloatingPanelOpen && floatingShortcuts.length > 0 && shortcutTrayVisible) {
+    <div class="shortcut-tray-backdrop" (click)="closeShortcutTray()"></div>
+  }
+
+  <!-- Shortcut Tray - shown when panel is closed and shortcuts are configured -->
+  @if (!isFloatingPanelOpen && floatingShortcuts.length > 0 && shortcutTrayVisible) {
+    <div class="shortcut-tray" [class]="'shortcut-tray-' + getFloatingButtonPosition()" (click)="$event.stopPropagation()">
+      <button
+        *ngFor="let shortcut of floatingShortcuts"
+        type="button"
+        class="shortcut-pill"
+        [disabled]="isLoading || isAutoStarting || isProcessing"
+        (click)="handleShortcutClick(shortcut)"
+        [title]="shortcut.label">
+        {{ shortcut.label }}
+      </button>
+    </div>
+  }
+
   <!-- Floating Button -->
   @if (!isFloatingPanelOpen) {
     <button
