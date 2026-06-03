@@ -151,7 +151,7 @@
 
 // Using Ionic CSS Variables for consistent theming
 // Primary: --ion-color-primary
-// Danger: --ion-color-danger  
+// Danger: --ion-color-danger
 // Warning: --ion-color-warning
 // Medium: --ion-color-medium
 // Light: --ion-color-light
@@ -1526,6 +1526,140 @@
 
     .conversations-sidebar {
         max-height: 140px;
+    }
+}
+
+// ============================================================================
+// FLOATING CHAT SHORTCUT TRAY (v1.4.0+)
+// ============================================================================
+
+.shortcut-tray-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: transparent;
+}
+
+.shortcut-tray {
+    position: fixed;
+    z-index: 1000;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #dee2e6;
+    animation: shortcutTrayEnter 0.2s ease-out;
+    max-width: 280px;
+}
+
+@keyframes shortcutTrayEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+// Position classes - based on floating button position
+.shortcut-tray-bottom-right {
+    bottom: 88px;
+    right: 16px;
+}
+
+.shortcut-tray-bottom-left {
+    bottom: 88px;
+    left: 16px;
+}
+
+.shortcut-tray-top-right {
+    top: 88px;
+    right: 16px;
+}
+
+.shortcut-tray-top-left {
+    top: 88px;
+    left: 16px;
+}
+
+.shortcut-tray-bottom-center {
+    bottom: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.shortcut-tray-top-center {
+    top: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+// Shortcut pills
+.shortcut-pill {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #495057;
+    font-family: inherit;
+}
+
+.shortcut-pill:hover {
+    background-color: var(--ion-color-primary);
+    color: #ffffff;
+    border-color: var(--ion-color-primary);
+}
+
+.shortcut-pill:active {
+    transform: translateY(0);
+}
+
+// Respect safe area for notched devices
+@supports (padding: max(0px)) {
+    .shortcut-tray-bottom-right {
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(88px, env(safe-area-inset-bottom));
+    }
+
+    .shortcut-tray-bottom-left {
+        left: max(16px, env(safe-area-inset-left));
+        bottom: max(88px, env(safe-area-inset-bottom));
+    }
+
+    .shortcut-tray-top-right {
+        right: max(16px, env(safe-area-inset-right));
+        top: max(88px, env(safe-area-inset-top));
+    }
+
+    .shortcut-tray-top-left {
+        left: max(16px, env(safe-area-inset-left));
+        top: max(88px, env(safe-area-inset-top));
+    }
+}
+
+// Narrow screen adjustments
+@media (max-width: 360px) {
+    .shortcut-tray {
+        max-width: 200px;
+        gap: 6px;
+        padding: 6px;
+    }
+
+    .shortcut-pill {
+        font-size: 11px;
+        padding: 5px 10px;
     }
 }
 

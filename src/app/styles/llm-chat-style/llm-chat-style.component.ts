@@ -10,7 +10,8 @@ import {
     LlmProgressData,
     LlmFileConfig,
     LlmFormDefinition,
-    LlmStructuredResponse
+    LlmStructuredResponse,
+    LlmChatShortcut
 } from 'src/app/selfhelpInterfaces';
 import {
     parseLlmStructuredResponse,
@@ -105,6 +106,8 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
 
     // Floating mode
     isFloatingPanelOpen = false;
+    shortcutTrayVisible = false;
+    floatingShortcuts: LlmChatShortcut[] = [];
 
     // Custom sidebar drawer
     isSidebarOpen = false;
@@ -180,6 +183,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
 
     override ngOnInit() {
         this.loadChatAppearance();
+        this.parseFloatingShortcuts();
         this.initializeChat();
     }
 
@@ -282,6 +286,52 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
             }
         });
         return out;
+    }
+
+    /**
+     * Parse floating chat shortcuts from style (v1.4.0+)
+     *
+     * Reads the `llm_chat_shortcuts` JSON field and normalises it into
+     * an array of `LlmChatShortcut` objects. Empty or missing shortcuts
+     * results in an empty array (no tray shown).
+     */
+    private parseFloatingShortcuts(): void {
+        const shortcutsField = (this.style as any)?.llm_chat_shortcuts;
+        if (!shortcutsField) {
+            this.floatingShortcuts = [];
+            return;
+        }
+
+        let content = shortcutsField.content;
+        if (content === undefined || content === null || content === '') {
+            this.floatingShortcuts = [];
+            return;
+        }
+
+        // Handle both string and pre-parsed object
+        if (typeof content === 'string') {
+            try {
+                content = JSON.parse(content);
+            } catch (e) {
+                console.error('Failed to parse llm_chat_shortcuts JSON:', e);
+                this.floatingShortcuts = [];
+                return;
+            }
+        }
+
+        if (!Array.isArray(content)) {
+            this.floatingShortcuts = [];
+            return;
+        }
+
+        // Normalize shortcuts array
+        this.floatingShortcuts = content
+            .filter(item => item && typeof item === 'object' && item.label)
+            .map(item => ({
+                label: String(item.label).trim(),
+                message: (item.message && String(item.message).trim()) || String(item.label).trim()
+            }))
+            .filter(item => item.label.length > 0);
     }
 
     /**
@@ -687,8 +737,8 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                     this.currentConversation = {
                         ...this.currentConversation,
                         blocked: true,
-                        blocked_reason: result.type === 'conversation_blocked' 
-                            ? 'Conversation blocked' 
+                        blocked_reason: result.type === 'conversation_blocked'
+                            ? 'Conversation blocked'
                             : 'Safety concerns detected'
                     };
                 }
@@ -1201,12 +1251,35 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
 
     /**
      * Toggle floating chat panel
+     * v1.4.0+ - If shortcuts are configured and tray is closed, show tray instead
      */
     toggleFloatingPanel(): void {
-        this.isFloatingPanelOpen = !this.isFloatingPanelOpen;
-        if (this.isFloatingPanelOpen) {
-            setTimeout(() => this.scrollToBottom(true), 300);
+        if (this.floatingShortcuts.length > 0 && !this.shortcutTrayVisible) {
+            // Show shortcut tray on first tap (stays visible until user taps elsewhere)
+            this.shortcutTrayVisible = true;
+        } else {
+            // Open chat normally (or close if already open)
+            this.shortcutTrayVisible = false;
+            this.isFloatingPanelOpen = !this.isFloatingPanelOpen;
+            if (this.isFloatingPanelOpen) {
+                setTimeout(() => this.scrollToBottom(true), 300);
+            }
         }
+    }
+
+    /**
+     * Handle shortcut click - opens chat and sends the shortcut message
+     * Guards against sending while chat is initializing/loading/processing
+     */
+    handleShortcutClick(shortcut: LlmChatShortcut): void {
+        // Prevent sending while chat is not ready
+        if (this.isLoading || this.isAutoStarting || this.isProcessing) {
+            return;
+        }
+        this.shortcutTrayVisible = false;
+        this.isFloatingPanelOpen = true;
+        // Send the shortcut message using existing sendMessage
+        this.sendMessage(shortcut.message);
     }
 
     /**
@@ -1214,6 +1287,13 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
      */
     closeFloatingPanel(): void {
         this.isFloatingPanelOpen = false;
+    }
+
+    /**
+     * Close shortcut tray (called when user taps elsewhere on screen)
+     */
+    closeShortcutTray(): void {
+        this.shortcutTrayVisible = false;
     }
 
     async toggleSidebar(): Promise<void> {
@@ -1257,7 +1337,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         if (!force && !this.isNearBottom) return;
 
         this.shouldScrollToBottom = true;
-        
+
         // Multiple attempts to ensure scroll happens after content renders
         setTimeout(() => this.scrollToBottomImmediate(), 50);
         setTimeout(() => this.scrollToBottomImmediate(), 150);

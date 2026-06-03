@@ -1,3 +1,30 @@
+# 4.0.5
+
+### Mobile compatibility for sh-shp-llm v1.4.0
+
+This release adds support for floating chat shortcuts introduced in plugin v1.4.0.
+
+### Added
+
+- **Floating chat shortcuts support.** When floating chat is enabled and shortcuts are configured:
+  - First tap on the floating button shows the shortcut tray (if shortcuts are configured)
+  - Tapping a shortcut opens the chat and sends the message
+  - Tapping the floating button again when the tray is open opens the chat normally
+  - No shortcuts configured: first tap opens chat normally (existing behavior)
+  - Shortcut tray is positioned near the floating button with safe-area spacing support
+  - Pills wrap cleanly on narrow screens
+- **`LlmChatShortcut` interface** in `selfhelpInterfaces.ts` for type safety
+- **`llm_chat_shortcuts` field** in `LlmChatStyle` interface (optional, v1.4.0+)
+- **`parseFloatingShortcuts()` method** in `LlmChatStyleComponent` to parse and normalize shortcuts
+- **`handleShortcutClick()` method** to handle shortcut selection
+- **Updated `toggleFloatingPanel()` behavior** to show tray on first tap when shortcuts exist
+
+### Changed
+
+- **Floating button behavior** now checks for configured shortcuts before opening chat
+- **Shortcut tray rendering** in template with position-based classes
+- **SCSS styles** for shortcut tray with animation, safe-area support, and responsive design
+
 # 4.0.4
 
 ### Mobile compatibility for sh-shp-llm v1.3.0

@@ -753,6 +753,16 @@ export interface TwoFactorAuthResult {
 // LLM CHAT TYPES
 // ============================================================================
 
+/**
+ * v1.4.0+ — Floating chat shortcut configuration.
+ * Represents a quick-start message shortcut that appears as a pill
+ * around the floating chat button.
+ */
+export interface LlmChatShortcut {
+  label: string;
+  message: string;
+}
+
 export interface LlmChatStyle extends Style {
     // Configuration fields
     llm_max_tokens: StyleField;
@@ -773,6 +783,12 @@ export interface LlmChatStyle extends Style {
     floating_button_icon: StyleField;
     floating_button_label: StyleField;
     floating_chat_title: StyleField;
+    /**
+     * v1.4.0+ — floating chat shortcuts JSON array.
+     * Each entry has `label` (shown on pill) and `message` (sent when clicked).
+     * If message is empty, label is used. Empty array means no shortcuts shown.
+     */
+    llm_chat_shortcuts?: StyleField;
     enable_progress_tracking: StyleField;
     progress_bar_label: StyleField;
     progress_complete_message: StyleField;
