@@ -69,9 +69,9 @@
     "rxjs": "~7.8.2",
     "safe-pipe": "^3.0.4",
     "slug": "^11.0.1",
-    "survey-angular-ui": "^2.5.12",
-    "survey-core": "^2.5.12",
-    "survey-pdf": "^2.5.12",
+    "survey-angular-ui": "^2.5.28",
+    "survey-core": "^2.5.28",
+    "survey-pdf": "^2.5.28",
     "swiper": "^12.1.2",
     "tslib": "^2.8.1",
     "zone.js": "~0.16.1"
