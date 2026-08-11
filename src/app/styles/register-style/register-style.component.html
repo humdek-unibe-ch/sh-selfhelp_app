@@ -4,7 +4,7 @@
       <ion-card [class]="getCss()">
         <ion-card-header [class]="'mobile-card-header card-' + getFieldContent('type')"
           [color]="getFieldContent('type')">
-          <ion-card-title>{{getFieldContent('title')}}</ion-card-title>
+          <ion-card-title [innerHTML]="getFieldContent('title')"></ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <form [formGroup]="form" [class]="getCss()" (keyup.enter)="register(form.value)">
@@ -42,7 +42,7 @@
       <ion-card [class]="getCss()">
         <ion-card-header [class]="'mobile-card-header card-' + getFieldContent('type')"
           [color]="getFieldContent('type')">
-          <ion-card-title>{{getFieldContent('title')}}</ion-card-title>
+          <ion-card-title [innerHTML]="getFieldContent('title')"></ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <form [formGroup]="form" [class]="'register-form ' + getCss()" (keyup.enter)="register(form.value)">
