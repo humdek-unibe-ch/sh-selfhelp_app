@@ -39,11 +39,14 @@
  *     lastEvent, completedAt
  *   }
  *
- *   `watched` only flips to `true` once `currentTime >= end - 0.05`,
- *   where `end` is the configured `endTimestamp` (capped at the file's
- *   real duration on `loadedmetadata`) or the file's natural duration
- *   when `endTimestamp` is unset. Required questions block survey
- *   navigation/completion until `watched === true`.
+ *   `watched` flips to `true` once `currentTime >= end - 0.05`, where
+ *   `end` is the configured `endTimestamp` (capped at the file's real
+ *   duration on `loadedmetadata`) or the file's natural duration when
+ *   `endTimestamp` is unset. It then latches on `completedAt` —
+ *   rewinding, replaying or scrubbing back never clears it. Required
+ *   questions block navigation/completion until `watched === true`.
+ *   Unlike the plugin, the latch is also seeded from a persisted value
+ *   so a survey resumed from `last_response` keeps its completion.
  */
 
 import * as SurveyCore from 'survey-core';
@@ -252,10 +255,34 @@ function attachPlaybackEnforcement(video: HTMLVideoElement, question: any): () =
         try { return new Date().toISOString(); } catch (e) { return null; }
     };
 
+    // Mobile-only: seed from a persisted value so a survey resumed from
+    // `last_response` keeps a completion earned in an earlier session.
+    // The plugin always starts from scratch because a web page load
+    // re-renders the whole survey; mobile re-attaches the widget to a
+    // restored model, so without this the latch below would be lost.
+    const restored = question.value as VideoQuestionValue | undefined;
+    if (restored) {
+        if (restored.completedAt) {
+            completedAt = restored.completedAt;
+        } else if (restored.watched === true) {
+            // Older payloads may carry `watched` without `completedAt`.
+            completedAt = restored.lastUpdatedAt || safeISO();
+        }
+        if (restored.startedAt) startedAt = restored.startedAt;
+        if (typeof restored.watchedSeconds === 'number' &&
+            isFinite(restored.watchedSeconds) && restored.watchedSeconds > 0) {
+            watchedSeconds = restored.watchedSeconds;
+        }
+    }
+
     const persistState = (eventType: VideoQuestionValue['lastEvent']): void => {
         try {
             const t = video.currentTime;
-            const watched = isFinite(end) ? (t >= end - 0.05) : false;
+            // Latch on `completedAt`, don't recompute: reading `watched`
+            // off the live playhead re-locks a required question after a
+            // rewind. Mirrors the plugin's `persistState`.
+            const watched = (completedAt !== null) ||
+                (isFinite(end) ? (t >= end - 0.05) : false);
             if (watched && !completedAt) completedAt = safeISO();
             const clampedTime = Math.max(start, isFinite(end) ? Math.min(end, t) : t);
             const value: VideoQuestionValue = {
@@ -387,10 +414,14 @@ function attachPlaybackEnforcement(video: HTMLVideoElement, question: any): () =
     };
 
     const onEnded = (): void => {
+        // Clamp to `end` and persist BEFORE rewinding, so the saved
+        // snapshot records the completed position rather than the
+        // rewound one. Mirrors the plugin's `onEnded`.
+        if (isFinite(end)) video.currentTime = end;
+        persistState('ended');
         enforcing = true;
         video.currentTime = start;
         enforcing = false;
-        persistState('ended');
     };
 
     video.addEventListener('loadedmetadata', onLoadedMetadata);

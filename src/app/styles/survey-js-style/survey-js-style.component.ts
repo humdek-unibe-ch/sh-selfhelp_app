@@ -119,17 +119,43 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         });
     }
 
-    private endSurvey() {
+    /**
+     * @description Fill `{{questionName}}` placeholders in `redirect_at_end`
+     * from the submitted survey data (`test/{{code}}` -> `test/ABC123`).
+     * Must stay in sync with the plugin's `resolveRedirectAtEnd()` in
+     * `4_surveyJS.js` — keep the regex and the accepted types identical.
+     * @param {string} url - The raw `redirect_at_end` field content.
+     * @param {any} data - The survey's submitted data object.
+     * @return {string} The interpolated URL.
+     * @memberof SurveyJSStyleComponent
+     */
+    private interpolateRedirectUrl(url: string, data: any): string {
+        if (!url || url.indexOf('{{') === -1) {
+            return url;
+        }
+        return url.replace(/\{\{([^}]+)\}\}/g, (_match, name: string) => {
+            const key = String(name).trim();
+            const value = data ? data[key] : undefined;
+            const type = typeof value;
+            if (type === 'string' || type === 'number' || type === 'boolean') {
+                return encodeURIComponent(String(value));
+            }
+            return '';
+        });
+    }
+
+    private endSurvey(surveyData?: any) {
+        const redirect = this.interpolateRedirectUrl(this.getFieldContent('redirect_at_end'), surveyData);
         if (this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal('submit');
-            if (this.getFieldContent('redirect_at_end') != '') {
-                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            if (redirect != '') {
+                this.selfhelpService.openUrl(redirect);
             } else {
                 this.selfhelpService.getPage(this.globals.SH_API_HOME);
             }
         } else {
-            if (this.getFieldContent('redirect_at_end') != '') {
-                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            if (redirect != '') {
+                this.selfhelpService.openUrl(redirect);
             }
         }
         this.style['end'] = this.style['end'] ? (this.style['end'] + 1) : 1; // work around to refresh the page when it is pointed to self
@@ -376,7 +402,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                         this.saveSurveyJS(sender, undefined).then((res) => {
                             if (res) {
                                 options.showSaveSuccess();
-                                this.endSurvey();
+                                this.endSurvey(sender.data);
                             } else {
                                 options.showSaveError();
                             }
