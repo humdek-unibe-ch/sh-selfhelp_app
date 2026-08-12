@@ -15,6 +15,7 @@ import { SurveyJsVoiceRecorderComponent } from './survey-js-voice-recorder/surve
 import { DefaultDark, DefaultLight } from "survey-core/themes";
 import { QuillComponent } from './quill-component/quill.component';
 import { addVideoQuestionWidget } from './survey-js-video-question';
+import { addGpxQuestionWidget } from './survey-js-gpx-question';
 
 function encodeHtml(params: any[]) {
     const input = params[0];
@@ -52,6 +53,13 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         // so a server switch from the dev menu is picked up without
         // re-registering the widget.
         addVideoQuestionWidget(() => this.selfhelpService.getApiEndPointNative());
+        // GPX custom question type. The widget POSTs `upload_gpx` /
+        // `delete_gpx` to the survey's own runtime controller, so the
+        // endpoint is the same one `uploadFiles()` uses. Resolved
+        // lazily: `this.url` is an @Input and is not populated yet at
+        // construction time, and a dev-menu server switch must be
+        // picked up without re-registering the widget.
+        addGpxQuestionWidget(() => this.selfhelpService.getApiEndPointNative() + this.url);
     }
 
     override async ngOnInit() {

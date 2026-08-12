@@ -1,0 +1,35 @@
+/*
+ * Styles for the `gpxMap` style — ported from the plugin's
+ * `gpxMap/css/gpx-map.css`.
+ *
+ * The map container reuses the same footprint as the `gpx` question's
+ * preview so a route reads consistently whether it's shown inside a
+ * survey or as a standalone section.
+ */
+
+.sjs-gpx-map-style {
+    display: block;
+    width: 100%;
+}
+
+/* Leaflet mounts here — ::ng-deep so its own markup picks up the radius. */
+:host ::ng-deep .sjs-gpx-map-style__map {
+    min-height: 300px;
+    height: 300px;
+    width: 100%;
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border: 1px solid var(--sjs-border-light, var(--border-light, #d1d5db));
+    overflow: hidden;
+    background-color: var(--sjs-general-backcolor-dim-light, var(--background-dim-light, #f3f4f6));
+}
+
+/* Shown when the section has no `sample_points` yet. */
+.sjs-gpx-map-style__empty {
+    padding: calc(2 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border: 1px dashed var(--sjs-border-light, var(--border-light, #d1d5db));
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    background-color: var(--sjs-general-backcolor-dim-light, var(--background-dim-light, #f9fafb));
+    color: var(--sjs-general-forecolor-light, var(--foreground-light, #6b7280));
+    font-size: calc(0.875 * var(--sjs-font-questiontitle-size, var(--sjs-font-size, 16px)));
+    text-align: center;
+}

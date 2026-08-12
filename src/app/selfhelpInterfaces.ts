@@ -522,6 +522,18 @@ export interface SurveyJSStyle extends Style {
     last_response: any, // the last user response if the survey is not yet finished and should be continued
 }
 
+/**
+ * `gpxMap` style (plugin v1.5.0+). Read-only Leaflet route preview.
+ *
+ * `sample_points` arrives already JSON-decoded (the plugin's
+ * `output_content_mobile()` decodes it, unlike the web path). Accepts
+ * a bare point array, a `gpx` answer object with `sampledPoints`, or
+ * null — all normalized by `extractSampledPoints()`.
+ */
+export interface GpxMapStyle extends Style {
+    sample_points: any,
+}
+
 export interface LabJSStyle extends Style {
     lab_json: any,
     redirect_at_end: StyleField,

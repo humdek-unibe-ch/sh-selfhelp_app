@@ -32,3 +32,212 @@
 :host ::ng-deep .sjs-video__error.is-visible {
     display: block;
 }
+
+/*
+ * Styles for the custom `gpx` SurveyJS question (v4.0.7).
+ *
+ * Ported from the plugin's `css/gpx-question.css`. Kept
+ * :host ::ng-deep-encapsulated so they only apply inside the SurveyJS
+ * Angular component, matching the `video` question above.
+ *
+ * Layout
+ * ------
+ *   .sjs-gpx           -> outer column: controls / error / preview.
+ *   .sjs-gpx__controls -> file input + current-file label + clear.
+ *   .sjs-gpx__error    -> question-level error banner.
+ *   .sjs-gpx__status   -> transient progress message.
+ *   .sjs-gpx__preview  -> map (full width) with the stats panel below.
+ *
+ * Theming follows the plugin: colours and spacing come from the
+ * SurveyJS theme variables (--sjs-*) so the question reads as part of
+ * the surrounding survey, with hard-coded fallbacks for the window
+ * before the theme CSS has applied.
+ */
+:host ::ng-deep .sjs-gpx {
+    display: flex;
+    flex-direction: column;
+    gap: calc(1.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    width: 100%;
+}
+
+:host ::ng-deep .sjs-gpx__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(1 * var(--sjs-base-unit, var(--base-unit, 8px)));
+}
+
+:host ::ng-deep .sjs-gpx__file-label {
+    margin: 0;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+/*
+ * The "Choose GPX file" pseudo-button. A <span> so the wrapping label
+ * still triggers the native file input. Styled after the SurveyJS file
+ * question's primary action button.
+ */
+:host ::ng-deep .sjs-gpx__file-button {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(1 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    padding: calc(1.25 * var(--sjs-base-unit, var(--base-unit, 8px)))
+             calc(2.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border: none;
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    background-color: var(--sjs-primary-backcolor-light, var(--primary-light, rgba(25, 179, 148, 0.1)));
+    color: var(--sjs-primary-backcolor, var(--primary, #19b394));
+    font-family: var(--sjs-font-family, inherit);
+    font-size: var(--sjs-font-questiontitle-size, var(--sjs-font-size, 16px));
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    user-select: none;
+    /* Comfortable tap target on touch devices. */
+    min-height: 44px;
+}
+
+:host ::ng-deep .sjs-gpx__file-button:hover {
+    background-color: var(--sjs-primary-backcolor-dark, rgba(25, 179, 148, 0.18));
+}
+
+:host ::ng-deep .sjs-gpx__file-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--sjs-primary-backcolor, var(--primary, #19b394));
+}
+
+/* Hide the native input but keep it reachable through the label. */
+:host ::ng-deep .sjs-gpx__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+:host ::ng-deep .sjs-gpx__current {
+    font-size: calc(0.875 * var(--sjs-font-questiontitle-size, var(--sjs-font-size, 16px)));
+    color: var(--sjs-general-forecolor, var(--foreground, #161616));
+    word-break: break-all;
+}
+
+/* Subdued danger-tinted counterpart to the "choose" button. */
+:host ::ng-deep .sjs-gpx__clear {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(0.75 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    padding: calc(1 * var(--sjs-base-unit, var(--base-unit, 8px)))
+             calc(2 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border: none;
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    background-color: var(--sjs-general-backcolor-dim-light, var(--background-dim-light, #f9f9f9));
+    color: var(--sjs-special-red, var(--red, #e60a3e));
+    font-family: var(--sjs-font-family, inherit);
+    font-size: calc(0.875 * var(--sjs-font-questiontitle-size, var(--sjs-font-size, 16px)));
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    min-height: 44px;
+}
+
+:host ::ng-deep .sjs-gpx__clear:hover {
+    background-color: var(--sjs-special-red-light, rgba(230, 10, 62, 0.1));
+}
+
+:host ::ng-deep .sjs-gpx__clear:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--sjs-special-red, var(--red, #e60a3e));
+}
+
+/*
+ * Inline action-button icons, sized in em so they scale with the host
+ * font-size. `currentColor` lets each icon inherit its button's text
+ * colour with no per-icon override.
+ */
+:host ::ng-deep .sjs-gpx__icon {
+    width: 1.25em;
+    height: 1.25em;
+    flex: 0 0 auto;
+    color: currentColor;
+}
+
+:host ::ng-deep .sjs-gpx__error {
+    padding: calc(1.25 * var(--sjs-base-unit, var(--base-unit, 8px)))
+             calc(2 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border: 1px solid var(--sjs-special-red-light, #f5c6cb);
+    background-color: var(--sjs-special-red-light, #f8d7da);
+    color: var(--sjs-special-red-forecolor, #721c24);
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    font-size: calc(0.875 * var(--sjs-font-questiontitle-size, var(--sjs-font-size, 16px)));
+}
+
+:host ::ng-deep .sjs-gpx__status {
+    padding: calc(1 * var(--sjs-base-unit, var(--base-unit, 8px)))
+             calc(2 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border: 1px solid var(--sjs-primary-backcolor-light, #bfdbfe);
+    background-color: var(--sjs-primary-backcolor-light, #eff6ff);
+    color: var(--sjs-primary-backcolor, #1e3a8a);
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    font-size: calc(0.875 * var(--sjs-font-questiontitle-size, var(--sjs-font-size, 16px)));
+}
+
+/*
+ * Preview: the map takes the full row width with the stats stacked
+ * underneath (plugin v1.5.0 layout). On a phone this reads as a clean
+ * vertical scroll with no media-query path.
+ */
+:host ::ng-deep .sjs-gpx__preview {
+    display: flex;
+    flex-direction: column;
+    gap: calc(1.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+}
+
+:host ::ng-deep .sjs-gpx__map {
+    min-height: 300px;
+    height: 300px;
+    width: 100%;
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border: 1px solid var(--sjs-border-light, var(--border-light, #d1d5db));
+    overflow: hidden;
+    background-color: var(--sjs-general-backcolor-dim-light, var(--background-dim-light, #f3f4f6));
+}
+
+:host ::ng-deep .sjs-gpx__stats {
+    border: 1px solid var(--sjs-border-light, var(--border-light, #d1d5db));
+    border-radius: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    background-color: var(--sjs-general-backcolor, var(--background, #ffffff));
+    padding: calc(1 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    overflow: auto;
+}
+
+:host ::ng-deep .sjs-gpx__stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: calc(0.875 * var(--sjs-font-questiontitle-size, var(--sjs-font-size, 16px)));
+}
+
+:host ::ng-deep .sjs-gpx__stats-table th,
+:host ::ng-deep .sjs-gpx__stats-table td {
+    padding: calc(0.5 * var(--sjs-base-unit, var(--base-unit, 8px)))
+             calc(1 * var(--sjs-base-unit, var(--base-unit, 8px)));
+    border-bottom: 1px solid var(--sjs-border-light, var(--border-light, #e5e7eb));
+    text-align: left;
+    vertical-align: top;
+}
+
+:host ::ng-deep .sjs-gpx__stats-table th {
+    width: 40%;
+    color: var(--sjs-general-forecolor-light, var(--foreground-light, #4b5563));
+    font-weight: 600;
+}
+
+:host ::ng-deep .sjs-gpx__stats-table tr:last-child th,
+:host ::ng-deep .sjs-gpx__stats-table tr:last-child td {
+    border-bottom: none;
+}

@@ -1,6 +1,6 @@
 {
   "name": "SelfHelp",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "author": "Stefan Kodzhabashev",
   "homepage": "https://www.tpf.philhum.unibe.ch",
   "scripts": {
@@ -58,6 +58,7 @@
     "iframe-resizer": "^5.5.9",
     "ionicons": "^8.0.13",
     "jquery": "^4.0.0",
+    "leaflet": "^1.9.4",
     "lodash": "^4.17.23",
     "marked": "^17.0.3",
     "ngx-colors": "^3.6.0",
@@ -96,6 +97,7 @@
     "@types/iframe-resizer": "^4.0.0",
     "@types/jasmine": "~6.0.0",
     "@types/jquery": "^4.0.0",
+    "@types/leaflet": "^1.9.22",
     "@types/lodash": "^4.17.24",
     "@types/node": "^25.3.0",
     "@types/plotly.js-dist-min": "^2.3.4",

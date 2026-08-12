@@ -63,6 +63,9 @@
     @case (isStyle('graph')) {
       <app-graph-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-graph-style>
     }
+    @case (isStyle('gpxMap')) {
+      <app-gpx-map-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-gpx-map-style>
+    }
     @case (isStyle('heading')) {
       <app-heading-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-heading-style>
     }
