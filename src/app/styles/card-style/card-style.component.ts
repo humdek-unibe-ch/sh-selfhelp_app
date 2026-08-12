@@ -20,7 +20,10 @@ export class CardStyleComponent extends BasicStyleComponent implements OnInit {
     }
 
     override ngOnInit() {
-        this.isCardExpanded = this.getFieldContent('is_expanded') == '1';
+        // A non-collapsible card can never be expanded by the user, so always
+        // show its body — same as the web renderer.
+        this.isCardExpanded = this.getFieldContent('is_expanded') == '1'
+            || this.getFieldContent('is_collapsible') != '1';
     }
 
     /**
