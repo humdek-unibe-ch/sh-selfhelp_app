@@ -1,3 +1,50 @@
+# 4.0.8
+
+### Added
+
+- **`languagePicker` style.** Had no mobile implementation and fell
+  through to "not implemented". Languages come from the page response,
+  not the style fields; choosing one reloads the page.
+- **labJS experiments run on mobile.** An experiment reads the web page
+  through globals, so its handlers hit `typeof labJSFields ===
+  'undefined'` and returned silently — the study sat on its first screen
+  and saved nothing. The component now publishes those globals, renders
+  the `selfHelp-locale-*` class the experiment reads the language from
+  (without it every run showed German), points `transmit('#')` at the
+  api, and navigates in-app instead of via `window.location.href`.
+- **Url params are saved as `extra_param_*` answers.** `update_based_on`
+  keys a row on one of those, so without them every page of a study
+  opened a row of its own. The column name comes from `update_based_on`.
+
+### Fixed
+
+- **An authored survey theme is no longer thrown away.** The v3 Creator
+  stores the chosen theme inside the survey config under a `theme` key.
+  Mobile passed the whole config to `new Model()`, so SurveyJS got a
+  property it does not define, and then overwrote the author's choice
+  with the system dark/light theme anyway. The theme is now pulled out
+  before the model is built and applied with `applyTheme()`; the system
+  theme stays the fallback for surveys that carry none. A malformed
+  theme is warned about rather than breaking the render.
+- **Two surveys on one page no longer share input ids.** v3 restarts its
+  element id counter per instance, where v2 used one global counter, so
+  a page with more than one `surveyJS` section emitted duplicate ids.
+  Each survey now gets an `elementIdPrefix` from its section id.
+- **`redirect_at_end` reaches the right page.** A CMS value without a
+  leading slash was concatenated onto the server url and glued itself to
+  the base path, so finishing a survey 404'd.
+
+### Changed
+
+- `survey-core`, `survey-angular-ui` and `survey-pdf` bumped **2.5.29 →
+  3.0.2**, pinned exactly: `survey-angular-ui` pins `survey-core` to an
+  exact version, and the plugin vendors exactly 3.0.2.
+  `survey-core/themes` and `survey-core/survey.i18n` keep their import
+  paths, the app's custom CSS only uses `--sjs-*` variables (v3 maps the
+  old names) and always with fallbacks, and it defines no
+  navigation-button selectors, so v3's `<input type="button">` →
+  `<button>` change has no effect.
+
 # 4.0.7
 
 ### GPX support — closes the v4.0.6 known gaps

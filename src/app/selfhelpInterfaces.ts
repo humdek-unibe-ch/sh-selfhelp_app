@@ -676,6 +676,14 @@ export interface Language {
     title: string,
 }
 
+// Languages are not style fields; they arrive with every page response.
+export interface LanguagePickerStyle extends Style {
+    label: StyleField,
+    display_style: StyleField, // 'buttons' or 'select'
+    redirect_at_select: StyleField, // page keyword to open after choosing, empty reloads
+    highlight_selected: StyleField,
+}
+
 export interface RegistrationResult {
     result: Boolean,
     url: string | Boolean,

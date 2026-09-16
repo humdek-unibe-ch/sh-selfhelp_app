@@ -1055,6 +1055,22 @@ export class SelfhelpService {
         }
     }
 
+    /**
+     * @description Change the language for the next requests. The caller
+     * reloads a page afterwards for it to take effect.
+     * @param {Number} id - The language id to switch to.
+     * @memberof SelfhelpService
+     */
+    public setUserLanguage(id: Number): void {
+        let newSelfhelp = this.selfhelp.value;
+        newSelfhelp.user_language = id;
+        const lang = newSelfhelp.languages ? newSelfhelp.languages.find(l => l.id == id) : undefined;
+        if (lang) {
+            newSelfhelp.locale = lang.locale;
+        }
+        this.setSelfhelp(newSelfhelp, true);
+    }
+
     public isURL(str: string): boolean {
         const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
         return urlPattern.test(str);

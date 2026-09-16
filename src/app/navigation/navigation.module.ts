@@ -31,6 +31,7 @@ import { DivStyleComponent } from '../styles/div-style/div-style.component';
 import { ImageStyleComponent } from '../styles/image-style/image-style.component';
 import { VideoStyleComponent } from '../styles/video-style/video-style.component';
 import { AlertStyleComponent } from '../styles/alert-style/alert-style.component';
+import { LanguagePickerStyleComponent } from '../styles/language-picker-style/language-picker-style.component';
 import { PlaintextStyleComponent } from '../styles/plaintext-style/plaintext-style.component';
 import { MarkdownInlineStyleComponent } from '../styles/markdown-inline-style/markdown-inline-style.component';
 import { HeadingStyleComponent } from '../styles/heading-style/heading-style.component';
@@ -181,6 +182,7 @@ const routes: Routes = [
         ImageStyleComponent,
         VideoStyleComponent,
         AlertStyleComponent,
+        LanguagePickerStyleComponent,
         PlaintextStyleComponent,
         MarkdownInlineStyleComponent,
         HeadingStyleComponent,
