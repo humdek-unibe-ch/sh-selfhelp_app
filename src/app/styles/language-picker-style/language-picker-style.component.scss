@@ -1,0 +1,36 @@
+/* Ported from the core style's language-picker.css so the picker looks the
+   same on both platforms. Kept deliberately plain so a study's own `css`
+   field can override it. */
+.selfHelp-language-picker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.selfHelp-language-picker--buttons {
+    justify-content: center;
+}
+
+.selfHelp-language-picker__label {
+    margin-right: .25rem;
+}
+
+.selfHelp-language-picker__button {
+    font: inherit;
+    padding: .375rem 1rem;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* The language already in force. */
+.selfHelp-language-picker__button[aria-current="true"] {
+    border-color: #495057;
+    font-weight: 600;
+}
+
+.selfHelp-language-picker__select {
+    width: auto;
+}

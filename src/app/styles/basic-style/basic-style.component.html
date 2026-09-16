@@ -87,6 +87,9 @@
     @case (isStyle('labJS')) {
       <app-lab-js [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-lab-js>
     }
+    @case (isStyle('languagePicker')) {
+      <app-language-picker-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-language-picker-style>
+    }
     @case (isStyle('link')) {
       <app-link-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-link-style>
     }
