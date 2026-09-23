@@ -748,6 +748,7 @@ export interface AppConfig {
 
 export interface SurveyJSMetaData {
     user_agent: string;
+    language: string;
     screen_width: number;
     screen_height: number;
     pixel_ratio: number;

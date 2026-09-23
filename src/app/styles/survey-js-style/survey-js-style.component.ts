@@ -378,6 +378,8 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 survey.setValue('survey_generated_id', this.style.survey_generated_id);
                 var metaData: SurveyJSMetaData = {
                     user_agent: navigator.userAgent,
+                    // The language the survey was answered in, beside the other session facts.
+                    language: survey.locale,
                     screen_width: window.screen.width,
                     screen_height: window.screen.height,
                     pixel_ratio: window.devicePixelRatio,
