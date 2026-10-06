@@ -34,7 +34,7 @@
 }
 
 /*
- * Styles for the custom `gpx` SurveyJS question (v4.0.7).
+ * Styles for the custom `gpx` SurveyJS question (v4.0.6).
  *
  * Ported from the plugin's `css/gpx-question.css`. Kept
  * :host ::ng-deep-encapsulated so they only apply inside the SurveyJS

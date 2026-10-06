@@ -1,4 +1,24 @@
-# 4.0.8
+# 4.0.6
+
+### Mobile compatibility for sh-shp-survey_js v1.6.0 (+ GPX, LabJS, languagePicker)
+
+This release ports the v1.6.0 SurveyJS plugin changes that have a
+mobile surface area, adds GPX question + `gpxMap` support, wires
+LabJS and `languagePicker` for mobile, and bumps SurveyJS to 3.0.2.
+The rest of plugin v1.6.0 is server / CMS only and needs no mobile
+work: vendor bundle filenames and the Knockout removal, the
+`survey-creator-js` / `autoSaveEnabled` / `creator.render()` switch,
+the CMS `survey-js-theme` removal (mobile already themes via
+`survey.applyTheme()`), the Versions viewer includes, the dashboard
+`survey-analytics` / Tabulator / Plotly bumps, published-only CMS
+select lists, the admin Published / Pending Changes table, the CSP
+`media-src` directive and the Publish/Delete plain-string-title fix.
+
+`leaflet` 1.9.4 and `@types/leaflet` are new dependencies. The plugin
+vendors Leaflet in-tree; mobile takes it from npm and copies the
+marker images to `assets/leaflet/` via `angular.json` (Leaflet's
+default `url(images/…)` lookup is relative to its CSS and misses when
+that CSS is served from `node_modules`).
 
 ### Added
 
@@ -15,53 +35,6 @@
 - **Url params are saved as `extra_param_*` answers.** `update_based_on`
   keys a row on one of those, so without them every page of a study
   opened a row of its own. The column name comes from `update_based_on`.
-
-### Fixed
-
-- **An authored survey theme is no longer thrown away.** The v3 Creator
-  stores the chosen theme inside the survey config under a `theme` key.
-  Mobile passed the whole config to `new Model()`, so SurveyJS got a
-  property it does not define, and then overwrote the author's choice
-  with the system dark/light theme anyway. The theme is now pulled out
-  before the model is built and applied with `applyTheme()`; the system
-  theme stays the fallback for surveys that carry none. A malformed
-  theme is warned about rather than breaking the render.
-- **Two surveys on one page no longer share input ids.** v3 restarts its
-  element id counter per instance, where v2 used one global counter, so
-  a page with more than one `surveyJS` section emitted duplicate ids.
-  Each survey now gets an `elementIdPrefix` from its section id.
-- **`redirect_at_end` reaches the right page.** A CMS value without a
-  leading slash was concatenated onto the server url and glued itself to
-  the base path, so finishing a survey 404'd.
-
-### Changed
-
-- `survey-core`, `survey-angular-ui` and `survey-pdf` bumped **2.5.29 →
-  3.0.2**, pinned exactly: `survey-angular-ui` pins `survey-core` to an
-  exact version, and the plugin vendors exactly 3.0.2.
-  `survey-core/themes` and `survey-core/survey.i18n` keep their import
-  paths, the app's custom CSS only uses `--sjs-*` variables (v3 maps the
-  old names) and always with fallbacks, and it defines no
-  navigation-button selectors, so v3's `<input type="button">` →
-  `<button>` change has no effect.
-
-# 4.0.7
-
-### GPX support — closes the v4.0.6 known gaps
-
-Both GPX gaps left open in v4.0.6 are now implemented. Mobile matches
-what the `sh-shp-survey_js` plugin provides: participants can answer a
-`gpx` question in the app, and saved routes render through the
-`gpxMap` style.
-
-`leaflet` 1.9.4 and `@types/leaflet` are new dependencies. The plugin
-vendors Leaflet in-tree; mobile takes it from npm and copies the
-marker images to `assets/leaflet/` via `angular.json` (Leaflet's
-default `url(images/…)` lookup is relative to its CSS and misses when
-that CSS is served from `node_modules`).
-
-### Added
-
 - **`gpx` SurveyJS question (plugin v1.4.11 + v1.5.0 UX polish).**
   Ported from `7_gpxQuestionWidget.js` to
   `survey-js-gpx-question.ts`. Registered as a standalone `gpx` class
@@ -94,9 +67,78 @@ that CSS is served from `node_modules`).
   style, so both render the identical visual contract the plugin
   defines: OSM basemap, `#2563eb` polyline at 4 px / 0.85 opacity,
   Start and End markers, `fitBounds` with 20 px padding.
+- **`redirect_at_end` supports `{{questionName}}` templates.** v1.6.0
+  fills the redirect target client-side from the submitted survey
+  data, e.g. `test/{{code}}` → `test/ABC123`. Mobile passed the raw
+  field straight to `openUrl()`, so a templated target navigated to
+  the literal `{{...}}` string. A new
+  `SurveyJSStyleComponent.interpolateRedirectUrl()` helper substitutes
+  placeholders against `survey.data` before navigating;
+  `endSurvey()` now takes the submitted data and is called with
+  `sender.data` from the `onComplete` handler. Placeholders match
+  question names case-sensitively, surrounding whitespace
+  (`{{ code }}`) is tolerated, and values are URI component encoded so
+  answers containing spaces, `/` or `&` cannot break out of their path
+  segment. A placeholder with no matching answer — or one whose answer
+  is an object or array, which has no sensible URL representation —
+  collapses to an empty string. Boolean `false` is preserved rather
+  than being treated as absent. Plain page keywords are untouched: a
+  target with no `{{` is returned as-is.
+
+### Fixed
+
+- **An authored survey theme is no longer thrown away.** The v3 Creator
+  stores the chosen theme inside the survey config under a `theme` key.
+  Mobile passed the whole config to `new Model()`, so SurveyJS got a
+  property it does not define, and then overwrote the author's choice
+  with the system dark/light theme anyway. The theme is now pulled out
+  before the model is built and applied with `applyTheme()`; the system
+  theme stays the fallback for surveys that carry none. A malformed
+  theme is warned about rather than breaking the render.
+- **Two surveys on one page no longer share input ids.** v3 restarts its
+  element id counter per instance, where v2 used one global counter, so
+  a page with more than one `surveyJS` section emitted duplicate ids.
+  Each survey now gets an `elementIdPrefix` from its section id.
+- **`redirect_at_end` reaches the right page.** A CMS value without a
+  leading slash was concatenated onto the server url and glued itself to
+  the base path, so finishing a survey 404'd.
+- **Video watch gate no longer unsets completion after rewind or
+  replay.** Mobile carries its own video question implementation
+  (`survey-js-video-question.ts`), so the plugin-side fix did not carry
+  over. `persistState()` recomputed `watched` from the live playhead on
+  every `seek` / `pause` / `timeupdate`, so any scrub backwards after
+  finishing flipped `watched` back to `false`. Combined with the strict
+  `watched === true` validator, a participant who watched a required
+  video to the end and then rewound was locked out of the next page.
+  The same recompute also fired on the rewind-to-start inside
+  `onEnded`, so plain playback to completion could clear the gate on
+  its own. `watched` now latches on `completedAt` that is set once the
+  playhead first reaches `end - 0.05` and is never cleared for the
+  lifetime of the widget.
+- **Completion survives a resumed survey.** The latch is seeded from
+  an already-persisted `question.value`, so a survey restored from
+  `last_response` (via `survey.mergeData()`) keeps a completion the
+  participant earned in an earlier session instead of losing it on
+  their first interaction with the player. `startedAt`, `completedAt`
+  and `watchedSeconds` are carried over from the restored value too,
+  so `percentWatched` does not restart from zero.
+- **Non-collapsible cards always show their body.** A card with
+  `is_collapsible != '1'` can never be expanded by the user, so its
+  body is always rendered — same as the web renderer.
+- **Markdown-inline titles render as HTML.** Card, heading, modal,
+  register and validate titles use `[innerHTML]` instead of escaped
+  text interpolation.
 
 ### Changed
 
+- `survey-core`, `survey-angular-ui` and `survey-pdf` bumped to
+  **3.0.2**, pinned exactly: `survey-angular-ui` pins `survey-core` to
+  an exact version, and the plugin vendors exactly 3.0.2.
+  `survey-core/themes` and `survey-core/survey.i18n` keep their import
+  paths, the app's custom CSS only uses `--sjs-*` variables (v3 maps the
+  old names) and always with fallbacks, and it defines no
+  navigation-button selectors, so v3's `<input type="button">` →
+  `<button>` change has no effect.
 - **Localized GPX status and error messages.** The plugin hardcodes
   "Parsing GPX…", "Upload failed" and the validation errors in
   English. Mobile surveys are routinely multilingual, so these follow
@@ -118,87 +160,6 @@ Creator localization, the design-mode local-only upload branch and
 the property-panel hooks. The app has no Creator. The dashboard
 `_file` column links and `.gpx` MIME mapping are likewise server-side
 and unchanged.
-
-# 4.0.6
-
-### Mobile compatibility for sh-shp-survey_js v1.6.0
-
-The SurveyJS libraries were already bumped to 2.5.28 to match the
-plugin. This release ports the two v1.6.0 changes that have a mobile
-surface area. The rest of v1.6.0 is server / CMS only and needs no
-mobile work: vendor bundle filenames and the Knockout removal, the
-`survey-creator-js` / `autoSaveEnabled` / `creator.render()` switch,
-the CMS `survey-js-theme` removal (mobile already themes via
-`survey.applyTheme(DefaultDark/DefaultLight)`), the Versions viewer
-includes, the dashboard `survey-analytics` / Tabulator / Plotly bumps,
-published-only CMS select lists, the admin Published / Pending Changes
-table, the CSP `media-src` directive and the Publish/Delete
-plain-string-title fix.
-
-The v1.5.0 `gpxMap` style was not implemented at the time of this
-release; it landed in v4.0.7 along with the `gpx` question.
-
-### Fixed
-
-- **Video watch gate no longer unsets completion after rewind or
-  replay.** Mobile carries its own video question implementation
-  (`survey-js-video-question.ts`), so the plugin-side fix did not carry
-  over. `persistState()` recomputed `watched` from the live playhead on
-  every `seek` / `pause` / `timeupdate`, so any scrub backwards after
-  finishing flipped `watched` back to `false`. Combined with the strict
-  `watched === true` validator, a participant who watched a required
-  video to the end and then rewound was locked out of the next page.
-  The same recompute also fired on the rewind-to-start inside
-  `onEnded`, so plain playback to completion could clear the gate on
-  its own. `watched` now latches on a new `hasReachedEnd` flag that is
-  set once the playhead first reaches `end - 0.05` and is never
-  cleared for the lifetime of the widget.
-- **Completion survives a resumed survey.** The latch is seeded from
-  an already-persisted `question.value`, so a survey restored from
-  `last_response` (via `survey.mergeData()`) keeps a completion the
-  participant earned in an earlier session instead of losing it on
-  their first interaction with the player. `startedAt`, `completedAt`
-  and `watchedSeconds` are carried over from the restored value too,
-  so `percentWatched` does not restart from zero.
-
-### Added
-
-- **`redirect_at_end` supports `{{questionName}}` templates.** v1.6.0
-  fills the redirect target client-side from the submitted survey
-  data, e.g. `test/{{code}}` → `test/ABC123`. Mobile passed the raw
-  field straight to `openUrl()`, so a templated target navigated to
-  the literal `{{...}}` string. A new
-  `SurveyJSStyleComponent.interpolateRedirectUrl()` helper substitutes
-  placeholders against `survey.data` before navigating;
-  `endSurvey()` now takes the submitted data and is called with
-  `sender.data` from the `onComplete` handler. Placeholders match
-  question names case-sensitively, surrounding whitespace
-  (`{{ code }}`) is tolerated, and values are URI component encoded so
-  answers containing spaces, `/` or `&` cannot break out of their path
-  segment. A placeholder with no matching answer — or one whose answer
-  is an object or array, which has no sensible URL representation —
-  collapses to an empty string. Boolean `false` is preserved rather
-  than being treated as absent. Plain page keywords are untouched: a
-  target with no `{{` is returned as-is.
-
-### Known gaps
-
-*Both gaps below were closed in v4.0.7 — see that entry.*
-
-- **`gpxMap` style (plugin v1.5.0) is not implemented.** There is no
-  `gpxMap` case in the style dispatch and no Leaflet dependency in the
-  app, so the style does not render on mobile. Porting it needs a new
-  style component, a `GpxMapStyle` interface, `sample_points` parsing
-  for all three accepted shapes (hardcoded array, `data_config`
-  interpolation, and a full GPX answer payload with `sampledPoints`
-  auto-extraction) and a `leaflet` / `@types/leaflet` dependency.
-- **The `gpx` SurveyJS question (plugin v1.4.11) is not implemented
-  either**, so the v1.5.0 GPX question UX polish — full-width map,
-  `DD-MM-YYYY` date row, themed buttons with inline SVG icons,
-  localizable `chooseFileButtonText` / `clearButtonText` and live
-  locale switching — has nothing to apply to yet. Only the
-  `microphone`, `video` and Quill custom widgets are registered on
-  mobile.
 
 # 4.0.5
 
