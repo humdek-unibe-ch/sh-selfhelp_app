@@ -15,6 +15,7 @@ import { SurveyJsVoiceRecorderComponent } from './survey-js-voice-recorder/surve
 import { DefaultDark, DefaultLight } from "survey-core/themes";
 import { QuillComponent } from './quill-component/quill.component';
 import { addVideoQuestionWidget } from './survey-js-video-question';
+import { addGpxQuestionWidget } from './survey-js-gpx-question';
 
 function encodeHtml(params: any[]) {
     const input = params[0];
@@ -52,6 +53,13 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         // so a server switch from the dev menu is picked up without
         // re-registering the widget.
         addVideoQuestionWidget(() => this.selfhelpService.getApiEndPointNative());
+        // GPX custom question type. The widget POSTs `upload_gpx` /
+        // `delete_gpx` to the survey's own runtime controller, so the
+        // endpoint is the same one `uploadFiles()` uses. Resolved
+        // lazily: `this.url` is an @Input and is not populated yet at
+        // construction time, and a dev-menu server switch must be
+        // picked up without re-registering the widget.
+        addGpxQuestionWidget(() => this.selfhelpService.getApiEndPointNative() + this.url);
     }
 
     override async ngOnInit() {
@@ -119,17 +127,76 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         });
     }
 
-    private endSurvey() {
+    /**
+     * @description The url params, saved as `extra_param_*` answers so
+     * `update_based_on` can key a row on one. The web side reads these server
+     * side; here the app already knows the url it asked for.
+     * @return {*} Param name => value.
+     * @memberof SurveyJSStyleComponent
+     */
+    private getExtraParams(): { [key: string]: string } {
+        const params: { [key: string]: string } = {};
+        const [path, query] = (this.url ?? '').split('?');
+        // The url carries route values but not their names, so the name comes
+        // from update_based_on: `extra_param_code` means the segment is `code`.
+        const keyed = String(this.getFieldContent('update_based_on') ?? '');
+        const segments = path.split('/').filter(s => s !== '');
+        if (keyed.startsWith('extra_param_') && segments.length > 1) {
+            params[keyed.slice('extra_param_'.length)] = decodeURIComponent(segments[segments.length - 1]);
+        }
+        // A query parameter of the same name wins, as on web.
+        if (query) {
+            new URLSearchParams(query).forEach((value, key) => {
+                params[key] = value;
+            });
+        }
+        return params;
+    }
+
+    /**
+     * @description Fill `{{questionName}}` placeholders in `redirect_at_end`
+     * from the submitted survey data (`test/{{code}}` -> `test/ABC123`).
+     * Must stay in sync with the plugin's `resolveRedirectAtEnd()` in
+     * `4_surveyJS.js` — keep the regex and the accepted types identical.
+     * @param {string} url - The raw `redirect_at_end` field content.
+     * @param {any} data - The survey's submitted data object.
+     * @return {string} The interpolated URL.
+     * @memberof SurveyJSStyleComponent
+     */
+    private interpolateRedirectUrl(url: string, data: any): string {
+        if (!url) {
+            return url;
+        }
+        const interpolated = url.indexOf('{{') === -1 ? url :
+            url.replace(/\{\{([^}]+)\}\}/g, (_match, name: string) => {
+                const key = String(name).trim();
+                const value = data ? data[key] : undefined;
+                const type = typeof value;
+                if (type === 'string' || type === 'number' || type === 'boolean') {
+                    return encodeURIComponent(String(value));
+                }
+                return '';
+            });
+        // The keyword is concatenated onto the server url, so it needs the
+        // leading slash the CMS value may not have. External links stay as they are.
+        if (interpolated === '' || /^[a-z][a-z0-9+.-]*:/i.test(interpolated)) {
+            return interpolated;
+        }
+        return interpolated.startsWith('/') ? interpolated : '/' + interpolated;
+    }
+
+    private endSurvey(surveyData?: any) {
+        const redirect = this.interpolateRedirectUrl(this.getFieldContent('redirect_at_end'), surveyData);
         if (this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal('submit');
-            if (this.getFieldContent('redirect_at_end') != '') {
-                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            if (redirect != '') {
+                this.selfhelpService.openUrl(redirect);
             } else {
                 this.selfhelpService.getPage(this.globals.SH_API_HOME);
             }
         } else {
-            if (this.getFieldContent('redirect_at_end') != '') {
-                this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+            if (redirect != '') {
+                this.selfhelpService.openUrl(redirect);
             }
         }
         this.style['end'] = this.style['end'] ? (this.style['end'] + 1) : 1; // work around to refresh the page when it is pointed to self
@@ -259,8 +326,28 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
         if (this.style.show_survey) {
             // this.loadMicrophone();
             this.expandSurveyJsForSelfhelp();
-            let survey = new Model(this.style.survey_json);
-            survey.applyTheme(this.selfhelpService.getSystemTheme() === 'dark' ? DefaultDark : DefaultLight);
+            // The Creator keeps the theme inside the config; pull it out so
+            // SurveyJS never sees a property it does not define.
+            const surveyContent = this.style.survey_json;
+            let surveyTheme = null;
+            if (surveyContent && typeof surveyContent === 'object' && surveyContent.theme) {
+                surveyTheme = surveyContent.theme;
+                delete surveyContent.theme;
+            }
+            let survey = new Model(surveyContent);
+            if (surveyTheme) {
+                try {
+                    survey.applyTheme(surveyTheme);
+                } catch (e) {
+                    // a broken theme must not stop the survey from rendering
+                    console.warn('SurveyJS: could not apply theme', e);
+                }
+            } else {
+                survey.applyTheme(this.selfhelpService.getSystemTheme() === 'dark' ? DefaultDark : DefaultLight);
+            }
+            // v3 restarts the element id counter per instance, so two surveys on
+            // one page would otherwise emit the same input ids.
+            survey.elementIdPrefix = 'sjs' + this.style.id.content + '_';
             survey.locale = this.selfhelpService.getUserLanguage().locale;
             this.applyHtml(survey);
             if (Number(this.getFieldContent('auto_save_interval')) > 0) {
@@ -291,6 +378,8 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                 survey.setValue('survey_generated_id', this.style.survey_generated_id);
                 var metaData: SurveyJSMetaData = {
                     user_agent: navigator.userAgent,
+                    // The language the survey was answered in, beside the other session facts.
+                    language: survey.locale,
                     screen_width: window.screen.width,
                     screen_height: window.screen.height,
                     pixel_ratio: window.devicePixelRatio,
@@ -305,6 +394,13 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                     ],
                 };
                 survey.setValue('_meta', metaData);
+                if (this.getFieldContent('url_params') == '1') {
+                    // url params become answers, so update_based_on can key a row on one
+                    const extraParams = this.getExtraParams();
+                    for (const prop in extraParams) {
+                        survey.setValue('extra_param_' + prop, extraParams[prop]);
+                    }
+                }
                 this.style.last_response = survey.data; // set the last response otherwise it will generate another id
                 this.saveSurveyJS(survey, undefined);
             }
@@ -376,7 +472,7 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                         this.saveSurveyJS(sender, undefined).then((res) => {
                             if (res) {
                                 options.showSaveSuccess();
-                                this.endSurvey();
+                                this.endSurvey(sender.data);
                             } else {
                                 options.showSaveError();
                             }

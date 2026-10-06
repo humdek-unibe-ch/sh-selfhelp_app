@@ -522,6 +522,18 @@ export interface SurveyJSStyle extends Style {
     last_response: any, // the last user response if the survey is not yet finished and should be continued
 }
 
+/**
+ * `gpxMap` style (plugin v1.5.0+). Read-only Leaflet route preview.
+ *
+ * `sample_points` arrives already JSON-decoded (the plugin's
+ * `output_content_mobile()` decodes it, unlike the web path). Accepts
+ * a bare point array, a `gpx` answer object with `sampledPoints`, or
+ * null — all normalized by `extractSampledPoints()`.
+ */
+export interface GpxMapStyle extends Style {
+    sample_points: any,
+}
+
 export interface LabJSStyle extends Style {
     lab_json: any,
     redirect_at_end: StyleField,
@@ -664,6 +676,14 @@ export interface Language {
     title: string,
 }
 
+// Languages are not style fields; they arrive with every page response.
+export interface LanguagePickerStyle extends Style {
+    label: StyleField,
+    display_style: StyleField, // 'buttons' or 'select'
+    redirect_at_select: StyleField, // page keyword to open after choosing, empty reloads
+    highlight_selected: StyleField,
+}
+
 export interface RegistrationResult {
     result: Boolean,
     url: string | Boolean,
@@ -728,6 +748,7 @@ export interface AppConfig {
 
 export interface SurveyJSMetaData {
     user_agent: string;
+    language: string;
     screen_width: number;
     screen_height: number;
     pixel_ratio: number;

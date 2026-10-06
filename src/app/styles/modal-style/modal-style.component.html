@@ -4,7 +4,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="#" (click)="closeModal()"></ion-back-button>
       </ion-buttons>
-      <ion-title>{{this.getFieldContent('title')}}</ion-title>
+      <ion-title [innerHTML]="this.getFieldContent('title')"></ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content #content fullscreen>

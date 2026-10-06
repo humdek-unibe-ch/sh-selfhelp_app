@@ -1,0 +1,7 @@
+<div class="sjs-gpx-map-style {{ style.css }}">
+  @if (points.length) {
+    <div #gpxMap class="sjs-gpx-map-style__map"></div>
+  } @else {
+    <div class="sjs-gpx-map-style__empty">No route data yet.</div>
+  }
+</div>

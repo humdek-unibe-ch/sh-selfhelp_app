@@ -1,0 +1,23 @@
+<!-- Mirrors tpl_language_picker.php: same class names and the same
+     aria-current marker, so the web stylesheet's rules carry over. -->
+@if (showPicker) {
+  <div [class]="'selfHelp-language-picker selfHelp-language-picker--' + (isSelect ? 'select' : 'buttons') + ' ' + getCss()">
+    @if (label !== '') {
+      <span class="selfHelp-language-picker__label">{{ label }}</span>
+    }
+    @if (isSelect) {
+      <select class="form-control selfHelp-language-picker__select"
+              (change)="selectLanguage($any($event.target).value)">
+        @for (language of languages; track language.id) {
+          <option [value]="language.id" [selected]="isCurrent(language)">{{ language.title }}</option>
+        }
+      </select>
+    } @else {
+      @for (language of languages; track language.id) {
+        <button type="button" class="selfHelp-language-picker__button"
+                [attr.aria-current]="isCurrent(language) ? 'true' : null"
+                (click)="selectLanguage(language.id)">{{ language.title }}</button>
+      }
+    }
+  </div>
+}

@@ -30,6 +30,11 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
         this.initSaveFunction();
     }
 
+    /** Feeds the selfHelp-locale-* class an experiment reads its language from. */
+    public get locale(): string {
+        return this.selfhelpService.getUserLanguage().locale;
+    }
+
     private initSaveFunction() {
         (window as any).saveDataToSelfHelp = (trigger_type: string, extra_data: any) => {
             if (!extra_data) {
@@ -41,12 +46,88 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
             }
             extra_data['labjs_response_id'] = this.labjs_response_id;
             extra_data['labjs_generated_id'] = this.style.labjs_generated_id;
+            // url params are saved with the run, so the code that identified it
+            // in the link can be handed on through redirect_at_end
+            const extraParams = this.getExtraParams();
+            for (const prop in extraParams) {
+                extra_data['extra_param_' + prop] = extraParams[prop];
+            }
             this.labjs_experiment.options.datastore.transmit(this.selfhelpService.API_ENDPOINT_NATIVE + this.url, extra_data);
             if (extra_data['trigger_type'] == 'finished') {
                 // redirect on finish and if redirect url is set
-                this.labjs_finished();
+                this.labjs_finished(extra_data);
             }
         };
+    }
+
+    /**
+     * @description The url params, saved with the run so a `{{extra_param_*}}`
+     * template in `redirect_at_end` can be filled in.
+     * @return {*} Param name => value.
+     * @memberof LabJSComponent
+     */
+    private getExtraParams(): { [key: string]: string } {
+        const params: { [key: string]: string } = {};
+        // The style hands the params over only when url_params is on, as on web.
+        if (this.getFieldContent('url_params') != '1') {
+            return params;
+        }
+        const [path, query] = (this.url ?? '').split('?');
+        // The url carries route values but not their names, so the name comes
+        // from update_based_on: `extra_param_code` means the segment is `code`.
+        const keyed = String(this.getFieldContent('update_based_on') ?? '');
+        const segments = path.split('/').filter(s => s !== '');
+        if (keyed.startsWith('extra_param_') && segments.length > 1) {
+            params[keyed.slice('extra_param_'.length)] = decodeURIComponent(segments[segments.length - 1]);
+        }
+        if (query) {
+            new URLSearchParams(query).forEach((value, key) => {
+                params[key] = value;
+            });
+        }
+        return params;
+    }
+
+    /**
+     * @description Same as `resolveRedirectAtEnd()` in the plugin's `3_labJS.js`.
+     * `openUrl()` strips the base path again when it navigates.
+     * @param {string} template - The raw `redirect_at_end` field content.
+     * @param {any} data - The data being saved.
+     * @param {string} basePath - The install path to join a relative result with.
+     * @return {string} The resolved url.
+     * @memberof LabJSComponent
+     */
+    private resolveRedirectAtEnd(template: string, data: any, basePath?: string): string {
+        if (!template) {
+            return '';
+        }
+        const raw = String(template);
+        if (!/\{\{[^}]+\}\}/.test(raw)) {
+            return raw;
+        }
+        const values = data || {};
+        const resolved = raw.replace(/\{\{([^}]+)\}\}/g, (_match, name: string) => {
+            const value = values[String(name).trim()];
+            if (value === null || value === undefined) {
+                return '';
+            }
+            const type = typeof value;
+            if (type === 'string' || type === 'number' || type === 'boolean') {
+                return encodeURIComponent(String(value));
+            }
+            return '';
+        });
+        if (/^(https?:)?\/\//i.test(resolved)) {
+            return resolved;
+        }
+        const base = basePath == null ? '' : String(basePath);
+        if (!base) {
+            return resolved;
+        }
+        if (resolved.charAt(0) === '/') {
+            return base.replace(/\/+$/, '') + resolved;
+        }
+        return base.replace(/\/+$/, '') + '/' + resolved.replace(/^\/+/, '');
     }
 
     /**
@@ -74,8 +155,56 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
         });
         this.labjs_experiment = lab.util.fromObject(componentTree);
         this.labjs_response_id = this.generate_labjs_response_id();
+        this.exposeGlobals();
+        this.rewriteSelfTransmits();
         this.labjs_experiment.run();
 
+    }
+
+    /**
+     * @description An experiment's own scripts transmit to '#', meaning the page
+     * they are on. There is no such page here, so point those at the api instead.
+     * @memberof LabJSComponent
+     */
+    private rewriteSelfTransmits(): void {
+        // The prototype, not an instance: the store is built during run(),
+        // after this point.
+        const proto = lab?.data?.Store?.prototype;
+        if (!proto || typeof proto.transmit !== 'function' || proto.__selfhelpPatched) {
+            return;
+        }
+        proto.__selfhelpPatched = true;
+        const original = proto.transmit;
+        const endpointFor = () => this.selfhelpService.API_ENDPOINT_NATIVE + this.url;
+        proto.transmit = function (url: string, ...rest: any[]) {
+            return original.call(this, url === '#' ? endpointFor() : url, ...rest);
+        };
+    }
+
+    /**
+     * @description Publish what an experiment reads off `window`. The web
+     * plugin declares these as file-scope globals; here they live on the component.
+     * @memberof LabJSComponent
+     */
+    private exposeGlobals(): void {
+        const w = window as any;
+        w.labjs_response_id = this.labjs_response_id;
+        w.labJSFields = {
+            'labjs_generated_id': this.style.labjs_generated_id,
+            'redirect_at_end': this.getFieldContent('redirect_at_end'),
+            'base_path': this.selfhelpService.getBasePath(),
+            'extra_params': this.getExtraParams()
+        };
+        // The experiment assigns the result to `window.location.href`, which
+        // browsers will not let us intercept and which would leave the app. So
+        // navigate here and hand it back an empty string, making that a no-op.
+        w.resolveRedirectAtEnd = (template: string, data: any, basePath?: string) => {
+            const target = this.resolveRedirectAtEnd(template, data, basePath);
+            if (target && data && data['trigger_type'] === 'finished') {
+                setTimeout(() => this.selfhelpService.openUrl(target));
+            }
+            return '';
+        };
     }
 
     /**
@@ -381,12 +510,15 @@ export class LabJSComponent extends BasicStyleComponent implements OnInit {
         )
     }
 
-    public labjs_finished() {
+    public labjs_finished(data?: any) {
         if (this.getFieldContent('close_modal_at_end') == '1') {
             this.selfhelpService.closeModal('submit');
         }
-        if (this.getFieldContent('redirect_at_end') != '') {
-            this.selfhelpService.openUrl(this.getFieldContent('redirect_at_end'));
+        const redirect = this.resolveRedirectAtEnd(
+            this.getFieldContent('redirect_at_end'), data, this.selfhelpService.getBasePath()
+        );
+        if (redirect != '') {
+            this.selfhelpService.openUrl(redirect);
         } else {
             this.selfhelpService.getPage(this.globals.SH_API_HOME);
         }

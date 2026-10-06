@@ -1,6 +1,7 @@
 <ion-card [id]="getFieldContent('id')" [class]="'m-0 ' + getCss()">
   <ion-card-header [class]="'mobile-card-header card-' + getFieldContent('type')" [color]="getFieldContent('type')">
-    <ion-card-title class="d-flex align-items-center justify-content-between" (click)="toggleCard()">{{getFieldContent('title')}}
+    <ion-card-title class="d-flex align-items-center justify-content-between" (click)="toggleCard()">
+      <span [innerHTML]="getFieldContent('title')"></span>
       <div>
         @if (getFieldContent('is_collapsible') === '1') {
           <ion-icon size="large"
