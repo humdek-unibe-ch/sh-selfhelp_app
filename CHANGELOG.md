@@ -1,4 +1,4 @@
-# 4.0.6
+# 4.0.6 Work In Progress
 
 ### Mobile compatibility for sh-shp-survey_js v1.6.0 (+ GPX, LabJS, languagePicker)
 
