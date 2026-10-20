@@ -154,6 +154,28 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
     }
 
     /**
+     * @description `auto_session_key`, as in the plugin's `ensureAutoSessionKey()`:
+     * key the row on a unique sid so guests sharing one user do not resume each
+     * other. Web keeps the sid in the URL; the app keeps it per page on the device.
+     * @param {Model} survey - The SurveyJS model.
+     * @memberof SurveyJSStyleComponent
+     */
+    private ensureAutoSessionKey(survey: Model) {
+        if (this.getFieldContent('auto_session_key') != '1') {
+            return;
+        }
+        const col = String(this.getFieldContent('update_based_on') ?? '').trim() || 'extra_param_sid';
+        const short = col.startsWith('extra_param_') ? col.slice('extra_param_'.length) : col;
+        const stored = new URLSearchParams(this.selfhelpService.getSurveySessionKey(this.url) ?? '').get(short);
+        const sid = survey.data[col] || stored || survey.data['response_id'];
+        if (!sid) {
+            return;
+        }
+        survey.setValue(col, sid);
+        this.selfhelpService.setSurveySessionKey(this.url, new URLSearchParams({ [short]: String(sid) }).toString());
+    }
+
+    /**
      * @description Fill `{{questionName}}` placeholders in `redirect_at_end`
      * from the submitted survey data (`test/{{code}}` -> `test/ABC123`).
      * Must stay in sync with the plugin's `resolveRedirectAtEnd()` in
@@ -401,8 +423,11 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                         survey.setValue('extra_param_' + prop, extraParams[prop]);
                     }
                 }
+                this.ensureAutoSessionKey(survey);
                 this.style.last_response = survey.data; // set the last response otherwise it will generate another id
                 this.saveSurveyJS(survey, undefined);
+            } else {
+                this.ensureAutoSessionKey(survey);
             }
             survey.onCurrentPageChanging.add((sender, options) => {
 
@@ -472,6 +497,10 @@ export class SurveyJSStyleComponent extends BasicStyleComponent implements OnIni
                         this.saveSurveyJS(sender, undefined).then((res) => {
                             if (res) {
                                 options.showSaveSuccess();
+                                // A finished row is not rejoined, so the next run needs a fresh key.
+                                if (this.getFieldContent('auto_session_key') == '1') {
+                                    this.selfhelpService.setSurveySessionKey(this.url, null);
+                                }
                                 this.endSurvey(sender.data);
                             } else {
                                 options.showSaveError();
