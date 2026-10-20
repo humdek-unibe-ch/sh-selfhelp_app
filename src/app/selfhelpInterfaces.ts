@@ -175,7 +175,11 @@ export interface ImageStyle extends Style {
 export interface VideoStyle extends Style {
     is_fluid: StyleField,
     alt: StyleField,
-    sources: StyleField
+    sources: StyleField,
+    track_interval_seconds?: StyleField,
+    track_enabled?: StyleField,
+    track_page_keyword?: StyleField,
+    track_source?: StyleField
 }
 
 export interface AlertStyle extends Style {
