@@ -1,4 +1,5 @@
-<video controls [class]="(getFieldContent('is_fluid') === '1' ? 'img-fluid ' : '') + getCss()">
+<video #video controls [class]="(getFieldContent('is_fluid') === '1' ? 'img-fluid ' : '') + getCss()"
+  (play)="onPlay()" (pause)="onPause()" (ended)="onEnded()">
   @for (source of getVideoSource(); track source) {
     <source [src]="getVideoUrl(source)" [type]="source.type">
   }
