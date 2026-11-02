@@ -555,8 +555,11 @@ export class SelfhelpService {
 
     public getPage(keyword: string): Promise<SelfHelpPageRequest> {
         this.utils.debugLog('getPage', 'getPage');
+        // A stored survey session key goes where web has it: the page's query string.
+        const sessionKey = keyword.includes('?') ? null : this.getSurveySessionKey(keyword);
+        const requestUrl = sessionKey ? keyword + '?' + sessionKey : keyword;
         return new Promise((resolve, reject) => {
-            this.execServerRequest(keyword, {})
+            this.execServerRequest(requestUrl, {})
                 .then(async (res: SelfHelpPageRequest) => {
                     if (res) {
                         await this.setPage(keyword, res);
@@ -569,6 +572,29 @@ export class SelfhelpService {
                     reject(err);
                 });
         });
+    }
+
+    /**
+     * @description The `auto_session_key` of a surveyJS page (e.g. `sid=RJS_x`),
+     * kept on the device since the app has no URL bar to carry it.
+     */
+    public getSurveySessionKey(url: string): string | null {
+        try {
+            return window.localStorage.getItem('sh_survey_session:' + url.split('?')[0]);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    public setSurveySessionKey(url: string, sessionKey: string | null): void {
+        try {
+            const key = 'sh_survey_session:' + url.split('?')[0];
+            if (sessionKey) {
+                window.localStorage.setItem(key, sessionKey);
+            } else {
+                window.localStorage.removeItem(key);
+            }
+        } catch (e) { }
     }
 
     public isEqual(obj1: any, obj2: any): boolean {
