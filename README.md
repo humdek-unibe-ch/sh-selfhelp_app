@@ -12,6 +12,12 @@ If you are shipping a branded project app, most project-specific settings are ma
 - TypeScript `5.9`
 - Android target/compile SDK `36`
 
+## SelfHelp Compatibility
+
+[COMPATIBILITY.md](COMPATIBILITY.md) lists the SelfHelp core and plugin versions the app is synced to, and what is still open.
+When you port a core or plugin change, update its row and the Open list in the same commit and add the work to `CHANGELOG.md`.
+Check `git log --all` first, it may already be on a branch waiting for its PR.
+
 ## Prerequisites
 
 - Node.js `20+` (Node `22 LTS` recommended) and npm.

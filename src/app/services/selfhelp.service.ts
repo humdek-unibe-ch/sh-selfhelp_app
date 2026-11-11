@@ -712,6 +712,23 @@ export class SelfhelpService {
         return this.selfhelp.value.base_path;
     }
 
+    /** Server URL for a media path; in the app the page origin is not the server. */
+    public resolveMediaUrl(src: string): string {
+        const trimmed = (src || '').trim();
+        if (!trimmed || /^(https?:|data:|blob:)/i.test(trimmed) || trimmed.startsWith('//')) {
+            return trimmed;
+        }
+        let path = trimmed;
+        if (!path.startsWith('/')) {
+            path = path.startsWith('assets/') ? `/${path}` : `/assets/${path}`;
+        }
+        const base = (this.getBasePath() || '').replace(/\/$/, '');
+        if (base && (path === base || path.startsWith(base + '/'))) {
+            path = path.substring(base.length);
+        }
+        return this.getApiEndPointNative().replace(/\/$/, '') + path;
+    }
+
     public setNav(url: string): boolean {
         this.utils.debugLog('Set selected menu: ', url);
         const currSelfhelp = this.selfhelp.value;

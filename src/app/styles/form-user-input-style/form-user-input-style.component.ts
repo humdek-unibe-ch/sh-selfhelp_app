@@ -65,10 +65,10 @@ export class FormUserInputStyleComponent extends BasicStyleComponent implements 
         });
     }
 
-    protected initForm(): void {
+    protected initForm(style: any = this.style): void {
         this.formFields = {};
         this.inputStyles = [];
-        this.collectFormFields(this.style);
+        this.collectFormFields(style);
         this.form = this.formBuilder.group(this.formFields);
     }
 

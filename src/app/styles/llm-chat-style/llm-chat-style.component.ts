@@ -109,6 +109,9 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     shortcutTrayVisible = false;
     floatingShortcuts: LlmChatShortcut[] = [];
 
+    // From the last blocked reply (may be the global message)
+    blockedMessage: string | null = null;
+
     // Custom sidebar drawer
     isSidebarOpen = false;
 
@@ -383,6 +386,15 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     private async initializeChat(): Promise<void> {
         this.isLoading = true;
         try {
+            // Always-new: never resume a previous session
+            if (this.isAlwaysStartNewConversation()) {
+                this.currentConversation = null;
+                this.messages = [];
+                if (this.isAutoStartEnabled()) {
+                    await this.createNewConversation(this.getLabel('default_chat_title', 'AI Chat'));
+                }
+                return;
+            }
             this.currentConversation = this.style.current_conversation;
             this.messages = this.style.messages || [];
             this.scrollToBottom(true);
@@ -461,6 +473,14 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         try {
             // Start auto conversation
             const startResult = await this.llmChatService.startAutoConversation(this.getSectionId());
+            if (startResult.success && startResult.conversation) {
+                this.currentConversation = startResult.conversation;
+                this.messages = startResult.messages || [];
+                this.conversations = await this.llmChatService.getConversations(this.getSectionId());
+                this.scrollToBottom(true);
+                return;
+            }
+            // Older servers only answer success; poll for the conversation
             if (startResult.success) {
                 // Wait a moment then check for the conversation
                 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -575,7 +595,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         try {
             const conversationId = await this.llmChatService.createConversation(
                 title,
-                this.getConfiguredModel(),
                 this.getSectionId()
             );
 
@@ -600,6 +619,16 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
             const newConversation = this.conversations.find(c => c.id === conversationId);
             if (newConversation) {
                 this.currentConversation = newConversation;
+            }
+
+            // New Chat with auto-start: seed the opening message
+            if (this.isAutoStartEnabled()) {
+                const startResult = await this.llmChatService.startAutoConversation(this.getSectionId(), conversationId);
+                if (startResult.success && startResult.conversation) {
+                    this.currentConversation = startResult.conversation;
+                    this.messages = startResult.messages || [];
+                    this.conversations = await this.llmChatService.getConversations(this.getSectionId());
+                }
             }
 
             this.scrollToBottom(true);
@@ -721,17 +750,14 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
             const result = await this.llmChatService.sendMessage(
                 message,
                 this.currentConversation?.id || null,
-                this.getConfiguredModel(),
                 this.getSectionId(),
                 filesToSend
             );
 
-            if (result.error) {
-                throw new Error(result.error);
-            }
-
-            // Handle blocked/danger detection (both danger_detected and conversation_blocked types)
+            // Handle blocked/danger detection (both danger_detected and conversation_blocked types).
+            // Checked before `error`: a danger-locked user gets both.
             if (result.blocked && (result.type === 'danger_detected' || result.type === 'conversation_blocked')) {
+                this.blockedMessage = result.message || null;
                 // Update conversation as blocked
                 if (this.currentConversation) {
                     this.currentConversation = {
@@ -756,6 +782,10 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 return;
             }
 
+            if (result.error) {
+                throw new Error(result.error);
+            }
+
             // Update progress if included
             if (result.progress && this.isProgressTrackingEnabled()) {
                 this.progress = result.progress;
@@ -777,6 +807,11 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 if (result.is_new_conversation && this.isConversationsListEnabled()) {
                     await this.loadConversations();
                 }
+            }
+
+            // No usable reply: the reload shows nothing new, so say so
+            if (result.notice) {
+                this.error = result.notice;
             }
 
             this.scrollToBottom(true);
@@ -1051,11 +1086,10 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 values,
                 readableText,
                 this.currentConversation?.id || null,
-                this.getConfiguredModel(),
                 this.getSectionId()
             );
 
-            if (result.error) {
+            if (result.error && !result.blocked) {
                 throw new Error(result.error);
             }
 
@@ -1078,6 +1112,7 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
 
             // Handle blocked/danger detection
             if (result.blocked && (result.type === 'danger_detected' || result.type === 'conversation_blocked')) {
+                this.blockedMessage = result.message || null;
                 if (this.currentConversation) {
                     this.currentConversation = {
                         ...this.currentConversation,
@@ -1100,43 +1135,23 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
                 return;
             }
 
-            // Process form submission response directly (no need for getConversation call)
+            // Reload: a local append could land on another thread
             if (result.conversation_id) {
-                // Update conversation ID if it's a new conversation
-                if (result.is_new_conversation && this.currentConversation) {
-                    this.currentConversation.id = result.conversation_id;
-                }
-
-                // Add assistant message if present
-                if (result.message) {
-                    try {
-                        // Try to parse the structured message
-                        const structuredData = JSON.parse(result.message);
-                        const assistantMessage: LlmMessage = {
-                            id: 'assistant_' + Date.now(),
-                            role: 'assistant',
-                            content: result.message, // Store the full JSON for processing
-                            timestamp: new Date().toISOString()
-                        };
-                        this.messages.push(assistantMessage);
-                    } catch (parseError) {
-                        // If parsing fails, add as plain text message
-                        const assistantMessage: LlmMessage = {
-                            id: 'assistant_' + Date.now(),
-                            role: 'assistant',
-                            content: result.message,
-                            timestamp: new Date().toISOString()
-                        };
-                        this.messages.push(assistantMessage);
-                    }
-                }
-
-                // Trigger change detection to ensure UI updates immediately
+                const conversationResult = await this.llmChatService.getConversation(
+                    result.conversation_id,
+                    this.getSectionId()
+                );
+                this.currentConversation = conversationResult.conversation;
+                this.messages = conversationResult.messages;
                 this.cdr.detectChanges();
 
                 if (this.isConversationsListEnabled()) {
                     await this.loadConversations();
                 }
+            }
+
+            if (result.notice) {
+                this.error = result.notice;
             }
 
             this.scrollToBottom(true);
@@ -1167,7 +1182,6 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
         try {
             const result = await this.llmChatService.continueConversation(
                 this.currentConversation.id,
-                this.getConfiguredModel(),
                 this.getSectionId()
             );
 
@@ -1190,6 +1204,10 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
 
             // Trigger change detection to ensure UI updates immediately
             this.cdr.detectChanges();
+
+            if (result.notice) {
+                this.error = result.notice;
+            }
 
             this.scrollToBottom(true);
         } catch (err) {
@@ -1268,18 +1286,12 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
     }
 
     /**
-     * Handle shortcut click - opens chat and sends the shortcut message
-     * Guards against sending while chat is initializing/loading/processing
+     * Handle shortcut click - fills the input, the participant sends it
      */
     handleShortcutClick(shortcut: LlmChatShortcut): void {
-        // Prevent sending while chat is not ready
-        if (this.isLoading || this.isAutoStarting || this.isProcessing) {
-            return;
-        }
         this.shortcutTrayVisible = false;
         this.isFloatingPanelOpen = true;
-        // Send the shortcut message using existing sendMessage
-        this.sendMessage(shortcut.message);
+        this.currentMessage = shortcut.message;
     }
 
     /**
@@ -1419,7 +1431,22 @@ export class LlmChatStyleComponent extends BasicStyleComponent implements OnInit
      * Check if conversations list is enabled
      */
     isConversationsListEnabled(): boolean {
-        return this.getFieldContent('enable_conversations_list') === '1';
+        // Always-new mode hides previous sessions
+        return this.getFieldContent('enable_conversations_list') === '1' && !this.isAlwaysStartNewConversation();
+    }
+
+    /**
+     * Every page load starts a fresh chat
+     */
+    isAlwaysStartNewConversation(): boolean {
+        return this.getFieldContent('always_start_new_conversation') === '1';
+    }
+
+    /**
+     * Model id in the header unless show_model_info is off
+     */
+    isModelInfoShown(): boolean {
+        return this.getFieldContent('show_model_info') !== '0';
     }
 
     /**

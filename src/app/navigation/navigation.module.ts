@@ -82,6 +82,8 @@ import { LabJSComponent } from '../styles/lab-js/lab-js.component';
 import { HtmlTagStyleComponent } from '../styles/html-tag-style/html-tag-style.component';
 import { ShepherdJsStyleComponent } from '../styles/shepherd-js-style/shepherd-js-style.component';
 import { EntryRecordDeleteStyleComponent } from '../styles/entry-record-delete-style/entry-record-delete-style.component';
+import { FormUserInputLogListStyleComponent } from '../styles/form-user-input-log-list-style/form-user-input-log-list-style.component';
+import { LlmFormLogListStyleComponent } from '../styles/llm-form-log-list-style/llm-form-log-list-style.component';
 import { SurveyJsVoiceRecorderComponent } from '../styles/survey-js-style/survey-js-voice-recorder/survey-js-voice-recorder.component';
 import { TwoFactorAuthStyleComponent } from '../styles/two-factor-auth-style/two-factor-auth-style.component';
 import { QuillModule } from 'ngx-quill';
@@ -230,6 +232,8 @@ const routes: Routes = [
         HtmlTagStyleComponent,
         ShepherdJsStyleComponent,
         EntryRecordDeleteStyleComponent,
+        FormUserInputLogListStyleComponent,
+        LlmFormLogListStyleComponent,
         SurveyJsVoiceRecorderComponent,
         TwoFactorAuthStyleComponent,
         QuillComponent,

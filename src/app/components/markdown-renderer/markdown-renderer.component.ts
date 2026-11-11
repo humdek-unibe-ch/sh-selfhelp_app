@@ -7,15 +7,20 @@
  * - Syntax highlighting for code blocks via PrismJS
  * - Copy-to-clipboard functionality for code
  * - Proper styling for all markdown elements
- * - Video and image media support
- * 
+ * - Video, audio and image media support
+ *
  * @module components/MarkdownRenderer
  */
 
 import { Component, Input, OnChanges, SimpleChanges, ViewEncapsulation, ElementRef, AfterViewChecked } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 declare var Prism: any;
+
+// As sh-shp-llm mediaPath.ts: .ogg is audio, .ogv video
+const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.ogv', '.mov', '.m4v'];
+const AUDIO_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.oga', '.m4a', '.aac', '.flac'];
 
 @Component({
     selector: 'app-markdown-renderer',
@@ -33,7 +38,8 @@ export class MarkdownRendererComponent implements OnChanges, AfterViewChecked {
 
     constructor(
         private clipboard: Clipboard,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private selfhelpService: SelfhelpService
     ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -60,6 +66,30 @@ export class MarkdownRendererComponent implements OnChanges, AfterViewChecked {
         // Some backend responses arrive with escaped newlines as literal text ("\n").
         // Convert them before markdown parsing so paragraphs/lists render correctly.
         content = content.replace(/\\r\\n|\\n|\\r/g, '\n');
+
+        // A bare media path on its own line becomes a player
+        const extPattern = [...VIDEO_EXTENSIONS, ...AUDIO_EXTENSIONS].map(ext => ext.replace('.', '\\.')).join('|');
+        content = content.replace(
+            new RegExp(`^([ \\t]*)(?!\\!\\[)(?!\\[)((?:https?:\\/\\/[^\\s]+|\\/?[^\\s]+?)(?:${extPattern})(?:\\?[^\\s]*)?)([ \\t]*)$`, 'gmi'),
+            (match, indent, url, trailing) => indent + (this.hasExtension(url, AUDIO_EXTENSIONS) ? `![audio](${url})` : `![video](${url})`) + trailing
+        );
+
+        // ![audio Caption](path.mp3), or any image syntax with an audio file -> <audio>
+        content = content.replace(
+            /!\[([^\]]*)\]\(([^)]+)\)/g,
+            (match, alt, src) => {
+                if (!alt.toLowerCase().startsWith('audio') && (alt.toLowerCase().startsWith('video') || !this.hasExtension(src, AUDIO_EXTENSIONS))) {
+                    return match;
+                }
+                const caption = alt.replace(/^audio(?::[^\s]*)?\s*/i, '');
+                return `<figure class="chat-media-figure chat-audio-figure my-3">
+                    <audio src="${this.resolveMediaPath(src)}" controls preload="metadata" class="chat-audio" style="width: 100%;">
+                        Your browser does not support the audio element.
+                    </audio>
+                    ${caption ? `<figcaption class="text-muted small mt-2 text-center">${caption}</figcaption>` : ''}
+                </figure>`;
+            }
+        );
 
         // Process video URLs in markdown image syntax
         // ![video:controls](path.mp4) -> <video> element
@@ -98,7 +128,7 @@ export class MarkdownRendererComponent implements OnChanges, AfterViewChecked {
                 const resolvedSrc = this.resolveMediaPath(src);
 
                 // Check if it's a video by extension
-                if (this.isVideoUrl(src)) {
+                if (this.hasExtension(src, VIDEO_EXTENSIONS)) {
                     return `<figure class="chat-media-figure my-3">
                         <video 
                             src="${resolvedSrc}" 
@@ -127,36 +157,13 @@ export class MarkdownRendererComponent implements OnChanges, AfterViewChecked {
         return content;
     }
 
-    /**
-     * Resolve asset path to full URL
-     */
     private resolveMediaPath(src: string): string {
-        // External URLs pass through
-        if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
-            return src;
-        }
-
-        // Base64 data URLs pass through
-        if (src.startsWith('data:')) {
-            return src;
-        }
-
-        // SelfHelp assets - use as-is (relative to site root)
-        if (src.startsWith('/assets/') || src.startsWith('assets/')) {
-            return src.startsWith('/') ? src : `/${src}`;
-        }
-
-        // Relative paths - assume assets folder
-        return `/assets/${src}`;
+        return this.selfhelpService.resolveMediaUrl(src);
     }
 
-    /**
-     * Check if URL is a video based on extension
-     */
-    private isVideoUrl(src: string): boolean {
-        const videoExtensions = ['.mp4', '.webm', '.ogg', '.ogv'];
-        const lowerSrc = src.toLowerCase();
-        return videoExtensions.some(ext => lowerSrc.endsWith(ext) || lowerSrc.includes(ext + '?'));
+    private hasExtension(src: string, extensions: string[]): boolean {
+        const lowerSrc = src.toLowerCase().split('#')[0];
+        return extensions.some(ext => lowerSrc.endsWith(ext) || lowerSrc.includes(ext + '?'));
     }
 
     /**

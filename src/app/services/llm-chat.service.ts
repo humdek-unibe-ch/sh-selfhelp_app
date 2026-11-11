@@ -99,21 +99,23 @@ export class LlmChatService {
     /**
      * Create a new conversation
      * @param title Conversation title
-     * @param model LLM model to use
      * @param sectionId The section ID
      * @returns Promise resolving to the new conversation ID
      */
-    async createConversation(title: string, model: string, sectionId: number): Promise<string> {
+    async createConversation(title: string, sectionId: number): Promise<string> {
         const params = {
             action: 'new_conversation',
             title: title,
-            model: model,
             section_id: sectionId.toString()
         };
         const response = await this.selfhelpService.execServerRequest<LlmNewConversationResponse>(
             this.buildUrl(sectionId),
             params
         );
+        // A danger-locked user gets the blocked message instead of a new chat
+        if (response.blocked && response.message) {
+            throw new Error(response.message);
+        }
         if (response.error) {
             throw new Error(response.error);
         }
@@ -147,7 +149,6 @@ export class LlmChatService {
      * Send a message to the LLM
      * @param message Message content
      * @param conversationId Conversation ID (optional, creates new if not provided)
-     * @param model LLM model to use
      * @param sectionId The section ID
      * @param files Optional array of files to attach
      * @returns Promise resolving to send result
@@ -155,14 +156,12 @@ export class LlmChatService {
     async sendMessage(
         message: string,
         conversationId: string | null,
-        model: string,
         sectionId: number,
         files: LlmSelectedFile[] = []
     ): Promise<LlmSendMessageResponseExtended> {
         const params: Record<string, string> = {
             action: 'send_message',
             message: message,
-            model: model,
             section_id: sectionId.toString()
         };
         if (conversationId) {
@@ -197,7 +196,6 @@ export class LlmChatService {
      * @param formValues Object mapping field IDs to selected values
      * @param readableText Human-readable text representation of selections
      * @param conversationId Conversation ID (optional)
-     * @param model LLM model to use
      * @param sectionId The section ID
      * @returns Promise resolving to form submission result
      */
@@ -205,14 +203,12 @@ export class LlmChatService {
         formValues: Record<string, string | string[]>,
         readableText: string,
         conversationId: string | null,
-        model: string,
         sectionId: number
     ): Promise<LlmFormSubmissionResponse> {
         const params: Record<string, string> = {
             action: 'submit_form',
             form_values: JSON.stringify(formValues),
             readable_text: readableText,
-            model: model,
             section_id: sectionId.toString()
         };
         if (conversationId) {
@@ -228,19 +224,16 @@ export class LlmChatService {
     /**
      * Continue conversation (form mode - when no form is pending)
      * @param conversationId The conversation ID
-     * @param model LLM model to use
      * @param sectionId The section ID
      * @returns Promise resolving to response
      */
     async continueConversation(
         conversationId: string,
-        model: string,
         sectionId: number
     ): Promise<LlmSendMessageResponseExtended> {
         const params: Record<string, string> = {
             action: 'continue_conversation',
             conversation_id: conversationId,
-            model: model,
             section_id: sectionId.toString()
         };
 
@@ -295,20 +288,29 @@ export class LlmChatService {
     /**
      * Start auto conversation
      * @param sectionId The section ID
-     * @returns Promise resolving to success status
+     * @param conversationId Empty conversation to seed (New Chat)
+     * @returns Success and the seeded conversation
      */
-    async startAutoConversation(sectionId: number): Promise<{ success: boolean; error?: string }> {
+    async startAutoConversation(sectionId: number, conversationId?: string): Promise<{
+        success: boolean;
+        error?: string;
+        conversation?: LlmConversation;
+        messages?: LlmMessage[];
+    }> {
         const params: Record<string, string> = {
             action: 'start_auto_conversation',
             section_id: sectionId.toString()
         };
+        if (conversationId) {
+            params['conversation_id'] = conversationId;
+        }
 
         try {
-            await this.selfhelpService.execServerGetRequest<{ success: boolean }>(
-                this.buildUrl(sectionId),
-                params
-            );
-            return { success: true };
+            const response = await this.selfhelpService.execServerGetRequest<{
+                conversation?: LlmConversation;
+                messages?: LlmMessage[];
+            }>(this.buildUrl(sectionId), params);
+            return { success: true, conversation: response?.conversation, messages: response?.messages };
         } catch (error) {
             return {
                 success: false,

@@ -159,10 +159,12 @@
             </div>
             <h4>{{ getChatTitle() }}</h4>
           </div>
-          <ion-badge color="medium" class="model-badge">
-            <ion-icon name="hardware-chip-outline"></ion-icon>
-            {{ getConfiguredModel() }}
-          </ion-badge>
+          @if (isModelInfoShown()) {
+            <ion-badge color="medium" class="model-badge">
+              <ion-icon name="hardware-chip-outline"></ion-icon>
+              {{ getConfiguredModel() }}
+            </ion-badge>
+          }
         </div>
 
         <!-- Progress Indicator -->
@@ -414,7 +416,10 @@
           @if (isConversationBlocked()) {
             <div class="blocked-notice">
               <ion-icon name="ban-outline"></ion-icon>
-              <span [innerHTML]="getLabel('danger_blocked_message', 'This conversation has been blocked.')"></span>
+              <!-- The server's text wins: it knows the global blocked message -->
+              <app-markdown-renderer
+                [content]="blockedMessage || getLabel('danger_blocked_message', 'This conversation has been blocked. You cannot send any more messages.')">
+              </app-markdown-renderer>
             </div>
           }
 
@@ -481,7 +486,7 @@
               [maxLength]="MAX_MESSAGE_LENGTH"
               [rows]="2"
               [showCharCount]="true"
-              [speechToTextEnabled]="true"
+              [speechToTextEnabled]="getFieldContent('enable_speech_to_text') === '1'"
               [transcriptionUrl]="url"
               [sectionId]="getSectionId()"
               [showAttachButton]="isVisionAttachEnabled"

@@ -72,6 +72,8 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() transcriptionUrl: string = '';
     @Input() sectionId: number | null = null;
+    // Replaces llmChat's transcribe fields (used by the interview)
+    @Input() transcriptionParams: Record<string, string> | null = null;
 
     @Output() messageSend = new EventEmitter<string>();
     @Output() appendTextConsumed = new EventEmitter<void>();
@@ -881,10 +883,14 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
         try {
             const fd = new FormData();
             fd.append('audio', blob, filename);
-            fd.append('action', 'speech_transcribe');
             fd.append('mobile', 'true');
-            if (this.sectionId != null) {
-                fd.append('section_id', String(this.sectionId));
+            if (this.transcriptionParams) {
+                Object.entries(this.transcriptionParams).forEach(([key, value]) => fd.append(key, value));
+            } else {
+                fd.append('action', 'speech_transcribe');
+                if (this.sectionId != null) {
+                    fd.append('section_id', String(this.sectionId));
+                }
             }
 
             const apiUrl = this.selfhelpService.getApiEndPointNative() + transcriptionPath;
@@ -907,7 +913,9 @@ export class ChatInputComponent implements OnInit, OnDestroy, OnChanges {
                 } else if (result.success && !result.text) {
                     this.speechError = 'No speech detected. Please try again.';
                 } else {
-                    this.speechError = result.error || 'Speech transcription failed.';
+                    // llmChat sends a string, the interview {type, message}
+                    const err = result.error && typeof result.error === 'object' ? result.error.message : result.error;
+                    this.speechError = err || 'Speech transcription failed.';
                 }
             });
         } catch (e: any) {

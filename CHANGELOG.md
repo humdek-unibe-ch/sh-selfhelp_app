@@ -84,6 +84,18 @@ that CSS is served from `node_modules`).
   collapses to an empty string. Boolean `false` is preserved rather
   than being treated as absent. Plain page keywords are untouched: a
   target with no `{{` is returned as-is.
+- **`formUserInputLogList` style (core v7.12.0).** List as table or
+  cards, the form in a modal or in the page, edit, delete and quick
+  actions. Search and paging follow the web: they show on the table
+  when the section css has `dt-searching` / `dt-bPaginate`.
+- **`llmFormLogList` style (sh-shp-llm v1.9.0).** The core list with
+  the coach interview for New and Edit. The launcher card is the entry
+  point and offers *Continue* / *Start over* for an unfinished draft;
+  the save confirmation shows the record, or each change before and
+  after.
+- **`llmChat` brought up to sh-shp-llm v1.9.0.**
+- **`COMPATIBILITY.md`.** Which core and plugin versions the app is
+  synced to, and what is still open.
 
 ### Fixed
 

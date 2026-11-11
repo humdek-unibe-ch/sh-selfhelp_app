@@ -1,0 +1,374 @@
+<!-- Launcher card: the entry point, replaces the core New buttons as on web -->
+<div class="llm-iv-launcher">
+  <span class="llm-iv-launcher-icon"><ion-icon name="flag"></ion-icon></span>
+  <div class="llm-iv-launcher-text">
+    <strong class="llm-iv-launcher-title">{{label('launcherTitle', 'Your next step')}}</strong>
+    <p>{{peeking ? '' : launcherText()}}</p>
+  </div>
+  <div class="llm-iv-launcher-actions">
+    <ion-button class="llm-iv-launcher-start" [disabled]="peeking || isOpen" (click)="openInterview(null)">
+      @if (peeking) {
+        <ion-spinner name="dots"></ion-spinner>
+      } @else {
+        {{resume ? label('resume', 'Continue') : style.interview.labels.start}}
+      }
+    </ion-button>
+    @if (resume && !isOpen) {
+      <ion-button fill="clear" size="small" (click)="launcherRestart()">{{label('restart', 'Start over')}}</ion-button>
+    }
+  </div>
+</div>
+
+<app-form-user-input-log-list-style [style]="style" [url]="url" [ionContent]="ionContent"
+  (openRecord)="onOpenRecord($event)"></app-form-user-input-log-list-style>
+
+<ion-modal [isOpen]="isOpen" (willPresent)="onModalPresent($event)" (didDismiss)="closeInterview()" class="llm-iv-modal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>
+          {{state?.mode === 'edit' ? (label('editTitle') || style.interview.labels.edit) : style.interview.labels.start}}
+        </ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeInterview()" [attr.aria-label]="label('close', 'Close')">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content #ivContent class="ion-padding">
+      <!-- Layout none = chat only -->
+      @if (state && style.interview.progressLayout !== 'none') {
+        @let layout = style.interview.progressLayout;
+        @let board = layout === 'cards';
+        @let edit = state.mode === 'edit';
+        @let steps = getSteps();
+        <section class="llm-iv-answers" [class.is-board]="board">
+          <div class="llm-iv-pane-head">
+            @if (board && label('collectedEyebrow')) {
+              <span class="llm-iv-eyebrow">{{label('collectedEyebrow')}}</span>
+            }
+            <div class="llm-iv-pane-titlerow">
+              <strong class="llm-iv-pane-title">{{label('collectedTitle', 'Your answers')}}</strong>
+              @if (edit && state.changed.length > 0) {
+                <span class="llm-iv-edited-badge">{{state.changed.length}} {{label('editedBadge', 'Edited')}}</span>
+              } @else if (board) {
+                <span class="llm-iv-status" [class]="'llm-iv-status is-' + getStateKey()">
+                  {{getStateKey() === 'saved' ? label('statusSaved', 'Saved') : getStateKey() === 'ready' ? label('statusReady', 'Ready to save') : label('statusDraft', 'Draft')}}
+                </span>
+              } @else if (!edit && state.progress.total > 0) {
+                <span class="llm-iv-count">{{state.progress.done}}/{{state.progress.total}}</span>
+              }
+            </div>
+          </div>
+          @if (!board && !edit && state.progress.total > 0) {
+            <div class="llm-iv-progress-bar" role="progressbar" [attr.aria-label]="label('progressLabel', 'Progress')">
+              <div [style.width.%]="state.progress.done * 100 / state.progress.total"></div>
+            </div>
+          }
+          @if (board) {
+            <ol class="llm-iv-tracker">
+              @for (step of steps; track step.name) {
+                @if (step.number !== null) {
+                  <li class="llm-iv-tracker-step" [class]="'llm-iv-tracker-step is-' + step.status"
+                    [class.is-asking]="isAsking(step.name)" [class.is-edited]="step.edited">
+                    <span class="llm-iv-tracker-dot">
+                      @if (step.edited) { <ion-icon name="pencil"></ion-icon> } @else { {{step.number}} }
+                    </span>
+                    <span class="llm-iv-tracker-label">{{step.def.label || step.name}}</span>
+                  </li>
+                }
+              }
+            </ol>
+          }
+
+          @if (edit) {
+            <p class="llm-iv-hint">{{label('editingHint', 'You are editing a saved entry. Changed answers are marked.')}}</p>
+          }
+          @if (getFieldErrorRows().length > 0) {
+            <ul class="llm-iv-field-errors">
+              @for (row of getFieldErrorRows(); track row.name) {
+                <li><strong>{{row.name}}</strong>: {{row.message}}</li>
+              }
+            </ul>
+          }
+
+          <ol [class]="'llm-iv-steps llm-iv-steps-' + layout">
+            @for (step of steps; track step.name) {
+              @let asked = isAsking(step.name);
+              <li [class]="'llm-iv-step is-' + step.status" [class.is-asking]="asked"
+                [class.is-edited]="step.edited" [class.is-hosted]="step.hosted">
+                <span class="llm-iv-step-mark">
+                  @if (step.edited) {
+                    <ion-icon name="pencil"></ion-icon>
+                  } @else if (step.status === 'done') {
+                    <ion-icon name="checkmark"></ion-icon>
+                  } @else if (step.number !== null) {
+                    {{step.number}}
+                  }
+                </span>
+                <div class="llm-iv-step-main">
+                  <div class="llm-iv-step-head">
+                    <span class="llm-iv-step-label">
+                      {{step.def.label || step.name}}
+                      @if (step.required) {
+                        <span class="llm-iv-req" [title]="label('required', 'Required')">*</span>
+                      }
+                    </span>
+                    @if (step.edited) {
+                      <span class="llm-iv-edited-badge">{{label('editedBadge', 'Edited')}}</span>
+                    } @else if (asked && layout !== 'stepper') {
+                      <span class="llm-iv-asking-tag">{{label('stepActive', 'current question')}}</span>
+                    }
+                  </div>
+                  @if (step.hosted) {
+                    <div class="llm-iv-step-slot">
+                      @switch (controlKind(step.def)) {
+                        @case ('textarea') {
+                          <ion-textarea [value]="fieldValue(step.name)" [autoGrow]="true" fill="outline"
+                            [placeholder]="step.def.hint || ''" (ionInput)="onFieldChange(step.name, $event.detail.value)"></ion-textarea>
+                        }
+                        @case ('select') {
+                          <ion-select [value]="fieldValue(step.name)" interface="popover" fill="outline"
+                            [placeholder]="step.def.hint || ''" (ionChange)="onFieldChange(step.name, $event.detail.value)">
+                            @for (o of step.def.options || []; track o.value) {
+                              <ion-select-option [value]="o.value">{{o.label}}</ion-select-option>
+                            }
+                          </ion-select>
+                        }
+                        @case ('select-multiple') {
+                          <ion-select [value]="fieldValue(step.name) || []" [multiple]="true" fill="outline"
+                            [placeholder]="step.def.hint || ''" (ionChange)="onFieldChange(step.name, $event.detail.value)">
+                            @for (o of step.def.options || []; track o.value) {
+                              <ion-select-option [value]="o.value">{{o.label}}</ion-select-option>
+                            }
+                          </ion-select>
+                        }
+                        @case ('radio') {
+                          <ion-radio-group [value]="fieldValue(step.name)" (ionChange)="onFieldChange(step.name, $event.detail.value)">
+                            @for (o of step.def.options || []; track o.value) {
+                              <ion-radio [value]="o.value" labelPlacement="end" justify="start">{{o.label}}</ion-radio>
+                            }
+                          </ion-radio-group>
+                        }
+                        @case ('checkbox') {
+                          <ion-checkbox labelPlacement="end" justify="start"
+                            [checked]="isChecked(step.name, step.def)"
+                            (ionChange)="onFieldChange(step.name, $event.detail.checked ? checkedValue(step.def) : '0')">
+                            {{step.def.hint || step.def.label}}
+                          </ion-checkbox>
+                        }
+                        @case ('slider') {
+                          <ion-range [value]="+fieldValue(step.name) || step.def.constraints?.min || 0"
+                            [min]="step.def.constraints?.min ?? 0" [max]="step.def.constraints?.max ?? 100"
+                            [snaps]="true" [pin]="true" (ionChange)="onFieldChange(step.name, '' + $event.detail.value)"></ion-range>
+                        }
+                        @case ('file') {
+                          <p class="llm-iv-unsupported">{{label('unsupportedFiles', 'File upload fields are not supported here: {fields}').replace('{fields}', step.def.label || step.name)}}</p>
+                        }
+                        @default {
+                          <ion-input [type]="$any(step.def.input_type)" [value]="fieldValue(step.name)" fill="outline"
+                            [min]="step.def.constraints?.min" [max]="step.def.constraints?.max"
+                            [placeholder]="step.def.hint || ''" (ionInput)="onFieldChange(step.name, $event.detail.value)"></ion-input>
+                        }
+                      }
+                    </div>
+                  } @else if (valueText(step.name)) {
+                    <div class="llm-iv-step-answer">{{valueText(step.name)}}</div>
+                  } @else if (board ? (step.def.hint || asked) : asked) {
+                    <div class="llm-iv-step-empty">{{board && step.def.hint ? step.def.hint : label('notAnswered', 'Not answered yet')}}</div>
+                  }
+                  @if (step.edited) {
+                    <div class="llm-iv-step-before">
+                      <span class="llm-iv-step-before-label">{{label('valueBefore', 'Before')}}</span>
+                      {{valueText(step.name, 'baseline') || label('valueEmpty', 'empty')}}
+                    </div>
+                  }
+                </div>
+              </li>
+            }
+          </ol>
+
+          @if (!edit && !state.progress.done) {
+            <p class="llm-iv-hint">{{label('collectedHint', 'Your answers appear here while you chat.')}}</p>
+          }
+
+          <div class="llm-iv-pane-foot">
+            <ion-button [expand]="board ? undefined : 'block'" size="small" [disabled]="!state.can_approve || busy"
+              (click)="approveClick()">
+              <ion-icon slot="start" name="checkmark"></ion-icon>
+              {{style.interview.labels.approve}}
+            </ion-button>
+            @if (!state.can_approve) {
+              <div class="llm-iv-hint">
+                {{edit && state.changed.length === 0 ? label('noChanges', 'Nothing to save yet. Tell the coach what you would like to change.') : label('approveHint', 'Answer the questions to be able to save.')}}
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Chat panel header as on web -->
+      <div class="llm-iv-chat-head">
+        <ng-container *ngTemplateOutlet="avatar; context: { $implicit: 'ai' }"></ng-container>
+        <div class="llm-iv-chat-head-text">
+          <strong>{{style.interview.labels.title || label('coachTitle', 'Coach')}}</strong>
+          <span class="llm-iv-chat-head-status" [class.is-busy]="busy">
+            {{busy ? label('thinking', 'Thinking…') : (style.interview.labels.subtitle || label('coachStatus', 'Online'))}}
+          </span>
+        </div>
+        @if (state && !state.blocked) {
+          <ion-button fill="clear" size="small" [disabled]="busy" (click)="startOver()" [attr.aria-label]="label('restart', 'Start over')">
+            <ion-icon slot="icon-only" name="refresh"></ion-icon>
+          </ion-button>
+        }
+      </div>
+
+      <div class="llm-iv-chat">
+        @for (message of getMessages(); track $index) {
+          <div class="llm-iv-message" [class.llm-iv-message-user]="message.role === 'user'">
+            <ng-container *ngTemplateOutlet="avatar; context: { $implicit: message.role === 'user' ? 'user' : 'ai' }"></ng-container>
+            <div class="llm-iv-bubble" [ngStyle]="bubbleStyle(message.role)">
+              @if (message.role === 'user') {
+                <span class="llm-iv-plain">{{message.content}}</span>
+              } @else {
+                <app-markdown-renderer [content]="message.content"></app-markdown-renderer>
+              }
+            </div>
+          </div>
+        }
+        @if (pendingText) {
+          <div class="llm-iv-message llm-iv-message-user">
+            <ng-container *ngTemplateOutlet="avatar; context: { $implicit: 'user' }"></ng-container>
+            <div class="llm-iv-bubble" [ngStyle]="bubbleStyle('user')"><span class="llm-iv-plain">{{pendingText}}</span></div>
+          </div>
+        }
+        @if (busy) {
+          <div class="llm-iv-thinking">
+            <ion-spinner name="dots"></ion-spinner> {{label('thinking', 'Thinking…')}}
+          </div>
+        }
+        @if (notice) {
+          <div class="llm-iv-notice" [class.llm-iv-notice-danger]="notice.danger">
+            @if (notice.danger) {
+              <app-markdown-renderer [content]="notice.message"></app-markdown-renderer>
+            } @else {
+              {{notice.message}}
+            }
+          </div>
+        }
+      </div>
+    </ion-content>
+
+    <ion-footer>
+      @if (state && !state.blocked) {
+        <!-- The green bar saves; hints only send their text to the coach -->
+        @if (state.can_approve) {
+          <div class="llm-iv-approvebar">
+            <span class="llm-iv-approvebar-text">
+              <ion-icon name="checkmark-circle"></ion-icon>
+              {{label('readyToSave', 'All set. Review your answers and save when you are ready.')}}
+            </span>
+            <ion-button color="success" size="small" [disabled]="busy" (click)="approveClick()">
+              {{style.interview.labels.approve}}
+            </ion-button>
+          </div>
+        }
+        @if (getQuickReplies().length > 0) {
+          <div class="llm-iv-quick" role="group" [attr.aria-label]="label('choose', 'Choose an answer:')">
+            @for (reply of getQuickReplies(); track reply) {
+              <ion-button fill="outline" size="small" (click)="send(reply)">{{reply}}</ion-button>
+            }
+          </div>
+        }
+        <app-chat-input
+          class="llm-iv-composer"
+          [variant]="'llm'"
+          [message]="text"
+          (messageChange)="text = $event"
+          [placeholder]="style.interview.labels.inputPlaceholder"
+          [disabled]="busy"
+          [rows]="1"
+          [showCharCount]="false"
+          [speechToTextEnabled]="style.interview.speech.enabled"
+          [transcriptionUrl]="url"
+          [transcriptionParams]="transcriptionParams"
+          [sendButtonTitle]="style.interview.labels.send"
+          (messageSend)="send($event)">
+        </app-chat-input>
+      }
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
+<!-- Save confirmation: the record that will be saved, or each change before and after -->
+<ion-modal class="llm-iv-review" [isOpen]="review !== null" (didDismiss)="review = null">
+  <ng-template>
+    @if (review) {
+      <div class="llm-iv-review-inner">
+        <div class="llm-iv-review-header">
+          <h5>{{review.title}}</h5>
+          <button type="button" [attr.aria-label]="label('close', 'Close')" (click)="review = null">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </div>
+        <div class="llm-iv-review-body">
+          @if (review.message) {
+            <p class="llm-iv-confirm-message">{{review.message}}</p>
+          }
+          <p class="llm-iv-review-intro">
+            {{review.edit ? label('reviewChanges', 'These changes will be saved') : label('reviewValues', 'These values will be saved')}}
+          </p>
+          @if (review.edit) {
+            @for (row of review.rows; track row.name) {
+              <div class="llm-iv-change">
+                <div class="llm-iv-change-label">{{row.label}}</div>
+                <div class="llm-iv-change-before">
+                  <span class="llm-iv-change-caption">{{label('valueBefore', 'Before')}}</span>
+                  <span class="llm-iv-change-text" [class.is-empty]="row.before === ''">{{row.before || label('valueEmpty', 'empty')}}</span>
+                </div>
+                <div class="llm-iv-change-arrow"><ion-icon name="chevron-down"></ion-icon></div>
+                <div class="llm-iv-change-after">
+                  <span class="llm-iv-change-caption">{{label('valueAfter', 'Now')}}</span>
+                  <span class="llm-iv-change-text" [class.is-empty]="row.after === ''">{{row.after || label('valueEmpty', 'empty')}}</span>
+                </div>
+              </div>
+            }
+            @if (review.unchanged > 0) {
+              <p class="llm-iv-hint">{{label('reviewUnchanged', 'Unchanged answers: {count}').replace('{count}', '' + review.unchanged)}}</p>
+            }
+          } @else {
+            <dl class="llm-iv-record">
+              @for (row of review.rows; track row.name) {
+                <div class="llm-iv-record-row">
+                  <dt>{{row.label}}</dt>
+                  <dd [class.is-empty]="row.after === ''">{{row.after || label('valueEmpty', 'empty')}}</dd>
+                </div>
+              }
+            </dl>
+          }
+        </div>
+        <div class="llm-iv-review-footer">
+          <ion-button fill="outline" color="medium" (click)="review = null">
+            {{style.interview.confirm.cancel || label('back', 'Back')}}
+          </ion-button>
+          <ion-button (click)="confirmReview()">
+            {{style.interview.confirm.continue || style.interview.labels.approve}}
+          </ion-button>
+        </div>
+      </div>
+    }
+  </ng-template>
+</ion-modal>
+
+<!-- iconImage wins over iconMobile, as on web -->
+<ng-template #avatar let-side>
+  <span class="llm-iv-avatar" [ngStyle]="avatarStyle(side)">
+    @if (avatarImage(side)) {
+      <img [src]="avatarImage(side)" alt="">
+    } @else {
+      <ion-icon [name]="avatarIcon(side)"></ion-icon>
+    }
+  </span>
+</ng-template>
