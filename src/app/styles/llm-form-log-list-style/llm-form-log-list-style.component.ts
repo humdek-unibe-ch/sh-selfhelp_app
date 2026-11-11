@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 import { LlmFormLogListStyle, LlmInterviewField, LlmInterviewState } from 'src/app/selfhelpInterfaces';
 import { SelfhelpService } from 'src/app/services/selfhelp.service';
@@ -9,6 +9,14 @@ interface InterviewError {
     message: string,
     state?: LlmInterviewState | null,
     fieldErrors?: { [name: string]: string } | null,
+}
+
+interface ReviewRow {
+    name: string,
+    label: string,
+    before: string,
+    after: string,
+    changed: boolean,
 }
 
 interface InterviewStep {
@@ -31,7 +39,7 @@ interface InterviewStep {
     styleUrls: ['./llm-form-log-list-style.component.scss'],
     standalone: false
 })
-export class LlmFormLogListStyleComponent extends BasicStyleComponent implements OnDestroy {
+export class LlmFormLogListStyleComponent extends BasicStyleComponent implements OnInit, OnDestroy {
     @Input() override style!: LlmFormLogListStyle;
     @ViewChild('ivContent') ivContent?: IonContent;
     private modalEl: HTMLIonModalElement | null = null;
@@ -46,6 +54,28 @@ export class LlmFormLogListStyleComponent extends BasicStyleComponent implements
     edits: { [name: string]: any } = {};
     fieldErrors: { [name: string]: string } | null = null;
     private syncTimer: any = null;
+    // Launcher card: an unfinished new draft that can be continued
+    peeking = false;
+    resume: { done: number, total: number, conversationId: number } | null = null;
+    // Save confirmation, as the web approval dialog
+    review: { title: string, message: string, edit: boolean, rows: ReviewRow[], unchanged: number } | null = null;
+
+    // Quiet check for an unfinished draft; new_on_open never continues one
+    override ngOnInit() {
+        if (this.style.interview.retention === 'new_on_open') {
+            return;
+        }
+        this.peeking = true;
+        this.call('state', { peek: '1' }, 'GET')
+            .then(body => {
+                const st: LlmInterviewState | null = body.state;
+                if (st && !st.completed_at && !st.record_id) {
+                    this.resume = { done: st.progress.done, total: st.progress.total, conversationId: st.conversation_id };
+                }
+            })
+            .catch(() => { })
+            .finally(() => this.peeking = false);
+    }
 
     // Dismissed directly: after a page refresh Ionic parks this page without change detection
     ngOnDestroy() {
@@ -79,7 +109,26 @@ export class LlmFormLogListStyleComponent extends BasicStyleComponent implements
         setTimeout(() => this.openInterview(recordId));
     }
 
-    async openInterview(recordId: number | null) {
+    launcherText(): string {
+        if (!this.resume) {
+            return this.label('launcherText', 'Our coach guides you through a few questions. Nothing is saved until you approve.');
+        }
+        return this.label('resumeText', 'You have an unfinished draft: {done} of {total} steps done.')
+            .replace('{done}', String(this.resume.done)).replace('{total}', String(this.resume.total));
+    }
+
+    launcherRestart() {
+        const conversationId = this.resume ? this.resume.conversationId : 0;
+        this.selfhelpService.presentAlertConfirm({
+            msg: this.label('restartConfirm', 'Start over with a fresh draft?'),
+            confirmLabel: this.label('restart', 'Start over'),
+            cancelLabel: this.label('back', 'Back'),
+            callback: () => this.openInterview(null, conversationId)
+        });
+    }
+
+    // restartId: discard that draft and open a fresh one
+    async openInterview(recordId: number | null, restartId = 0) {
         this.recordId = recordId;
         this.state = null;
         this.notice = null;
@@ -88,7 +137,9 @@ export class LlmFormLogListStyleComponent extends BasicStyleComponent implements
         this.fieldErrors = null;
         this.isOpen = true;
         await this.run(async () => {
-            const body = await this.call('open', { open_token: this.token('open') });
+            const body = restartId > 0
+                ? await this.call('reset', { open_token: this.token('open'), conversation_id: String(restartId) })
+                : await this.call('open', { open_token: this.token('open') });
             this.state = body.state;
             if (this.state!.needs_start) {
                 await this.turn('', true);
@@ -98,7 +149,15 @@ export class LlmFormLogListStyleComponent extends BasicStyleComponent implements
 
     closeInterview() {
         clearTimeout(this.syncTimer);
+        const st = this.state;
+        // Runs again on didDismiss without a state: the launcher keeps what was set here
+        if (st) {
+            this.resume = this.style.interview.retention !== 'new_on_open' && st.mode === 'new' && !st.completed_at
+                ? { done: st.progress.done, total: st.progress.total, conversationId: st.conversation_id }
+                : null;
+        }
         this.isOpen = false;
+        this.review = null;
         this.state = null;
         this.modalEl?.dismiss();
     }
@@ -143,20 +202,29 @@ export class LlmFormLogListStyleComponent extends BasicStyleComponent implements
             this.approve();
             return;
         }
-        const names = st.mode === 'edit' ? st.changed : Object.keys(st.progress.fields);
-        const lines = names.map(name => this.fieldLabel(name) + ': ' + (this.valueText(name) || this.label('valueEmpty', 'empty')));
-        const intro = confirm.message || (st.mode === 'edit'
-            ? this.label('reviewChanges', 'These changes will be saved')
-            : this.label('reviewValues', 'These values will be saved'));
-        this.selfhelpService.presentAlertConfirm({
-            header: confirm.title || (st.mode === 'edit'
+        const edit = st.mode === 'edit';
+        const rows = Object.keys(st.fields).filter(name => !st.fields[name].hidden).map(name => ({
+            name: name,
+            label: st.fields[name].label || name,
+            before: this.valueText(name, 'baseline'),
+            after: this.valueText(name),
+            changed: st.changed.includes(name),
+        }));
+        const changed = rows.filter(row => row.changed);
+        this.review = {
+            title: confirm.title || (edit
                 ? this.label('reviewTitleEdit', 'Save your changes?')
                 : this.label('reviewTitleNew', 'Save this entry?')),
-            msg: intro + ' - ' + lines.join('; '),
-            confirmLabel: confirm.continue || this.style.interview.labels.approve,
-            cancelLabel: confirm.cancel || this.label('back', 'Back'),
-            callback: () => this.approve()
-        });
+            message: confirm.message,
+            edit: edit,
+            rows: edit ? changed : rows,
+            unchanged: rows.length - changed.length,
+        };
+    }
+
+    confirmReview() {
+        this.review = null;
+        this.approve();
     }
 
     async approve() {
@@ -168,6 +236,8 @@ export class LlmFormLogListStyleComponent extends BasicStyleComponent implements
                 request_token: this.token('approve'),
                 ...this.pendingPatches(),
             });
+            this.state = null;
+            this.resume = null;
             this.closeInterview();
             this.selfhelpService.presentToast(this.label('savedText', 'Your answers were saved.'), 'success');
             const redirect = body.approval && body.approval.redirect;

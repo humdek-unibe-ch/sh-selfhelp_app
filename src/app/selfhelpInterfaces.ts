@@ -142,6 +142,7 @@ export interface LlmInterviewConfig {
     sectionId: number,
     csrfToken: string,
     confirm: { mode: 'edit' | 'always' | 'never', title: string, message: string, continue: string, cancel: string },
+    retention: 'continue' | 'new_on_open' | 'new_after_save',
     progressLayout: 'stepper' | 'cards' | 'list' | 'none',
     labels: {
         title: string,
@@ -170,10 +171,13 @@ export interface LlmInterviewField {
     llm_writable: boolean,
     native_only: boolean,
     manual_writable: boolean,
+    hidden?: boolean,
 }
 
 export interface LlmInterviewState {
     conversation_id: number,
+    record_id?: number | null,
+    completed_at?: string | null,
     revision: number,
     mode: 'new' | 'edit',
     draft: { [name: string]: any },

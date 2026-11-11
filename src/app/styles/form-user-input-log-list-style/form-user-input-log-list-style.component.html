@@ -39,6 +39,10 @@
             }
           </div>
         } @else {
+          @if (hasCssClass('dt-searching')) {
+            <input type="search" class="formUserInputLogList-search" [value]="search" placeholder="Search"
+              aria-label="Search" (input)="onSearch($any($event.target).value)">
+          }
           <div class="formUserInputLogList-table-wrap">
             <table class="formUserInputLogList-table">
               <thead>
@@ -55,7 +59,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for (row of style.list_rows; track getRecordId(row)) {
+                @for (row of getTableRows(); track getRecordId(row)) {
                   <tr class="formUserInputLogList-row">
                     @if (hasActions() && style.actions_position === 'left') {
                       <td class="formUserInputLogList-cell">
@@ -75,6 +79,17 @@
               </tbody>
             </table>
           </div>
+          @if (hasCssClass('dt-bPaginate') && getPageCount() > 1) {
+            <div class="formUserInputLogList-pager">
+              <button type="button" [disabled]="page === 0" aria-label="Previous" (click)="page = page - 1">
+                <ion-icon name="chevron-back"></ion-icon>
+              </button>
+              <span>{{page + 1}} / {{getPageCount()}}</span>
+              <button type="button" [disabled]="page >= getPageCount() - 1" aria-label="Next" (click)="page = page + 1">
+                <ion-icon name="chevron-forward"></ion-icon>
+              </button>
+            </div>
+          }
         }
       </div>
     }

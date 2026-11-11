@@ -446,3 +446,159 @@
     display: block;
     padding: 0 .5rem .5rem;
 }
+
+/* Launcher card and save confirmation (interview.css) */
+.llm-iv-launcher,
+.llm-iv-review-inner {
+    --_border: var(--llm-iv-border, #dee2e6);
+    --_muted: var(--llm-iv-muted, #6c757d);
+    --_radius: var(--llm-iv-radius, .5rem);
+}
+
+.llm-iv-launcher {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .75rem 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--_border);
+    border-radius: var(--_radius);
+    background: var(--llm-iv-surface, var(--ion-background-color, #fff));
+}
+
+.llm-iv-launcher-icon {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: rgba(0, 123, 255, .12);
+    color: var(--llm-iv-accent, var(--ion-color-primary, #007bff));
+    font-size: 1.25rem;
+}
+
+.llm-iv-launcher-text {
+    flex: 1 1 12rem;
+    min-width: 0;
+
+    p { min-height: 1.2em; margin: .15rem 0 0; color: var(--_muted); }
+}
+
+.llm-iv-launcher-title { font-size: 1.1rem; }
+
+.llm-iv-launcher-actions {
+    display: flex;
+    align-items: center;
+    flex: 1 1 100%;
+}
+
+.llm-iv-launcher-start { flex: 1 1 auto; }
+
+/* The launcher replaces the core New buttons */
+:host ::ng-deep .formUserInputLogList-toolbar,
+:host ::ng-deep .formUserInputLogList-empty-cta {
+    display: none;
+}
+
+ion-modal.llm-iv-review {
+    --width: min(92vw, 480px);
+    --height: auto;
+    --border-radius: .5rem;
+}
+
+::ng-deep ion-modal.llm-iv-review .ion-page {
+    position: relative;
+    contain: content;
+}
+
+.llm-iv-review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--_border);
+
+    h5 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+
+    button {
+        display: inline-flex;
+        padding: .25rem;
+        border: 0;
+        background: transparent;
+        color: var(--_muted);
+        font-size: 1.25rem;
+    }
+}
+
+.llm-iv-review-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.llm-iv-review-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    padding: .5rem 1rem 1rem;
+}
+
+.llm-iv-record {
+    margin: 0;
+    border: 1px solid var(--_border);
+    border-radius: calc(var(--_radius) * .75);
+    overflow: hidden;
+
+    dt { font-size: .875rem; font-weight: 600; }
+    dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+}
+
+.llm-iv-record-row {
+    padding: .6rem .875rem;
+
+    & + & { border-top: 1px solid var(--_border); }
+}
+
+.llm-iv-change {
+    margin-bottom: .75rem;
+    border: 1px solid var(--_border);
+    border-radius: calc(var(--_radius) * .75);
+    overflow: hidden;
+}
+
+.llm-iv-change-label {
+    padding: .4rem .875rem;
+    border-bottom: 1px solid var(--_border);
+    background: #f8f9fa;
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.llm-iv-change-before,
+.llm-iv-change-after { padding: .6rem .875rem; }
+.llm-iv-change-before { background: rgba(220, 53, 69, .06); color: #6c757d; }
+.llm-iv-change-after { background: rgba(40, 167, 69, .1); font-weight: 500; }
+
+.llm-iv-change-arrow {
+    display: flex;
+    justify-content: center;
+    color: var(--_muted);
+    font-size: .8rem;
+}
+
+.llm-iv-change-caption {
+    display: block;
+    margin-bottom: .15rem;
+    color: var(--_muted);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.llm-iv-change-text { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+.llm-iv-review-inner .is-empty { font-style: italic; }

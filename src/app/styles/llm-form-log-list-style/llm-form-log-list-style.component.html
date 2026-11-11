@@ -1,3 +1,24 @@
+<!-- Launcher card: the entry point, replaces the core New buttons as on web -->
+<div class="llm-iv-launcher">
+  <span class="llm-iv-launcher-icon"><ion-icon name="flag"></ion-icon></span>
+  <div class="llm-iv-launcher-text">
+    <strong class="llm-iv-launcher-title">{{label('launcherTitle', 'Your next step')}}</strong>
+    <p>{{peeking ? '' : launcherText()}}</p>
+  </div>
+  <div class="llm-iv-launcher-actions">
+    <ion-button class="llm-iv-launcher-start" [disabled]="peeking || isOpen" (click)="openInterview(null)">
+      @if (peeking) {
+        <ion-spinner name="dots"></ion-spinner>
+      } @else {
+        {{resume ? label('resume', 'Continue') : style.interview.labels.start}}
+      }
+    </ion-button>
+    @if (resume && !isOpen) {
+      <ion-button fill="clear" size="small" (click)="launcherRestart()">{{label('restart', 'Start over')}}</ion-button>
+    }
+  </div>
+</div>
+
 <app-form-user-input-log-list-style [style]="style" [url]="url" [ionContent]="ionContent"
   (openRecord)="onOpenRecord($event)"></app-form-user-input-log-list-style>
 
@@ -278,6 +299,66 @@
         </app-chat-input>
       }
     </ion-footer>
+  </ng-template>
+</ion-modal>
+
+<!-- Save confirmation: the record that will be saved, or each change before and after -->
+<ion-modal class="llm-iv-review" [isOpen]="review !== null" (didDismiss)="review = null">
+  <ng-template>
+    @if (review) {
+      <div class="llm-iv-review-inner">
+        <div class="llm-iv-review-header">
+          <h5>{{review.title}}</h5>
+          <button type="button" [attr.aria-label]="label('close', 'Close')" (click)="review = null">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </div>
+        <div class="llm-iv-review-body">
+          @if (review.message) {
+            <p class="llm-iv-confirm-message">{{review.message}}</p>
+          }
+          <p class="llm-iv-review-intro">
+            {{review.edit ? label('reviewChanges', 'These changes will be saved') : label('reviewValues', 'These values will be saved')}}
+          </p>
+          @if (review.edit) {
+            @for (row of review.rows; track row.name) {
+              <div class="llm-iv-change">
+                <div class="llm-iv-change-label">{{row.label}}</div>
+                <div class="llm-iv-change-before">
+                  <span class="llm-iv-change-caption">{{label('valueBefore', 'Before')}}</span>
+                  <span class="llm-iv-change-text" [class.is-empty]="row.before === ''">{{row.before || label('valueEmpty', 'empty')}}</span>
+                </div>
+                <div class="llm-iv-change-arrow"><ion-icon name="chevron-down"></ion-icon></div>
+                <div class="llm-iv-change-after">
+                  <span class="llm-iv-change-caption">{{label('valueAfter', 'Now')}}</span>
+                  <span class="llm-iv-change-text" [class.is-empty]="row.after === ''">{{row.after || label('valueEmpty', 'empty')}}</span>
+                </div>
+              </div>
+            }
+            @if (review.unchanged > 0) {
+              <p class="llm-iv-hint">{{label('reviewUnchanged', 'Unchanged answers: {count}').replace('{count}', '' + review.unchanged)}}</p>
+            }
+          } @else {
+            <dl class="llm-iv-record">
+              @for (row of review.rows; track row.name) {
+                <div class="llm-iv-record-row">
+                  <dt>{{row.label}}</dt>
+                  <dd [class.is-empty]="row.after === ''">{{row.after || label('valueEmpty', 'empty')}}</dd>
+                </div>
+              }
+            </dl>
+          }
+        </div>
+        <div class="llm-iv-review-footer">
+          <ion-button fill="outline" color="medium" (click)="review = null">
+            {{style.interview.confirm.cancel || label('back', 'Back')}}
+          </ion-button>
+          <ion-button (click)="confirmReview()">
+            {{style.interview.confirm.continue || style.interview.labels.approve}}
+          </ion-button>
+        </div>
+      </div>
+    }
   </ng-template>
 </ion-modal>
 

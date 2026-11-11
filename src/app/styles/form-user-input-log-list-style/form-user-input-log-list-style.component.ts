@@ -25,6 +25,11 @@ export class FormUserInputLogListStyleComponent extends FormUserInputStyleCompon
         cancelLabel?: string, run: () => Promise<any>
     } | null = null;
 
+    // Web turns these on with the DataTables classes dt-searching / dt-bPaginate (table layout)
+    search = '';
+    page = 0;
+    private readonly pageSize = 10;
+
     override ngOnInit() {
         if (!this.isListShown()) {
             this.openNew();
@@ -171,6 +176,38 @@ export class FormUserInputLogListStyleComponent extends FormUserInputStyleCompon
             }
             return String(row[header] ?? '') === String(when[field]);
         });
+    }
+
+    hasCssClass(name: string): boolean {
+        return (this.style.css || '').split(/\s+/).includes(name);
+    }
+
+    onSearch(value: string) {
+        this.search = value;
+        this.page = 0;
+    }
+
+    private getFilteredRows(): { [header: string]: any }[] {
+        const term = this.search.trim().toLowerCase();
+        if (term === '' || !this.hasCssClass('dt-searching')) {
+            return this.style.list_rows;
+        }
+        return this.style.list_rows.filter(row => this.style.list_headers.some(header =>
+            String(row[header] ?? '').replace(/<[^>]*>/g, '').toLowerCase().includes(term)));
+    }
+
+    getPageCount(): number {
+        return Math.ceil(this.getFilteredRows().length / this.pageSize);
+    }
+
+    getTableRows(): { [header: string]: any }[] {
+        const rows = this.getFilteredRows();
+        if (!this.hasCssClass('dt-bPaginate')) {
+            return rows;
+        }
+        // The list can shrink after a delete or a new search
+        const page = Math.min(this.page, Math.max(0, this.getPageCount() - 1));
+        return rows.slice(page * this.pageSize, (page + 1) * this.pageSize);
     }
 
     getRecordId(row: any): number {

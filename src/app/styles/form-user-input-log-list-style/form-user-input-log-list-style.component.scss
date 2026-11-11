@@ -21,6 +21,39 @@
     background: var(--_ful-surface);
 }
 
+.formUserInputLogList-search {
+    display: block;
+    width: 100%;
+    margin-bottom: .5rem;
+    padding: .4rem .75rem;
+    border: 1px solid var(--_ful-border);
+    border-radius: var(--_ful-radius);
+    background: var(--_ful-surface);
+    color: inherit;
+    font: inherit;
+}
+
+.formUserInputLogList-pager {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: .75rem;
+    margin-top: .5rem;
+    color: var(--_ful-muted);
+    font-size: .85rem;
+
+    button {
+        display: inline-flex;
+        padding: .35rem;
+        border: 1px solid var(--_ful-border);
+        border-radius: var(--_ful-radius);
+        background: var(--_ful-surface);
+        color: var(--_ful-accent);
+
+        &:disabled { opacity: .4; }
+    }
+}
+
 .formUserInputLogList-table {
     width: 100%;
     border-collapse: collapse;
