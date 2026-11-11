@@ -1,0 +1,189 @@
+@if (!style.record_access_denied) {
+  <div [class]="getRootCss()">
+    @if (isListShown() && (!isFormOpen() || style.show_form_in_modal)) {
+      @if (style.list_rows.length > 0) {
+        <div class="formUserInputLogList-toolbar">
+          <ng-container *ngTemplateOutlet="newButton"></ng-container>
+        </div>
+      }
+      <div class="formUserInputLogList-list">
+        @if (style.list_rows.length === 0) {
+          <div class="formUserInputLogList-empty">
+            @if (style.empty_title) {
+              <h3 class="formUserInputLogList-empty-title">{{style.empty_title}}</h3>
+            }
+            @if (style.empty_text) {
+              <p class="formUserInputLogList-empty-text">{{style.empty_text}}</p>
+            }
+            <div class="formUserInputLogList-empty-cta">
+              <ng-container *ngTemplateOutlet="newButton"></ng-container>
+            </div>
+          </div>
+        } @else if (style.list_layout === 'cards') {
+          <div class="formUserInputLogList-cards">
+            @for (row of style.list_rows; track getRecordId(row)) {
+              <div class="formUserInputLogList-card">
+                @if (hasActions() && style.actions_position === 'left') {
+                  <ng-container *ngTemplateOutlet="actions; context: { $implicit: getRecordId(row) }"></ng-container>
+                }
+                <div class="formUserInputLogList-card-body">
+                  @for (header of style.list_headers; track header) {
+                    <div class="formUserInputLogList-card-cell" [attr.data-header]="header"
+                      [innerHTML]="getCellHtml(row[header])"></div>
+                  }
+                </div>
+                @if (hasActions() && style.actions_position !== 'left') {
+                  <ng-container *ngTemplateOutlet="actions; context: { $implicit: getRecordId(row) }"></ng-container>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="formUserInputLogList-table-wrap">
+            <table class="formUserInputLogList-table">
+              <thead>
+                <tr>
+                  @if (hasActions() && style.actions_position === 'left') {
+                    <th class="formUserInputLogList-col"></th>
+                  }
+                  @for (header of style.list_headers; track header) {
+                    <th class="formUserInputLogList-col">{{header}}</th>
+                  }
+                  @if (hasActions() && style.actions_position !== 'left') {
+                    <th class="formUserInputLogList-col"></th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of style.list_rows; track getRecordId(row)) {
+                  <tr class="formUserInputLogList-row">
+                    @if (hasActions() && style.actions_position === 'left') {
+                      <td class="formUserInputLogList-cell">
+                        <ng-container *ngTemplateOutlet="actions; context: { $implicit: getRecordId(row) }"></ng-container>
+                      </td>
+                    }
+                    @for (header of style.list_headers; track header) {
+                      <td class="formUserInputLogList-cell" [innerHTML]="getCellHtml(row[header])"></td>
+                    }
+                    @if (hasActions() && style.actions_position !== 'left') {
+                      <td class="formUserInputLogList-cell">
+                        <ng-container *ngTemplateOutlet="actions; context: { $implicit: getRecordId(row) }"></ng-container>
+                      </td>
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    }
+
+    @if (isFormOpen() && !style.show_form_in_modal) {
+      <ng-container *ngTemplateOutlet="formTpl"></ng-container>
+    }
+  </div>
+
+  @if (style.show_form_in_modal) {
+    <ion-modal [isOpen]="isFormOpen()" (willPresent)="trackModal($event, true)" (didDismiss)="trackModal($event, false); closeForm()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>{{formMode === 'edit' ? style.label_edit : style.label_new}}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeForm()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ng-container *ngTemplateOutlet="formTpl"></ng-container>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  }
+
+  <!-- Delete and quick-action confirmation, as the web dialogs -->
+  <ion-modal class="ful-dialog" [isOpen]="dialog !== null" (willPresent)="trackModal($event, true)" (didDismiss)="trackModal($event, false); dialog = null">
+    <ng-template>
+      @if (dialog) {
+        <div class="ful-dialog-inner">
+          <div class="ful-dialog-header">
+            <h5 class="ful-dialog-title">{{dialog.title}}</h5>
+            <button type="button" class="ful-dialog-close" aria-label="Close" (click)="dialog = null">
+              <ion-icon name="close"></ion-icon>
+            </button>
+          </div>
+          <div class="ful-dialog-body">
+            <app-markdown-renderer [content]="dialog.content"></app-markdown-renderer>
+          </div>
+          <div class="ful-dialog-footer">
+            @if (dialog.cancelLabel) {
+              <ion-button fill="outline" color="medium" (click)="dialog = null">{{dialog.cancelLabel}}</ion-button>
+            }
+            <ion-button [color]="dialog.confirmColor" (click)="confirmDialog()">{{dialog.confirmLabel}}</ion-button>
+          </div>
+        </div>
+      }
+    </ng-template>
+  </ion-modal>
+}
+
+<ng-template #newButton>
+  <ion-button size="small" class="formUserInputLogList-btn-new" (click)="openNew()">{{style.label_new}}</ion-button>
+</ng-template>
+
+<ng-template #actions let-recordId>
+  <div class="formUserInputLogList-actions">
+    @for (action of getRowActions(recordId); track action.id) {
+      @if (action.id === 'edit') {
+        <button type="button" class="formUserInputLogList-btn-edit"
+          [disabled]="loadingRecordId !== null" (click)="openEdit(recordId)">
+          @if (loadingRecordId === recordId) {
+            <ion-spinner name="dots" class="submit-spinner"></ion-spinner>
+          } @else {
+            {{style.label_edit}}
+          }
+        </button>
+      } @else if (action.id === 'delete') {
+        <button type="button" class="formUserInputLogList-btn-delete"
+          [attr.aria-label]="style.label_delete" (click)="confirmDelete(recordId)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      } @else {
+        <button type="button" class="formUserInputLogList-btn-quick"
+          (click)="quickAction(recordId, action)">{{action.label}}</button>
+      }
+    }
+  </div>
+</ng-template>
+
+<ng-template #formTpl>
+  @if (formStyle) {
+    <form [formGroup]="form" class="formUserInputLogList-form">
+      @for (child of formStyle.children; track child) {
+        <app-basic-style [style]="child" [url]="url" [ionContent]="ionContent" [parentForm]="form"></app-basic-style>
+      }
+      <div class="formUserInputLogList-form-buttons">
+        @if (getFieldContent('label')) {
+          <ion-button [color]="getFieldContent('type')" size="small"
+            [disabled]="!form.valid || isSubmitting" (click)="formSubmitClick(form.value)">
+            @if (isSubmitting) {
+              <ion-spinner name="dots" class="submit-spinner"></ion-spinner>
+              <span>Processing...</span>
+            } @else {
+              <span>{{getFieldContent('label')}}</span>
+            }
+          </ion-button>
+        }
+        @if (isListShown()) {
+          <ion-button size="small" fill="outline" color="medium" class="selfhelp-form-cancel-btn"
+            [disabled]="isSubmitting" (click)="closeForm()">
+            {{getFieldContent('label_cancel') || 'Cancel'}}
+          </ion-button>
+        }
+      </div>
+    </form>
+  }
+</ng-template>

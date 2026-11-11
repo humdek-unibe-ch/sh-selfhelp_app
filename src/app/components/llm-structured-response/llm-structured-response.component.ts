@@ -22,6 +22,7 @@ import {
     LlmFormDefinition,
     LlmFormField
 } from 'src/app/selfhelpInterfaces';
+import { SelfhelpService } from 'src/app/services/selfhelp.service';
 
 @Component({
     selector: 'app-llm-structured-response',
@@ -54,6 +55,8 @@ export class LlmStructuredResponseComponent implements OnChanges {
     milestone: string | null = null;
     newlyCovered: string[] = [];
 
+    constructor(private selfhelpService: SelfhelpService) { }
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['response'] && this.response) {
             this.parseResponse();
@@ -75,7 +78,7 @@ export class LlmStructuredResponseComponent implements OnChanges {
         // Media items
         this.mediaItems = (content.media || []).map(m => ({
             type: m.type,
-            src: m.src,
+            src: this.selfhelpService.resolveMediaUrl(m.src),
             alt: m.alt,
             caption: m.caption
         }));

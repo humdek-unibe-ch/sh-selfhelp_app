@@ -110,6 +110,90 @@ export interface FormUserInputStyle extends Style {
     url_cancel: StyleField,
 }
 
+// output_content_mobile() replaces these fields with plain values.
+export interface FormUserInputLogListStyle extends FormUserInputStyle {
+    list_rows: { [header: string]: any }[],
+    list_headers: string[],
+    can_delete: boolean,
+    show_form_in_modal: boolean,
+    label_new: string,
+    label_edit: string,
+    label_delete: string,
+    list_layout: 'table' | 'cards',
+    actions_position: 'left' | 'right',
+    empty_title: string,
+    empty_text: string,
+    record_access_denied: boolean,
+}
+
+export interface LogListRowAction {
+    id: string,
+    label?: string,
+    confirm?: boolean,
+    confirm_title?: string,
+    confirm_message?: string,
+}
+
+export interface LlmFormLogListStyle extends FormUserInputLogListStyle {
+    interview: LlmInterviewConfig,
+}
+
+export interface LlmInterviewConfig {
+    sectionId: number,
+    csrfToken: string,
+    confirm: { mode: 'edit' | 'always' | 'never', title: string, message: string, continue: string, cancel: string },
+    progressLayout: 'stepper' | 'cards' | 'list' | 'none',
+    labels: {
+        title: string,
+        subtitle: string,
+        inputPlaceholder: string,
+        send: string,
+        approve: string,
+        start: string,
+        edit: string,
+        ui: { [key: string]: string },
+    },
+    appearance: { [side: string]: { bg?: string, text?: string, border?: string, iconMobile?: string, iconImage?: string } },
+    allowManualEdit: boolean,
+    speech: { enabled: boolean },
+}
+
+export interface LlmInterviewField {
+    name: string,
+    label: string,
+    hint?: string,
+    style: string,
+    input_type: string,
+    required: boolean,
+    options: { value: string, label: string }[] | null,
+    constraints: { min?: number, max?: number, checked_value?: string } | null,
+    llm_writable: boolean,
+    native_only: boolean,
+    manual_writable: boolean,
+}
+
+export interface LlmInterviewState {
+    conversation_id: number,
+    revision: number,
+    mode: 'new' | 'edit',
+    draft: { [name: string]: any },
+    fields: { [name: string]: LlmInterviewField },
+    progress: {
+        fields: { [name: string]: { label: string, status: 'done' | 'pending' | 'active', required: boolean } },
+        total: number,
+        done: number,
+        active: string | null,
+    },
+    asking?: string | null,
+    messages: { id: number | null, role: 'user' | 'assistant' | 'system', content: string }[],
+    changed: string[],
+    baseline: { [name: string]: any },
+    can_approve: boolean,
+    needs_start: boolean,
+    suggestions?: string[],
+    blocked?: boolean,
+}
+
 export interface FormField extends Style {
     is_required: StyleField,
     name: StyleField,
@@ -1003,11 +1087,15 @@ export interface LlmSendMessageResponse {
     error?: string;
     blocked?: boolean;
     type?: 'danger_detected' | 'conversation_blocked';
+    // Turn without a usable reply (provider failure)
+    notice?: string;
 }
 
 export interface LlmNewConversationResponse {
     conversation_id?: string;
     error?: string;
+    blocked?: boolean;
+    message?: string;
 }
 
 export interface LlmDeleteConversationResponse {

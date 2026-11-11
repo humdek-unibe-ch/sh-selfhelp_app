@@ -1,0 +1,243 @@
+/* Ported from core formUserInputLogList.css (same --ful-* variables) */
+.formUserInputLogList {
+    --_ful-accent: var(--ful-accent, var(--ion-color-primary, #007bff));
+    --_ful-border: var(--ful-border, #dee2e6);
+    --_ful-surface: var(--ful-surface, var(--ion-background-color, #fff));
+    --_ful-muted: var(--ful-muted, #6c757d);
+    --_ful-radius: var(--ful-radius, 0.5rem);
+    margin-bottom: 1rem;
+}
+
+.formUserInputLogList-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: .75rem;
+}
+
+.formUserInputLogList-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--_ful-border);
+    border-radius: var(--_ful-radius);
+    background: var(--_ful-surface);
+}
+
+.formUserInputLogList-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.formUserInputLogList-col {
+    padding: .5rem .75rem;
+    border-bottom: 1px solid var(--_ful-border);
+    color: var(--_ful-muted);
+    font-size: .85rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.formUserInputLogList-cell {
+    padding: .5rem .75rem;
+    border-top: 1px solid var(--_ful-border);
+    vertical-align: middle;
+}
+
+.formUserInputLogList-row:first-child .formUserInputLogList-cell {
+    border-top: 0;
+}
+
+.formUserInputLogList-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: .5rem;
+    white-space: nowrap;
+}
+
+.formUserInputLogList-actions-right .formUserInputLogList-actions {
+    justify-content: flex-end;
+}
+
+.formUserInputLogList-btn-edit,
+.formUserInputLogList-btn-quick {
+    display: inline-flex;
+    align-items: center;
+    padding: .35rem .85rem;
+    border-radius: 999px;
+    font: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.formUserInputLogList-btn-edit {
+    border: 1px solid var(--_ful-accent);
+    background: transparent;
+    color: var(--_ful-accent);
+
+    &:active { background: var(--_ful-accent); color: #fff; }
+    &:disabled { opacity: .6; }
+}
+
+.formUserInputLogList-btn-quick {
+    border: 1px solid rgba(0, 0, 0, .12);
+    background: #f3f5f7;
+    color: inherit;
+
+    &:active { background: #e8ecf0; }
+}
+
+.formUserInputLogList-btn-delete {
+    display: inline-flex;
+    padding: .35rem;
+    border: 0;
+    background: transparent;
+    color: var(--ion-color-danger, #dc3545);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.formUserInputLogList-form-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-top: 1rem;
+}
+
+/* Small centered dialog like the web modals */
+ion-modal.ful-dialog {
+    --width: min(92vw, 420px);
+    --height: auto;
+    --border-radius: .5rem;
+}
+
+::ng-deep ion-modal.ful-dialog .ion-page {
+    position: relative;
+    contain: content;
+}
+
+.ful-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .75rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.ful-dialog-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.ful-dialog-close {
+    display: inline-flex;
+    padding: .25rem;
+    border: 0;
+    background: transparent;
+    color: #6c757d;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.ful-dialog-body {
+    padding: 1rem;
+}
+
+.ful-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    padding: .5rem 1rem 1rem;
+}
+
+.formUserInputLogList-cards {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+/* Cards read like table rows */
+.formUserInputLogList-card {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .75rem;
+    border: 1px solid var(--_ful-border);
+    border-radius: var(--_ful-radius);
+    background: var(--_ful-surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+}
+
+.formUserInputLogList-card-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    min-width: 0;
+}
+
+.formUserInputLogList-card-cell {
+    flex: 1 1 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .1rem;
+    min-width: 0;
+    font-size: .95rem;
+    font-weight: 500;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.formUserInputLogList-card-cell[data-header]::before {
+    content: attr(data-header);
+    color: var(--_ful-muted);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+.formUserInputLogList-card-cell[data-header=""]::before {
+    display: none;
+}
+
+/* Edit above the trash icon, as in the table's action cell */
+.formUserInputLogList-card .formUserInputLogList-actions {
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.formUserInputLogList-actions-left .formUserInputLogList-card .formUserInputLogList-actions {
+    align-items: flex-start;
+}
+
+.formUserInputLogList-empty {
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+.formUserInputLogList-empty-title {
+    margin-top: 0;
+}
+
+.formUserInputLogList-empty-text {
+    color: var(--_ful-muted);
+}
+
+.submit-spinner {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+}
+
+:host ::ng-deep .ful-list-img {
+    max-height: 48px;
+    width: auto;
+    display: block;
+}

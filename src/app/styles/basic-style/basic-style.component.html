@@ -60,6 +60,12 @@
     @case (isStyle('formUserInput') || isStyle('formUserInputLog') || isStyle('formUserInputRecord')) {
       <app-form-user-input-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-user-input-style>
     }
+    @case (isStyle('llmFormLogList')) {
+      <app-llm-form-log-list-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-llm-form-log-list-style>
+    }
+    @case (isStyle('formUserInputLogList')) {
+      <app-form-user-input-log-list-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-form-user-input-log-list-style>
+    }
     @case (isStyle('graph')) {
       <app-graph-style [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-graph-style>
     }
