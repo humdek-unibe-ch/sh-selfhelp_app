@@ -84,6 +84,10 @@ that CSS is served from `node_modules`).
   collapses to an empty string. Boolean `false` is preserved rather
   than being treated as absent. Plain page keywords are untouched: a
   target with no `{{` is returned as-is.
+- **`slider` style (core).** Had no mobile implementation and showed
+  "not implemented". A range from `min` to `max` with the `labels`
+  under each position, saved like any form field. With
+  `locked_after_submit` a set value can not be moved anymore, as on web.
 
 ### Fixed
 

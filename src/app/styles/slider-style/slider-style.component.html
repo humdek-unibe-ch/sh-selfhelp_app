@@ -1,0 +1,18 @@
+@if (parentForm) {
+  <ion-item [formGroup]="parentForm" [class]="getCss()" lines="none">
+    <div class="selfhelp-slider" [class.is-locked]="locked">
+      @if (getFieldContent('label')) {
+        <ion-label position="stacked">{{getFieldContent('label')}}</ion-label>
+      }
+      <ion-range [formControlName]="getFieldContent('name')" [min]="getMin()" [max]="getMax()"
+        [step]="1" [snaps]="true" [ticks]="true" color="secondary"></ion-range>
+      @if (getLabels().length > 0) {
+        <div class="slider-legend">
+          @for (label of getLabels(); track $index) {
+            <span class="slider-legend-item">{{label}}</span>
+          }
+        </div>
+      }
+    </div>
+  </ion-item>
+}

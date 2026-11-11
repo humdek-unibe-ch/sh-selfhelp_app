@@ -23,6 +23,7 @@ import { FormUserInputStyleComponent } from '../styles/form-user-input-style/for
 import { ConditionalContainerStyleComponent } from '../styles/conditional-container-style/conditional-container-style.component';
 import { SubMenuComponent } from './sub-menu/sub-menu.component';
 import { InputStyleComponent } from '../styles/input-style/input-style.component';
+import { SliderStyleComponent } from '../styles/slider-style/slider-style.component';
 import { RadioStyleComponent } from '../styles/radio-style/radio-style.component';
 import { SelectStyleComponent } from '../styles/select-style/select-style.component';
 import { TextareaStyleComponent } from '../styles/textarea-style/textarea-style.component';
@@ -174,6 +175,7 @@ const routes: Routes = [
         ConditionalContainerStyleComponent,
         SubMenuComponent,
         InputStyleComponent,
+        SliderStyleComponent,
         RadioStyleComponent,
         SelectStyleComponent,
         TextareaStyleComponent,

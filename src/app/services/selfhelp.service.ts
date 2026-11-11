@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Capacitor, CapacitorHttp, HttpOptions } from '@capacitor/core';
 import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle, TwoFactorAuthResult } from './../selfhelpInterfaces';
+import { SelfHelp, Language, SelfHelpNavigation, SelfHelpPageRequest, LocalSelfhelp, Styles, ConfirmAlert, LoginValues, RegistrationValues, ResetPasswordValues, ValidateValues, ValueItem, SkinApp, InputStyle, RadioStyle, SelectStyle, TextAreaStyle, RegistrationResult, ValidationResult, ResetPasswordResult, ModalCloseType, OSShortcuts, MobilePlatform, CheckboxStyle, SliderStyle, TwoFactorAuthResult } from './../selfhelpInterfaces';
 import { GetResult, Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { Device } from '@capacitor/device';
@@ -1021,10 +1021,10 @@ export class SelfhelpService {
 
     public isFormField(field: any): boolean {
         return field.style_name &&
-            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea' || field.style_name == 'checkbox');
+            (field.style_name == 'input' || field.style_name == 'radio' || field.style_name == 'select' || field.style_name == 'textarea' || field.style_name == 'checkbox' || field.style_name == 'slider');
     }
 
-    public getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle | CheckboxStyle {
+    public getFormField(formField: any): InputStyle | RadioStyle | SelectStyle | TextAreaStyle | CheckboxStyle | SliderStyle {
         switch (formField.style_name) {
             case 'input':
                 return <InputStyle>formField;
@@ -1036,6 +1036,8 @@ export class SelfhelpService {
                 return <SelectStyle>formField;
             case 'textarea':
                 return <TextAreaStyle>formField;
+            case 'slider':
+                return <SliderStyle>formField;
             default:
                 return formField;
         }
