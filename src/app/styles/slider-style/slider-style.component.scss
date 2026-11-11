@@ -1,0 +1,32 @@
+.selfhelp-slider {
+    width: 100%;
+    padding: .5rem 0;
+
+    // Room for the knob at both ends
+    ion-range {
+        padding-inline: 14px;
+    }
+
+    // Locked after submit: shown but not movable, as on web
+    &.is-locked ion-range {
+        pointer-events: none;
+        opacity: .7;
+    }
+}
+
+.slider-legend {
+    display: flex;
+    justify-content: space-between;
+    gap: .25rem;
+}
+
+.slider-legend-item {
+    flex: 1 1 0;
+    min-width: 0;
+    color: var(--ion-color-medium, #6c757d);
+    font-size: .8rem;
+    text-align: center;
+
+    &:first-child { text-align: left; }
+    &:last-child { text-align: right; }
+}

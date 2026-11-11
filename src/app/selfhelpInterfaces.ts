@@ -124,6 +124,13 @@ export interface InputStyle extends FormField {
     format?: string
 }
 
+export interface SliderStyle extends FormField {
+    min: StyleField,
+    max: StyleField,
+    labels: StyleField,
+    locked_after_submit: StyleField
+}
+
 export interface CheckboxStyle extends FormField {
     checkbox_value: StyleField
 }

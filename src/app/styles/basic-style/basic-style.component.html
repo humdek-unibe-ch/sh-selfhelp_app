@@ -168,6 +168,9 @@
     @case (isStyle('select')) {
       <app-select-style [style]="getStyle()" [url]="url" [ionContent]="ionContent" [parentForm]="parentForm"></app-select-style>
     }
+    @case (isStyle('slider')) {
+      <app-slider-style [style]="getStyle()" [parentForm]="parentForm"></app-slider-style>
+    }
     @case (isStyle('sortableList')) {
       <app-sortable-list [style]="getStyle()" [url]="url" [ionContent]="ionContent"></app-sortable-list>
     }
